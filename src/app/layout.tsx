@@ -1,23 +1,34 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin", "cyrillic"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TATU AL | Muhammad al-Xorazmiy nomidagi TATU akademik litseyi",
-  description: "Muhammad al-Xorazmiy nomidagi Toshkent axborot texnologiyalari universiteti akademik litseyi rasmiy veb-sayti. IT va aniq fanlar yo'nalishida yuqori sifatli ta'lim.",
-  keywords: "tatual, tatu litsey, akademik litsey, al-xorazmiy litsey, it ta'lim, toshkent litseylari",
+  title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
+  description:
+    "Toshkent axborot texnologiyalari universiteti (TATU) huzuridagi Muhammad al-Xorazmiy nomidagi Akademik Litsey — zamonaviy ta'lim muhitida yuqori sifatli akademik ta'lim.",
+  keywords: [
+    "TATU litsey",
+    "akademik litsey",
+    "Muhammad al-Xorazmiy litsey",
+    "Toshkent litsey",
+    "tatual.uz",
+    "litsey qabul",
+  ],
+  openGraph: {
+    title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
+    description: "Zamonaviy akademik ta'lim markazi — TATU huzuridagi Al-Xorazmiy Akademik Litseyi",
+    locale: "uz_UZ",
+    type: "website",
+  },
+  icons: {
+    icon: "/tuit.png",
+  },
 };
 
 export default function RootLayout({
@@ -26,14 +37,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uz" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="antialiased min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow pt-[88px]">
-          {children}
-        </main>
-        <Footer />
-      </body>
+    <html lang="uz">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={inter.variable}>{children}</body>
     </html>
   );
 }
