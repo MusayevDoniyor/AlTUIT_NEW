@@ -27,7 +27,7 @@ export default function Contact({ lang }: ContactProps) {
 
   return (
     <section id="contact" style={{ padding: '96px 0', background: '#f8f9fc' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
         <div style={{ textAlign: 'center', maxWidth: 500, margin: '0 auto 56px' }}>
           <div style={{
             display: 'inline-block', background: 'rgba(26,58,110,0.08)', color: '#1a3a6e',

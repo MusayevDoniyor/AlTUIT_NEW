@@ -45,7 +45,7 @@ export default function Admission({ lang }: AdmissionProps) {
       <div style={{ position: 'absolute', top: -100, right: -100, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle,rgba(200,169,110,0.08) 0%,transparent 70%)', zIndex: 0 }} />
       <div style={{ position: 'absolute', bottom: -60, left: -60, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle,rgba(45,91,181,0.2) 0%,transparent 70%)', zIndex: 0 }} />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: 580, margin: '0 auto 64px' }}>

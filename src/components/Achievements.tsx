@@ -56,7 +56,7 @@ export default function Achievements({ lang }: AchievementsProps) {
   const t = translations[lang];
   return (
     <section id="achievements" style={{ padding: '96px 0', background: 'white' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
         <div style={{ textAlign: 'center', maxWidth: 580, margin: '0 auto 56px' }}>
           <div style={{
             display: 'inline-block', background: 'rgba(26,58,110,0.08)', color: '#1a3a6e',

@@ -48,7 +48,7 @@ export default function Stats({ lang }: StatsProps) {
 
   return (
     <section ref={ref} style={{ padding: '72px 0', background: 'linear-gradient(135deg,#f0f4ff,#e8eeff)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 24 }}>
           {stats.map((s, i) => (
             <div key={i} style={{ textAlign: 'center', padding: '24px 16px' }}>

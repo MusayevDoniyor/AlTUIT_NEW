@@ -27,6 +27,20 @@ body {
   background-color: #f8f9fc;
   color: #1a1f2e;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.container-custom {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 640px) {
+  .container-custom {
+    padding: 0 16px;
+  }
 }
 
 /* ===== CUSTOM SCROLLBAR ===== */
@@ -245,10 +259,14 @@ body {
 }
 
 .header-bottom.sticky {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.header-bottom-wrapper {
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  background: white;
 }
 
 .nav-link {
@@ -257,10 +275,10 @@ body {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 20px 14px;
+  padding: 24px 18px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   transition: all 0.2s;
   cursor: pointer;
   border: none;

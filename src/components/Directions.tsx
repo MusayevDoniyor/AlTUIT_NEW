@@ -51,7 +51,7 @@ export default function Directions({ lang }: DirectionsProps) {
 
   return (
     <section id="directions" style={{ padding: '96px 0', background: 'white' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
 
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: 620, margin: '0 auto 56px' }}>

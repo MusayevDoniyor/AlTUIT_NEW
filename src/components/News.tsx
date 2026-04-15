@@ -49,7 +49,7 @@ export default function News({ lang }: NewsProps) {
 
   return (
     <section id="news" style={{ padding: '96px 0', background: 'white' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
           <div>
             <div style={{

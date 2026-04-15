@@ -49,7 +49,7 @@ export default function About({ lang }: AboutProps) {
 
   return (
     <section id="about" style={{ padding: '96px 0', background: '#f8f9fc' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
 
         {/* Header */}
         <div style={{ maxWidth: 680, marginBottom: 20 }}>

@@ -22,12 +22,13 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
-    description: "Zamonaviy akademik ta'lim markazi — TATU huzuridagi Al-Xorazmiy Akademik Litseyi",
+    description:
+      "Zamonaviy akademik ta'lim markazi — TATU huzuridagi Al-Xorazmiy Akademik Litseyi",
     locale: "uz_UZ",
     type: "website",
   },
   icons: {
-    icon: "/tuit.png",
+    icon: "/logo.png",
   },
 };
 
@@ -37,10 +38,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uz">
+    <html lang="uz" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"

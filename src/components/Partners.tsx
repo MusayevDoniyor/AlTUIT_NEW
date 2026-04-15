@@ -18,7 +18,7 @@ export default function Partners({ lang }: PartnersProps) {
   const t = translations[lang];
   return (
     <section id="partners" style={{ padding: '80px 0', background: '#f0f4ff' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
+      <div className="container-custom">
         <div style={{ textAlign: 'center', marginBottom: 52 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,

@@ -42,6 +42,10 @@ type NavT = {
   header_admin: string;
   header_hours: string;
   header_transport: string;
+  contact_address_val: string;
+  contact_phone_val: string;
+  contact_email_val: string;
+  contact_schedule_val: string;
 };
 
 const navItems = (t: NavT) => [
@@ -83,7 +87,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
+      setScrolled(window.scrollY > 120);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -96,276 +100,285 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     setMobileOpen(false);
   };
 
   return (
-    <header style={{ position: "relative", zIndex: 100, width: "100%" }}>
-      {/* 1. TOP INFO BAR */}
-      <div className={`header-top ${scrolled ? "shrunk" : ""}`}>
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            padding: "0 24px",
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <div style={{ display: "flex", gap: 30 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <MapPin size={13} color="#c8a96e" />
-              <span>{t.nav_contact}</span>
+    <>
+      <header
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          width: "100%",
+          transition: "all 0.4s",
+        }}
+      >
+        {/* 1. TOP INFO BAR */}
+        <div className={`header-top ${scrolled ? "shrunk" : ""}`}>
+          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", gap: 40 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <MapPin size={14} color="#c8a96e" />
+                <span>{t.contact_address_val}</span>
+              </div>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+                className="hidden-tablet"
+              >
+                <Bus size={14} color="#c8a96e" />
+                <span>{t.header_transport}</span>
+              </div>
             </div>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: 6 }}
-              className="hidden-mobile"
-            >
-              <Bus size={13} color="#c8a96e" />
-              <span>{t.header_transport}</span>
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 30 }}>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: 6 }}
-              className="hidden-mobile"
-            >
-              <Mail size={13} color="#c8a96e" />
-              <span>info@tatual.uz</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <Clock size={13} color="#c8a96e" />
-              <span>{t.header_hours}</span>
+            <div style={{ display: "flex", gap: 40 }}>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
+                className="hidden-tablet"
+              >
+                <Mail size={14} color="#c8a96e" />
+                <span>info@tatual.uz</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Clock size={14} color="#c8a96e" />
+                <span>{t.header_hours}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 2. LOGO & ADMIN BAR */}
-      <div className={`header-middle ${scrolled ? "shrunk" : ""}`}>
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            padding: "0 24px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          {/* Logo */}
-          <Link
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollTo("#");
-            }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 15,
-              textDecoration: "none",
-            }}
-          >
-            <div
-              style={{
-                width: scrolled ? 50 : 64,
-                height: scrolled ? 50 : 64,
-                transition: "all 0.4s",
+        {/* 2. LOGO & ADMIN BAR */}
+        <div className={`header-middle ${scrolled ? "shrunk" : ""}`}>
+          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Link
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollTo("#");
               }}
-            >
-              <Image
-                src="/tuit.png"
-                alt="TATU Logo"
-                width={64}
-                height={64}
-                style={{ objectFit: "contain" }}
-              />
-            </div>
-            <div>
-              <div
-                style={{
-                  color: "#002147",
-                  fontWeight: 800,
-                  fontSize: scrolled ? "1rem" : "1.3rem",
-                  transition: "all 0.4s",
-                  lineHeight: 1.1,
-                }}
-              >
-                Al-Xorazmiy
-              </div>
-              <div
-                style={{
-                  color: "#c8a96e",
-                  fontSize: scrolled ? "0.7rem" : "0.8rem",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                Akademik Litseyi
-              </div>
-            </div>
-          </Link>
-
-          {/* Admin Support (Hidden on mobile) */}
-          <div
-            className="hidden-mobile"
-            style={{ display: "flex", alignItems: "center", gap: 15 }}
-          >
-            <div
               style={{
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                background: "#f8f9fa",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                border: "1px solid #eee",
+                gap: 20,
+                textDecoration: "none",
               }}
             >
-              <Headset size={22} color="#c8a96e" />
-            </div>
-            <div style={{ textAlign: "right" }}>
               <div
-                style={{ color: "#666", fontSize: "0.75rem", fontWeight: 600 }}
-              >
-                {t.header_admin}
-              </div>
-              <a
-                href="tel:+998712350369"
                 style={{
-                  color: "#002147",
-                  fontSize: "1.2rem",
-                  fontWeight: 800,
-                  textDecoration: "none",
+                  width: scrolled ? 54 : 70,
+                  height: scrolled ? 54 : 70,
+                  transition: "all 0.4s",
                 }}
               >
-                +998 71 235 03 69
-              </a>
+                <Image
+                  src="/logo.png"
+                  alt="TATU Logo"
+                  width={70}
+                  height={70}
+                  priority
+                  style={{
+                    objectFit: "contain",
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                />
+              </div>
+              <div>
+                <div
+                  style={{
+                    color: "#002147",
+                    fontWeight: 900,
+                    fontSize: scrolled ? "1.1rem" : "1.5rem",
+                    transition: "all 0.4s",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  Al-Xorazmiy
+                </div>
+                <div
+                  style={{
+                    color: "#c8a96e",
+                    fontSize: scrolled ? "0.75rem" : "0.9rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.12em",
+                    marginTop: 2,
+                  }}
+                >
+                  Akademik Litseyi
+                </div>
+              </div>
+            </Link>
+
+            <div
+              className="hidden-mobile"
+              style={{ display: "flex", alignItems: "center", gap: 20 }}
+            >
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "50%",
+                  background: "#f0f4f8",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 0.3s",
+                }}
+              >
+                <Headset size={24} color="#c8a96e" />
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div
+                  style={{
+                    color: "#64748b",
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    marginBottom: 2,
+                  }}
+                >
+                  {t.header_admin}
+                </div>
+                <a
+                  href="tel:+998712350369"
+                  style={{
+                    color: "#002147",
+                    fontSize: "1.3rem",
+                    fontWeight: 800,
+                    textDecoration: "none",
+                    transition: "all 0.3s",
+                  }}
+                >
+                  +998 71 235 03 69
+                </a>
+              </div>
             </div>
-          </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="show-mobile"
-            onClick={() => setMobileOpen(true)}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#002147",
-              cursor: "pointer",
-            }}
-          >
-            <Menu size={28} />
-          </button>
-        </div>
-      </div>
-
-      {/* 3. NAVIGATION BAR (Sticky) */}
-      <nav className={`header-bottom ${scrolled ? "sticky" : ""}`}>
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: "0 auto",
-            padding: scrolled ? "0 24px" : "0 24px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <ul
-            style={{
-              display: "flex",
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-            }}
-            className="hidden-mobile"
-          >
-            {items.map((item, i) => (
-              <li key={i} className="nav-item" style={{ position: "relative" }}>
-                {item.children ? (
-                  <>
-                    <button className="nav-link">
-                      {item.label} <ChevronDown size={14} />
-                    </button>
-                    <div className="dropdown-menu">
-                      {item.children.map((child, j) => (
-                        <button
-                          key={j}
-                          onClick={() => scrollTo(child.href)}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            textAlign: "left",
-                            padding: "12px 20px",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                            fontSize: "0.85rem",
-                            color: "#444",
-                            fontWeight: 500,
-                            transition: "all 0.2s",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#f8f9fa";
-                            e.currentTarget.style.color = "#c8a96e";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "none";
-                            e.currentTarget.style.color = "#444";
-                          }}
-                        >
-                          {child.label}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <button
-                    className="nav-link"
-                    onClick={() => scrollTo(item.href!)}
-                  >
-                    {item.label}
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          {/* Right: Search & Language */}
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <button
+              className="show-mobile"
+              onClick={() => setMobileOpen(true)}
               style={{
                 background: "none",
                 border: "none",
+                color: "#002147",
                 cursor: "pointer",
-                color: "#333",
+                padding: 10,
               }}
-              aria-label="Search"
             >
-              <Search size={18} />
+              <Menu size={32} />
             </button>
-            <div style={{ width: 1, height: 20, background: "#eee" }} />
-            <div style={{ display: "flex", gap: 8 }}>
-              {(["uz", "ru", "en"] as Lang[]).map((l) => (
-                <button
-                  key={l}
-                  className={`lang-btn ${lang === l ? "active" : ""}`}
-                  onClick={() => onLangChange(l)}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
-      </nav>
+
+        {/* 3. NAVIGATION BAR */}
+        <nav
+          className={`header-bottom ${scrolled ? "sticky" : ""}`}
+          style={{ background: "white" }}
+        >
+          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <ul
+              style={{
+                display: "flex",
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+              }}
+              className="hidden-mobile"
+            >
+              {items.map((item, i) => (
+                <li
+                  key={i}
+                  className="nav-item"
+                  style={{ position: "relative" }}
+                >
+                  {item.children ? (
+                    <>
+                      <button className="nav-link">
+                        {item.label}{" "}
+                        <ChevronDown size={14} style={{ opacity: 0.5 }} />
+                      </button>
+                      <div className="dropdown-menu">
+                        {item.children.map((child, j) => (
+                          <button
+                            key={j}
+                            onClick={() => scrollTo(child.href)}
+                            style={{
+                              display: "block",
+                              width: "100%",
+                              textAlign: "left",
+                              padding: "14px 24px",
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              fontSize: "0.9rem",
+                              color: "#334155",
+                              fontWeight: 600,
+                              transition: "all 0.2s",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background = "#f1f5f9";
+                              e.currentTarget.style.color = "#c8a96e";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background = "none";
+                              e.currentTarget.style.color = "#334155";
+                            }}
+                          >
+                            {child.label}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <button
+                      className="nav-link"
+                      onClick={() => scrollTo(item.href!)}
+                    >
+                      {item.label}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+              <button
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#64748b",
+                  padding: 8,
+                }}
+                aria-label="Search"
+              >
+                <Search size={20} />
+              </button>
+              <div
+                style={{ width: 1, height: 24, background: "#e2e8f0" }}
+                className="hidden-mobile"
+              />
+              <div style={{ display: "flex", gap: 10 }}>
+                {(["uz", "ru", "en"] as Lang[]).map((l) => (
+                  <button
+                    key={l}
+                    className={`lang-btn ${lang === l ? "active" : ""}`}
+                    onClick={() => onLangChange(l)}
+                    style={{ padding: "8px 4px" }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
 
       {/* MOBILE SIDEBAR */}
       <div
@@ -375,23 +388,40 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
       <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
         <div
           style={{
-            padding: "25px",
+            padding: "30px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            borderBottom: "1px solid #f0f0f0",
+            borderBottom: "1px solid #f1f5f9",
           }}
         >
-          <div style={{ fontWeight: 800, color: "#002147" }}>MENU</div>
+          <div
+            style={{
+              fontWeight: 900,
+              color: "#002147",
+              letterSpacing: "0.1em",
+            }}
+          >
+            MENU
+          </div>
           <button
             onClick={() => setMobileOpen(false)}
-            style={{ background: "none", border: "none" }}
+            style={{
+              background: "#f1f5f9",
+              border: "none",
+              borderRadius: "50%",
+              width: 40,
+              height: 40,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <X size={24} color="#002147" />
           </button>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto", padding: "10px 0" }}>
+        <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
           {items.map((item, i) => (
             <div key={i}>
               <button
@@ -403,31 +433,34 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 style={{
                   width: "100%",
                   textAlign: "left",
-                  padding: "15px 25px",
+                  padding: "18px 30px",
                   background: "none",
                   border: "none",
-                  fontSize: "0.9rem",
-                  fontWeight: 700,
-                  color: "#333",
+                  fontSize: "1rem",
+                  fontWeight: 800,
+                  color: "#1e293b",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                   textTransform: "uppercase",
+                  letterSpacing: "0.05em",
                 }}
               >
                 {item.label}
                 {item.children && (
                   <ChevronDown
-                    size={16}
+                    size={18}
                     style={{
                       transform:
                         mobileExpanded === i ? "rotate(180deg)" : "none",
+                      transition: "transform 0.3s",
+                      opacity: 0.4,
                     }}
                   />
                 )}
               </button>
               {item.children && mobileExpanded === i && (
-                <div style={{ background: "#f9f9f9", padding: "5px 0" }}>
+                <div style={{ background: "#f8fafc", padding: "8px 0" }}>
                   {item.children.map((child, j) => (
                     <button
                       key={j}
@@ -435,11 +468,12 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                       style={{
                         width: "100%",
                         textAlign: "left",
-                        padding: "12px 40px",
+                        padding: "14px 45px",
                         background: "none",
                         border: "none",
-                        fontSize: "0.85rem",
-                        color: "#666",
+                        fontSize: "0.95rem",
+                        color: "#475569",
+                        fontWeight: 600,
                       }}
                     >
                       {child.label}
@@ -453,19 +487,26 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
         <div
           style={{
-            padding: "25px",
-            borderTop: "1px solid #f0f0f0",
-            background: "#fcfcfc",
+            padding: "30px",
+            borderTop: "1px solid #f1f5f9",
+            background: "#f8fafc",
           }}
         >
-          <div style={{ fontSize: "0.8rem", color: "#999", marginBottom: 10 }}>
+          <div
+            style={{
+              fontSize: "0.85rem",
+              color: "#64748b",
+              fontWeight: 600,
+              marginBottom: 8,
+            }}
+          >
             {t.header_admin}
           </div>
           <a
             href="tel:+998712350369"
             style={{
-              fontSize: "1.2rem",
-              fontWeight: 800,
+              fontSize: "1.4rem",
+              fontWeight: 900,
               color: "#002147",
               textDecoration: "none",
             }}
@@ -475,15 +516,26 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         </div>
       </div>
 
-      <style>{`
+      <style jsx>{`
+        @media (max-width: 1100px) {
+          .hidden-tablet {
+            display: none !important;
+          }
+        }
         @media (max-width: 1024px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
+          .hidden-mobile {
+            display: none !important;
+          }
+          .show-mobile {
+            display: block !important;
+          }
         }
         @media (min-width: 1025px) {
-          .show-mobile { display: none !important; }
+          .show-mobile {
+            display: none !important;
+          }
         }
       `}</style>
-    </header>
+    </>
   );
 }
