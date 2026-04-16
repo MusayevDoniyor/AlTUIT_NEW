@@ -63,7 +63,7 @@ export default function Footer({ lang }: FooterProps) {
                   alt="TATU"
                   width={38}
                   height={38}
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "contain", width: "auto", height: "auto" }}
                 />
               </div>
               <div>

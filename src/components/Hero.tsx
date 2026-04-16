@@ -60,7 +60,7 @@ export default function Hero({ lang }: HeroProps) {
   const desc = lang === 'uz' ? slide.descUz : lang === 'ru' ? slide.descRu : slide.descEn;
 
   return (
-    <section className="carousel-container" style={{ minHeight: '650px', height: '90vh', background: '#002147' }}>
+    <section className="carousel-container" style={{ height: '100vh', background: '#002147' }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
@@ -68,7 +68,7 @@ export default function Hero({ lang }: HeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.2 }}
           style={{ position: 'absolute', inset: 0 }}
         >
           <Image 
@@ -77,17 +77,17 @@ export default function Hero({ lang }: HeroProps) {
             fill 
             priority={current === 0} 
             className="object-cover"
-            style={{ zIndex: -1, opacity: 0.6 }}
+            style={{ zIndex: -1, opacity: 0.5 }}
             sizes="100vw"
           />
 
-          <div className="carousel-overlay" style={{ background: 'linear-gradient(to right, rgba(0,33,71,0.9) 0%, rgba(0,33,71,0.3) 100%)' }} />
+          <div className="carousel-overlay" style={{ background: 'linear-gradient(to right, rgba(0,33,71,0.95) 0%, rgba(0,33,71,0.2) 100%)' }} />
           
           <div className="container-custom" style={{ 
             position: 'relative', zIndex: 2, height: '100%', display: 'flex', 
-            alignItems: 'center', paddingTop: '180px' 
+            alignItems: 'center'
           }}>
-            <div style={{ maxWidth: 850 }}>
+            <div style={{ maxWidth: 900 }}>
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
