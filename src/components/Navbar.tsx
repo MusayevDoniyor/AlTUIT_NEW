@@ -115,44 +115,62 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
           right: 0,
           zIndex: 1000,
           width: "100%",
-          transition: "all 0.4s",
+          transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        {/* 1. TOP INFO BAR */}
-        <div className={`header-top ${scrolled ? "shrunk" : ""}`}>
-          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", gap: 40 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <MapPin size={14} color="#c8a96e" />
+        {/* ROW 1: UPPER INFO BAR */}
+        <div 
+          className="header-top" 
+          style={{ 
+            background: "#002147", 
+            color: "rgba(255,255,255,0.9)",
+            fontSize: "0.72rem",
+            padding: scrolled ? "0" : "8px 0",
+            height: scrolled ? "0" : "auto",
+            overflow: "hidden",
+            opacity: scrolled ? 0 : 1,
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            borderBottom: "1px solid rgba(255,255,255,0.1)"
+          }}
+        >
+          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: 30 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <MapPin size={12} color="#c8a96e" />
                 <span>{t.contact_address_val}</span>
               </div>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: 8 }}
-                className="hidden-tablet"
-              >
-                <Bus size={14} color="#c8a96e" />
-                <span>{t.header_transport}</span>
+              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <Bus size={12} color="#c8a96e" />
+                <span>{t.header_transport}: 19, 38, 50, 63, 115</span>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 40 }}>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: 8 }}
-                className="hidden-tablet"
-              >
-                <Mail size={14} color="#c8a96e" />
+            <div style={{ display: "flex", gap: 30 }}>
+              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <Mail size={12} color="#c8a96e" />
                 <span>info@tatual.uz</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Clock size={14} color="#c8a96e" />
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <Clock size={12} color="#c8a96e" />
                 <span>{t.header_hours}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 2. LOGO & ADMIN BAR */}
-        <div className={`header-middle ${scrolled ? "shrunk" : ""}`}>
+        {/* ROW 2: MAIN SLIM BAR (Sticky) */}
+        <div 
+          className={`header-main ${scrolled ? "scrolled" : ""}`}
+          style={{
+            background: scrolled ? "rgba(255, 255, 255, 0.95)" : "white",
+            backdropFilter: scrolled ? "blur(10px)" : "none",
+            padding: scrolled ? "8px 0" : "12px 0",
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: scrolled ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 20px rgba(0,0,0,0.05)",
+            borderBottom: "1px solid #f1f5f9"
+          }}
+        >
           <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {/* LOGO */}
             <Link
               href="/"
               onClick={(e) => {
@@ -162,38 +180,36 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 20,
+                gap: 12,
                 textDecoration: "none",
               }}
             >
               <div
                 style={{
-                  width: scrolled ? 54 : 70,
-                  height: scrolled ? 54 : 70,
+                  width: scrolled ? 40 : 52,
+                  height: scrolled ? 40 : 52,
                   transition: "all 0.4s",
                 }}
               >
                 <Image
                   src="/logo.png"
                   alt="TATU Logo"
-                  width={70}
-                  height={70}
+                  width={52}
+                  height={52}
                   priority
                   style={{
                     objectFit: "contain",
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
+                    width: "100%",
+                    height: "100%",
                   }}
                 />
               </div>
-              <div>
+              <div className="hidden-mobile">
                 <div
                   style={{
                     color: "#002147",
                     fontWeight: 900,
-                    fontSize: scrolled ? "1.1rem" : "1.5rem",
+                    fontSize: scrolled ? "1rem" : "1.2rem",
                     transition: "all 0.4s",
                     lineHeight: 1.1,
                   }}
@@ -203,11 +219,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 <div
                   style={{
                     color: "#c8a96e",
-                    fontSize: scrolled ? "0.75rem" : "0.9rem",
+                    fontSize: scrolled ? "0.6rem" : "0.75rem",
                     fontWeight: 600,
                     textTransform: "uppercase",
-                    letterSpacing: "0.12em",
-                    marginTop: 2,
+                    letterSpacing: "0.1em",
+                    marginTop: 1,
                   }}
                 >
                   Akademik Litseyi
@@ -215,169 +231,129 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               </div>
             </Link>
 
-            <div
-              className="hidden-mobile"
-              style={{ display: "flex", alignItems: "center", gap: 20 }}
-            >
-              <div
+            {/* NAV MENU */}
+            <nav className="hidden-mobile" style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+              <ul
                 style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "50%",
-                  background: "#f0f4f8",
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.3s",
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  gap: 4,
                 }}
               >
-                <Headset size={24} color="#c8a96e" />
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div
-                  style={{
-                    color: "#64748b",
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
-                    marginBottom: 2,
-                  }}
-                >
-                  {t.header_admin}
-                </div>
-                <a
-                  href="tel:+998712350369"
-                  style={{
-                    color: "#002147",
-                    fontSize: "1.3rem",
-                    fontWeight: 800,
-                    textDecoration: "none",
-                    transition: "all 0.3s",
-                  }}
-                >
-                  +998 71 235 03 69
-                </a>
-              </div>
-            </div>
-
-            <button
-              className="show-mobile"
-              onClick={() => setMobileOpen(true)}
-              style={{
-                background: "none",
-                border: "none",
-                color: "#002147",
-                cursor: "pointer",
-                padding: 10,
-              }}
-            >
-              <Menu size={32} />
-            </button>
-          </div>
-        </div>
-
-        {/* 3. NAVIGATION BAR */}
-        <nav
-          className={`header-bottom ${scrolled ? "sticky" : ""}`}
-          style={{ background: "white" }}
-        >
-          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <ul
-              style={{
-                display: "flex",
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-              }}
-              className="hidden-mobile"
-            >
-              {items.map((item, i) => (
-                <li
-                  key={i}
-                  className="nav-item"
-                  style={{ position: "relative" }}
-                >
-                  {item.children ? (
-                    <>
-                      <button className="nav-link">
-                        {item.label}{" "}
-                        <ChevronDown size={14} style={{ opacity: 0.5 }} />
+                {items.map((item, i) => (
+                  <li key={i} className="nav-item" style={{ position: "relative" }}>
+                    {item.children ? (
+                      <>
+                        <button className="nav-link" style={{ padding: "10px 14px", fontSize: "0.75rem" }}>
+                          {item.label}
+                          <ChevronDown size={11} style={{ opacity: 0.5, marginLeft: 3 }} />
+                        </button>
+                        <div className="dropdown-menu">
+                          {item.children.map((child, j) => (
+                            <button
+                              key={j}
+                              onClick={() => scrollTo(child.href)}
+                              style={{
+                                display: "block",
+                                width: "100%",
+                                textAlign: "left",
+                                padding: "10px 18px",
+                                background: "none",
+                                border: "none",
+                                cursor: "pointer",
+                                fontSize: "0.82rem",
+                                color: "#334155",
+                                fontWeight: 600,
+                                transition: "all 0.2s",
+                              }}
+                            >
+                              {child.label}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <button
+                        className="nav-link"
+                        style={{ padding: "10px 14px", fontSize: "0.75rem" }}
+                        onClick={() => scrollTo(item.href!)}
+                      >
+                        {item.label}
                       </button>
-                      <div className="dropdown-menu">
-                        {item.children.map((child, j) => (
-                          <button
-                            key={j}
-                            onClick={() => scrollTo(child.href)}
-                            style={{
-                              display: "block",
-                              width: "100%",
-                              textAlign: "left",
-                              padding: "14px 24px",
-                              background: "none",
-                              border: "none",
-                              cursor: "pointer",
-                              fontSize: "0.9rem",
-                              color: "#334155",
-                              fontWeight: 600,
-                              transition: "all 0.2s",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "#f1f5f9";
-                              e.currentTarget.style.color = "#c8a96e";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "none";
-                              e.currentTarget.style.color = "#334155";
-                            }}
-                          >
-                            {child.label}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <button
-                      className="nav-link"
-                      onClick={() => scrollTo(item.href!)}
-                    >
-                      {item.label}
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+            {/* ACTIONS */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <button
                 style={{
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "#64748b",
+                  color: "#002147",
                   padding: 8,
+                  opacity: 0.6,
                 }}
                 aria-label="Search"
               >
-                <Search size={20} />
+                <Search size={18} />
               </button>
-              <div
-                style={{ width: 1, height: 24, background: "#e2e8f0" }}
-                className="hidden-mobile"
-              />
-              <div style={{ display: "flex", gap: 10 }}>
+              <div style={{ width: 1, height: 18, background: "#e2e8f0" }} className="hidden-mobile" />
+              <div style={{ display: "flex", gap: 2 }}>
                 {(["uz", "ru", "en"] as Lang[]).map((l) => (
                   <button
                     key={l}
                     className={`lang-btn ${lang === l ? "active" : ""}`}
                     onClick={() => onLangChange(l)}
-                    style={{ padding: "8px 4px" }}
+                    style={{ padding: "4px", fontSize: "0.68rem" }}
                   >
                     {l}
                   </button>
                 ))}
               </div>
+              
+              <a
+                href="tel:+998712350369"
+                className="hidden-mobile"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 14px",
+                  background: "#002147",
+                  color: "white",
+                  borderRadius: 50,
+                  textDecoration: "none",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  transition: "all 0.3s",
+                }}
+              >
+                <Phone size={12} />
+                <span>+998 71 235 03 69</span>
+              </a>
+
+              <button
+                className="show-mobile"
+                onClick={() => setMobileOpen(true)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#002147",
+                  cursor: "pointer",
+                  padding: 4,
+                }}
+              >
+                <Menu size={24} />
+              </button>
             </div>
           </div>
-        </nav>
+        </div>
       </header>
 
       {/* MOBILE SIDEBAR */}
@@ -532,6 +508,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         }
         @media (min-width: 1025px) {
           .show-mobile {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .header-top {
             display: none !important;
           }
         }
