@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
 import { Phone, Mail, MapPin, ExternalLink, Bus } from "lucide-react";
 
@@ -11,24 +12,21 @@ interface FooterProps {
 export default function Footer({ lang }: FooterProps) {
   const t = translations[lang];
 
-  const scrollTo = (id: string) =>
-    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
-
   const links = [
-    { label: t.nav_about_short, href: "#about" },
-    { label: t.nav_directions, href: "#directions" },
-    { label: t.nav_rules, href: "#admission" },
-    { label: t.nav_docs, href: "#documents" },
-    { label: t.nav_faq, href: "#faq" },
-    { label: t.nav_achievements, href: "#achievements" },
-    { label: t.nav_news, href: "#news" },
-    { label: t.nav_contact, href: "#contact" },
+    { label: t.nav_about_short, href: "/about" },
+    { label: t.nav_directions, href: "/#directions" },
+    { label: t.nav_rules, href: "/admission" },
+    { label: t.nav_docs, href: "/admission#documents" },
+    { label: t.nav_faq, href: "/about#faq" },
+    { label: t.nav_achievements, href: "/science" },
+    { label: t.nav_news, href: "/news" },
+    { label: t.nav_contact, href: "/contact" },
   ];
 
   return (
     <footer style={{ background: "#060f1e", color: "rgba(255,255,255,0.7)" }}>
       {/* Main footer */}
-      <div className="container-custom" style={{ padding: '64px 0 40px' }}>
+      <div className="container-custom" style={{ padding: "64px 0 40px" }}>
         <div
           style={{
             display: "grid",
@@ -50,7 +48,7 @@ export default function Footer({ lang }: FooterProps) {
                 style={{
                   width: 44,
                   height: 44,
-                  borderRadius: 10,
+                  borderRadius: "50%",
                   background: "white",
                   display: "flex",
                   alignItems: "center",
@@ -63,7 +61,11 @@ export default function Footer({ lang }: FooterProps) {
                   alt="TATU"
                   width={38}
                   height={38}
-                  style={{ objectFit: "contain", width: "auto", height: "auto" }}
+                  style={{
+                    objectFit: "contain",
+                    width: "auto",
+                    height: "auto",
+                  }}
                 />
               </div>
               <div>
@@ -96,17 +98,17 @@ export default function Footer({ lang }: FooterProps) {
                 {
                   href: "https://t.me/altuit_lyceum",
                   label: "Telegram",
-                  emoji: "✈️",
+                  icon: "✈️",
                 },
                 {
-                  href: "https://instagram.com",
+                  href: "https://instagram.com/altuit_lyceum",
                   label: "Instagram",
-                  emoji: "📸",
+                  icon: "📸",
                 },
                 {
-                  href: "https://facebook.com",
-                  label: "Facebook",
-                  emoji: "👍",
+                  href: "https://youtube.com/@tatual",
+                  label: "YouTube",
+                  icon: "▶️",
                 },
               ].map((s) => (
                 <a
@@ -141,7 +143,7 @@ export default function Footer({ lang }: FooterProps) {
                       "rgba(255,255,255,0.1)";
                   }}
                 >
-                  {s.emoji}
+                  {s.icon}
                 </a>
               ))}
             </div>
@@ -172,32 +174,31 @@ export default function Footer({ lang }: FooterProps) {
             >
               {links.map((l, i) => (
                 <li key={i}>
-                  <button
-                    onClick={() => scrollTo(l.href)}
+                  <Link
+                    href={l.href}
                     style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
                       color: "rgba(255,255,255,0.5)",
                       fontSize: "0.84rem",
-                      padding: 0,
                       display: "flex",
                       alignItems: "center",
                       gap: 6,
                       transition: "color 0.2s",
+                      textDecoration: "none",
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = "#c8a96e")
+                      ((e.currentTarget as HTMLAnchorElement).style.color =
+                        "#c8a96e")
                     }
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = "rgba(255,255,255,0.5)")
+                      ((e.currentTarget as HTMLAnchorElement).style.color =
+                        "rgba(255,255,255,0.5)")
                     }
                   >
                     <span style={{ color: "#c8a96e", fontSize: "0.7rem" }}>
                       ›
                     </span>{" "}
                     {l.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -241,9 +242,7 @@ export default function Footer({ lang }: FooterProps) {
                   color="#c8a96e"
                   style={{ flexShrink: 0, marginTop: 2 }}
                 />
-                <span style={{ fontSize: "0.84rem" }}>
-                  {t.header_transport}
-                </span>
+                <span style={{ fontSize: "0.84rem" }}>19, 38, 50, 63, 115</span>
               </div>
 
               <div
@@ -254,7 +253,6 @@ export default function Footer({ lang }: FooterProps) {
                 }}
               />
 
-              {/* Parent university link */}
               <a
                 href="https://tatu.uz"
                 target="_blank"
@@ -269,15 +267,20 @@ export default function Footer({ lang }: FooterProps) {
                   textDecoration: "none",
                   transition: "opacity 0.2s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.75")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.opacity =
+                    "0.75")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.opacity = "1")
+                }
               >
                 <ExternalLink size={13} /> tatu.uz
               </a>
             </div>
           </div>
 
-          {/* Telegram channel CTA */}
+          {/* Telegram CTA */}
           <div>
             <h4
               style={{
@@ -353,18 +356,28 @@ export default function Footer({ lang }: FooterProps) {
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '20px 0' }}>
-        <div className="container-custom" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+      <div
+        style={{
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          padding: "20px 0",
+        }}
+      >
+        <div
+          className="container-custom"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 12,
+          }}
+        >
           <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.3)" }}>
             © {new Date().getFullYear()} Al-Xorazmiy Akademik Litseyi (TATU).{" "}
             {t.footer_copy}
           </p>
           <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.25)" }}>
-            {lang === "uz"
-              ? "Barcha huquqlar himoyalangan."
-              : lang === "ru"
-                ? "tatual.uz"
-                : "tatual.uz"}
+            tatual.uz
           </p>
         </div>
       </div>

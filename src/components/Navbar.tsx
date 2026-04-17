@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
 import {
   Menu,
@@ -14,7 +15,6 @@ import {
   Clock,
   Bus,
   Search,
-  Headset,
 } from "lucide-react";
 
 interface NavbarProps {
@@ -22,87 +22,62 @@ interface NavbarProps {
   onLangChange: (l: Lang) => void;
 }
 
-type NavT = {
-  nav_home: string;
-  nav_about: string;
-  nav_about_short: string;
-  nav_leadership: string;
-  nav_teachers: string;
-  nav_base: string;
-  nav_admissions: string;
-  nav_directions: string;
-  nav_rules: string;
-  nav_docs: string;
-  nav_faq: string;
-  nav_science: string;
-  nav_partners: string;
-  nav_achievements: string;
-  nav_news: string;
-  nav_contact: string;
-  header_admin: string;
-  header_hours: string;
-  header_transport: string;
-  contact_address_val: string;
-  contact_phone_val: string;
-  contact_email_val: string;
-  contact_schedule_val: string;
-};
-
-const navItems = (t: NavT) => [
-  { label: t.nav_home, href: "#" },
+const navItems = (t: Record<string, string>) => [
+  { label: t.nav_home, href: "/" },
   {
     label: t.nav_about,
     children: [
-      { label: t.nav_about_short, href: "#about" },
-      { label: t.nav_leadership, href: "#leadership" },
-      { label: t.nav_teachers, href: "#teachers" },
-      { label: t.nav_base, href: "#facilities" },
+      { label: t.nav_about_short, href: "/about" },
+      { label: t.nav_leadership, href: "/about#leadership" },
+      { label: t.nav_teachers, href: "/about#teachers" },
+      { label: t.nav_base, href: "/about#facilities" },
     ],
   },
   {
     label: t.nav_admissions,
     children: [
-      { label: t.nav_directions, href: "#directions" },
-      { label: t.nav_rules, href: "#admission" },
-      { label: t.nav_docs, href: "#documents" },
-      { label: t.nav_faq, href: "#faq" },
+      { label: t.nav_directions, href: "/#directions" },
+      { label: t.nav_rules, href: "/admission" },
+      { label: t.nav_docs, href: "/admission#documents" },
+      { label: t.nav_faq, href: "/about#faq" },
     ],
   },
   {
     label: t.nav_science,
     children: [
-      { label: t.nav_partners, href: "#partners" },
-      { label: t.nav_achievements, href: "#achievements" },
+      { label: t.nav_partners, href: "/science#partners" },
+      { label: t.nav_achievements, href: "/science" },
     ],
   },
-  { label: t.nav_news, href: "#news" },
-  { label: t.nav_contact, href: "#contact" },
+  { label: t.nav_news, href: "/news" },
+  { label: t.nav_contact, href: "/contact" },
 ];
 
 export default function Navbar({ lang, onLangChange }: NavbarProps) {
-  const t = translations[lang] as unknown as NavT;
+  const t = translations[lang] as unknown as Record<string, string>;
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 120);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 120);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const items = navItems(t);
 
-  const scrollTo = (href: string) => {
-    if (href === "#") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      const el = document.querySelector(href);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+  const handleNavClick = (href: string) => {
     setMobileOpen(false);
+    // If same page with hash, smooth scroll
+    if (href.startsWith("/#") && pathname === "/") {
+      const id = href.replace("/#", "#");
+      document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+    } else if (href.includes("#") && href.startsWith(pathname + "#")) {
+      const hash = href.split("#")[1];
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -119,10 +94,10 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         }}
       >
         {/* ROW 1: UPPER INFO BAR */}
-        <div 
-          className="header-top" 
-          style={{ 
-            background: "#002147", 
+        <div
+          className="header-top"
+          style={{
+            background: "#002147",
             color: "rgba(255,255,255,0.9)",
             fontSize: "0.72rem",
             padding: scrolled ? "0" : "8px 0",
@@ -130,10 +105,13 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             overflow: "hidden",
             opacity: scrolled ? 0 : 1,
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-            borderBottom: "1px solid rgba(255,255,255,0.1)"
+            borderBottom: "1px solid rgba(255,255,255,0.1)",
           }}
         >
-          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            className="container-custom"
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          >
             <div style={{ display: "flex", gap: 30 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <MapPin size={12} color="#c8a96e" />
@@ -141,7 +119,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               </div>
               <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <Bus size={12} color="#c8a96e" />
-                <span>{t.header_transport}: 19, 38, 50, 63, 115</span>
+                <span>19, 38, 50, 63, 115</span>
               </div>
             </div>
             <div style={{ display: "flex", gap: 30 }}>
@@ -157,32 +135,28 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
           </div>
         </div>
 
-        {/* ROW 2: MAIN SLIM BAR (Sticky) */}
-        <div 
+        {/* ROW 2: MAIN NAV BAR */}
+        <div
           className={`header-main ${scrolled ? "scrolled" : ""}`}
           style={{
-            background: scrolled ? "rgba(255, 255, 255, 0.95)" : "white",
-            backdropFilter: scrolled ? "blur(10px)" : "none",
+            background: scrolled ? "rgba(255,255,255,0.97)" : "white",
+            backdropFilter: scrolled ? "blur(12px)" : "none",
             padding: scrolled ? "8px 0" : "12px 0",
             transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-            boxShadow: scrolled ? "0 10px 30px rgba(0,0,0,0.08)" : "0 4px 20px rgba(0,0,0,0.05)",
-            borderBottom: "1px solid #f1f5f9"
+            boxShadow: scrolled
+              ? "0 10px 30px rgba(0,0,0,0.08)"
+              : "0 4px 20px rgba(0,0,0,0.05)",
+            borderBottom: "1px solid #f1f5f9",
           }}
         >
-          <div className="container-custom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            className="container-custom"
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          >
             {/* LOGO */}
             <Link
               href="/"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#");
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                textDecoration: "none",
-              }}
+              style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
             >
               <div
                 style={{
@@ -197,11 +171,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   width={52}
                   height={52}
                   priority
-                  style={{
-                    objectFit: "contain",
-                    width: "100%",
-                    height: "100%",
-                  }}
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
                 />
               </div>
               <div className="hidden-mobile">
@@ -233,28 +203,24 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
             {/* NAV MENU */}
             <nav className="hidden-mobile" style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-              <ul
-                style={{
-                  display: "flex",
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  gap: 4,
-                }}
-              >
+              <ul style={{ display: "flex", listStyle: "none", padding: 0, margin: 0, gap: 4 }}>
                 {items.map((item, i) => (
                   <li key={i} className="nav-item" style={{ position: "relative" }}>
                     {item.children ? (
                       <>
-                        <button className="nav-link" style={{ padding: "10px 14px", fontSize: "0.75rem" }}>
+                        <button
+                          className="nav-link"
+                          style={{ padding: "10px 14px", fontSize: "0.75rem" }}
+                        >
                           {item.label}
                           <ChevronDown size={11} style={{ opacity: 0.5, marginLeft: 3 }} />
                         </button>
                         <div className="dropdown-menu">
                           {item.children.map((child, j) => (
-                            <button
+                            <Link
                               key={j}
-                              onClick={() => scrollTo(child.href)}
+                              href={child.href}
+                              onClick={() => handleNavClick(child.href)}
                               style={{
                                 display: "block",
                                 width: "100%",
@@ -267,21 +233,30 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                                 color: "#334155",
                                 fontWeight: 600,
                                 transition: "all 0.2s",
+                                textDecoration: "none",
+                              }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLAnchorElement).style.color = "#c8a96e";
+                                (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "22px";
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLAnchorElement).style.color = "#334155";
+                                (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "18px";
                               }}
                             >
                               {child.label}
-                            </button>
+                            </Link>
                           ))}
                         </div>
                       </>
                     ) : (
-                      <button
-                        className="nav-link"
-                        style={{ padding: "10px 14px", fontSize: "0.75rem" }}
-                        onClick={() => scrollTo(item.href!)}
+                      <Link
+                        href={item.href!}
+                        className={`nav-link ${pathname === item.href ? "active" : ""}`}
+                        style={{ padding: "10px 14px", fontSize: "0.75rem", textDecoration: "none" }}
                       >
                         {item.label}
-                      </button>
+                      </Link>
                     )}
                   </li>
                 ))}
@@ -316,7 +291,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   </button>
                 ))}
               </div>
-              
+
               <a
                 href="tel:+998712350369"
                 className="hidden-mobile"
@@ -371,15 +346,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             borderBottom: "1px solid #f1f5f9",
           }}
         >
-          <div
-            style={{
-              fontWeight: 900,
-              color: "#002147",
-              letterSpacing: "0.1em",
-            }}
-          >
-            MENU
-          </div>
+          <div style={{ fontWeight: 900, color: "#002147", letterSpacing: "0.1em" }}>MENU</div>
           <button
             onClick={() => setMobileOpen(false)}
             style={{
@@ -400,92 +367,93 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
           {items.map((item, i) => (
             <div key={i}>
-              <button
-                onClick={() =>
-                  item.children
-                    ? setMobileExpanded(mobileExpanded === i ? null : i)
-                    : scrollTo(item.href!)
-                }
-                style={{
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "18px 30px",
-                  background: "none",
-                  border: "none",
-                  fontSize: "1rem",
-                  fontWeight: 800,
-                  color: "#1e293b",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                {item.label}
-                {item.children && (
-                  <ChevronDown
-                    size={18}
+              {item.children ? (
+                <>
+                  <button
+                    onClick={() => setMobileExpanded(mobileExpanded === i ? null : i)}
                     style={{
-                      transform:
-                        mobileExpanded === i ? "rotate(180deg)" : "none",
-                      transition: "transform 0.3s",
-                      opacity: 0.4,
+                      width: "100%",
+                      textAlign: "left",
+                      padding: "18px 30px",
+                      background: "none",
+                      border: "none",
+                      fontSize: "1rem",
+                      fontWeight: 800,
+                      color: "#1e293b",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
                     }}
-                  />
-                )}
-              </button>
-              {item.children && mobileExpanded === i && (
-                <div style={{ background: "#f8fafc", padding: "8px 0" }}>
-                  {item.children.map((child, j) => (
-                    <button
-                      key={j}
-                      onClick={() => scrollTo(child.href)}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      size={18}
                       style={{
-                        width: "100%",
-                        textAlign: "left",
-                        padding: "14px 45px",
-                        background: "none",
-                        border: "none",
-                        fontSize: "0.95rem",
-                        color: "#475569",
-                        fontWeight: 600,
+                        transform: mobileExpanded === i ? "rotate(180deg)" : "none",
+                        transition: "transform 0.3s",
+                        opacity: 0.4,
                       }}
-                    >
-                      {child.label}
-                    </button>
-                  ))}
-                </div>
+                    />
+                  </button>
+                  {mobileExpanded === i && (
+                    <div style={{ background: "#f8fafc", padding: "8px 0" }}>
+                      {item.children.map((child, j) => (
+                        <Link
+                          key={j}
+                          href={child.href}
+                          onClick={() => setMobileOpen(false)}
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            textAlign: "left",
+                            padding: "14px 45px",
+                            fontSize: "0.95rem",
+                            color: "#475569",
+                            fontWeight: 600,
+                            textDecoration: "none",
+                          }}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <Link
+                  href={item.href!}
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "18px 30px",
+                    fontSize: "1rem",
+                    fontWeight: 800,
+                    color: pathname === item.href ? "#c8a96e" : "#1e293b",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    textDecoration: "none",
+                  }}
+                >
+                  {item.label}
+                </Link>
               )}
             </div>
           ))}
         </div>
 
         <div
-          style={{
-            padding: "30px",
-            borderTop: "1px solid #f1f5f9",
-            background: "#f8fafc",
-          }}
+          style={{ padding: "30px", borderTop: "1px solid #f1f5f9", background: "#f8fafc" }}
         >
-          <div
-            style={{
-              fontSize: "0.85rem",
-              color: "#64748b",
-              fontWeight: 600,
-              marginBottom: 8,
-            }}
-          >
+          <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, marginBottom: 8 }}>
             {t.header_admin}
           </div>
           <a
             href="tel:+998712350369"
-            style={{
-              fontSize: "1.4rem",
-              fontWeight: 900,
-              color: "#002147",
-              textDecoration: "none",
-            }}
+            style={{ fontSize: "1.4rem", fontWeight: 900, color: "#002147", textDecoration: "none" }}
           >
             +998 71 235 03 69
           </a>
@@ -494,27 +462,17 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
       <style jsx>{`
         @media (max-width: 1100px) {
-          .hidden-tablet {
-            display: none !important;
-          }
+          .hidden-tablet { display: none !important; }
         }
         @media (max-width: 1024px) {
-          .hidden-mobile {
-            display: none !important;
-          }
-          .show-mobile {
-            display: block !important;
-          }
+          .hidden-mobile { display: none !important; }
+          .show-mobile { display: block !important; }
         }
         @media (min-width: 1025px) {
-          .show-mobile {
-            display: none !important;
-          }
+          .show-mobile { display: none !important; }
         }
         @media (max-width: 768px) {
-          .header-top {
-            display: none !important;
-          }
+          .header-top { display: none !important; }
         }
       `}</style>
     </>
