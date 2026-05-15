@@ -3,13 +3,24 @@
 import { useState } from "react";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import {
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+  FaRegClock,
+  FaPaperPlane,
+} from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function ContactPage() {
   const [lang, setLang] = useState<Lang>("uz");
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [sent, setSent] = useState(false);
 
   const t = translations[lang];
@@ -22,10 +33,32 @@ export default function ContactPage() {
   };
 
   const info = [
-    { icon: MapPin, label: t.contact_address, value: t.contact_address_val, color: "#1a3a6e" },
-    { icon: Phone, label: t.contact_phone, value: t.contact_phone_val, color: "#2d5bb5", href: "tel:+998712350369" },
-    { icon: Mail, label: t.contact_email, value: t.contact_email_val, color: "#1d7a55", href: "mailto:info@tatual.uz" },
-    { icon: Clock, label: t.contact_schedule, value: t.contact_schedule_val, color: "#c8a96e" },
+    {
+      icon: FaMapMarkerAlt,
+      label: t.contact_address,
+      value: t.contact_address_val,
+      color: "#1a3a6e",
+    },
+    {
+      icon: FaPhoneAlt,
+      label: t.contact_phone,
+      value: t.contact_phone_val,
+      color: "#2d5bb5",
+      href: "tel:+998712350369",
+    },
+    {
+      icon: FaEnvelope,
+      label: t.contact_email,
+      value: t.contact_email_val,
+      color: "#1d7a55",
+      href: "mailto:info@tatual.uz",
+    },
+    {
+      icon: FaRegClock,
+      label: t.contact_schedule,
+      value: t.contact_schedule_val,
+      color: "#c8a96e",
+    },
   ];
 
   const departments = [
@@ -61,7 +94,10 @@ export default function ContactPage() {
 
       {/* PAGE BANNER */}
       <div className="page-banner" style={{ paddingTop: 140 }}>
-        <div className="container-custom" style={{ position: "relative", zIndex: 1 }}>
+        <div
+          className="container-custom"
+          style={{ position: "relative", zIndex: 1 }}
+        >
           <div
             style={{
               display: "flex",
@@ -72,7 +108,10 @@ export default function ContactPage() {
               color: "rgba(255,255,255,0.6)",
             }}
           >
-            <Link href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+            <Link
+              href="/"
+              style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
+            >
               {t.nav_home}
             </Link>
             <span>/</span>
@@ -88,12 +127,18 @@ export default function ContactPage() {
           >
             {t.contact_title}
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1rem", maxWidth: 600 }}>
+          <p
+            style={{
+              color: "rgba(255,255,255,0.7)",
+              fontSize: "1rem",
+              maxWidth: 600,
+            }}
+          >
             {lang === "uz"
               ? "Har qanday savol yoki murojaat uchun biz bilan bog'laning"
               : lang === "ru"
-              ? "Свяжитесь с нами по любому вопросу"
-              : "Contact us for any questions or inquiries"}
+                ? "Свяжитесь с нами по любому вопросу"
+                : "Contact us for any questions or inquiries"}
           </p>
         </div>
       </div>
@@ -102,17 +147,37 @@ export default function ContactPage() {
       <section style={{ padding: "96px 0", background: "#f8f9fc" }}>
         <div className="container-custom">
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 40 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+              gap: 40,
+            }}
           >
             {/* Info cards */}
             <div>
               <h2
-                style={{ color: "#1a3a6e", fontWeight: 800, fontSize: "1.3rem", marginBottom: 28 }}
+                style={{
+                  color: "#1a3a6e",
+                  fontWeight: 800,
+                  fontSize: "1.3rem",
+                  marginBottom: 28,
+                }}
               >
-                {lang === "uz" ? "Aloqa ma'lumotlari" : lang === "ru" ? "Контактные данные" : "Contact Details"}
+                {lang === "uz"
+                  ? "Aloqa ma'lumotlari"
+                  : lang === "ru"
+                    ? "Контактные данные"
+                    : "Contact Details"}
               </h2>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 36 }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 16,
+                  marginBottom: 36,
+                }}
+              >
                 {info.map((item, i) => (
                   <div
                     key={i}
@@ -143,7 +208,14 @@ export default function ContactPage() {
                       <item.icon size={20} color={item.color} />
                     </div>
                     <div>
-                      <p style={{ color: "#9ca3af", fontSize: "0.75rem", fontWeight: 600, marginBottom: 4 }}>
+                      <p
+                        style={{
+                          color: "#9ca3af",
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          marginBottom: 4,
+                        }}
+                      >
                         {item.label}
                       </p>
                       {item.href ? (
@@ -160,7 +232,14 @@ export default function ContactPage() {
                           {item.value}
                         </a>
                       ) : (
-                        <p style={{ color: "#1a1f2e", fontWeight: 600, fontSize: "0.88rem", lineHeight: 1.5 }}>
+                        <p
+                          style={{
+                            color: "#1a1f2e",
+                            fontWeight: 600,
+                            fontSize: "0.88rem",
+                            lineHeight: 1.5,
+                          }}
+                        >
                           {item.value}
                         </p>
                       )}
@@ -185,18 +264,43 @@ export default function ContactPage() {
                 }}
                 onClick={() =>
                   window.open(
-                    "https://maps.google.com/?q=Tashkent+Amir+Temur+108+TATU+Lyceum",
-                    "_blank"
+                    "https://maps.google.com/?q=Tashkent+Bogishamol+112",
+                    "_blank",
                   )
                 }
               >
-                <div style={{ textAlign: "center", color: "rgba(255,255,255,0.9)", padding: "24px" }}>
-                  <MapPin size={40} style={{ marginBottom: 12, opacity: 0.8 }} />
-                  <p style={{ fontSize: "0.9rem", fontWeight: 700, marginBottom: 4 }}>
-                    {lang === "uz" ? "Toshkent, Yunusobod tumani" : lang === "ru" ? "Ташкент, Юнусабадский район" : "Tashkent, Yunusabad"}
+                <div
+                  style={{
+                    textAlign: "center",
+                    color: "rgba(255,255,255,0.9)",
+                    padding: "24px",
+                  }}
+                >
+                  <FaMapMarkerAlt
+                    size={40}
+                    style={{ marginBottom: 12, opacity: 0.8 }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 700,
+                      marginBottom: 4,
+                    }}
+                  >
+                    {lang === "uz"
+                      ? "Toshkent, Yunusobod tumani"
+                      : lang === "ru"
+                        ? "Ташкент, Юнусабадский район"
+                        : "Tashkent, Yunusabad"}
                   </p>
-                  <p style={{ fontSize: "0.8rem", opacity: 0.7, marginBottom: 14 }}>
-                    Amir Temur shox ko'chasi, 108
+                  <p
+                    style={{
+                      fontSize: "0.8rem",
+                      opacity: 0.7,
+                      marginBottom: 14,
+                    }}
+                  >
+                    Bog'ishamol ko'chasi, 112
                   </p>
                   <span
                     style={{
@@ -209,7 +313,11 @@ export default function ContactPage() {
                       borderRadius: 50,
                     }}
                   >
-                    {lang === "uz" ? "Xaritada ko'rish →" : lang === "ru" ? "Открыть на карте →" : "View on map →"}
+                    {lang === "uz"
+                      ? "Xaritada ko'rish →"
+                      : lang === "ru"
+                        ? "Открыть на карте →"
+                        : "View on map →"}
                   </span>
                 </div>
               </div>
@@ -225,22 +333,41 @@ export default function ContactPage() {
                 border: "1px solid rgba(26,58,110,0.07)",
               }}
             >
-              <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "1.2rem", marginBottom: 8 }}>
+              <h3
+                style={{
+                  color: "#1a1f2e",
+                  fontWeight: 700,
+                  fontSize: "1.2rem",
+                  marginBottom: 8,
+                }}
+              >
                 ✉️ {t.contact_send}
               </h3>
-              <p style={{ color: "#6b7280", fontSize: "0.85rem", marginBottom: 28 }}>
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: "0.85rem",
+                  marginBottom: 28,
+                }}
+              >
                 {lang === "uz"
                   ? "Xabaringizga 24 soat ichida javob beramiz"
                   : lang === "ru"
-                  ? "Мы ответим на ваше сообщение в течение 24 часов"
-                  : "We will respond to your message within 24 hours"}
+                    ? "Мы ответим на ваше сообщение в течение 24 часов"
+                    : "We will respond to your message within 24 hours"}
               </p>
 
               <form
                 onSubmit={handleSubmit}
                 style={{ display: "flex", flexDirection: "column", gap: 18 }}
               >
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 16,
+                  }}
+                >
                   <div>
                     <label
                       style={{
@@ -257,8 +384,16 @@ export default function ContactPage() {
                       type="text"
                       required
                       value={form.name}
-                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                      placeholder={lang === "uz" ? "Ismingiz" : lang === "ru" ? "Ваше имя" : "Your name"}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, name: e.target.value }))
+                      }
+                      placeholder={
+                        lang === "uz"
+                          ? "Ismingiz"
+                          : lang === "ru"
+                            ? "Ваше имя"
+                            : "Your name"
+                      }
                       style={{
                         width: "100%",
                         padding: "12px 16px",
@@ -290,7 +425,9 @@ export default function ContactPage() {
                       type="email"
                       required
                       value={form.email}
-                      onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, email: e.target.value }))
+                      }
                       placeholder="email@misol.uz"
                       style={{
                         width: "100%",
@@ -319,14 +456,26 @@ export default function ContactPage() {
                       marginBottom: 8,
                     }}
                   >
-                    {lang === "uz" ? "Mavzu" : lang === "ru" ? "Тема" : "Subject"}
+                    {lang === "uz"
+                      ? "Mavzu"
+                      : lang === "ru"
+                        ? "Тема"
+                        : "Subject"}
                   </label>
                   <input
                     type="text"
                     required
                     value={form.subject}
-                    onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
-                    placeholder={lang === "uz" ? "Xabar mavzusi" : lang === "ru" ? "Тема сообщения" : "Message subject"}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, subject: e.target.value }))
+                    }
+                    placeholder={
+                      lang === "uz"
+                        ? "Xabar mavzusi"
+                        : lang === "ru"
+                          ? "Тема сообщения"
+                          : "Message subject"
+                    }
                     style={{
                       width: "100%",
                       padding: "12px 16px",
@@ -359,13 +508,15 @@ export default function ContactPage() {
                     required
                     rows={5}
                     value={form.message}
-                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, message: e.target.value }))
+                    }
                     placeholder={
                       lang === "uz"
                         ? "Xabaringizni yozing..."
                         : lang === "ru"
-                        ? "Напишите ваше сообщение..."
-                        : "Write your message..."
+                          ? "Напишите ваше сообщение..."
+                          : "Write your message..."
                     }
                     style={{
                       width: "100%",
@@ -407,17 +558,26 @@ export default function ContactPage() {
                   }}
                   onMouseEnter={(e) => {
                     if (!sent)
-                      (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                      (e.currentTarget as HTMLButtonElement).style.transform =
+                        "translateY(-2px)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.transform = "none";
+                    (e.currentTarget as HTMLButtonElement).style.transform =
+                      "none";
                   }}
                 >
                   {sent ? (
-                    <>✓ {lang === "uz" ? "Yuborildi!" : lang === "ru" ? "Отправлено!" : "Sent!"}</>
+                    <>
+                      ✓{" "}
+                      {lang === "uz"
+                        ? "Yuborildi!"
+                        : lang === "ru"
+                          ? "Отправлено!"
+                          : "Sent!"}
+                    </>
                   ) : (
                     <>
-                      <Send size={16} /> {t.contact_submit}
+                      <FaPaperPlane size={16} /> {t.contact_submit}
                     </>
                   )}
                 </button>
@@ -430,12 +590,35 @@ export default function ContactPage() {
       {/* ===== DEPARTMENT CONTACTS ===== */}
       <section style={{ padding: "72px 0", background: "white" }}>
         <div className="container-custom">
-          <h2 style={{ color: "#1a3a6e", fontWeight: 800, fontSize: "1.4rem", marginBottom: 36, textAlign: "center" }}>
-            {lang === "uz" ? "Bo'limlar" : lang === "ru" ? "Отделы" : "Departments"}
+          <h2
+            style={{
+              color: "#1a3a6e",
+              fontWeight: 800,
+              fontSize: "1.4rem",
+              marginBottom: 36,
+              textAlign: "center",
+            }}
+          >
+            {lang === "uz"
+              ? "Bo'limlar"
+              : lang === "ru"
+                ? "Отделы"
+                : "Departments"}
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 20 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
+              gap: 20,
+            }}
+          >
             {departments.map((d, i) => {
-              const title = lang === "uz" ? d.titleUz : lang === "ru" ? d.titleRu : d.titleEn;
+              const title =
+                lang === "uz"
+                  ? d.titleUz
+                  : lang === "ru"
+                    ? d.titleRu
+                    : d.titleEn;
               return (
                 <div
                   key={i}
@@ -447,21 +630,44 @@ export default function ContactPage() {
                     borderLeft: `4px solid ${d.color}`,
                   }}
                 >
-                  <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "0.97rem", marginBottom: 14 }}>
+                  <h3
+                    style={{
+                      color: "#1a1f2e",
+                      fontWeight: 700,
+                      fontSize: "0.97rem",
+                      marginBottom: 14,
+                    }}
+                  >
                     {title}
                   </h3>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                  >
                     <a
                       href={`tel:${d.phone}`}
-                      style={{ color: "#6b7280", fontSize: "0.85rem", textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.85rem",
+                        textDecoration: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                      }}
                     >
-                      <Phone size={13} color={d.color} /> {d.phone}
+                      <FaPhoneAlt size={13} color={d.color} /> {d.phone}
                     </a>
                     <a
                       href={`mailto:${d.email}`}
-                      style={{ color: "#6b7280", fontSize: "0.85rem", textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.85rem",
+                        textDecoration: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                      }}
                     >
-                      <Mail size={13} color={d.color} /> {d.email}
+                      <FaEnvelope size={13} color={d.color} /> {d.email}
                     </a>
                   </div>
                 </div>

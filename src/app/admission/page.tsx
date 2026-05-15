@@ -4,6 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
 import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
+import { 
+  FaFileAlt, 
+  FaCalendarAlt, 
+  FaPenNib, 
+  FaStar, 
+  FaPhoneAlt 
+} from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -248,7 +255,7 @@ export default function AdmissionPage() {
               }}
             >
               <h3 style={{ color: "white", fontWeight: 700, fontSize: "1.05rem", marginBottom: 22 }}>
-                📄 {t.docs_title}
+                <FaFileAlt size={16} style={{ marginRight: 10, color: "#c8a96e" }} /> {t.docs_title}
               </h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {t.docs_list.map((doc: string, i: number) => (
@@ -305,7 +312,7 @@ export default function AdmissionPage() {
                     marginBottom: 8,
                   }}
                 >
-                  📅 {t.docs_deadline}
+                  <FaCalendarAlt size={14} style={{ marginRight: 8 }} /> {t.docs_deadline}
                 </p>
                 <p style={{ color: "white", fontWeight: 600, fontSize: "0.9rem" }}>
                   {t.docs_deadline_val}
@@ -332,7 +339,7 @@ export default function AdmissionPage() {
                     marginBottom: 8,
                   }}
                 >
-                  ✍️ {t.docs_exam}
+                  <FaPenNib size={14} style={{ marginRight: 8 }} /> {t.docs_exam}
                 </p>
                 <p style={{ color: "white", fontWeight: 600, fontSize: "0.9rem" }}>
                   {t.docs_exam_val}
@@ -350,7 +357,7 @@ export default function AdmissionPage() {
                 }}
               >
                 <p style={{ color: "white", fontWeight: 700, fontSize: "0.92rem", marginBottom: 14 }}>
-                  ⭐ {privLabels.title[lang]}
+                  <FaStar size={14} style={{ marginRight: 8, color: "#c8a96e" }} /> {privLabels.title[lang]}
                 </p>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
                   {privLabels.items[lang].map((item: string, i: number) => (
@@ -443,7 +450,7 @@ export default function AdmissionPage() {
                 className="btn-primary"
                 style={{ textDecoration: "none" }}
               >
-                📞 +998 71 235 03 69
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 71 235 03 69
               </a>
               <Link href="/contact" className="btn-outline" style={{ color: "#1a3a6e", borderColor: "#1a3a6e" }}>
                 {t.nav_contact}

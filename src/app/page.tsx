@@ -26,31 +26,43 @@ import Footer from "@/components/Footer";
 
 const slides = [
   {
-    image: "https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Kelajak texnologiyalari markazi",
-    titleRu: "Центр технологий будущего",
-    titleEn: "Center of Future Technologies",
-    descUz: "Zamonaviy laboratoriyalar va yuqori texnologik ta'lim muhiti sizni kutmoqda.",
-    descRu: "Современные лаборатории и высокотехнологичная образовательная среда ждут вас.",
-    descEn: "Modern laboratories and a high-tech educational environment await you.",
+    image:
+      "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
+    titleUz: "Akademik mukofotlar va yuksak bilim",
+    titleRu: "Академические достижения и глубокие знания",
+    titleEn: "Academic Excellence and Deep Knowledge",
+    descUz:
+      "Muhammad al-Xorazmiy nomidagi akademik litsey — aniq va tabiiy fanlar bo'yicha mustahkam ta'lim poydevori.",
+    descRu:
+      "Академический лицей имени Мухаммада аль-Хорезми — прочный фундамент по точным и естественным наукам.",
+    descEn:
+      "Academic Lyceum named after Muhammad al-Khwarizmi — a strong foundation in exact and natural sciences.",
   },
   {
-    image: "https://images.unsplash.com/photo-1523050335392-9bc567597280?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Sifatli ta'lim — muvaffaqiyat garovi",
-    titleRu: "Качественное образование — залог успеха",
-    titleEn: "Quality Education — Key to Success",
-    descUz: "TATU huzuridagi Al-Xorazmiy litseyi bilan xalqaro standartlarda ilm oling.",
-    descRu: "Получайте знания по международным стандартам в лицее Аль-Хорезми при ТУИТ.",
-    descEn: "Study with international standards at the Al-Khwarizmi Lyceum under TUIT.",
+    image:
+      "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=2070&auto=format&fit=crop",
+    titleUz: "Olimpiadalar va nufuzli OTMlarga tayyorgarlik",
+    titleRu: "Подготовка к олимпиадам и престижным ВУЗам",
+    titleEn: "Preparation for Olympiads and Top Universities",
+    descUz:
+      "Bizning bitiruvchilarimiz Respublika va xalqaro fan olimpiadalarida muntazam g'olib bo'lib kelishmoqda.",
+    descRu:
+      "Наши выпускники регулярно становятся победителями республиканских и международных олимпиад.",
+    descEn:
+      "Our graduates regularly win in national and international science olympiads.",
   },
   {
-    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Iqtidorli yoshlar jamiyati",
-    titleRu: "Сообщество талантливой молодёжи",
-    titleEn: "Community of Talented Youth",
-    descUz: "Biz bilan birga yangi marralarni zabt eting va xalqaro olimpiadalarga tayyorlaning.",
-    descRu: "Покоряйте новые вершины вместе с нами и готовьтесь к международным олимпиадам.",
-    descEn: "Conquer new heights with us and prepare for international olympiads.",
+    image:
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop",
+    titleUz: "Keng qamrovli ta'lim muhiti",
+    titleRu: "Всесторонняя образовательная среда",
+    titleEn: "Comprehensive Educational Environment",
+    descUz:
+      "O'quvchilar nafaqat chuqur bilim oladi, balki yetakchilik va ijtimoiy ko'nikmalarni rivojlantiradi.",
+    descRu:
+      "Ученики не только получают глубокие знания, но и развивают лидерские и социальные навыки.",
+    descEn:
+      "Students not only gain deep knowledge but also develop leadership and social skills.",
   },
 ];
 
@@ -89,7 +101,8 @@ const newsItems = [
     titleUz: "Navro'z bayrami munosabati bilan katta bayram tashkil etildi",
     titleRu: "Большой праздник организован в честь Навруза",
     titleEn: "Grand celebration organized for Nowruz holiday",
-    descUz: "Litsey o'quvchilari va o'qituvchilar Navro'z bayramini shod-xurramlik bilan nishonlashdi.",
+    descUz:
+      "Litsey o'quvchilari va o'qituvchilar Navro'z bayramini shod-xurramlik bilan nishonlashdi.",
     descRu: "Ученики и учителя лицея радостно отпраздновали Навруз.",
     descEn: "Students and teachers of the lyceum joyfully celebrated Nowruz.",
     tag: { uz: "Ijtimoiy", ru: "Социальное", en: "Social" },
@@ -101,7 +114,8 @@ const newsItems = [
     titleUz: "Informatika va robototexnika ko'rgazmasi o'tkazildi",
     titleRu: "Проведена выставка по информатике и робототехнике",
     titleEn: "Informatics and robotics exhibition was held",
-    descUz: "O'quvchilar tomonidan tayyorlangan 30 dan ortiq loyiha namoyish etildi.",
+    descUz:
+      "O'quvchilar tomonidan tayyorlangan 30 dan ortiq loyiha namoyish etildi.",
     descRu: "Было представлено более 30 проектов, подготовленных учениками.",
     descEn: "Over 30 projects prepared by students were presented.",
     tag: { uz: "Ilm", ru: "Наука", en: "Science" },
@@ -113,8 +127,10 @@ const newsItems = [
     titleUz: "Matematika olimpiadasi g'oliblari mukofotlandi",
     titleRu: "Победители олимпиады по математике награждены",
     titleEn: "Math olympiad winners were awarded",
-    descUz: "Respublika matematika olimpiadasida g'olib bo'lgan o'quvchilar nishonlandi.",
-    descRu: "Ученики, победившие на республиканской олимпиаде по математике, были отмечены.",
+    descUz:
+      "Respublika matematika olimpiadasida g'olib bo'lgan o'quvchilar nishonlandi.",
+    descRu:
+      "Ученики, победившие на республиканской олимпиаде по математике, были отмечены.",
     descEn: "Students who won the national math olympiad were celebrated.",
     tag: { uz: "Yutuqlar", ru: "Достижения", en: "Achievement" },
     color: "#c8a96e",
@@ -122,7 +138,15 @@ const newsItems = [
 ];
 
 // ===== COUNTER COMPONENT =====
-function Counter({ to, active, suffix = "" }: { to: number; active: boolean; suffix?: string }) {
+function Counter({
+  to,
+  active,
+  suffix = "",
+}: {
+  to: number;
+  active: boolean;
+  suffix?: string;
+}) {
   const [val, setVal] = useState(0);
   const started = useRef(false);
   useEffect(() => {
@@ -138,7 +162,12 @@ function Counter({ to, active, suffix = "" }: { to: number; active: boolean; suf
     };
     requestAnimationFrame(tick);
   }, [to, active]);
-  return <>{val}{suffix}</>;
+  return (
+    <>
+      {val}
+      {suffix}
+    </>
+  );
 }
 
 // ===== MAIN PAGE =====
@@ -150,8 +179,12 @@ export default function Home() {
 
   const t = translations[lang];
 
-  const next = useCallback(() => setCurrent((prev) => (prev + 1) % slides.length), []);
-  const prev = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  const next = useCallback(
+    () => setCurrent((prev) => (prev + 1) % slides.length),
+    [],
+  );
+  const prev = () =>
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
 
   useEffect(() => {
     const timer = setInterval(next, 7000);
@@ -160,8 +193,10 @@ export default function Home() {
 
   useEffect(() => {
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setStatsInView(true); },
-      { threshold: 0.3 }
+      ([e]) => {
+        if (e.isIntersecting) setStatsInView(true);
+      },
+      { threshold: 0.3 },
     );
     if (statsRef.current) obs.observe(statsRef.current);
     return () => obs.disconnect();
@@ -169,7 +204,11 @@ export default function Home() {
 
   const slide = slides[current];
   const slideTitle =
-    lang === "uz" ? slide.titleUz : lang === "ru" ? slide.titleRu : slide.titleEn;
+    lang === "uz"
+      ? slide.titleUz
+      : lang === "ru"
+        ? slide.titleRu
+        : slide.titleEn;
   const slideDesc =
     lang === "uz" ? slide.descUz : lang === "ru" ? slide.descRu : slide.descEn;
 
@@ -181,13 +220,51 @@ export default function Home() {
   ];
 
   const subjects =
-    lang === "uz" ? dirSubjectsUz : lang === "ru" ? dirSubjectsRu : dirSubjectsEn;
+    lang === "uz"
+      ? dirSubjectsUz
+      : lang === "ru"
+        ? dirSubjectsRu
+        : dirSubjectsEn;
 
   const stats = [
-    { icon: GraduationCap, value: 1200, suffix: "+", label: t.hero_stat1, color: "#1a3a6e" },
-    { icon: Users2, value: 85, suffix: "+", label: t.hero_stat2, color: "#2d5bb5" },
-    { icon: TrendingUp, value: 96, suffix: "%", label: lang === "uz" ? "Oliy ta'limga kirish" : lang === "ru" ? "Поступление в вузы" : "Uni Admission Rate", color: "#1d7a55" },
-    { icon: Trophy, value: 200, suffix: "+", label: lang === "uz" ? "Olimpiada g'oliblari" : lang === "ru" ? "Победители олимпиад" : "Olympiad Winners", color: "#c8a96e" },
+    {
+      icon: GraduationCap,
+      value: 1200,
+      suffix: "+",
+      label: t.hero_stat1,
+      color: "#1a3a6e",
+    },
+    {
+      icon: Users2,
+      value: 85,
+      suffix: "+",
+      label: t.hero_stat2,
+      color: "#2d5bb5",
+    },
+    {
+      icon: TrendingUp,
+      value: 96,
+      suffix: "%",
+      label:
+        lang === "uz"
+          ? "Oliy ta'limga kirish"
+          : lang === "ru"
+            ? "Поступление в вузы"
+            : "Uni Admission Rate",
+      color: "#1d7a55",
+    },
+    {
+      icon: Trophy,
+      value: 200,
+      suffix: "+",
+      label:
+        lang === "uz"
+          ? "Olimpiada g'oliblari"
+          : lang === "ru"
+            ? "Победители олимпиад"
+            : "Olympiad Winners",
+      color: "#c8a96e",
+    },
   ];
 
   return (
@@ -212,36 +289,43 @@ export default function Home() {
               fill
               priority={current === 0}
               className="object-cover"
-              style={{ zIndex: -1, opacity: 0.5 }}
+              style={{ zIndex: -1, opacity: 0.4 }}
               sizes="100vw"
             />
             <div
               className="carousel-overlay"
               style={{
                 background:
-                  "linear-gradient(to right, rgba(0,33,71,0.95) 0%, rgba(0,33,71,0.2) 100%)",
+                  "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
               }}
             />
             <div
               className="container-custom"
-              style={{ position: "relative", zIndex: 2, height: "100%", display: "flex", alignItems: "center" }}
+              style={{
+                position: "relative",
+                zIndex: 2,
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              <div style={{ maxWidth: 900 }}>
+              <div style={{ maxWidth: 850 }}>
                 <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.8 }}
                 >
                   <div
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
-                      gap: 10,
-                      marginBottom: 24,
-                      background: "rgba(200,169,110,0.15)",
-                      border: "1px solid rgba(200,169,110,0.3)",
-                      borderRadius: 50,
-                      padding: "8px 20px",
+                      gap: 12,
+                      marginBottom: 28,
+                      background: "rgba(255,255,255,0.08)",
+                      backdropFilter: "blur(5px)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      borderRadius: 100,
+                      padding: "8px 24px",
                     }}
                   >
                     <div
@@ -249,10 +333,10 @@ export default function Home() {
                     />
                     <span
                       style={{
-                        color: "#c8a96e",
-                        fontSize: "0.85rem",
+                        color: "white",
+                        fontSize: "0.8rem",
                         fontWeight: 700,
-                        letterSpacing: "0.12em",
+                        letterSpacing: "0.08em",
                         textTransform: "uppercase",
                       }}
                     >
@@ -265,9 +349,8 @@ export default function Home() {
                       color: "white",
                       fontWeight: 900,
                       fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                      lineHeight: 1.05,
+                      lineHeight: 1.1,
                       marginBottom: 25,
-                      textShadow: "0 4px 12px rgba(0,0,0,0.2)",
                     }}
                   >
                     {slideTitle}
@@ -275,11 +358,11 @@ export default function Home() {
 
                   <p
                     style={{
-                      color: "rgba(255,255,255,0.9)",
-                      fontSize: "clamp(1rem, 1.6vw, 1.3rem)",
+                      color: "rgba(255,255,255,0.85)",
+                      fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
                       lineHeight: 1.6,
-                      marginBottom: 45,
-                      maxWidth: 700,
+                      marginBottom: 40,
+                      maxWidth: 650,
                     }}
                   >
                     {slideDesc}
@@ -319,37 +402,40 @@ export default function Home() {
           </motion.div>
         </AnimatePresence>
 
-        <button
-          className="carousel-arrow hidden-mobile"
-          style={{ left: 40 }}
-          onClick={prev}
-          aria-label="Previous slide"
+        {/* Navigation Arrows & Indicators */}
+        <div
+          className="container-custom"
+          style={{
+            position: "absolute",
+            bottom: 60,
+            left: 0,
+            right: 0,
+            zIndex: 10,
+            display: "flex",
+            gap: 12,
+          }}
         >
-          <ChevronLeft size={28} />
-        </button>
-        <button
-          className="carousel-arrow hidden-mobile"
-          style={{ right: 40 }}
-          onClick={next}
-          aria-label="Next slide"
-        >
-          <ChevronRight size={28} />
-        </button>
-
-        <div className="carousel-dots">
           {slides.map((_, i) => (
-            <div
+            <button
               key={i}
-              className={`carousel-dot ${current === i ? "active" : ""}`}
               onClick={() => setCurrent(i)}
-              style={{ width: current === i ? 32 : 12, height: 12 }}
+              style={{
+                width: current === i ? 40 : 10,
+                height: 10,
+                borderRadius: 5,
+                background: current === i ? "#c8a96e" : "rgba(255,255,255,0.3)",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.4s",
+              }}
             />
           ))}
         </div>
-
         <style jsx>{`
           @media (max-width: 768px) {
-            .hidden-mobile { display: none !important; }
+            .hidden-mobile {
+              display: none !important;
+            }
           }
         `}</style>
       </section>
@@ -357,14 +443,24 @@ export default function Home() {
       {/* ===== STATS ===== */}
       <section
         ref={statsRef}
-        style={{ padding: "72px 0", background: "linear-gradient(135deg,#f0f4ff,#e8eeff)" }}
+        style={{
+          padding: "72px 0",
+          background: "linear-gradient(135deg,#f0f4ff,#e8eeff)",
+        }}
       >
         <div className="container-custom">
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 24 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+              gap: 24,
+            }}
           >
             {stats.map((s, i) => (
-              <div key={i} style={{ textAlign: "center", padding: "24px 16px" }}>
+              <div
+                key={i}
+                style={{ textAlign: "center", padding: "24px 16px" }}
+              >
                 <div
                   style={{
                     width: 60,
@@ -389,9 +485,19 @@ export default function Home() {
                     marginBottom: 8,
                   }}
                 >
-                  <Counter to={s.value} active={statsInView} suffix={s.suffix} />
+                  <Counter
+                    to={s.value}
+                    active={statsInView}
+                    suffix={s.suffix}
+                  />
                 </div>
-                <div style={{ color: "#6b7280", fontSize: "0.88rem", fontWeight: 500 }}>
+                <div
+                  style={{
+                    color: "#6b7280",
+                    fontSize: "0.88rem",
+                    fontWeight: 500,
+                  }}
+                >
                   {s.label}
                 </div>
               </div>
@@ -401,9 +507,18 @@ export default function Home() {
       </section>
 
       {/* ===== DIRECTIONS ===== */}
-      <section id="directions" style={{ padding: "96px 0", background: "white" }}>
+      <section
+        id="directions"
+        style={{ padding: "96px 0", background: "white" }}
+      >
         <div className="container-custom">
-          <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 56px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 620,
+              margin: "0 auto 56px",
+            }}
+          >
             <div
               style={{
                 display: "inline-block",
@@ -418,7 +533,11 @@ export default function Home() {
                 textTransform: "uppercase",
               }}
             >
-              {lang === "uz" ? "Yo'nalishlar" : lang === "ru" ? "Направления" : "Directions"}
+              {lang === "uz"
+                ? "Yo'nalishlar"
+                : lang === "ru"
+                  ? "Направления"
+                  : "Directions"}
             </div>
             <h2 className="section-title" style={{ marginBottom: 12 }}>
               {t.dir_title}
@@ -442,9 +561,17 @@ export default function Home() {
                 <div
                   key={i}
                   className="card-hover"
-                  style={{ borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 32px rgba(0,0,0,0.08)", display: "flex", flexDirection: "column" }}
+                  style={{
+                    borderRadius: 18,
+                    overflow: "hidden",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  <div style={{ background: color.bg, padding: "28px 24px 24px" }}>
+                  <div
+                    style={{ background: color.bg, padding: "28px 24px 24px" }}
+                  >
                     <div
                       style={{
                         width: 50,
@@ -459,18 +586,58 @@ export default function Home() {
                     >
                       <Icon size={24} color={color.accent} />
                     </div>
-                    <h3 style={{ color: "white", fontWeight: 700, fontSize: "1.05rem", marginBottom: 10, lineHeight: 1.3 }}>
+                    <h3
+                      style={{
+                        color: "white",
+                        fontWeight: 700,
+                        fontSize: "1.05rem",
+                        marginBottom: 10,
+                        lineHeight: 1.3,
+                      }}
+                    >
                       {dir.name}
                     </h3>
-                    <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.84rem", lineHeight: 1.65 }}>
+                    <p
+                      style={{
+                        color: "rgba(255,255,255,0.7)",
+                        fontSize: "0.84rem",
+                        lineHeight: 1.65,
+                      }}
+                    >
                       {dir.desc}
                     </p>
                   </div>
-                  <div style={{ background: "white", padding: "20px 24px", flex: 1 }}>
-                    <p style={{ color: "#6b7280", fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>
-                      {lang === "uz" ? "Asosiy fanlar" : lang === "ru" ? "Основные предметы" : "Core Subjects"}
+                  <div
+                    style={{
+                      background: "white",
+                      padding: "20px 24px",
+                      flex: 1,
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        marginBottom: 12,
+                      }}
+                    >
+                      {lang === "uz"
+                        ? "Asosiy fanlar"
+                        : lang === "ru"
+                          ? "Основные предметы"
+                          : "Core Subjects"}
                     </p>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 18 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 8,
+                        marginBottom: 18,
+                      }}
+                    >
                       {subjects[i].map((s, j) => (
                         <span
                           key={j}
@@ -501,13 +668,96 @@ export default function Home() {
                         transition: "gap 0.2s",
                       }}
                     >
-                      {lang === "uz" ? "Qabul →" : lang === "ru" ? "Поступление →" : "Apply →"}{" "}
+                      {lang === "uz"
+                        ? "Qabul →"
+                        : lang === "ru"
+                          ? "Поступление →"
+                          : "Apply →"}{" "}
                       <ArrowRight size={15} />
                     </Link>
                   </div>
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== YEARLY STATISTICS ===== */}
+      <section style={{ padding: "96px 0", background: "linear-gradient(135deg, #002147, #003366)", color: "white" }}>
+        <div className="container-custom">
+          <div style={{ textAlign: "center", maxWidth: 800, margin: "0 auto 64px" }}>
+            <h2 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: 16 }}>
+              {lang === "uz" ? "3 yillik o'quv statistikasi" : lang === "ru" ? "3-летняя статистика обучения" : "3-Year Educational Statistics"}
+            </h2>
+            <div style={{ width: 80, height: 4, background: "#c8a96e", margin: "0 auto" }}></div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 32 }}>
+            {[
+              { year: 2021, perc: 81, grad: 239, uni: 19 },
+              { year: 2022, perc: 85, grad: 211, uni: 190 },
+              { year: 2023, perc: 90, grad: 390, uni: 370 },
+            ].map((stat, idx) => (
+              <motion.div
+                key={stat.year}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: 24,
+                  padding: "40px 32px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  position: "relative",
+                  overflow: "hidden"
+                }}
+              >
+                <div style={{ position: "absolute", top: -20, right: -10, fontSize: "6rem", fontWeight: 900, color: "rgba(255,255,255,0.03)", zIndex: 0 }}>
+                  {stat.year}
+                </div>
+                
+                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#c8a96e", marginBottom: 32, position: "relative", zIndex: 1 }}>
+                  {stat.year}-yil
+                </h3>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                      <span style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.6)" }}>
+                        {lang === "uz" ? "OTMga kirish ko'rsatkichi" : lang === "ru" ? "Показатель поступления в ВУЗ" : "Admission Rate"}
+                      </span>
+                      <span style={{ fontWeight: 800, color: "#c8a96e" }}>{stat.perc}%</span>
+                    </div>
+                    <div style={{ height: 8, background: "rgba(255,255,255,0.1)", borderRadius: 10 }}>
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${stat.perc}%` }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        style={{ height: "100%", background: "linear-gradient(90deg, #c8a96e, #dfc08a)", borderRadius: 10 }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, paddingTop: 10 }}>
+                    <div style={{ background: "rgba(255,255,255,0.05)", padding: "16px", borderRadius: 16 }}>
+                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
+                        {lang === "uz" ? "Bitiruvchilar" : lang === "ru" ? "Выпускников" : "Graduates"}
+                      </p>
+                      <p style={{ fontSize: "1.3rem", fontWeight: 800 }}>{stat.grad}</p>
+                    </div>
+                    <div style={{ background: "rgba(255,255,255,0.05)", padding: "16px", borderRadius: 16 }}>
+                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
+                        {lang === "uz" ? "OTMga kirganlar" : lang === "ru" ? "Поступили в ВУЗ" : "Admitted"}
+                      </p>
+                      <p style={{ fontSize: "1.3rem", fontWeight: 800, color: "#c8a96e" }}>{stat.uni}</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -540,7 +790,11 @@ export default function Home() {
                   textTransform: "uppercase",
                 }}
               >
-                {lang === "uz" ? "Yangiliklar" : lang === "ru" ? "Новости" : "News"}
+                {lang === "uz"
+                  ? "Yangiliklar"
+                  : lang === "ru"
+                    ? "Новости"
+                    : "News"}
               </div>
               <h2 className="section-title">{t.news_title}</h2>
             </div>
@@ -561,11 +815,13 @@ export default function Home() {
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "#1a3a6e";
+                (e.currentTarget as HTMLAnchorElement).style.background =
+                  "#1a3a6e";
                 (e.currentTarget as HTMLAnchorElement).style.color = "white";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "none";
+                (e.currentTarget as HTMLAnchorElement).style.background =
+                  "none";
                 (e.currentTarget as HTMLAnchorElement).style.color = "#1a3a6e";
               }}
             >
@@ -574,11 +830,25 @@ export default function Home() {
           </div>
 
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: 24,
+            }}
           >
             {newsItems.map((item) => {
-              const title = lang === "uz" ? item.titleUz : lang === "ru" ? item.titleRu : item.titleEn;
-              const desc = lang === "uz" ? item.descUz : lang === "ru" ? item.descRu : item.descEn;
+              const title =
+                lang === "uz"
+                  ? item.titleUz
+                  : lang === "ru"
+                    ? item.titleRu
+                    : item.titleEn;
+              const desc =
+                lang === "uz"
+                  ? item.descUz
+                  : lang === "ru"
+                    ? item.descRu
+                    : item.descEn;
               const tagStr = item.tag[lang];
 
               return (
@@ -586,11 +856,27 @@ export default function Home() {
                   key={item.id}
                   href={`/news/${item.id}`}
                   className="news-card"
-                  style={{ cursor: "pointer", textDecoration: "none", display: "block" }}
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    display: "block",
+                  }}
                 >
-                  <div style={{ height: 4, background: `linear-gradient(90deg, ${item.color}, ${item.color}88)` }} />
+                  <div
+                    style={{
+                      height: 4,
+                      background: `linear-gradient(90deg, ${item.color}, ${item.color}88)`,
+                    }}
+                  />
                   <div style={{ padding: "24px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 16,
+                      }}
+                    >
                       <span
                         style={{
                           background: `${item.color}15`,
@@ -605,19 +891,49 @@ export default function Home() {
                         {tagStr}
                       </span>
                       <div
-                        style={{ display: "flex", alignItems: "center", gap: 5, color: "#9ca3af", fontSize: "0.77rem" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 5,
+                          color: "#9ca3af",
+                          fontSize: "0.77rem",
+                        }}
                       >
                         <Calendar size={13} />
                         {item.date}
                       </div>
                     </div>
-                    <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "1rem", lineHeight: 1.45, marginBottom: 12 }}>
+                    <h3
+                      style={{
+                        color: "#1a1f2e",
+                        fontWeight: 700,
+                        fontSize: "1rem",
+                        lineHeight: 1.45,
+                        marginBottom: 12,
+                      }}
+                    >
                       {title}
                     </h3>
-                    <p style={{ color: "#6b7280", fontSize: "0.84rem", lineHeight: 1.7, marginBottom: 18 }}>
+                    <p
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.84rem",
+                        lineHeight: 1.7,
+                        marginBottom: 18,
+                      }}
+                    >
                       {desc}
                     </p>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, color: item.color, fontSize: "0.83rem", fontWeight: 600 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        color: item.color,
+                        fontSize: "0.83rem",
+                        fontWeight: 600,
+                      }}
+                    >
                       {t.news_read} <ArrowRight size={14} />
                     </div>
                   </div>

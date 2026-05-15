@@ -9,13 +9,18 @@ import {
   Menu,
   X,
   ChevronDown,
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Bus,
   Search,
 } from "lucide-react";
+import { 
+  FaPhoneAlt, 
+  FaEnvelope, 
+  FaMapMarkerAlt, 
+  FaInstagram, 
+  FaYoutube, 
+  FaFacebookF, 
+  FaTelegramPlane,
+  FaClock,
+} from "react-icons/fa";
 
 interface NavbarProps {
   lang: Lang;
@@ -114,24 +119,25 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
           >
             <div style={{ display: "flex", gap: 30 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <MapPin size={12} color="#c8a96e" />
+                <FaMapMarkerAlt size={12} color="#c8a96e" />
                 <span>{t.contact_address_val}</span>
               </div>
               <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Bus size={12} color="#c8a96e" />
-                <span>19, 38, 50, 63, 115</span>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 30 }}>
-              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Mail size={12} color="#c8a96e" />
+                <FaEnvelope size={12} color="#c8a96e" />
                 <span>info@tatual.uz</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Clock size={12} color="#c8a96e" />
+            </div>
+            <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <a href="https://t.me/altuit_lyceum" style={{ color: "white", opacity: 0.8 }}><FaTelegramPlane size={14} /></a>
+                <a href="https://instagram.com/altuit_lyceum" style={{ color: "white", opacity: 0.8 }}><FaInstagram size={14} /></a>
+                <a href="https://youtube.com/@tatual" style={{ color: "white", opacity: 0.8 }}><FaYoutube size={14} /></a>
+              </div>
+              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <FaClock size={12} color="#c8a96e" />
                 <span>{t.header_hours}</span>
               </div>
-            </div>
+              </div>
           </div>
         </div>
 
@@ -265,6 +271,17 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
             {/* ACTIONS */}
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div className="hidden-mobile" style={{ display: "flex", gap: 6, alignItems: "center", borderRight: scrolled ? "1px solid #e2e8f0" : "1px solid rgba(255,255,255,0.2)", paddingRight: 14 }}>
+                {(["uz", "ru", "en"] as Lang[]).map((l) => (
+                  <button
+                    key={l}
+                    className={`language-selector-btn ${lang === l ? "active" : ""} ${scrolled ? "dark-text" : "light-text"}`}
+                    onClick={() => onLangChange(l)}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
               <button
                 style={{
                   background: "none",
@@ -278,19 +295,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               >
                 <Search size={18} />
               </button>
-              <div style={{ width: 1, height: 18, background: "#e2e8f0" }} className="hidden-mobile" />
-              <div style={{ display: "flex", gap: 2 }}>
-                {(["uz", "ru", "en"] as Lang[]).map((l) => (
-                  <button
-                    key={l}
-                    className={`lang-btn ${lang === l ? "active" : ""}`}
-                    onClick={() => onLangChange(l)}
-                    style={{ padding: "4px", fontSize: "0.68rem" }}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </div>
 
               <a
                 href="tel:+998712350369"
@@ -309,7 +313,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   transition: "all 0.3s",
                 }}
               >
-                <Phone size={12} />
+                <FaPhoneAlt size={12} />
                 <span>+998 71 235 03 69</span>
               </a>
 
@@ -460,21 +464,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         </div>
       </div>
 
-      <style jsx>{`
-        @media (max-width: 1100px) {
-          .hidden-tablet { display: none !important; }
-        }
-        @media (max-width: 1024px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
-        }
-        @media (min-width: 1025px) {
-          .show-mobile { display: none !important; }
-        }
-        @media (max-width: 768px) {
-          .header-top { display: none !important; }
-        }
-      `}</style>
     </>
   );
 }

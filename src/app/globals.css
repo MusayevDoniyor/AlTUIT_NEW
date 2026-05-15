@@ -406,22 +406,52 @@ body {
   box-shadow: 0 4px 16px rgba(26, 58, 110, 0.08);
 }
 
-.lang-btn {
-  font-size: 0.75rem;
+.language-selector-btn {
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #666;
-  text-transform: lowercase;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s;
   border: none;
-  background: none;
-  padding: 0 4px;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
-.lang-btn.active {
-  color: #c8a96e;
+.language-selector-btn.light-text {
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.lang-btn:hover {
-  color: #333;
+.language-selector-btn.light-text:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.language-selector-btn.dark-text {
+  color: #64748b;
+}
+
+.language-selector-btn.dark-text:hover {
+  color: #002147;
+  background: rgba(0, 33, 71, 0.05);
+}
+
+.language-selector-btn.active {
+  background: #c8a96e;
+  color: #ffffff !important;
+}
+
+/* NAVBAR RESPONSIVE UTILITIES */
+@media (max-width: 1100px) {
+  .hidden-tablet { display: none !important; }
+}
+@media (max-width: 1024px) {
+  .hidden-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+}
+@media (min-width: 1025px) {
+  .show-mobile { display: none !important; }
+}
+@media (max-width: 768px) {
+  .header-top { display: none !important; }
 }

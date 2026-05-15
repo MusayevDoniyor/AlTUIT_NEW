@@ -3,7 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
-import { Phone, Mail, MapPin, ExternalLink, Bus } from "lucide-react";
+import { ExternalLink, Bus } from "lucide-react";
+import { 
+  FaPhoneAlt, 
+  FaEnvelope, 
+  FaMapMarkerAlt, 
+  FaInstagram, 
+  FaYoutube, 
+  FaFacebookF, 
+  FaTelegramPlane 
+} from "react-icons/fa";
 
 interface FooterProps {
   lang: Lang;
@@ -24,9 +33,9 @@ export default function Footer({ lang }: FooterProps) {
   ];
 
   return (
-    <footer style={{ background: "#060f1e", color: "rgba(255,255,255,0.7)" }}>
+    <footer style={{ background: "#10223e", color: "rgba(255,255,255,0.7)" }}>
       {/* Main footer */}
-      <div className="container-custom" style={{ padding: "64px 0 40px" }}>
+      <div className="container-custom" style={{ padding: "80px 40px 40px" }}>
         <div
           style={{
             display: "grid",
@@ -98,17 +107,17 @@ export default function Footer({ lang }: FooterProps) {
                 {
                   href: "https://t.me/altuit_lyceum",
                   label: "Telegram",
-                  icon: "✈️",
+                  icon: FaTelegramPlane,
                 },
                 {
                   href: "https://instagram.com/altuit_lyceum",
                   label: "Instagram",
-                  icon: "📸",
+                  icon: FaInstagram,
                 },
                 {
                   href: "https://youtube.com/@tatual",
                   label: "YouTube",
-                  icon: "▶️",
+                  icon: FaYoutube,
                 },
               ].map((s) => (
                 <a
@@ -143,7 +152,7 @@ export default function Footer({ lang }: FooterProps) {
                       "rgba(255,255,255,0.1)";
                   }}
                 >
-                  {s.icon}
+                  <s.icon size={18} />
                 </a>
               ))}
             </div>
@@ -218,9 +227,9 @@ export default function Footer({ lang }: FooterProps) {
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {[
-                { icon: MapPin, text: t.contact_address_val },
-                { icon: Phone, text: t.contact_phone_val },
-                { icon: Mail, text: t.contact_email_val },
+                { icon: FaMapMarkerAlt, text: t.contact_address_val },
+                { icon: FaPhoneAlt, text: t.contact_phone_val },
+                { icon: FaEnvelope, text: t.contact_email_val },
               ].map((c, i) => (
                 <div
                   key={i}
@@ -317,7 +326,19 @@ export default function Footer({ lang }: FooterProps) {
                 (e.currentTarget as HTMLAnchorElement).style.transform = "none";
               }}
             >
-              <div style={{ fontSize: "1.6rem", marginBottom: 8 }}>✈️</div>
+              <div style={{ 
+                width: 44, 
+                height: 44, 
+                borderRadius: 10, 
+                background: "rgba(200,169,110,0.2)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                marginBottom: 12,
+                color: "#c8a96e"
+              }}>
+                <FaTelegramPlane size={24} />
+              </div>
               <p
                 style={{
                   color: "white",
@@ -365,6 +386,7 @@ export default function Footer({ lang }: FooterProps) {
         <div
           className="container-custom"
           style={{
+            padding: "0 40px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",

@@ -17,6 +17,7 @@ import {
   Wifi,
   Library,
 } from "lucide-react";
+import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -407,13 +408,13 @@ export default function AboutPage() {
                       href={`tel:${person.phone}`}
                       style={{ color: "#6b7280", fontSize: "0.82rem", textDecoration: "none" }}
                     >
-                      📞 {person.phone}
+                      <FaPhoneAlt size={12} style={{ marginRight: 6 }} /> {person.phone}
                     </a>
                     <a
                       href={`mailto:${person.email}`}
                       style={{ color: "#6b7280", fontSize: "0.82rem", textDecoration: "none" }}
                     >
-                      ✉️ {person.email}
+                      <FaEnvelope size={12} style={{ marginRight: 6 }} /> {person.email}
                     </a>
                   </div>
                 </div>
