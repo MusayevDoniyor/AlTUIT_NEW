@@ -271,11 +271,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
             {/* ACTIONS */}
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div className="hidden-mobile" style={{ display: "flex", gap: 6, alignItems: "center", borderRight: scrolled ? "1px solid #e2e8f0" : "1px solid rgba(255,255,255,0.2)", paddingRight: 14 }}>
+              <div className="hidden-mobile" style={{ display: "flex", gap: 6, alignItems: "center", borderRight: "1px solid #e2e8f0", paddingRight: 14 }}>
                 {(["uz", "ru", "en"] as Lang[]).map((l) => (
                   <button
                     key={l}
-                    className={`language-selector-btn ${lang === l ? "active" : ""} ${scrolled ? "dark-text" : "light-text"}`}
+                    className={`language-selector-btn ${lang === l ? "active" : ""} dark-text`}
                     onClick={() => onLangChange(l)}
                   >
                     {l}
@@ -369,6 +369,26 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
+          {/* Mobile Language Switcher */}
+          <div style={{ display: "flex", gap: 8, justifyContent: "center", padding: "0 30px 20px 30px", borderBottom: "1px solid #f1f5f9", marginBottom: "10px" }}>
+            {(["uz", "ru", "en"] as Lang[]).map((l) => (
+              <button
+                key={l}
+                className={`language-selector-btn ${lang === l ? "active" : ""} dark-text`}
+                onClick={() => {
+                  onLangChange(l);
+                  setMobileOpen(false);
+                }}
+                style={{
+                  fontSize: "0.82rem",
+                  padding: "6px 14px",
+                }}
+              >
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
+
           {items.map((item, i) => (
             <div key={i}>
               {item.children ? (
