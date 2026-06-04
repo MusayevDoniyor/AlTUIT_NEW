@@ -28,41 +28,41 @@ const slides = [
   {
     image:
       "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Akademik mukofotlar va yuksak bilim",
-    titleRu: "Академические достижения и глубокие знания",
-    titleEn: "Academic Excellence and Deep Knowledge",
+    titleUz: "Ilmiy izlanish va amaliy yutuq",
+    titleRu: "Научные достижения и практические результаты",
+    titleEn: "Scientific Achievements and Practical Results",
     descUz:
-      "Muhammad al-Xorazmiy nomidagi akademik litsey — aniq va tabiiy fanlar bo'yicha mustahkam ta'lim poydevori.",
+      "Muhammad al-Xorazmiy litseyi matematika, fizika va informatika bo'yicha chuqurlashtirilgan tayyorgarlik beradi.",
     descRu:
-      "Академический лицей имени Мухаммада аль-Хорезми — прочный фундамент по точным и естественным наукам.",
+      "Лицей имени Мухаммада аль-Хорезми обеспечивает углубленную подготовку по математике, физике и информатике.",
     descEn:
-      "Academic Lyceum named after Muhammad al-Khwarizmi — a strong foundation in exact and natural sciences.",
+      "The lyceum provides advanced preparation in mathematics, physics and informatics.",
   },
   {
     image:
       "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Olimpiadalar va nufuzli OTMlarga tayyorgarlik",
-    titleRu: "Подготовка к олимпиадам и престижным ВУЗам",
-    titleEn: "Preparation for Olympiads and Top Universities",
+    titleUz: "Olimpiadalar va oliy ta'limga tayyorgarlik",
+    titleRu: "Подготовка к олимпиадам и вузам",
+    titleEn: "Olympiad and University Preparation",
     descUz:
-      "Bizning bitiruvchilarimiz Respublika va xalqaro fan olimpiadalarida muntazam g'olib bo'lib kelishmoqda.",
+      "Bitiruvchilarimiz respublika va xalqaro olimpiadalarda faol ishtirok etib, yetakchi universitetlarga kirishadi.",
     descRu:
-      "Наши выпускники регулярно становятся победителями республиканских и международных олимпиад.",
+      "Наши выпускники участвуют в республиканских и международных олимпиадах и поступают в ведущие вузы.",
     descEn:
-      "Our graduates regularly win in national and international science olympiads.",
+      "Our graduates compete in national and international olympiads and enter leading universities.",
   },
   {
     image:
       "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Keng qamrovli ta'lim muhiti",
-    titleRu: "Всесторонняя образовательная среда",
-    titleEn: "Comprehensive Educational Environment",
+    titleUz: "Qulay va qo'llab-quvvatlovchi muhit",
+    titleRu: "Комфортная и поддерживающая среда",
+    titleEn: "Comfortable and Supportive Environment",
     descUz:
-      "O'quvchilar nafaqat chuqur bilim oladi, balki yetakchilik va ijtimoiy ko'nikmalarni rivojlantiradi.",
+      "Litseyimizda o'quvchilar laboratoriyalar, kutubxona va sinfxonalarda ishonchli ta'lim oladi.",
     descRu:
-      "Ученики не только получают глубокие знания, но и развивают лидерские и социальные навыки.",
+      "В нашем лицее ученики обучаются в лабораториях, библиотеке и современных аудиториях.",
     descEn:
-      "Students not only gain deep knowledge but also develop leadership and social skills.",
+      "At our lyceum students learn in laboratories, library and modern classrooms.",
   },
 ];
 
@@ -272,7 +272,10 @@ export default function Home() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       {/* ===== HERO CAROUSEL ===== */}
-      <section className="carousel-container" style={{ height: "100vh", background: "#002147" }}>
+      <section
+        className="carousel-container"
+        style={{ height: "100vh", background: "#002147" }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -329,7 +332,12 @@ export default function Home() {
                     }}
                   >
                     <div
-                      style={{ width: 8, height: 8, borderRadius: "50%", background: "#c8a96e" }}
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        background: "#c8a96e",
+                      }}
                     />
                     <span
                       style={{
@@ -684,16 +692,47 @@ export default function Home() {
       </section>
 
       {/* ===== YEARLY STATISTICS ===== */}
-      <section style={{ padding: "96px 0", background: "linear-gradient(135deg, #002147, #003366)", color: "white" }}>
+      <section
+        style={{
+          padding: "96px 0",
+          background: "linear-gradient(135deg, #002147, #003366)",
+          color: "white",
+        }}
+      >
         <div className="container-custom">
-          <div style={{ textAlign: "center", maxWidth: 800, margin: "0 auto 64px" }}>
-            <h2 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: 16 }}>
-              {lang === "uz" ? "3 yillik o'quv statistikasi" : lang === "ru" ? "3-летняя статистика обучения" : "3-Year Educational Statistics"}
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 800,
+              margin: "0 auto 64px",
+            }}
+          >
+            <h2
+              style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: 16 }}
+            >
+              {lang === "uz"
+                ? "3 yillik o'quv statistikasi"
+                : lang === "ru"
+                  ? "3-летняя статистика обучения"
+                  : "3-Year Educational Statistics"}
             </h2>
-            <div style={{ width: 80, height: 4, background: "#c8a96e", margin: "0 auto" }}></div>
+            <div
+              style={{
+                width: 80,
+                height: 4,
+                background: "#c8a96e",
+                margin: "0 auto",
+              }}
+            ></div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 32 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: 32,
+            }}
+          >
             {[
               { year: 2021, perc: 81, grad: 239, uni: 19 },
               { year: 2022, perc: 85, grad: 211, uni: 190 },
@@ -712,47 +751,151 @@ export default function Home() {
                   padding: "40px 32px",
                   border: "1px solid rgba(255,255,255,0.1)",
                   position: "relative",
-                  overflow: "hidden"
+                  overflow: "hidden",
                 }}
               >
-                <div style={{ position: "absolute", top: -20, right: -10, fontSize: "6rem", fontWeight: 900, color: "rgba(255,255,255,0.03)", zIndex: 0 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -20,
+                    right: -10,
+                    fontSize: "6rem",
+                    fontWeight: 900,
+                    color: "rgba(255,255,255,0.03)",
+                    zIndex: 0,
+                  }}
+                >
                   {stat.year}
                 </div>
-                
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#c8a96e", marginBottom: 32, position: "relative", zIndex: 1 }}>
+
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 800,
+                    color: "#c8a96e",
+                    marginBottom: 32,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
                   {stat.year}-yil
                 </h3>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 24,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
                   <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                      <span style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.6)" }}>
-                        {lang === "uz" ? "OTMga kirish ko'rsatkichi" : lang === "ru" ? "Показатель поступления в ВУЗ" : "Admission Rate"}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: 8,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.9rem",
+                          color: "rgba(255,255,255,0.6)",
+                        }}
+                      >
+                        {lang === "uz"
+                          ? "OTMga kirish ko'rsatkichi"
+                          : lang === "ru"
+                            ? "Показатель поступления в ВУЗ"
+                            : "Admission Rate"}
                       </span>
-                      <span style={{ fontWeight: 800, color: "#c8a96e" }}>{stat.perc}%</span>
+                      <span style={{ fontWeight: 800, color: "#c8a96e" }}>
+                        {stat.perc}%
+                      </span>
                     </div>
-                    <div style={{ height: 8, background: "rgba(255,255,255,0.1)", borderRadius: 10 }}>
-                      <motion.div 
+                    <div
+                      style={{
+                        height: 8,
+                        background: "rgba(255,255,255,0.1)",
+                        borderRadius: 10,
+                      }}
+                    >
+                      <motion.div
                         initial={{ width: 0 }}
                         whileInView={{ width: `${stat.perc}%` }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
-                        style={{ height: "100%", background: "linear-gradient(90deg, #c8a96e, #dfc08a)", borderRadius: 10 }}
+                        style={{
+                          height: "100%",
+                          background:
+                            "linear-gradient(90deg, #c8a96e, #dfc08a)",
+                          borderRadius: 10,
+                        }}
                       />
                     </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, paddingTop: 10 }}>
-                    <div style={{ background: "rgba(255,255,255,0.05)", padding: "16px", borderRadius: 16 }}>
-                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
-                        {lang === "uz" ? "Bitiruvchilar" : lang === "ru" ? "Выпускников" : "Graduates"}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 20,
+                      paddingTop: 10,
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        padding: "16px",
+                        borderRadius: 16,
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "rgba(255,255,255,0.5)",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {lang === "uz"
+                          ? "Bitiruvchilar"
+                          : lang === "ru"
+                            ? "Выпускников"
+                            : "Graduates"}
                       </p>
-                      <p style={{ fontSize: "1.3rem", fontWeight: 800 }}>{stat.grad}</p>
+                      <p style={{ fontSize: "1.3rem", fontWeight: 800 }}>
+                        {stat.grad}
+                      </p>
                     </div>
-                    <div style={{ background: "rgba(255,255,255,0.05)", padding: "16px", borderRadius: 16 }}>
-                      <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>
-                        {lang === "uz" ? "OTMga kirganlar" : lang === "ru" ? "Поступили в ВУЗ" : "Admitted"}
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        padding: "16px",
+                        borderRadius: 16,
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "rgba(255,255,255,0.5)",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {lang === "uz"
+                          ? "OTMga kirganlar"
+                          : lang === "ru"
+                            ? "Поступили в ВУЗ"
+                            : "Admitted"}
                       </p>
-                      <p style={{ fontSize: "1.3rem", fontWeight: 800, color: "#c8a96e" }}>{stat.uni}</p>
+                      <p
+                        style={{
+                          fontSize: "1.3rem",
+                          fontWeight: 800,
+                          color: "#c8a96e",
+                        }}
+                      >
+                        {stat.uni}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
   description:
-    "Toshkent axborot texnologiyalari universiteti (TATU) huzuridagi Muhammad al-Xorazmiy nomidagi Akademik Litsey — zamonaviy ta'lim muhitida yuqori sifatli akademik ta'lim.",
+    "Toshkent axborot texnologiyalari universiteti (TATU) huzuridagi Muhammad al-Xorazmiy nomidagi Akademik Litsey — 1993-yildan buyon matematik, fizika va informatika yo'nalishlarida iqtidorli yoshlarni tayyorlaydi.",
   keywords: [
     "TATU litsey",
     "akademik litsey",

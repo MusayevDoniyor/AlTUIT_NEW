@@ -111,7 +111,8 @@ const FACILITIES = [
     titleUz: "Zamonaviy laboratoriyalar",
     titleRu: "Современные лаборатории",
     titleEn: "Modern Laboratories",
-    descUz: "Kimyo, fizika va biologiya fanlari uchun to'liq jihozlangan 6 ta laboratoriya",
+    descUz:
+      "Kimyo, fizika va biologiya fanlari uchun to'liq jihozlangan 6 ta laboratoriya",
     descRu: "6 полностью оснащённых лабораторий по химии, физике и биологии",
     descEn: "6 fully equipped laboratories for chemistry, physics and biology",
     color: "#1d7a55",
@@ -157,48 +158,70 @@ export default function AboutPage() {
   const values = [
     {
       icon: Target,
-      title: lang === "uz" ? "Maqsadimiz" : lang === "ru" ? "Наша цель" : "Our Mission",
+      title:
+        lang === "uz"
+          ? "Maqsadimiz"
+          : lang === "ru"
+            ? "Наша цель"
+            : "Our Mission",
       desc:
         lang === "uz"
-          ? "Iqtidorli yoshlarni aniqlash va ularni zamonaviy bilim bilan qurollantirish"
+          ? "Iqtidorli yoshlarni topib, ularni aniq fanlar bo'yicha ilmiy va amaliy tayyorgarlikka yo'naltirish."
           : lang === "ru"
-          ? "Выявление талантливой молодёжи и вооружение её современными знаниями"
-          : "Identifying talented youth and equipping them with modern knowledge",
+            ? "Найти талантливую молодежь и направить её на научную и практическую подготовку по точным наукам."
+            : "Find talented youth and guide them into scientific and practical training in exact sciences.",
     },
     {
       icon: Eye,
-      title: lang === "uz" ? "Qadriyatlar" : lang === "ru" ? "Ценности" : "Values",
+      title:
+        lang === "uz" ? "Qadriyatlar" : lang === "ru" ? "Ценности" : "Values",
       desc:
         lang === "uz"
-          ? "Bilim, halollik, insonparvarlik va milliy qadriyatlarga sadoqat"
+          ? "Nazokat, mas'uliyat, hamkorlik va o'zbek milliy an'analariga hurmat."
           : lang === "ru"
-          ? "Знания, честность, гуманизм и преданность национальным ценностям"
-          : "Knowledge, integrity, humanism and dedication to national values",
+            ? "Вежливость, ответственность, сотрудничество и уважение к узбекским национальным традициям."
+            : "Courtesy, responsibility, collaboration and respect for Uzbek national traditions.",
     },
     {
       icon: Star,
-      title: lang === "uz" ? "Ko'rsatkichlar" : lang === "ru" ? "Показатели" : "Results",
+      title:
+        lang === "uz" ? "Natijalar" : lang === "ru" ? "Результаты" : "Results",
       desc:
         lang === "uz"
-          ? "O'quvchilarimizning 90%+ yetakchi oliy o'quv yurtlariga kiradi"
+          ? "Bitiruvchilarimiz TATU va boshqa nufuzli oliygohlarga muvaffaqiyatli kirishadi."
           : lang === "ru"
-          ? "Более 90% наших учеников поступают в ведущие вузы"
-          : "Over 90% of our graduates enter leading universities",
+            ? "Наши выпускники успешно поступают в ТУИТ и другие престижные вузы."
+            : "Our graduates successfully enter TATU and other prestigious universities.",
     },
     {
       icon: BookOpen,
-      title: lang === "uz" ? "Ta'lim standarti" : lang === "ru" ? "Стандарт обучения" : "Education Standard",
+      title:
+        lang === "uz"
+          ? "O'quv jarayoni"
+          : lang === "ru"
+            ? "Процесс обучения"
+            : "Learning Process",
       desc:
         lang === "uz"
-          ? "Davlat ta'lim standartlari asosida chuqurlashtirilgan o'qitish metodologiyasi"
+          ? "Amaliy mashg'ulotlar, laboratoriya tajribalari va ta'lim resurslariga keng kirish imkoniyati."
           : lang === "ru"
-          ? "Углублённая методология обучения на основе государственных стандартов"
-          : "Deepened teaching methodology based on state education standards",
+            ? "Практические занятия, лабораторные эксперименты и широкий доступ к учебным ресурсам."
+            : "Practical lessons, laboratory experiments and broad access to learning resources.",
     },
   ];
 
-  const estLabel = lang === "uz" ? "Ta'sis etilgan" : lang === "ru" ? "Основан" : "Established";
-  const uniLabel = lang === "uz" ? "Universitet" : lang === "ru" ? "Университет" : "University";
+  const estLabel =
+    lang === "uz"
+      ? "Ta'sis etilgan"
+      : lang === "ru"
+        ? "Основан"
+        : "Established";
+  const uniLabel =
+    lang === "uz"
+      ? "Universitet"
+      : lang === "ru"
+        ? "Университет"
+        : "University";
 
   return (
     <main>
@@ -206,7 +229,10 @@ export default function AboutPage() {
 
       {/* PAGE BANNER */}
       <div className="page-banner" style={{ paddingTop: 140 }}>
-        <div className="container-custom" style={{ position: "relative", zIndex: 1 }}>
+        <div
+          className="container-custom"
+          style={{ position: "relative", zIndex: 1 }}
+        >
           <div
             style={{
               display: "flex",
@@ -217,7 +243,10 @@ export default function AboutPage() {
               color: "rgba(255,255,255,0.6)",
             }}
           >
-            <Link href="/" style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}>
+            <Link
+              href="/"
+              style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
+            >
               {t.nav_home}
             </Link>
             <span>/</span>
@@ -231,9 +260,19 @@ export default function AboutPage() {
               marginBottom: 12,
             }}
           >
-            {lang === "uz" ? "Litsey haqida" : lang === "ru" ? "О лицее" : "About the Lyceum"}
+            {lang === "uz"
+              ? "Litsey haqida"
+              : lang === "ru"
+                ? "О лицее"
+                : "About the Lyceum"}
           </h1>
-          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1rem", maxWidth: 600 }}>
+          <p
+            style={{
+              color: "rgba(255,255,255,0.7)",
+              fontSize: "1rem",
+              maxWidth: 600,
+            }}
+          >
             {t.about_p1}
           </p>
         </div>
@@ -243,7 +282,10 @@ export default function AboutPage() {
       <section id="about" style={{ padding: "96px 0", background: "#f8f9fc" }}>
         <div className="container-custom">
           <div style={{ maxWidth: 680, marginBottom: 20 }}>
-            <h2 className="section-title accent-underline" style={{ marginBottom: 32 }}>
+            <h2
+              className="section-title accent-underline"
+              style={{ marginBottom: 32 }}
+            >
               {t.about_title}
             </h2>
           </div>
@@ -257,13 +299,33 @@ export default function AboutPage() {
             }}
           >
             <div>
-              <p style={{ color: "#4b5563", lineHeight: 1.85, marginBottom: 18, fontSize: "0.97rem" }}>
+              <p
+                style={{
+                  color: "#4b5563",
+                  lineHeight: 1.85,
+                  marginBottom: 18,
+                  fontSize: "0.97rem",
+                }}
+              >
                 {t.about_p1}
               </p>
-              <p style={{ color: "#4b5563", lineHeight: 1.85, marginBottom: 18, fontSize: "0.97rem" }}>
+              <p
+                style={{
+                  color: "#4b5563",
+                  lineHeight: 1.85,
+                  marginBottom: 18,
+                  fontSize: "0.97rem",
+                }}
+              >
                 {t.about_p2}
               </p>
-              <p style={{ color: "#4b5563", lineHeight: 1.85, fontSize: "0.97rem" }}>
+              <p
+                style={{
+                  color: "#4b5563",
+                  lineHeight: 1.85,
+                  fontSize: "0.97rem",
+                }}
+              >
                 {t.about_p3}
               </p>
 
@@ -279,26 +341,64 @@ export default function AboutPage() {
                 }}
               >
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ color: "#c8a96e", fontSize: "1.8rem", fontWeight: 800, lineHeight: 1 }}>
+                  <div
+                    style={{
+                      color: "#c8a96e",
+                      fontSize: "1.8rem",
+                      fontWeight: 800,
+                      lineHeight: 1,
+                    }}
+                  >
                     1993
                   </div>
-                  <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.73rem", marginTop: 4 }}>
+                  <div
+                    style={{
+                      color: "rgba(255,255,255,0.55)",
+                      fontSize: "0.73rem",
+                      marginTop: 4,
+                    }}
+                  >
                     {estLabel}
                   </div>
                 </div>
-                <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.15)" }} />
+                <div
+                  style={{
+                    width: 1,
+                    height: 40,
+                    background: "rgba(255,255,255,0.15)",
+                  }}
+                />
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ color: "#c8a96e", fontSize: "1.8rem", fontWeight: 800, lineHeight: 1 }}>
+                  <div
+                    style={{
+                      color: "#c8a96e",
+                      fontSize: "1.8rem",
+                      fontWeight: 800,
+                      lineHeight: 1,
+                    }}
+                  >
                     TATU
                   </div>
-                  <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.73rem", marginTop: 4 }}>
+                  <div
+                    style={{
+                      color: "rgba(255,255,255,0.55)",
+                      fontSize: "0.73rem",
+                      marginTop: 4,
+                    }}
+                  >
                     {uniLabel}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 16,
+              }}
+            >
               {values.map((v, i) => (
                 <div
                   key={i}
@@ -317,7 +417,8 @@ export default function AboutPage() {
                       height: 44,
                       borderRadius: 10,
                       marginBottom: 14,
-                      background: "linear-gradient(135deg,rgba(26,58,110,0.08),rgba(26,58,110,0.04))",
+                      background:
+                        "linear-gradient(135deg,rgba(26,58,110,0.08),rgba(26,58,110,0.04))",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -325,10 +426,25 @@ export default function AboutPage() {
                   >
                     <v.icon size={20} color="#1a3a6e" />
                   </div>
-                  <h3 style={{ fontWeight: 700, color: "#1a1f2e", fontSize: "0.9rem", marginBottom: 8 }}>
+                  <h3
+                    style={{
+                      fontWeight: 700,
+                      color: "#1a1f2e",
+                      fontSize: "0.9rem",
+                      marginBottom: 8,
+                    }}
+                  >
                     {v.title}
                   </h3>
-                  <p style={{ color: "#6b7280", fontSize: "0.8rem", lineHeight: 1.6 }}>{v.desc}</p>
+                  <p
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "0.8rem",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {v.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -337,9 +453,18 @@ export default function AboutPage() {
       </section>
 
       {/* ===== LEADERSHIP ===== */}
-      <section id="leadership" style={{ padding: "96px 0", background: "white" }}>
+      <section
+        id="leadership"
+        style={{ padding: "96px 0", background: "white" }}
+      >
         <div className="container-custom">
-          <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto 56px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 580,
+              margin: "0 auto 56px",
+            }}
+          >
             <div
               style={{
                 display: "inline-block",
@@ -354,19 +479,41 @@ export default function AboutPage() {
                 textTransform: "uppercase",
               }}
             >
-              {lang === "uz" ? "Rahbariyat" : lang === "ru" ? "Руководство" : "Leadership"}
+              {lang === "uz"
+                ? "Rahbariyat"
+                : lang === "ru"
+                  ? "Руководство"
+                  : "Leadership"}
             </div>
             <h2 className="section-title" style={{ marginBottom: 12 }}>
-              {lang === "uz" ? "Litsey rahbariyati" : lang === "ru" ? "Руководство лицея" : "Lyceum Leadership"}
+              {lang === "uz"
+                ? "Litsey rahbariyati"
+                : lang === "ru"
+                  ? "Руководство лицея"
+                  : "Lyceum Leadership"}
             </h2>
           </div>
 
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gap: 24,
+            }}
           >
             {LEADERSHIP.map((person, i) => {
-              const name = lang === "uz" ? person.nameUz : lang === "ru" ? person.nameRu : person.nameEn;
-              const role = lang === "uz" ? person.roleUz : lang === "ru" ? person.roleRu : person.roleEn;
+              const name =
+                lang === "uz"
+                  ? person.nameUz
+                  : lang === "ru"
+                    ? person.nameRu
+                    : person.nameEn;
+              const role =
+                lang === "uz"
+                  ? person.roleUz
+                  : lang === "ru"
+                    ? person.roleRu
+                    : person.roleEn;
               return (
                 <div
                   key={i}
@@ -397,24 +544,51 @@ export default function AboutPage() {
                   >
                     {person.initials}
                   </div>
-                  <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "1rem", marginBottom: 8, lineHeight: 1.3 }}>
+                  <h3
+                    style={{
+                      color: "#1a1f2e",
+                      fontWeight: 700,
+                      fontSize: "1rem",
+                      marginBottom: 8,
+                      lineHeight: 1.3,
+                    }}
+                  >
                     {name}
                   </h3>
-                  <p style={{ color: person.color, fontSize: "0.82rem", fontWeight: 600, marginBottom: 18 }}>
+                  <p
+                    style={{
+                      color: person.color,
+                      fontSize: "0.82rem",
+                      fontWeight: 600,
+                      marginBottom: 18,
+                    }}
+                  >
                     {role}
                   </p>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                  >
                     <a
                       href={`tel:${person.phone}`}
-                      style={{ color: "#6b7280", fontSize: "0.82rem", textDecoration: "none" }}
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.82rem",
+                        textDecoration: "none",
+                      }}
                     >
-                      <FaPhoneAlt size={12} style={{ marginRight: 6 }} /> {person.phone}
+                      <FaPhoneAlt size={12} style={{ marginRight: 6 }} />{" "}
+                      {person.phone}
                     </a>
                     <a
                       href={`mailto:${person.email}`}
-                      style={{ color: "#6b7280", fontSize: "0.82rem", textDecoration: "none" }}
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.82rem",
+                        textDecoration: "none",
+                      }}
                     >
-                      <FaEnvelope size={12} style={{ marginRight: 6 }} /> {person.email}
+                      <FaEnvelope size={12} style={{ marginRight: 6 }} />{" "}
+                      {person.email}
                     </a>
                   </div>
                 </div>
@@ -425,9 +599,18 @@ export default function AboutPage() {
       </section>
 
       {/* ===== TEACHERS / DEPARTMENTS ===== */}
-      <section id="teachers" style={{ padding: "96px 0", background: "#f8f9fc" }}>
+      <section
+        id="teachers"
+        style={{ padding: "96px 0", background: "#f8f9fc" }}
+      >
         <div className="container-custom">
-          <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto 56px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 580,
+              margin: "0 auto 56px",
+            }}
+          >
             <div
               style={{
                 display: "inline-flex",
@@ -445,17 +628,27 @@ export default function AboutPage() {
               }}
             >
               <Users size={13} />
-              {lang === "uz" ? "Pedagog xodimlar" : lang === "ru" ? "Педагогический состав" : "Teaching Staff"}
+              {lang === "uz"
+                ? "Pedagog xodimlar"
+                : lang === "ru"
+                  ? "Педагогический состав"
+                  : "Teaching Staff"}
             </div>
             <h2 className="section-title" style={{ marginBottom: 12 }}>
-              {lang === "uz" ? "Kafedra va bo'limlar" : lang === "ru" ? "Кафедры и отделы" : "Departments"}
+              {lang === "uz"
+                ? "Kafedra va bo'limlar"
+                : lang === "ru"
+                  ? "Кафедры и отделы"
+                  : "Departments"}
             </h2>
-            <p style={{ color: "#6b7280", fontSize: "0.97rem", lineHeight: 1.6 }}>
+            <p
+              style={{ color: "#6b7280", fontSize: "0.97rem", lineHeight: 1.6 }}
+            >
               {lang === "uz"
                 ? "85+ malakali pedagoglar 6 ta kafedrada dars olib boradi"
                 : lang === "ru"
-                ? "85+ квалифицированных педагогов ведут занятия на 6 кафедрах"
-                : "85+ qualified teachers conduct classes in 6 departments"}
+                  ? "85+ квалифицированных педагогов ведут занятия на 6 кафедрах"
+                  : "85+ qualified teachers conduct classes in 6 departments"}
             </p>
           </div>
 
@@ -467,7 +660,12 @@ export default function AboutPage() {
             }}
           >
             {DEPARTMENTS.map((dept, i) => {
-              const name = lang === "uz" ? dept.nameUz : lang === "ru" ? dept.nameRu : dept.nameEn;
+              const name =
+                lang === "uz"
+                  ? dept.nameUz
+                  : lang === "ru"
+                    ? dept.nameRu
+                    : dept.nameEn;
               return (
                 <div
                   key={i}
@@ -481,10 +679,19 @@ export default function AboutPage() {
                     borderLeft: `4px solid ${dept.color}`,
                   }}
                 >
-                  <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "0.97rem", marginBottom: 10 }}>
+                  <h3
+                    style={{
+                      color: "#1a1f2e",
+                      fontWeight: 700,
+                      fontSize: "0.97rem",
+                      marginBottom: 10,
+                    }}
+                  >
                     {name}
                   </h3>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
                     <div
                       style={{
                         background: `${dept.color}18`,
@@ -496,7 +703,12 @@ export default function AboutPage() {
                         border: `1px solid ${dept.color}30`,
                       }}
                     >
-                      {dept.teachersCount} {lang === "uz" ? "o'qituvchi" : lang === "ru" ? "педагогов" : "teachers"}
+                      {dept.teachersCount}{" "}
+                      {lang === "uz"
+                        ? "o'qituvchi"
+                        : lang === "ru"
+                          ? "педагогов"
+                          : "teachers"}
                     </div>
                   </div>
                 </div>
@@ -519,29 +731,92 @@ export default function AboutPage() {
             }}
           >
             <div>
-              <div style={{ color: "#c8a96e", fontSize: "3rem", fontWeight: 900, lineHeight: 1 }}>
+              <div
+                style={{
+                  color: "#c8a96e",
+                  fontSize: "3rem",
+                  fontWeight: 900,
+                  lineHeight: 1,
+                }}
+              >
                 85+
               </div>
-              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "1rem", marginTop: 6 }}>
-                {lang === "uz" ? "Pedagog xodimlar" : lang === "ru" ? "Педагогических работников" : "Teaching staff members"}
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: "1rem",
+                  marginTop: 6,
+                }}
+              >
+                {lang === "uz"
+                  ? "Pedagog xodimlar"
+                  : lang === "ru"
+                    ? "Педагогических работников"
+                    : "Teaching staff members"}
               </div>
             </div>
-            <div style={{ height: 60, width: 1, background: "rgba(255,255,255,0.15)" }} />
+            <div
+              style={{
+                height: 60,
+                width: 1,
+                background: "rgba(255,255,255,0.15)",
+              }}
+            />
             <div>
-              <div style={{ color: "#c8a96e", fontSize: "3rem", fontWeight: 900, lineHeight: 1 }}>
+              <div
+                style={{
+                  color: "#c8a96e",
+                  fontSize: "3rem",
+                  fontWeight: 900,
+                  lineHeight: 1,
+                }}
+              >
                 40+
               </div>
-              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "1rem", marginTop: 6 }}>
-                {lang === "uz" ? "Fan nomzodlari va doktorlar" : lang === "ru" ? "Кандидаты и доктора наук" : "PhD & Doctors of Science"}
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: "1rem",
+                  marginTop: 6,
+                }}
+              >
+                {lang === "uz"
+                  ? "Fan nomzodlari va doktorlar"
+                  : lang === "ru"
+                    ? "Кандидаты и доктора наук"
+                    : "PhD & Doctors of Science"}
               </div>
             </div>
-            <div style={{ height: 60, width: 1, background: "rgba(255,255,255,0.15)" }} />
+            <div
+              style={{
+                height: 60,
+                width: 1,
+                background: "rgba(255,255,255,0.15)",
+              }}
+            />
             <div>
-              <div style={{ color: "#c8a96e", fontSize: "3rem", fontWeight: 900, lineHeight: 1 }}>
+              <div
+                style={{
+                  color: "#c8a96e",
+                  fontSize: "3rem",
+                  fontWeight: 900,
+                  lineHeight: 1,
+                }}
+              >
                 30+
               </div>
-              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "1rem", marginTop: 6 }}>
-                {lang === "uz" ? "Yillik pedagogik tajriba" : lang === "ru" ? "Лет педагогического опыта" : "Years of pedagogical experience"}
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: "1rem",
+                  marginTop: 6,
+                }}
+              >
+                {lang === "uz"
+                  ? "Yillik pedagogik tajriba"
+                  : lang === "ru"
+                    ? "Лет педагогического опыта"
+                    : "Years of pedagogical experience"}
               </div>
             </div>
           </div>
@@ -549,9 +824,18 @@ export default function AboutPage() {
       </section>
 
       {/* ===== FACILITIES ===== */}
-      <section id="facilities" style={{ padding: "96px 0", background: "white" }}>
+      <section
+        id="facilities"
+        style={{ padding: "96px 0", background: "white" }}
+      >
         <div className="container-custom">
-          <div style={{ textAlign: "center", maxWidth: 580, margin: "0 auto 56px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 580,
+              margin: "0 auto 56px",
+            }}
+          >
             <div
               style={{
                 display: "inline-flex",
@@ -569,23 +853,37 @@ export default function AboutPage() {
               }}
             >
               <Building2 size={13} />
-              {lang === "uz" ? "Moddiy-texnik baza" : lang === "ru" ? "Материально-техническая база" : "Facilities"}
+              {lang === "uz"
+                ? "Moddiy-texnik baza"
+                : lang === "ru"
+                  ? "Материально-техническая база"
+                  : "Facilities"}
             </div>
             <h2 className="section-title" style={{ marginBottom: 12 }}>
               {lang === "uz"
                 ? "Zamonaviy o'quv muhiti"
                 : lang === "ru"
-                ? "Современная учебная среда"
-                : "Modern Learning Environment"}
+                  ? "Современная учебная среда"
+                  : "Modern Learning Environment"}
             </h2>
           </div>
 
           <div
-            style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 24 }}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
+              gap: 24,
+            }}
           >
             {FACILITIES.map((f, i) => {
-              const title = lang === "uz" ? f.titleUz : lang === "ru" ? f.titleRu : f.titleEn;
-              const desc = lang === "uz" ? f.descUz : lang === "ru" ? f.descRu : f.descEn;
+              const title =
+                lang === "uz"
+                  ? f.titleUz
+                  : lang === "ru"
+                    ? f.titleRu
+                    : f.titleEn;
+              const desc =
+                lang === "uz" ? f.descUz : lang === "ru" ? f.descRu : f.descEn;
               return (
                 <div
                   key={i}
@@ -613,10 +911,25 @@ export default function AboutPage() {
                   >
                     <f.icon size={26} color={f.color} />
                   </div>
-                  <h3 style={{ color: "#1a1f2e", fontWeight: 700, fontSize: "1rem", marginBottom: 10 }}>
+                  <h3
+                    style={{
+                      color: "#1a1f2e",
+                      fontWeight: 700,
+                      fontSize: "1rem",
+                      marginBottom: 10,
+                    }}
+                  >
                     {title}
                   </h3>
-                  <p style={{ color: "#6b7280", fontSize: "0.84rem", lineHeight: 1.65 }}>{desc}</p>
+                  <p
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "0.84rem",
+                      lineHeight: 1.65,
+                    }}
+                  >
+                    {desc}
+                  </p>
                 </div>
               );
             })}
@@ -656,8 +969,12 @@ export default function AboutPage() {
                   key={i}
                   className="faq-item"
                   style={{
-                    boxShadow: openFaq === i ? "0 8px 32px rgba(26,58,110,0.1)" : undefined,
-                    borderColor: openFaq === i ? "rgba(26,58,110,0.15)" : "#e5e7eb",
+                    boxShadow:
+                      openFaq === i
+                        ? "0 8px 32px rgba(26,58,110,0.1)"
+                        : undefined,
+                    borderColor:
+                      openFaq === i ? "rgba(26,58,110,0.15)" : "#e5e7eb",
                   }}
                 >
                   <button
@@ -691,7 +1008,10 @@ export default function AboutPage() {
                         height: 30,
                         borderRadius: 8,
                         flexShrink: 0,
-                        background: openFaq === i ? "linear-gradient(135deg,#1a3a6e,#2d5bb5)" : "rgba(26,58,110,0.07)",
+                        background:
+                          openFaq === i
+                            ? "linear-gradient(135deg,#1a3a6e,#2d5bb5)"
+                            : "rgba(26,58,110,0.07)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -706,9 +1026,26 @@ export default function AboutPage() {
                     </div>
                   </button>
                   {openFaq === i && (
-                    <div style={{ padding: "0 24px 22px", animation: "fadeInUp 0.3s ease" }}>
-                      <div style={{ height: 1, background: "rgba(26,58,110,0.08)", marginBottom: 16 }} />
-                      <p style={{ color: "#4b5563", lineHeight: 1.8, fontSize: "0.9rem" }}>
+                    <div
+                      style={{
+                        padding: "0 24px 22px",
+                        animation: "fadeInUp 0.3s ease",
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: 1,
+                          background: "rgba(26,58,110,0.08)",
+                          marginBottom: 16,
+                        }}
+                      />
+                      <p
+                        style={{
+                          color: "#4b5563",
+                          lineHeight: 1.8,
+                          fontSize: "0.9rem",
+                        }}
+                      >
                         {item.a}
                       </p>
                     </div>
@@ -727,19 +1064,32 @@ export default function AboutPage() {
                 textAlign: "center",
               }}
             >
-              <h3 style={{ color: "white", fontWeight: 700, fontSize: "1.2rem", marginBottom: 12 }}>
+              <h3
+                style={{
+                  color: "white",
+                  fontWeight: 700,
+                  fontSize: "1.2rem",
+                  marginBottom: 12,
+                }}
+              >
                 {lang === "uz"
                   ? "Qabul haqida ko'proq ma'lumot olish uchun"
                   : lang === "ru"
-                  ? "Узнать больше о поступлении"
-                  : "Learn more about admission"}
+                    ? "Узнать больше о поступлении"
+                    : "Learn more about admission"}
               </h3>
-              <p style={{ color: "rgba(255,255,255,0.6)", marginBottom: 24, fontSize: "0.9rem" }}>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.6)",
+                  marginBottom: 24,
+                  fontSize: "0.9rem",
+                }}
+              >
                 {lang === "uz"
                   ? "Barcha savollaringizga javob topishingiz mumkin"
                   : lang === "ru"
-                  ? "Вы можете найти ответы на все свои вопросы"
-                  : "You can find answers to all your questions"}
+                    ? "Вы можете найти ответы на все свои вопросы"
+                    : "You can find answers to all your questions"}
               </p>
               <Link
                 href="/admission"

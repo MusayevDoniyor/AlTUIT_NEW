@@ -28,7 +28,7 @@ export const translations = {
     hero_badge: "Toshkent axborot texnologiyalari universiteti",
     hero_title: "Muhammad al-Xorazmiy Akademik Litseyi",
     hero_subtitle:
-      "Bilim, ilm va kelajak — barchasi bir joyda. Zamonaviy ta'lim muhitida yuqori sifatli akademik ta'lim.",
+      "Biz 1993-yildan beri iqtidorli oʻquvchilarni amaliy fanlarga tayyorlaymiz. Ilmiy yoʻnalishlar va shaxsiy rivojlanishga alohida eʼtibor qaratiladi.",
     hero_cta: "Qabul haqida",
     hero_cta2: "Litsey haqida",
     hero_stat1: "O'quvchi",
