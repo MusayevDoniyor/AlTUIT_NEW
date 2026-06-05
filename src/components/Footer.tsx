@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
 import { ExternalLink, Bus } from "lucide-react";
-import { 
-  FaPhoneAlt, 
-  FaEnvelope, 
-  FaMapMarkerAlt, 
-  FaInstagram, 
-  FaYoutube, 
-  FaFacebookF, 
-  FaTelegramPlane 
+import {
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
+  FaTelegramPlane,
 } from "react-icons/fa";
 
 interface FooterProps {
@@ -326,17 +326,19 @@ export default function Footer({ lang }: FooterProps) {
                 (e.currentTarget as HTMLAnchorElement).style.transform = "none";
               }}
             >
-              <div style={{ 
-                width: 44, 
-                height: 44, 
-                borderRadius: 10, 
-                background: "rgba(200,169,110,0.2)", 
-                display: "flex", 
-                alignItems: "center", 
-                justifyContent: "center",
-                marginBottom: 12,
-                color: "#c8a96e"
-              }}>
+              <div
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 10,
+                  background: "rgba(200,169,110,0.2)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginBottom: 12,
+                  color: "#c8a96e",
+                }}
+              >
                 <FaTelegramPlane size={24} />
               </div>
               <p

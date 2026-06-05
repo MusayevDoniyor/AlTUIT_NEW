@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
+import {
+  getLeadership,
+  getTeachers,
+  LeadershipItem,
+  TeacherItem,
+} from "@/lib/db";
 import {
   Target,
   Eye,
@@ -21,44 +28,7 @@ import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const LEADERSHIP = [
-  {
-    nameUz: "Abdullayev Sherzod Hamidovich",
-    nameRu: "Абдуллаев Шерзод Хамидович",
-    nameEn: "Abdullayev Sherzod Hamidovich",
-    roleUz: "Litsey direktori",
-    roleRu: "Директор лицея",
-    roleEn: "Lyceum Director",
-    phone: "+998 71 235 03 69",
-    email: "director@tatual.uz",
-    initials: "AŞ",
-    color: "#1a3a6e",
-  },
-  {
-    nameUz: "Karimova Dilnoza Baxtiyorovna",
-    nameRu: "Каримова Дилноза Бахтиёровна",
-    nameEn: "Karimova Dilnoza Baxtiyorovna",
-    roleUz: "O'quv ishlari bo'yicha direktor o'rinbosari",
-    roleRu: "Заместитель директора по учебной работе",
-    roleEn: "Deputy Director for Academic Affairs",
-    phone: "+998 71 235 03 70",
-    email: "akademik@tatual.uz",
-    initials: "KD",
-    color: "#2d5bb5",
-  },
-  {
-    nameUz: "Xolmatov Jamshid Narzullayevich",
-    nameRu: "Холматов Жамшид Нарзуллаевич",
-    nameEn: "Xolmatov Jamshid Narzullayevich",
-    roleUz: "Tarbiyaviy ishlar bo'yicha direktor o'rinbosari",
-    roleRu: "Заместитель директора по воспитательной работе",
-    roleEn: "Deputy Director for Educational Affairs",
-    phone: "+998 71 235 03 71",
-    email: "tarbiya@tatual.uz",
-    initials: "XJ",
-    color: "#1d7a55",
-  },
-];
+const LEADERSHIP: any[] = [];
 
 const DEPARTMENTS = [
   {
@@ -105,53 +75,30 @@ const DEPARTMENTS = [
   },
 ];
 
-const FACILITIES = [
-  {
-    icon: FlaskConical,
-    titleUz: "Zamonaviy laboratoriyalar",
-    titleRu: "Современные лаборатории",
-    titleEn: "Modern Laboratories",
-    descUz:
-      "Kimyo, fizika va biologiya fanlari uchun to'liq jihozlangan 6 ta laboratoriya",
-    descRu: "6 полностью оснащённых лабораторий по химии, физике и биологии",
-    descEn: "6 fully equipped laboratories for chemistry, physics and biology",
-    color: "#1d7a55",
-  },
-  {
-    icon: Wifi,
-    titleUz: "Kompyuter sinflari",
-    titleRu: "Компьютерные классы",
-    titleEn: "Computer Labs",
-    descUz: "150+ zamonaviy kompyuter, tezkor internet va dasturlash muhiti",
-    descRu: "150+ современных компьютеров, высокоскоростной интернет",
-    descEn: "150+ modern computers, high-speed internet and coding environment",
-    color: "#1a3a6e",
-  },
-  {
-    icon: Library,
-    titleUz: "Kutubxona",
-    titleRu: "Библиотека",
-    titleEn: "Library",
-    descUz: "25,000+ kitob, elektron resurslar va o'qish zallari",
-    descRu: "25,000+ книг, электронные ресурсы и читальные залы",
-    descEn: "25,000+ books, digital resources and reading halls",
-    color: "#c8a96e",
-  },
-  {
-    icon: Building2,
-    titleUz: "Sport majmuasi",
-    titleRu: "Спортивный комплекс",
-    titleEn: "Sports Complex",
-    descUz: "Zamonaviy sport zali, futbol va basketbol maydonlari",
-    descRu: "Современный спортзал, футбольное и баскетбольное поля",
-    descEn: "Modern gym, football and basketball courts",
-    color: "#2d5bb5",
-  },
-];
-
 export default function AboutPage() {
   const [lang, setLang] = useState<Lang>("uz");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const [dbLeadership, setDbLeadership] = useState<LeadershipItem[]>([]);
+  const [dbTeachers, setDbTeachers] = useState<TeacherItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const leaders = await getLeadership();
+        if (leaders && leaders.length > 0) setDbLeadership(leaders);
+
+        const teachers = await getTeachers();
+        if (teachers && teachers.length > 0) setDbTeachers(teachers);
+      } catch (err) {
+        console.error("Failed to load about page data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   const t = translations[lang];
 
@@ -494,107 +441,146 @@ export default function AboutPage() {
             </h2>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-              gap: 24,
-            }}
-          >
-            {LEADERSHIP.map((person, i) => {
-              const name =
-                lang === "uz"
-                  ? person.nameUz
+          {dbLeadership.length === 0 ? (
+            <div
+              style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
+            >
+              <p style={{ color: "#6b7280", fontSize: "1.1rem", margin: 0 }}>
+                {lang === "uz"
+                  ? "Rahbariyat ma'lumotlari mavjud emas"
                   : lang === "ru"
-                    ? person.nameRu
-                    : person.nameEn;
-              const role =
-                lang === "uz"
-                  ? person.roleUz
-                  : lang === "ru"
-                    ? person.roleRu
-                    : person.roleEn;
-              return (
-                <div
-                  key={i}
-                  className="card-hover"
-                  style={{
-                    background: "white",
-                    borderRadius: 18,
-                    padding: "32px 24px",
-                    border: "1px solid rgba(26,58,110,0.08)",
-                    boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
-                    textAlign: "center",
-                  }}
-                >
+                    ? "Информация о руководстве отсутствует"
+                    : "No leadership information available"}
+              </p>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+                gap: 24,
+              }}
+            >
+              {dbLeadership.map((person, i) => {
+                const name =
+                  lang === "uz"
+                    ? person.nameUz
+                    : lang === "ru"
+                      ? person.nameRu
+                      : person.nameEn;
+                const role =
+                  lang === "uz"
+                    ? person.roleUz
+                    : lang === "ru"
+                      ? person.roleRu
+                      : person.roleEn;
+                return (
                   <div
+                    key={(person as any).id || i}
+                    className="card-hover"
                     style={{
-                      width: 80,
-                      height: 80,
-                      borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${person.color}, ${person.color}aa)`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 20px",
-                      fontSize: "1.6rem",
-                      fontWeight: 900,
-                      color: "white",
+                      background: "white",
+                      borderRadius: 18,
+                      padding: "32px 24px",
+                      border: "1px solid rgba(26,58,110,0.08)",
+                      boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
+                      textAlign: "center",
                     }}
                   >
-                    {person.initials}
-                  </div>
-                  <h3
-                    style={{
-                      color: "#1a1f2e",
-                      fontWeight: 700,
-                      fontSize: "1rem",
-                      marginBottom: 8,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {name}
-                  </h3>
-                  <p
-                    style={{
-                      color: person.color,
-                      fontSize: "0.82rem",
-                      fontWeight: 600,
-                      marginBottom: 18,
-                    }}
-                  >
-                    {role}
-                  </p>
-                  <div
-                    style={{ display: "flex", flexDirection: "column", gap: 8 }}
-                  >
-                    <a
-                      href={`tel:${person.phone}`}
+                    <div
                       style={{
-                        color: "#6b7280",
-                        fontSize: "0.82rem",
-                        textDecoration: "none",
+                        width: 90,
+                        height: 90,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        margin: "0 auto 20px",
+                        background: `linear-gradient(135deg, ${person.color || "#1a3a6e"}, ${person.color || "#1a3a6e"}aa)`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border: "3px solid rgba(200,169,110,0.15)",
                       }}
                     >
-                      <FaPhoneAlt size={12} style={{ marginRight: 6 }} />{" "}
-                      {person.phone}
-                    </a>
-                    <a
-                      href={`mailto:${person.email}`}
+                      {person.photoUrl ? (
+                        <Image
+                          src={person.photoUrl}
+                          alt=""
+                          width={90}
+                          height={90}
+                          style={{
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        />
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: "1.6rem",
+                            fontWeight: 900,
+                            color: "white",
+                          }}
+                        >
+                          {person.initials || name.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+                    <h3
                       style={{
-                        color: "#6b7280",
-                        fontSize: "0.82rem",
-                        textDecoration: "none",
+                        color: "#1a1f2e",
+                        fontWeight: 700,
+                        fontSize: "1rem",
+                        marginBottom: 8,
+                        lineHeight: 1.3,
                       }}
                     >
-                      <FaEnvelope size={12} style={{ marginRight: 6 }} />{" "}
-                      {person.email}
-                    </a>
+                      {name}
+                    </h3>
+                    <p
+                      style={{
+                        color: person.color,
+                        fontSize: "0.82rem",
+                        fontWeight: 600,
+                        marginBottom: 18,
+                      }}
+                    >
+                      {role}
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                      }}
+                    >
+                      <a
+                        href={`tel:${person.phone}`}
+                        style={{
+                          color: "#6b7280",
+                          fontSize: "0.82rem",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <FaPhoneAlt size={12} style={{ marginRight: 6 }} />{" "}
+                        {person.phone}
+                      </a>
+                      <a
+                        href={`mailto:${person.email}`}
+                        style={{
+                          color: "#6b7280",
+                          fontSize: "0.82rem",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <FaEnvelope size={12} style={{ marginRight: 6 }} />{" "}
+                        {person.email}
+                      </a>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -820,120 +806,114 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ===== FACILITIES ===== */}
-      <section
-        id="facilities"
-        style={{ padding: "96px 0", background: "white" }}
-      >
-        <div className="container-custom">
-          <div
-            style={{
-              textAlign: "center",
-              maxWidth: 580,
-              margin: "0 auto 56px",
-            }}
-          >
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(26,58,110,0.08)",
-                color: "#1a3a6e",
-                fontSize: "0.78rem",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                padding: "5px 14px",
-                borderRadius: 50,
-                marginBottom: 16,
-                textTransform: "uppercase",
-              }}
-            >
-              <Building2 size={13} />
-              {lang === "uz"
-                ? "Moddiy-texnik baza"
-                : lang === "ru"
-                  ? "Материально-техническая база"
-                  : "Facilities"}
-            </div>
-            <h2 className="section-title" style={{ marginBottom: 12 }}>
-              {lang === "uz"
-                ? "Zamonaviy o'quv muhiti"
-                : lang === "ru"
-                  ? "Современная учебная среда"
-                  : "Modern Learning Environment"}
-            </h2>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-              gap: 24,
-            }}
-          >
-            {FACILITIES.map((f, i) => {
-              const title =
-                lang === "uz"
-                  ? f.titleUz
+          {/* O'qituvchilar ro'yxati */}
+          {dbTeachers.length > 0 && (
+            <div style={{ marginTop: 64 }}>
+              <h3
+                style={{
+                  color: "#1a1f2e",
+                  fontWeight: 800,
+                  fontSize: "1.4rem",
+                  textAlign: "center",
+                  marginBottom: 36,
+                }}
+              >
+                {lang === "uz"
+                  ? "Pedagoglarimiz"
                   : lang === "ru"
-                    ? f.titleRu
-                    : f.titleEn;
-              const desc =
-                lang === "uz" ? f.descUz : lang === "ru" ? f.descRu : f.descEn;
-              return (
-                <div
-                  key={i}
-                  className="card-hover"
-                  style={{
-                    background: "#f8f9fc",
-                    borderRadius: 18,
-                    padding: "32px 24px",
-                    border: "1px solid rgba(26,58,110,0.07)",
-                    boxShadow: "0 4px 18px rgba(26,58,110,0.05)",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: 14,
-                      background: `${f.color}18`,
-                      border: `1px solid ${f.color}30`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: 20,
-                    }}
-                  >
-                    <f.icon size={26} color={f.color} />
-                  </div>
-                  <h3
-                    style={{
-                      color: "#1a1f2e",
-                      fontWeight: 700,
-                      fontSize: "1rem",
-                      marginBottom: 10,
-                    }}
-                  >
-                    {title}
-                  </h3>
-                  <p
-                    style={{
-                      color: "#6b7280",
-                      fontSize: "0.84rem",
-                      lineHeight: 1.65,
-                    }}
-                  >
-                    {desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+                    ? "Наши педагоги"
+                    : "Our Teachers"}
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                  gap: 24,
+                }}
+              >
+                {dbTeachers.map((teacher) => {
+                  const name =
+                    lang === "uz"
+                      ? teacher.fullNameUz
+                      : lang === "ru"
+                        ? teacher.fullNameRu
+                        : teacher.fullNameEn;
+                  const subject =
+                    lang === "uz"
+                      ? teacher.subjectUz
+                      : lang === "ru"
+                        ? teacher.subjectRu
+                        : teacher.subjectEn;
+                  return (
+                    <div
+                      key={teacher.id}
+                      className="card-hover"
+                      style={{
+                        background: "white",
+                        borderRadius: 16,
+                        padding: "24px 16px",
+                        border: "1px solid rgba(26,58,110,0.07)",
+                        boxShadow: "0 4px 16px rgba(26,58,110,0.04)",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: "50%",
+                          overflow: "hidden",
+                          margin: "0 auto 16px",
+                          background: "rgba(200,169,110,0.1)",
+                          border: "2px solid rgba(200,169,110,0.2)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {teacher.photoUrl ? (
+                          <Image
+                            src={teacher.photoUrl}
+                            alt=""
+                            width={80}
+                            height={80}
+                            style={{
+                              objectFit: "cover",
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          />
+                        ) : (
+                          <span style={{ fontSize: "1.8rem" }}>👨‍🏫</span>
+                        )}
+                      </div>
+                      <h4
+                        style={{
+                          color: "#1a1f2e",
+                          fontWeight: 700,
+                          fontSize: "0.9rem",
+                          margin: "0 0 6px",
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {name}
+                      </h4>
+                      <p
+                        style={{
+                          color: "#6b7280",
+                          fontSize: "0.78rem",
+                          margin: 0,
+                        }}
+                      >
+                        {subject}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

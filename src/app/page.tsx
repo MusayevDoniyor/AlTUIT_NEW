@@ -21,50 +21,9 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getHeroSlides, getStats, getNews } from "@/lib/db";
 
 // ===== DATA =====
-
-const slides = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Ilmiy izlanish va amaliy yutuq",
-    titleRu: "Научные достижения и практические результаты",
-    titleEn: "Scientific Achievements and Practical Results",
-    descUz:
-      "Muhammad al-Xorazmiy litseyi matematika, fizika va informatika bo'yicha chuqurlashtirilgan tayyorgarlik beradi.",
-    descRu:
-      "Лицей имени Мухаммада аль-Хорезми обеспечивает углубленную подготовку по математике, физике и информатике.",
-    descEn:
-      "The lyceum provides advanced preparation in mathematics, physics and informatics.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Olimpiadalar va oliy ta'limga tayyorgarlik",
-    titleRu: "Подготовка к олимпиадам и вузам",
-    titleEn: "Olympiad and University Preparation",
-    descUz:
-      "Bitiruvchilarimiz respublika va xalqaro olimpiadalarda faol ishtirok etib, yetakchi universitetlarga kirishadi.",
-    descRu:
-      "Наши выпускники участвуют в республиканских и международных олимпиадах и поступают в ведущие вузы.",
-    descEn:
-      "Our graduates compete in national and international olympiads and enter leading universities.",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop",
-    titleUz: "Qulay va qo'llab-quvvatlovchi muhit",
-    titleRu: "Комфортная и поддерживающая среда",
-    titleEn: "Comfortable and Supportive Environment",
-    descUz:
-      "Litseyimizda o'quvchilar laboratoriyalar, kutubxona va sinfxonalarda ishonchli ta'lim oladi.",
-    descRu:
-      "В нашем лицее ученики обучаются в лабораториях, библиотеке и современных аудиториях.",
-    descEn:
-      "At our lyceum students learn in laboratories, library and modern classrooms.",
-  },
-];
 
 const dirColors = [
   { bg: "linear-gradient(135deg,#0f2347,#1a3a6e)", accent: "#c8a96e" },
@@ -92,49 +51,6 @@ const dirSubjectsEn = [
   ["Mathematics", "English", "Economics", "Native Language"],
   ["Biology", "Chemistry", "Mathematics", "Physics"],
   ["History", "Law", "Philosophy", "Geography"],
-];
-
-const newsItems = [
-  {
-    id: "navrouz-2026",
-    date: "2026-03-21",
-    titleUz: "Navro'z bayrami munosabati bilan katta bayram tashkil etildi",
-    titleRu: "Большой праздник организован в честь Навруза",
-    titleEn: "Grand celebration organized for Nowruz holiday",
-    descUz:
-      "Litsey o'quvchilari va o'qituvchilar Navro'z bayramini shod-xurramlik bilan nishonlashdi.",
-    descRu: "Ученики и учителя лицея радостно отпраздновали Навруз.",
-    descEn: "Students and teachers of the lyceum joyfully celebrated Nowruz.",
-    tag: { uz: "Ijtimoiy", ru: "Социальное", en: "Social" },
-    color: "#1a3a6e",
-  },
-  {
-    id: "robotics-2026",
-    date: "2026-04-05",
-    titleUz: "Informatika va robototexnika ko'rgazmasi o'tkazildi",
-    titleRu: "Проведена выставка по информатике и робототехнике",
-    titleEn: "Informatics and robotics exhibition was held",
-    descUz:
-      "O'quvchilar tomonidan tayyorlangan 30 dan ortiq loyiha namoyish etildi.",
-    descRu: "Было представлено более 30 проектов, подготовленных учениками.",
-    descEn: "Over 30 projects prepared by students were presented.",
-    tag: { uz: "Ilm", ru: "Наука", en: "Science" },
-    color: "#1d7a55",
-  },
-  {
-    id: "math-olympiad-2026",
-    date: "2026-04-10",
-    titleUz: "Matematika olimpiadasi g'oliblari mukofotlandi",
-    titleRu: "Победители олимпиады по математике награждены",
-    titleEn: "Math olympiad winners were awarded",
-    descUz:
-      "Respublika matematika olimpiadasida g'olib bo'lgan o'quvchilar nishonlandi.",
-    descRu:
-      "Ученики, победившие на республиканской олимпиаде по математике, были отмечены.",
-    descEn: "Students who won the national math olympiad were celebrated.",
-    tag: { uz: "Yutuqlar", ru: "Достижения", en: "Achievement" },
-    color: "#c8a96e",
-  },
 ];
 
 // ===== COUNTER COMPONENT =====
@@ -177,19 +93,66 @@ export default function Home() {
   const [statsInView, setStatsInView] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
+  const [dbSlides, setDbSlides] = useState<any[]>([]);
+  const [dbStats, setDbStats] = useState<any[]>([]);
+  const [dbNews, setDbNews] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const fetchedSlides = await getHeroSlides();
+        if (fetchedSlides && fetchedSlides.length > 0) {
+          setDbSlides(fetchedSlides);
+        }
+
+        const fetchedStats = await getStats();
+        if (fetchedStats && fetchedStats.length > 0) {
+          setDbStats(fetchedStats);
+        }
+
+        const fetchedNews = await getNews();
+        if (fetchedNews && fetchedNews.length > 0) {
+          setDbNews(fetchedNews.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Failed to load dynamic data:", err);
+      }
+    }
+    loadData();
+  }, []);
+
+  const activeSlides =
+    dbSlides.length > 0
+      ? dbSlides
+      : [
+          {
+            imageUrl:
+              "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
+            titleUz: "",
+            titleRu: "",
+            titleEn: "",
+            descUz: "",
+            descRu: "",
+            descEn: "",
+          },
+        ];
+
   const t = translations[lang];
 
   const next = useCallback(
-    () => setCurrent((prev) => (prev + 1) % slides.length),
-    [],
+    () => setCurrent((prev) => (prev + 1) % activeSlides.length),
+    [activeSlides.length],
   );
   const prev = () =>
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrent(
+      (prev) => (prev - 1 + activeSlides.length) % activeSlides.length,
+    );
 
   useEffect(() => {
+    if (activeSlides.length === 0) return;
     const timer = setInterval(next, 7000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, activeSlides.length]);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -202,15 +165,23 @@ export default function Home() {
     return () => obs.disconnect();
   }, []);
 
-  const slide = slides[current];
-  const slideTitle =
-    lang === "uz"
+  const slide = activeSlides[current];
+  const slideImage = slide?.imageUrl || slide?.image || "";
+  const hasText = !!(slide?.titleUz || slide?.titleRu || slide?.titleEn);
+  const slideTitle = hasText
+    ? lang === "uz"
       ? slide.titleUz
       : lang === "ru"
         ? slide.titleRu
-        : slide.titleEn;
-  const slideDesc =
-    lang === "uz" ? slide.descUz : lang === "ru" ? slide.descRu : slide.descEn;
+        : slide.titleEn
+    : "";
+  const slideDesc = hasText
+    ? lang === "uz"
+      ? slide.descUz
+      : lang === "ru"
+        ? slide.descRu
+        : slide.descEn
+    : "";
 
   const dirs = [
     { name: t.dir1_name, desc: t.dir1_desc },
@@ -226,46 +197,25 @@ export default function Home() {
         ? dirSubjectsRu
         : dirSubjectsEn;
 
-  const stats = [
-    {
-      icon: GraduationCap,
-      value: 1200,
-      suffix: "+",
-      label: t.hero_stat1,
-      color: "#1a3a6e",
-    },
-    {
-      icon: Users2,
-      value: 85,
-      suffix: "+",
-      label: t.hero_stat2,
-      color: "#2d5bb5",
-    },
-    {
-      icon: TrendingUp,
-      value: 96,
-      suffix: "%",
-      label:
-        lang === "uz"
-          ? "Oliy ta'limga kirish"
-          : lang === "ru"
-            ? "Поступление в вузы"
-            : "Uni Admission Rate",
-      color: "#1d7a55",
-    },
-    {
-      icon: Trophy,
-      value: 200,
-      suffix: "+",
-      label:
-        lang === "uz"
-          ? "Olimpiada g'oliblari"
-          : lang === "ru"
-            ? "Победители олимпиад"
-            : "Olympiad Winners",
-      color: "#c8a96e",
-    },
-  ];
+  const activeStats =
+    dbStats.length > 0
+      ? dbStats.map((s) => {
+          let Icon = GraduationCap;
+          if (s.key === "teachers") Icon = Users2;
+          else if (s.key === "uni_rate") Icon = TrendingUp;
+          else if (s.key === "olympiad_winners") Icon = Trophy;
+          return {
+            icon: Icon,
+            value: s.value,
+            suffix: s.suffix,
+            label:
+              lang === "uz" ? s.labelUz : lang === "ru" ? s.labelRu : s.labelEn,
+            color: s.color,
+          };
+        })
+      : [];
+
+  const activeNews = dbNews;
 
   return (
     <main>
@@ -286,127 +236,143 @@ export default function Home() {
             transition={{ duration: 1.2 }}
             style={{ position: "absolute", inset: 0 }}
           >
-            <Image
-              src={slide.image}
-              alt="Hero background"
-              fill
-              priority={current === 0}
-              className="object-cover"
-              style={{ zIndex: -1, opacity: 0.4 }}
-              sizes="100vw"
-            />
-            <div
-              className="carousel-overlay"
-              style={{
-                background:
-                  "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
-              }}
-            />
-            <div
-              className="container-custom"
-              style={{
-                position: "relative",
-                zIndex: 2,
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ maxWidth: 850 }}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.8 }}
+            {slideImage && (
+              <Image
+                src={slideImage}
+                alt="Hero background"
+                fill
+                priority={current === 0}
+                className="object-cover"
+                style={{ zIndex: -1, opacity: hasText ? 0.4 : 0.85 }}
+                sizes="100vw"
+              />
+            )}
+            {hasText ? (
+              <>
+                <div
+                  className="carousel-overlay"
+                  style={{
+                    background:
+                      "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
+                  }}
+                />
+                <div
+                  className="container-custom"
+                  style={{
+                    position: "relative",
+                    zIndex: 2,
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  <div
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 12,
-                      marginBottom: 28,
-                      background: "rgba(255,255,255,0.08)",
-                      backdropFilter: "blur(5px)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      borderRadius: 100,
-                      padding: "8px 24px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 8,
-                        height: 8,
-                        borderRadius: "50%",
-                        background: "#c8a96e",
-                      }}
-                    />
-                    <span
-                      style={{
-                        color: "white",
-                        fontSize: "0.8rem",
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                      }}
+                  <div style={{ maxWidth: 850 }}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2, duration: 0.8 }}
                     >
-                      {t.hero_badge}
-                    </span>
+                      <div
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 12,
+                          marginBottom: 28,
+                          background: "rgba(255,255,255,0.08)",
+                          backdropFilter: "blur(5px)",
+                          border: "1px solid rgba(255,255,255,0.15)",
+                          borderRadius: 100,
+                          padding: "8px 24px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: "50%",
+                            background: "#c8a96e",
+                          }}
+                        />
+                        <span
+                          style={{
+                            color: "white",
+                            fontSize: "0.8rem",
+                            fontWeight: 700,
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {t.hero_badge}
+                        </span>
+                      </div>
+
+                      <h1
+                        style={{
+                          color: "white",
+                          fontWeight: 900,
+                          fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                          lineHeight: 1.1,
+                          marginBottom: 25,
+                        }}
+                      >
+                        {slideTitle}
+                      </h1>
+
+                      <p
+                        style={{
+                          color: "rgba(255,255,255,0.85)",
+                          fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
+                          lineHeight: 1.6,
+                          marginBottom: 40,
+                          maxWidth: 650,
+                        }}
+                      >
+                        {slideDesc}
+                      </p>
+
+                      <div
+                        style={{ display: "flex", gap: 20, flexWrap: "wrap" }}
+                      >
+                        <Link
+                          href="/admission"
+                          className="btn-primary"
+                          style={{
+                            padding: "18px 40px",
+                            borderRadius: 12,
+                            fontSize: "1rem",
+                            background: "#c8a96e",
+                            color: "#002147",
+                          }}
+                        >
+                          {t.hero_cta} <ArrowRight size={20} />
+                        </Link>
+                        <Link
+                          href="/about"
+                          className="btn-outline"
+                          style={{
+                            padding: "18px 40px",
+                            borderRadius: 12,
+                            fontSize: "1rem",
+                            borderColor: "rgba(255,255,255,0.4)",
+                            borderWidth: 2,
+                          }}
+                        >
+                          {t.hero_cta2}
+                        </Link>
+                      </div>
+                    </motion.div>
                   </div>
-
-                  <h1
-                    style={{
-                      color: "white",
-                      fontWeight: 900,
-                      fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                      lineHeight: 1.1,
-                      marginBottom: 25,
-                    }}
-                  >
-                    {slideTitle}
-                  </h1>
-
-                  <p
-                    style={{
-                      color: "rgba(255,255,255,0.85)",
-                      fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                      lineHeight: 1.6,
-                      marginBottom: 40,
-                      maxWidth: 650,
-                    }}
-                  >
-                    {slideDesc}
-                  </p>
-
-                  <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                    <Link
-                      href="/admission"
-                      className="btn-primary"
-                      style={{
-                        padding: "18px 40px",
-                        borderRadius: 12,
-                        fontSize: "1rem",
-                        background: "#c8a96e",
-                        color: "#002147",
-                      }}
-                    >
-                      {t.hero_cta} <ArrowRight size={20} />
-                    </Link>
-                    <Link
-                      href="/about"
-                      className="btn-outline"
-                      style={{
-                        padding: "18px 40px",
-                        borderRadius: 12,
-                        fontSize: "1rem",
-                        borderColor: "rgba(255,255,255,0.4)",
-                        borderWidth: 2,
-                      }}
-                    >
-                      {t.hero_cta2}
-                    </Link>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+                </div>
+              </>
+            ) : (
+              <div
+                className="carousel-overlay"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(0,33,71,0.2) 0%, rgba(0,33,71,0.65) 100%)",
+                }}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -423,7 +389,7 @@ export default function Home() {
             gap: 12,
           }}
         >
-          {slides.map((_, i) => (
+          {activeSlides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
@@ -464,52 +430,71 @@ export default function Home() {
               gap: 24,
             }}
           >
-            {stats.map((s, i) => (
+            {activeStats.length === 0 ? (
               <div
-                key={i}
-                style={{ textAlign: "center", padding: "24px 16px" }}
+                style={{
+                  textAlign: "center",
+                  padding: "24px 0",
+                  width: "100%",
+                  gridColumn: "1 / -1",
+                }}
               >
-                <div
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 16,
-                    margin: "0 auto 16px",
-                    background: `${s.color}18`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: `1px solid ${s.color}28`,
-                  }}
-                >
-                  <s.icon size={26} color={s.color} />
-                </div>
-                <div
-                  style={{
-                    fontSize: "2.8rem",
-                    fontWeight: 900,
-                    color: s.color,
-                    lineHeight: 1,
-                    marginBottom: 8,
-                  }}
-                >
-                  <Counter
-                    to={s.value}
-                    active={statsInView}
-                    suffix={s.suffix}
-                  />
-                </div>
-                <div
-                  style={{
-                    color: "#6b7280",
-                    fontSize: "0.88rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  {s.label}
-                </div>
+                <p style={{ color: "#6b7280", fontSize: "0.95rem", margin: 0 }}>
+                  {lang === "uz"
+                    ? "Statistikalar mavjud emas"
+                    : lang === "ru"
+                      ? "Статистика отсутствует"
+                      : "No stats available"}
+                </p>
               </div>
-            ))}
+            ) : (
+              activeStats.map((s, i) => (
+                <div
+                  key={i}
+                  style={{ textAlign: "center", padding: "24px 16px" }}
+                >
+                  <div
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 16,
+                      margin: "0 auto 16px",
+                      background: `${s.color}18`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: `1px solid ${s.color}28`,
+                    }}
+                  >
+                    <s.icon size={26} color={s.color} />
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "2.8rem",
+                      fontWeight: 900,
+                      color: s.color,
+                      lineHeight: 1,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <Counter
+                      to={s.value}
+                      active={statsInView}
+                      suffix={s.suffix}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      color: "#6b7280",
+                      fontSize: "0.88rem",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {s.label}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -972,118 +957,153 @@ export default function Home() {
             </Link>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 24,
-            }}
-          >
-            {newsItems.map((item) => {
-              const title =
-                lang === "uz"
-                  ? item.titleUz
+          {activeNews.length === 0 ? (
+            <div
+              style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
+            >
+              <p style={{ color: "#6b7280", fontSize: "1rem", margin: 0 }}>
+                {lang === "uz"
+                  ? "Yangiliklar mavjud emas"
                   : lang === "ru"
-                    ? item.titleRu
-                    : item.titleEn;
-              const desc =
-                lang === "uz"
-                  ? item.descUz
-                  : lang === "ru"
-                    ? item.descRu
-                    : item.descEn;
-              const tagStr = item.tag[lang];
+                    ? "Новости отсутствуют"
+                    : "No news available"}
+              </p>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: 24,
+              }}
+            >
+              {activeNews.map((item) => {
+                const title =
+                  lang === "uz"
+                    ? item.titleUz
+                    : lang === "ru"
+                      ? item.titleRu
+                      : item.titleEn;
+                const desc =
+                  lang === "uz"
+                    ? item.descUz
+                    : lang === "ru"
+                      ? item.descRu
+                      : item.descEn;
+                const tagStr =
+                  typeof item.tag === "string"
+                    ? item.tag
+                    : item.tag?.[lang] || "";
 
-              return (
-                <Link
-                  key={item.id}
-                  href={`/news/${item.id}`}
-                  className="news-card"
-                  style={{
-                    cursor: "pointer",
-                    textDecoration: "none",
-                    display: "block",
-                  }}
-                >
-                  <div
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/news/${item.id}`}
+                    className="news-card"
                     style={{
-                      height: 4,
-                      background: `linear-gradient(90deg, ${item.color}, ${item.color}88)`,
+                      cursor: "pointer",
+                      textDecoration: "none",
+                      display: "block",
                     }}
-                  />
-                  <div style={{ padding: "24px" }}>
+                  >
                     <div
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: 16,
+                        height: 4,
+                        background: `linear-gradient(90deg, ${item.color || "#1a3a6e"}, ${item.color || "#1a3a6e"}88)`,
                       }}
-                    >
-                      <span
+                    />
+                    {item.imageUrl && (
+                      <div
                         style={{
-                          background: `${item.color}15`,
-                          color: item.color,
-                          fontSize: "0.74rem",
-                          fontWeight: 700,
-                          padding: "4px 10px",
-                          borderRadius: 50,
-                          border: `1px solid ${item.color}30`,
+                          position: "relative",
+                          width: "100%",
+                          height: 160,
+                          overflow: "hidden",
                         }}
                       >
-                        {tagStr}
-                      </span>
+                        <Image
+                          src={item.imageUrl}
+                          alt={title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    )}
+                    <div style={{ padding: "24px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: 16,
+                        }}
+                      >
+                        <span
+                          style={{
+                            background: `${item.color || "#1a3a6e"}15`,
+                            color: item.color || "#1a3a6e",
+                            fontSize: "0.74rem",
+                            fontWeight: 700,
+                            padding: "4px 10px",
+                            borderRadius: 50,
+                            border: `1px solid ${item.color || "#1a3a6e"}30`,
+                          }}
+                        >
+                          {tagStr}
+                        </span>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 5,
+                            color: "#9ca3af",
+                            fontSize: "0.77rem",
+                          }}
+                        >
+                          <Calendar size={13} />
+                          {item.date}
+                        </div>
+                      </div>
+                      <h3
+                        style={{
+                          color: "#1a1f2e",
+                          fontWeight: 700,
+                          fontSize: "1rem",
+                          lineHeight: 1.45,
+                          marginBottom: 12,
+                        }}
+                      >
+                        {title}
+                      </h3>
+                      <p
+                        style={{
+                          color: "#6b7280",
+                          fontSize: "0.84rem",
+                          lineHeight: 1.7,
+                          marginBottom: 18,
+                        }}
+                      >
+                        {desc}
+                      </p>
                       <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 5,
-                          color: "#9ca3af",
-                          fontSize: "0.77rem",
+                          gap: 6,
+                          color: item.color || "#1a3a6e",
+                          fontSize: "0.83rem",
+                          fontWeight: 600,
                         }}
                       >
-                        <Calendar size={13} />
-                        {item.date}
+                        {t.news_read} <ArrowRight size={14} />
                       </div>
                     </div>
-                    <h3
-                      style={{
-                        color: "#1a1f2e",
-                        fontWeight: 700,
-                        fontSize: "1rem",
-                        lineHeight: 1.45,
-                        marginBottom: 12,
-                      }}
-                    >
-                      {title}
-                    </h3>
-                    <p
-                      style={{
-                        color: "#6b7280",
-                        fontSize: "0.84rem",
-                        lineHeight: 1.7,
-                        marginBottom: 18,
-                      }}
-                    >
-                      {desc}
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        color: item.color,
-                        fontSize: "0.83rem",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {t.news_read} <ArrowRight size={14} />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

@@ -5,19 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
+import { Menu, X, ChevronDown, Search } from "lucide-react";
 import {
-  Menu,
-  X,
-  ChevronDown,
-  Search,
-} from "lucide-react";
-import { 
-  FaPhoneAlt, 
-  FaEnvelope, 
-  FaMapMarkerAlt, 
-  FaInstagram, 
-  FaYoutube, 
-  FaFacebookF, 
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
   FaTelegramPlane,
   FaClock,
 } from "react-icons/fa";
@@ -35,7 +30,6 @@ const navItems = (t: Record<string, string>) => [
       { label: t.nav_about_short, href: "/about" },
       { label: t.nav_leadership, href: "/about#leadership" },
       { label: t.nav_teachers, href: "/about#teachers" },
-      { label: t.nav_base, href: "/about#facilities" },
     ],
   },
   {
@@ -49,10 +43,7 @@ const navItems = (t: Record<string, string>) => [
   },
   {
     label: t.nav_science,
-    children: [
-      { label: t.nav_partners, href: "/science#partners" },
-      { label: t.nav_achievements, href: "/science" },
-    ],
+    children: [{ label: t.nav_achievements, href: "/science" }],
   },
   { label: t.nav_news, href: "/news" },
   { label: t.nav_contact, href: "/contact" },
@@ -115,29 +106,54 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         >
           <div
             className="container-custom"
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
             <div style={{ display: "flex", gap: 30 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <FaMapMarkerAlt size={12} color="#c8a96e" />
                 <span>{t.contact_address_val}</span>
               </div>
-              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div
+                className="hidden-tablet"
+                style={{ display: "flex", alignItems: "center", gap: 6 }}
+              >
                 <FaEnvelope size={12} color="#c8a96e" />
                 <span>info@tatual.uz</span>
               </div>
             </div>
             <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                <a href="https://t.me/altuit_lyceum" style={{ color: "white", opacity: 0.8 }}><FaTelegramPlane size={14} /></a>
-                <a href="https://instagram.com/altuit_lyceum" style={{ color: "white", opacity: 0.8 }}><FaInstagram size={14} /></a>
-                <a href="https://youtube.com/@tatual" style={{ color: "white", opacity: 0.8 }}><FaYoutube size={14} /></a>
+                <a
+                  href="https://t.me/altuit_lyceum"
+                  style={{ color: "white", opacity: 0.8 }}
+                >
+                  <FaTelegramPlane size={14} />
+                </a>
+                <a
+                  href="https://instagram.com/altuit_lyceum"
+                  style={{ color: "white", opacity: 0.8 }}
+                >
+                  <FaInstagram size={14} />
+                </a>
+                <a
+                  href="https://youtube.com/@tatual"
+                  style={{ color: "white", opacity: 0.8 }}
+                >
+                  <FaYoutube size={14} />
+                </a>
               </div>
-              <div className="hidden-tablet" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div
+                className="hidden-tablet"
+                style={{ display: "flex", alignItems: "center", gap: 6 }}
+              >
                 <FaClock size={12} color="#c8a96e" />
                 <span>{t.header_hours}</span>
               </div>
-              </div>
+            </div>
           </div>
         </div>
 
@@ -157,12 +173,21 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         >
           <div
             className="container-custom"
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
             {/* LOGO */}
             <Link
               href="/"
-              style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                textDecoration: "none",
+              }}
             >
               <div
                 style={{
@@ -177,7 +202,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   width={52}
                   height={52}
                   priority
-                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "100%",
+                  }}
                 />
               </div>
               <div className="hidden-mobile">
@@ -208,10 +237,25 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             </Link>
 
             {/* NAV MENU */}
-            <nav className="hidden-mobile" style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-              <ul style={{ display: "flex", listStyle: "none", padding: 0, margin: 0, gap: 4 }}>
+            <nav
+              className="hidden-mobile"
+              style={{ flex: 1, display: "flex", justifyContent: "center" }}
+            >
+              <ul
+                style={{
+                  display: "flex",
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  gap: 4,
+                }}
+              >
                 {items.map((item, i) => (
-                  <li key={i} className="nav-item" style={{ position: "relative" }}>
+                  <li
+                    key={i}
+                    className="nav-item"
+                    style={{ position: "relative" }}
+                  >
                     {item.children ? (
                       <>
                         <button
@@ -219,7 +263,10 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                           style={{ padding: "10px 14px", fontSize: "0.75rem" }}
                         >
                           {item.label}
-                          <ChevronDown size={11} style={{ opacity: 0.5, marginLeft: 3 }} />
+                          <ChevronDown
+                            size={11}
+                            style={{ opacity: 0.5, marginLeft: 3 }}
+                          />
                         </button>
                         <div className="dropdown-menu">
                           {item.children.map((child, j) => (
@@ -242,12 +289,20 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                                 textDecoration: "none",
                               }}
                               onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLAnchorElement).style.color = "#c8a96e";
-                                (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "22px";
+                                (
+                                  e.currentTarget as HTMLAnchorElement
+                                ).style.color = "#c8a96e";
+                                (
+                                  e.currentTarget as HTMLAnchorElement
+                                ).style.paddingLeft = "22px";
                               }}
                               onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLAnchorElement).style.color = "#334155";
-                                (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "18px";
+                                (
+                                  e.currentTarget as HTMLAnchorElement
+                                ).style.color = "#334155";
+                                (
+                                  e.currentTarget as HTMLAnchorElement
+                                ).style.paddingLeft = "18px";
                               }}
                             >
                               {child.label}
@@ -259,7 +314,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                       <Link
                         href={item.href!}
                         className={`nav-link ${pathname === item.href ? "active" : ""}`}
-                        style={{ padding: "10px 14px", fontSize: "0.75rem", textDecoration: "none" }}
+                        style={{
+                          padding: "10px 14px",
+                          fontSize: "0.75rem",
+                          textDecoration: "none",
+                        }}
                       >
                         {item.label}
                       </Link>
@@ -271,7 +330,16 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
             {/* ACTIONS */}
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div className="hidden-mobile" style={{ display: "flex", gap: 6, alignItems: "center", borderRight: "1px solid #e2e8f0", paddingRight: 14 }}>
+              <div
+                className="hidden-mobile"
+                style={{
+                  display: "flex",
+                  gap: 6,
+                  alignItems: "center",
+                  borderRight: "1px solid #e2e8f0",
+                  paddingRight: 14,
+                }}
+              >
                 {(["uz", "ru", "en"] as Lang[]).map((l) => (
                   <button
                     key={l}
@@ -350,7 +418,15 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             borderBottom: "1px solid #f1f5f9",
           }}
         >
-          <div style={{ fontWeight: 900, color: "#002147", letterSpacing: "0.1em" }}>MENU</div>
+          <div
+            style={{
+              fontWeight: 900,
+              color: "#002147",
+              letterSpacing: "0.1em",
+            }}
+          >
+            MENU
+          </div>
           <button
             onClick={() => setMobileOpen(false)}
             style={{
@@ -370,7 +446,16 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
         <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
           {/* Mobile Language Switcher */}
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", padding: "0 30px 20px 30px", borderBottom: "1px solid #f1f5f9", marginBottom: "10px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              justifyContent: "center",
+              padding: "0 30px 20px 30px",
+              borderBottom: "1px solid #f1f5f9",
+              marginBottom: "10px",
+            }}
+          >
             {(["uz", "ru", "en"] as Lang[]).map((l) => (
               <button
                 key={l}
@@ -394,7 +479,9 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               {item.children ? (
                 <>
                   <button
-                    onClick={() => setMobileExpanded(mobileExpanded === i ? null : i)}
+                    onClick={() =>
+                      setMobileExpanded(mobileExpanded === i ? null : i)
+                    }
                     style={{
                       width: "100%",
                       textAlign: "left",
@@ -415,7 +502,8 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                     <ChevronDown
                       size={18}
                       style={{
-                        transform: mobileExpanded === i ? "rotate(180deg)" : "none",
+                        transform:
+                          mobileExpanded === i ? "rotate(180deg)" : "none",
                         transition: "transform 0.3s",
                         opacity: 0.4,
                       }}
@@ -470,20 +558,35 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         </div>
 
         <div
-          style={{ padding: "30px", borderTop: "1px solid #f1f5f9", background: "#f8fafc" }}
+          style={{
+            padding: "30px",
+            borderTop: "1px solid #f1f5f9",
+            background: "#f8fafc",
+          }}
         >
-          <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, marginBottom: 8 }}>
+          <div
+            style={{
+              fontSize: "0.85rem",
+              color: "#64748b",
+              fontWeight: 600,
+              marginBottom: 8,
+            }}
+          >
             {t.header_admin}
           </div>
           <a
             href="tel:+998712350369"
-            style={{ fontSize: "1.4rem", fontWeight: 900, color: "#002147", textDecoration: "none" }}
+            style={{
+              fontSize: "1.4rem",
+              fontWeight: 900,
+              color: "#002147",
+              textDecoration: "none",
+            }}
           >
             +998 71 235 03 69
           </a>
         </div>
       </div>
-
     </>
   );
 }

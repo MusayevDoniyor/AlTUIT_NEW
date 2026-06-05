@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
-import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
+import {
+  ClipboardList,
+  FileText,
+  PenLine,
+  CheckCircle,
+  Loader2,
+} from "lucide-react";
 import { FaFileAlt, FaCalendarAlt, FaPenNib, FaPhoneAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getAdmissionRules, type AdmissionRuleItem } from "@/lib/db";
 
 const APPLY_BTN = {
   uz: "my.edu.uz orqali ro'yxatdan o'ting →",
@@ -16,6 +23,22 @@ const APPLY_BTN = {
 
 export default function AdmissionPage() {
   const [lang, setLang] = useState<Lang>("uz");
+  const [rules, setRules] = useState<AdmissionRuleItem[]>([]);
+  const [loadingRules, setLoadingRules] = useState(true);
+
+  useEffect(() => {
+    async function loadRules() {
+      try {
+        const data = await getAdmissionRules();
+        setRules(data);
+      } catch (err) {
+        console.error("Failed to load admission rules:", err);
+      } finally {
+        setLoadingRules(false);
+      }
+    }
+    loadRules();
+  }, []);
   const t = translations[lang];
 
   const steps = [
@@ -454,6 +477,141 @@ export default function AdmissionPage() {
           </div>
         </div>
       </section>
+
+      {/* ===== DYNAMIC RULES SECTION ===== */}
+      {!loadingRules && rules.length > 0 && (
+        <section
+          style={{
+            padding: "96px 0",
+            background: "#f8f9fc",
+          }}
+        >
+          <div className="container-custom">
+            <div
+              style={{
+                textAlign: "center",
+                maxWidth: 580,
+                margin: "0 auto 56px",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  background: "rgba(26,58,110,0.08)",
+                  color: "#1a3a6e",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  padding: "5px 14px",
+                  borderRadius: 50,
+                  marginBottom: 16,
+                  textTransform: "uppercase",
+                }}
+              >
+                {lang === "uz"
+                  ? "Qoidalar"
+                  : lang === "ru"
+                    ? "Правила"
+                    : "Rules"}
+              </div>
+              <h2
+                className="section-title"
+                style={{
+                  marginBottom: 12,
+                  color: "#1a3a6e",
+                  fontWeight: 800,
+                  fontSize: "clamp(1.6rem,4vw,2.2rem)",
+                  textAlign: "center",
+                }}
+              >
+                {lang === "uz"
+                  ? "Batafsil ma'lumot va qoidalar"
+                  : lang === "ru"
+                    ? "Подробная информация и правила"
+                    : "Detailed Information & Rules"}
+              </h2>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: 24,
+                maxWidth: 800,
+                margin: "0 auto",
+              }}
+            >
+              {rules.map((rule) => {
+                const title =
+                  lang === "uz"
+                    ? rule.titleUz
+                    : lang === "ru"
+                      ? rule.titleRu
+                      : rule.titleEn;
+                const content =
+                  lang === "uz"
+                    ? rule.contentUz
+                    : lang === "ru"
+                      ? rule.contentRu
+                      : rule.contentEn;
+                return (
+                  <div
+                    key={rule.id}
+                    style={{
+                      background: "white",
+                      borderRadius: 18,
+                      padding: "32px",
+                      border: "1px solid rgba(26,58,110,0.07)",
+                      boxShadow: "0 4px 18px rgba(26,58,110,0.05)",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        color: "#1a3a6e",
+                        fontWeight: 700,
+                        fontSize: "1.1rem",
+                        marginBottom: 14,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 12,
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: "50%",
+                          background: "rgba(200,169,110,0.15)",
+                          color: "#c8a96e",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "0.85rem",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {rule.orderIndex + 1}
+                      </span>
+                      {title}
+                    </h3>
+                    <p
+                      style={{
+                        color: "#4b5563",
+                        fontSize: "0.92rem",
+                        lineHeight: 1.7,
+                        margin: 0,
+                        whiteSpace: "pre-line",
+                      }}
+                    >
+                      {content}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== CONTACT CTA ===== */}
       <section style={{ padding: "72px 0", background: "#f8f9fc" }}>
