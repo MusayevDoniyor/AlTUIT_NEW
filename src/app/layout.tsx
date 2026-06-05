@@ -9,26 +9,64 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
+  title: {
+    default: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
+    template: "%s | TATU Akademik Litsey",
+  },
   description:
-    "Toshkent axborot texnologiyalari universiteti (TATU) huzuridagi Muhammad al-Xorazmiy nomidagi Akademik Litsey — 1993-yildan buyon matematik, fizika va informatika yo'nalishlarida iqtidorli yoshlarni tayyorlaydi.",
+    "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi — matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi. Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlari. 9-sinf bitiruvchilari uchun 2 yillik ta'lim. Toshkent, Yunusobod tumani.",
   keywords: [
-    "TATU litsey",
-    "akademik litsey",
+    "TATU akademik litsey",
     "Muhammad al-Xorazmiy litsey",
-    "Toshkent litsey",
     "tatual.uz",
-    "litsey qabul",
+    "aniq fanlar texnika",
+    "aniq fanlar iqtisod",
+    "TATU litsey qabul 2025",
+    "litsey Yunusobod",
+    "Bogishamol 112 litsey",
+    "matematika fizika litsey Toshkent",
+    "informatika litsey",
+    "TATU litsey kirish imtihoni",
+    "akademik litsey o'zbek",
+    "litsey robototexnika",
+    "IELTS litsey Toshkent",
   ],
+  authors: [{ name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi" }],
+  creator: "TATU Akademik Litsey",
+  publisher: "TATU Akademik Litsey",
+  metadataBase: new URL("https://tatual.uz"),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "uz-UZ": "/uz",
+      "ru-RU": "/ru",
+      "en-US": "/en",
+    },
+  },
   openGraph: {
-    title: "Muhammad al-Xorazmiy Akademik Litseyi | TATU",
+    title: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
     description:
-      "Zamonaviy akademik ta'lim markazi — TATU huzuridagi Al-Xorazmiy Akademik Litseyi",
+      "Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlarida 2 yillik intensiv ta'lim. Robototexnika, Web-dasturlash, Cisco, IELTS to'garaklari. Manzil: Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
+    url: "https://tatual.uz",
+    siteName: "TATU Akademik Litsey",
     locale: "uz_UZ",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
+    description:
+      "Aniq fanlar yo'nalishida 2 yillik intensiv ta'lim. Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
   icons: {
     icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 
