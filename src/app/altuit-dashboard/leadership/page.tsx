@@ -28,6 +28,9 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  ConfirmDialog,
+  useToast,
+  ImageUpload,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -68,6 +71,8 @@ export default function AdminLeadershipPage() {
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<LeadershipItem | null>(null);
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -92,14 +97,14 @@ export default function AdminLeadershipPage() {
     setSuccess("");
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0] || !editing) return;
+  const handleImageUpload = async (file: File) => {
+    if (!editing) return;
     setUploadingImage(true);
     try {
-      const url = await uploadImage(e.target.files[0], "leadership");
+      const url = await uploadImage(file, "leadership");
       setEditing((prev) => (prev ? { ...prev, photoUrl: url } : prev));
     } catch {
-      setError("Rasm yuklashda xatolik");
+      showToast("error", "Rasm yuklashda xatolik");
     } finally {
       setUploadingImage(false);
     }
@@ -113,24 +118,27 @@ export default function AdminLeadershipPage() {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as LeadershipItem;
       await saveLeadership(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast("success", editing.id ? "Tahrirlandi" : "Qo'shildi");
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik");
+      showToast("error", "Saqlashda xatolik");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: LeadershipItem) => {
-    if (!confirm(`"${item.nameUz}"ni o'chirasizmi?`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteLeadership(item.id!);
-      if (item.photoUrl) await deleteImage(item.photoUrl);
+      await deleteLeadership(deleteTarget.id!);
+      if (deleteTarget.photoUrl) await deleteImage(deleteTarget.photoUrl);
+      showToast("success", `"${deleteTarget.nameUz}" o'chirildi`);
       await load();
     } catch {
-      setError("O'chirishda xatolik");
+      showToast("error", "O'chirishda xatolik");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -140,6 +148,13 @@ export default function AdminLeadershipPage() {
   return (
     <div>
       <style>{spinStyle}</style>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Rahbariyat a'zosini o'chirish"
+        message={`"${deleteTarget?.nameUz}"ni o'chirasizmi?`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <PageHeader
         title="Rahbariyat"
         description="Litsey rahbariyati ma'lumotlari"
@@ -278,7 +293,7 @@ export default function AdminLeadershipPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />
@@ -350,9 +365,6 @@ export default function AdminLeadershipPage() {
                 <X size={20} />
               </button>
             </div>
-
-            {error && <Alert type="error" message={error} />}
-            {success && <Alert type="success" message={success} />}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Multilingual */}
@@ -481,80 +493,13 @@ export default function AdminLeadershipPage() {
               {/* Photo */}
               <div>
                 <SectionTitle>Rasm</SectionTitle>
-                {editing.photoUrl && (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: 80,
-                      height: 80,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Image
-                      src={editing.photoUrl}
-                      alt=""
-                      fill
-                      sizes="80px"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <button
-                      onClick={() => set("photoUrl", "")}
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        background: "rgba(0,0,0,0.6)",
-                        border: "none",
-                        borderRadius: 6,
-                        color: "white",
-                        cursor: "pointer",
-                        padding: 3,
-                        display: "flex",
-                      }}
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
-                <label
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "9px 14px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px dashed ${C.border}`,
-                    borderRadius: 10,
-                    cursor: "pointer",
-                    color: C.textMuted,
-                    fontSize: "0.83rem",
-                  }}
-                >
-                  {uploadingImage ? (
-                    <div
-                      style={{
-                        width: 14,
-                        height: 14,
-                        border: `2px solid ${C.goldLight}`,
-                        borderTopColor: C.gold,
-                        borderRadius: "50%",
-                        animation: "spin 0.8s linear infinite",
-                      }}
-                    />
-                  ) : (
-                    "📷"
-                  )}
-                  {uploadingImage ? "Yuklanmoqda..." : "Rasm yuklash"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                  />
-                </label>
+                <ImageUpload
+                  currentUrl={editing.photoUrl || ""}
+                  onUpload={handleImageUpload}
+                  onRemove={() => set("photoUrl", "")}
+                  uploading={uploadingImage}
+                  folder="leadership"
+                />
               </div>
             </div>
 
