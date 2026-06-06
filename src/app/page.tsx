@@ -393,6 +393,7 @@ export default function Home() {
             <button
               key={i}
               onClick={() => setCurrent(i)}
+              aria-label={`Slayd ${i + 1}`}
               style={{
                 width: current === i ? 40 : 10,
                 height: 10,

@@ -263,6 +263,7 @@ export default function AdminHeroPage() {
                   <Button
                     variant="ghost"
                     onClick={() => openEdit(item)}
+                    aria-label="Tahrirlash"
                     style={{ padding: "6px 10px" }}
                   >
                     <Pencil size={13} />
@@ -270,6 +271,7 @@ export default function AdminHeroPage() {
                   <Button
                     variant="danger"
                     onClick={() => handleDelete(item)}
+                    aria-label="O'chirish"
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />
@@ -329,6 +331,7 @@ export default function AdminHeroPage() {
               </h2>
               <button
                 onClick={close}
+                aria-label="Yopish"
                 style={{
                   background: "none",
                   border: "none",
@@ -370,6 +373,7 @@ export default function AdminHeroPage() {
                     />
                     <button
                       onClick={() => set("imageUrl", "")}
+                      aria-label="Rasmni olib tashlash"
                       style={{
                         position: "absolute",
                         top: 8,

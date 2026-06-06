@@ -129,18 +129,21 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <a
                   href="https://t.me/altuit_lyceum"
+                  aria-label="Telegram"
                   style={{ color: "white", opacity: 0.8 }}
                 >
                   <FaTelegramPlane size={14} />
                 </a>
                 <a
                   href="https://instagram.com/altuit_lyceum"
+                  aria-label="Instagram"
                   style={{ color: "white", opacity: 0.8 }}
                 >
                   <FaInstagram size={14} />
                 </a>
                 <a
                   href="https://youtube.com/@tatual"
+                  aria-label="YouTube"
                   style={{ color: "white", opacity: 0.8 }}
                 >
                   <FaYoutube size={14} />
@@ -388,6 +391,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               <button
                 className="show-mobile"
                 onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
                 style={{
                   background: "none",
                   border: "none",
@@ -429,6 +433,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
             style={{
               background: "#f1f5f9",
               border: "none",

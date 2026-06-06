@@ -125,6 +125,7 @@ export default function Footer({ lang }: FooterProps) {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={s.label}
                   title={s.label}
                   style={{
                     width: 36,
