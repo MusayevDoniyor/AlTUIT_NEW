@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { Newspaper, Plus, Pencil, Trash2, X, Check } from "lucide-react";
 import {
@@ -21,6 +21,10 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  SearchInput,
+  ConfirmDialog,
+  ImageUpload,
+  useToast,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -62,6 +66,10 @@ export default function AdminNewsPage() {
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [search, setSearch] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<NewsItem | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -78,54 +86,91 @@ export default function AdminNewsPage() {
     load();
   }, []);
 
-  const openNew = () =>
+  // Ctrl+S handler
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s" && editing) {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [editing, lang]);
+
+  const openNew = () => {
     setEditing({ ...EMPTY, date: new Date().toISOString().slice(0, 10) });
-  const openEdit = (item: NewsItem) => setEditing({ ...item });
+    setErrors({});
+  };
+  const openEdit = (item: NewsItem) => {
+    setEditing({ ...item });
+    setErrors({});
+  };
   const close = () => {
     setEditing(null);
     setError("");
     setSuccess("");
+    setErrors({});
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0] || !editing) return;
+  const handleImageUpload = async (file: File) => {
+    if (!editing) return;
     setUploadingImage(true);
     try {
-      const url = await uploadImage(e.target.files[0], "news");
+      const url = await uploadImage(file, "news");
       setEditing((prev) => (prev ? { ...prev, imageUrl: url } : prev));
     } catch {
-      setError("Rasm yuklashda xatolik");
+      showToast("error", "Rasm yuklashda xatolik");
     } finally {
       setUploadingImage(false);
     }
   };
 
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!editing) return false;
+    if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha majburiy";
+    if (!editing.titleRu.trim()) errs.titleRu = "Sarlavha majburiy";
+    if (!editing.titleEn.trim()) errs.titleEn = "Sarlavha majburiy";
+    if (!editing.descUz.trim()) errs.descUz = "Qisqa tavsif majburiy";
+    if (!editing.descRu.trim()) errs.descRu = "Qisqa tavsif majburiy";
+    if (!editing.descEn.trim()) errs.descEn = "Qisqa tavsif majburiy";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSave = async () => {
-    if (!editing) return;
+    if (!editing || !validate()) return;
     setSaving(true);
     setError("");
     try {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as NewsItem;
       await saveNews(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast(
+        "success",
+        editing.id ? "Yangilik tahrirlandi" : "Yangilik qo'shildi",
+      );
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik yuz berdi");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: NewsItem) => {
-    if (!confirm(`"${item.titleUz}" yangiligini o'chirasizmi?`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteNews(item.id!);
-      if (item.imageUrl) await deleteImage(item.imageUrl);
+      await deleteNews(deleteTarget.id!);
+      if (deleteTarget.imageUrl) await deleteImage(deleteTarget.imageUrl);
+      showToast("success", `"${deleteTarget.titleUz}" o'chirildi`);
       await load();
     } catch {
-      setError("O'chirishda xatolik");
+      showToast("error", "O'chirishda xatolik");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -136,9 +181,27 @@ export default function AdminNewsPage() {
       prev ? { ...prev, tag: { ...prev.tag, [l]: val } } : prev,
     );
 
+  const filteredItems = items.filter(
+    (item) =>
+      !search ||
+      item.titleUz?.toLowerCase().includes(search.toLowerCase()) ||
+      item.titleRu?.toLowerCase().includes(search.toLowerCase()) ||
+      item.titleEn?.toLowerCase().includes(search.toLowerCase()) ||
+      item.tag?.uz?.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <div>
       <style>{spinStyle}</style>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Yangilikni o'chirish"
+        message={`"${deleteTarget?.titleUz}" yangiligini o'chirasizmi? Bu amalni qaytarib bo'lmaydi.`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
       <PageHeader
         title="Yangiliklar"
         description="Barcha yangiliklar ro'yxati"
@@ -150,7 +213,14 @@ export default function AdminNewsPage() {
         }
       />
 
-      {error && <Alert type="error" message={error} />}
+      {/* Search */}
+      <div style={{ marginBottom: 16 }}>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Yangiliklardan qidirish..."
+        />
+      </div>
 
       {/* List */}
       <Card>
@@ -168,11 +238,17 @@ export default function AdminNewsPage() {
               }}
             />
           </div>
-        ) : items.length === 0 ? (
-          <EmptyState message="Yangiliklar yo'q. Birinchi yangilikni qo'shing." />
+        ) : filteredItems.length === 0 ? (
+          <EmptyState
+            message={
+              search
+                ? "Qidiruv bo'yicha hech narsa topilmadi."
+                : "Yangiliklar yo'q. Birinchi yangilikni qo'shing."
+            }
+          />
         ) : (
           <div>
-            {items.map((item, idx) => (
+            {filteredItems.map((item, idx) => (
               <div
                 key={item.id}
                 style={{
@@ -181,7 +257,9 @@ export default function AdminNewsPage() {
                   gap: 14,
                   padding: "14px 18px",
                   borderBottom:
-                    idx < items.length - 1 ? `1px solid ${C.border}` : "none",
+                    idx < filteredItems.length - 1
+                      ? `1px solid ${C.border}`
+                      : "none",
                   transition: "background 0.15s",
                 }}
                 onMouseEnter={(e) => {
@@ -281,7 +359,7 @@ export default function AdminNewsPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />
@@ -338,6 +416,16 @@ export default function AdminNewsPage() {
                 }}
               >
                 {editing.id ? "Yangilikni tahrirlash" : "Yangi yangilik"}
+                <span
+                  style={{
+                    color: C.textDim,
+                    fontSize: "0.75rem",
+                    fontWeight: 500,
+                    marginLeft: 10,
+                  }}
+                >
+                  Ctrl+S
+                </span>
               </h2>
               <button
                 onClick={close}
@@ -353,9 +441,6 @@ export default function AdminNewsPage() {
                 <X size={20} />
               </button>
             </div>
-
-            {error && <Alert type="error" message={error} />}
-            {success && <Alert type="success" message={success} />}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Date and published */}
@@ -443,6 +528,16 @@ export default function AdminNewsPage() {
                         e.target.value,
                       )
                     }
+                    error={
+                      errors[
+                        lang === "uz"
+                          ? "titleUz"
+                          : lang === "ru"
+                            ? "titleRu"
+                            : "titleEn"
+                      ] || ""
+                    }
+                    placeholder="Yangilik sarlavhasi"
                   />
                   <Textarea
                     label={`Qisqa tavsif (${lang.toUpperCase()})`}
@@ -463,7 +558,17 @@ export default function AdminNewsPage() {
                         e.target.value,
                       )
                     }
+                    error={
+                      errors[
+                        lang === "uz"
+                          ? "descUz"
+                          : lang === "ru"
+                            ? "descRu"
+                            : "descEn"
+                      ]
+                    }
                     style={{ minHeight: 80 }}
+                    placeholder="Qisqa tavsif (maks 160 belgi)"
                   />
                   <Textarea
                     label={`To'liq matn (${lang.toUpperCase()})`}
@@ -485,6 +590,7 @@ export default function AdminNewsPage() {
                       )
                     }
                     style={{ minHeight: 120 }}
+                    placeholder="Yangilikning to'liq matni..."
                   />
                   <Input
                     label={`Teg/Kategoriya (${lang.toUpperCase()})`}
@@ -529,85 +635,17 @@ export default function AdminNewsPage() {
               {/* Image */}
               <div>
                 <SectionTitle>Rasm</SectionTitle>
-                {editing.imageUrl && (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: 160,
-                      borderRadius: 10,
-                      overflow: "hidden",
-                      marginBottom: 10,
-                      background: "rgba(255,255,255,0.05)",
-                    }}
-                  >
-                    <Image
-                      src={editing.imageUrl}
-                      alt=""
-                      fill
-                      sizes="(max-width: 680px) 100vw, 624px"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <button
-                      onClick={() => set("imageUrl", "")}
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "rgba(0,0,0,0.6)",
-                        border: "none",
-                        borderRadius: 6,
-                        color: "white",
-                        cursor: "pointer",
-                        padding: 4,
-                        display: "flex",
-                      }}
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 14px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px dashed ${C.border}`,
-                    borderRadius: 10,
-                    cursor: "pointer",
-                    color: C.textMuted,
-                    fontSize: "0.83rem",
-                  }}
-                >
-                  {uploadingImage ? (
-                    <div
-                      style={{
-                        width: 14,
-                        height: 14,
-                        border: `2px solid ${C.goldLight}`,
-                        borderTopColor: C.gold,
-                        borderRadius: "50%",
-                        animation: "spin 0.8s linear infinite",
-                      }}
-                    />
-                  ) : (
-                    "📷"
-                  )}
-                  {uploadingImage ? "Yuklanmoqda..." : "Rasm yuklash"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                  />
-                </label>
+                <ImageUpload
+                  currentUrl={editing.imageUrl || ""}
+                  onUpload={handleImageUpload}
+                  onRemove={() => set("imageUrl", "")}
+                  uploading={uploadingImage}
+                  folder="news"
+                />
               </div>
             </div>
 
-            {/* Actions */}
+            {/* Actions — sticky */}
             <div
               style={{
                 display: "flex",
@@ -616,6 +654,9 @@ export default function AdminNewsPage() {
                 marginTop: 24,
                 paddingTop: 20,
                 borderTop: `1px solid ${C.border}`,
+                position: "sticky",
+                bottom: 0,
+                background: "#141620",
               }}
             >
               <Button variant="ghost" onClick={close}>

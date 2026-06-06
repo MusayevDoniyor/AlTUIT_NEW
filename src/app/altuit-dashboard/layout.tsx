@@ -20,15 +20,28 @@ import {
   X,
   ChevronRight,
 } from "lucide-react";
+import { ToastProvider } from "./_components/ui";
 
 const navItems = [
   { label: "Dashboard", href: "/altuit-dashboard", icon: LayoutDashboard },
   { label: "Yangiliklar", href: "/altuit-dashboard/news", icon: Newspaper },
   { label: "Rahbariyat", href: "/altuit-dashboard/leadership", icon: Users },
-  { label: "Pedagog xodimlar", href: "/altuit-dashboard/teachers", icon: GraduationCap },
+  {
+    label: "Pedagog xodimlar",
+    href: "/altuit-dashboard/teachers",
+    icon: GraduationCap,
+  },
   { label: "Yutuqlar", href: "/altuit-dashboard/achievements", icon: Trophy },
-  { label: "Kirish qoidalari", href: "/altuit-dashboard/admission", icon: FileText },
-  { label: "Statistika raqamlari", href: "/altuit-dashboard/stats", icon: BarChart2 },
+  {
+    label: "Kirish qoidalari",
+    href: "/altuit-dashboard/admission",
+    icon: FileText,
+  },
+  {
+    label: "Statistika raqamlari",
+    href: "/altuit-dashboard/stats",
+    icon: BarChart2,
+  },
   { label: "Galereya", href: "/altuit-dashboard/gallery", icon: ImageIcon },
   { label: "Hero slider", href: "/altuit-dashboard/hero", icon: Sliders },
 ];
@@ -443,58 +456,62 @@ export default function AdminLayout({
           minWidth: 0,
         }}
       >
-        {/* TOP BAR (mobile) */}
-        <div
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 30,
-            background: "rgba(15,17,23,0.95)",
-            backdropFilter: "blur(12px)",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
-            padding: "12px 20px",
-            display: "flex",
-            alignItems: "center",
-            gap: 14,
-          }}
-        >
-          <button
-            onClick={() => setSidebarOpen(true)}
+        <ToastProvider>
+          {/* TOP BAR (mobile) */}
+          <div
             style={{
-              background: "rgba(255,255,255,0.08)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 8,
-              padding: "6px 8px",
-              color: "white",
-              cursor: "pointer",
+              position: "sticky",
+              top: 0,
+              zIndex: 30,
+              background: "rgba(15,17,23,0.95)",
+              backdropFilter: "blur(12px)",
+              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              padding: "12px 20px",
               display: "flex",
               alignItems: "center",
+              gap: 14,
             }}
-            className="admin-mobile-menu-btn"
           >
-            <Menu size={18} />
-          </button>
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.82rem" }}>
-            {navItems.find((i) => isActive(i.href))?.label || "Admin Panel"}
-          </span>
-          <style>{`
+            <button
+              onClick={() => setSidebarOpen(true)}
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 8,
+                padding: "6px 8px",
+                color: "white",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+              className="admin-mobile-menu-btn"
+            >
+              <Menu size={18} />
+            </button>
+            <span
+              style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.82rem" }}
+            >
+              {navItems.find((i) => isActive(i.href))?.label || "Admin Panel"}
+            </span>
+            <style>{`
             @media (min-width: 1024px) {
               .admin-mobile-menu-btn { display: none !important; }
             }
           `}</style>
-        </div>
+          </div>
 
-        {/* PAGE CONTENT */}
-        <div
-          style={{
-            flex: 1,
-            padding: "32px 24px",
-            maxWidth: 1200,
-            width: "100%",
-          }}
-        >
-          {children}
-        </div>
+          {/* PAGE CONTENT */}
+          <div
+            style={{
+              flex: 1,
+              padding: "32px 24px",
+              maxWidth: 1200,
+              width: "100%",
+            }}
+          >
+            {children}
+          </div>
+        </ToastProvider>
       </div>
     </div>
   );

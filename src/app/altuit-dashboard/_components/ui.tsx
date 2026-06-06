@@ -1,4 +1,14 @@
-import React, { CSSProperties } from "react";
+import React, {
+  CSSProperties,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  createContext,
+  useContext,
+} from "react";
+import Image from "next/image";
+import { X, ImageIcon } from "lucide-react";
 
 // ─── Colors ──────────────────────────────────────────────────
 export const C = {
@@ -7,6 +17,7 @@ export const C = {
   surfaceHover: "rgba(255,255,255,0.07)",
   border: "rgba(255,255,255,0.07)",
   borderFocus: "rgba(200,169,110,0.5)",
+  borderError: "rgba(239,68,68,0.5)",
   text: "white",
   textMuted: "rgba(255,255,255,0.45)",
   textDim: "rgba(255,255,255,0.25)",
@@ -20,6 +31,9 @@ export const C = {
   successBg: "rgba(34,197,94,0.1)",
   successBorder: "rgba(34,197,94,0.25)",
 };
+
+// ─── Modal portal helper ────────────────────────────────────
+export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }} input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }`;
 
 // ─── Page Header ─────────────────────────────────────────────
 export function PageHeader({
@@ -109,15 +123,16 @@ export function Card({
 // ─── Input ────────────────────────────────────────────────────
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  error?: string;
 }
-export function Input({ label, style, ...props }: InputProps) {
+export function Input({ label, error, style, ...props }: InputProps) {
   return (
     <div>
       {label && (
         <label
           style={{
             display: "block",
-            color: C.textMuted,
+            color: error ? C.danger : C.textMuted,
             fontSize: "0.78rem",
             fontWeight: 600,
             marginBottom: 6,
@@ -132,7 +147,7 @@ export function Input({ label, style, ...props }: InputProps) {
           width: "100%",
           padding: "10px 14px",
           background: "rgba(255,255,255,0.05)",
-          border: `1px solid ${C.border}`,
+          border: `1px solid ${error ? C.borderError : C.border}`,
           borderRadius: 10,
           color: C.text,
           fontSize: "0.88rem",
@@ -143,14 +158,19 @@ export function Input({ label, style, ...props }: InputProps) {
           ...style,
         }}
         onFocus={(e) => {
-          e.target.style.borderColor = C.borderFocus;
+          e.target.style.borderColor = error ? C.borderError : C.borderFocus;
           props.onFocus?.(e);
         }}
         onBlur={(e) => {
-          e.target.style.borderColor = C.border;
+          e.target.style.borderColor = error ? C.borderError : C.border;
           props.onBlur?.(e);
         }}
       />
+      {error && (
+        <p style={{ color: C.danger, fontSize: "0.72rem", margin: "4px 0 0" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -158,8 +178,66 @@ export function Input({ label, style, ...props }: InputProps) {
 // ─── Textarea ─────────────────────────────────────────────────
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  error?: string;
 }
-export function Textarea({ label, style, ...props }: TextareaProps) {
+export function Textarea({ label, error, style, ...props }: TextareaProps) {
+  return (
+    <div>
+      {label && (
+        <label
+          style={{
+            display: "block",
+            color: error ? C.danger : C.textMuted,
+            fontSize: "0.78rem",
+            fontWeight: 600,
+            marginBottom: 6,
+          }}
+        >
+          {label}
+        </label>
+      )}
+      <textarea
+        {...props}
+        style={{
+          width: "100%",
+          padding: "10px 14px",
+          background: "rgba(255,255,255,0.05)",
+          border: `1px solid ${error ? C.borderError : C.border}`,
+          borderRadius: 10,
+          color: C.text,
+          fontSize: "0.88rem",
+          outline: "none",
+          transition: "border-color 0.2s",
+          boxSizing: "border-box",
+          fontFamily: "inherit",
+          resize: "vertical",
+          minHeight: 90,
+          ...style,
+        }}
+        onFocus={(e) => {
+          e.target.style.borderColor = error ? C.borderError : C.borderFocus;
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = error ? C.borderError : C.border;
+          props.onBlur?.(e);
+        }}
+      />
+      {error && (
+        <p style={{ color: C.danger, fontSize: "0.72rem", margin: "4px 0 0" }}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Select ───────────────────────────────────────────────────
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  options: { label: string; value: string }[];
+}
+export function Select({ label, options, style, ...props }: SelectProps) {
   return (
     <div>
       {label && (
@@ -175,7 +253,7 @@ export function Textarea({ label, style, ...props }: TextareaProps) {
           {label}
         </label>
       )}
-      <textarea
+      <select
         {...props}
         style={{
           width: "100%",
@@ -186,22 +264,22 @@ export function Textarea({ label, style, ...props }: TextareaProps) {
           color: C.text,
           fontSize: "0.88rem",
           outline: "none",
-          transition: "border-color 0.2s",
           boxSizing: "border-box",
           fontFamily: "inherit",
-          resize: "vertical",
-          minHeight: 90,
+          cursor: "pointer",
           ...style,
         }}
-        onFocus={(e) => {
-          e.target.style.borderColor = C.borderFocus;
-          props.onFocus?.(e);
-        }}
-        onBlur={(e) => {
-          e.target.style.borderColor = C.border;
-          props.onBlur?.(e);
-        }}
-      />
+      >
+        {options.map((o) => (
+          <option
+            key={o.value}
+            value={o.value}
+            style={{ background: "#141620" }}
+          >
+            {o.label}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }
@@ -431,4 +509,356 @@ export function LangTabs({
   );
 }
 
-export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }} input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }`;
+// ─── Search Input ────────────────────────────────────────────
+export function SearchInput({
+  value,
+  onChange,
+  placeholder = "Qidirish...",
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+}) {
+  return (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      style={{
+        width: "100%",
+        maxWidth: 320,
+        padding: "9px 14px",
+        background: "rgba(255,255,255,0.05)",
+        border: `1px solid ${C.border}`,
+        borderRadius: 10,
+        color: C.text,
+        fontSize: "0.83rem",
+        outline: "none",
+        boxSizing: "border-box",
+        fontFamily: "inherit",
+      }}
+      onFocus={(e) => {
+        e.target.style.borderColor = C.borderFocus;
+      }}
+      onBlur={(e) => {
+        e.target.style.borderColor = C.border;
+      }}
+    />
+  );
+}
+
+// ─── Toast System ─────────────────────────────────────────────
+interface ToastMessage {
+  id: number;
+  type: "success" | "error";
+  message: string;
+}
+
+const ToastContext = createContext<{
+  showToast: (type: "success" | "error", message: string) => void;
+}>({ showToast: () => {} });
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const nextId = useRef(0);
+
+  const showToast = useCallback(
+    (type: "success" | "error", message: string) => {
+      const id = nextId.current++;
+      setToasts((prev) => [...prev, { id, type, message }]);
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, 3500);
+    },
+    [],
+  );
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      <div
+        style={{
+          position: "fixed",
+          bottom: 24,
+          right: 24,
+          zIndex: 9999,
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
+      >
+        {toasts.map((t) => (
+          <div
+            key={t.id}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "12px 18px",
+              borderRadius: 12,
+              background: t.type === "error" ? C.dangerBg : C.successBg,
+              border: `1px solid ${t.type === "error" ? C.dangerBorder : C.successBorder}`,
+              backdropFilter: "blur(12px)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+              animation: "toastSlideIn 0.3s ease",
+              minWidth: 240,
+              maxWidth: 400,
+            }}
+          >
+            <span>{t.type === "error" ? "⚠️" : "✅"}</span>
+            <p
+              style={{
+                color: t.type === "error" ? C.danger : C.success,
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                margin: 0,
+              }}
+            >
+              {t.message}
+            </p>
+          </div>
+        ))}
+      </div>
+      <style>{`
+        @keyframes toastSlideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+      `}</style>
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  return useContext(ToastContext);
+}
+
+// ─── Confirm Dialog ───────────────────────────────────────────
+export function ConfirmDialog({
+  open,
+  title,
+  message,
+  confirmLabel = "O'chirish",
+  cancelLabel = "Bekor qilish",
+  variant = "danger",
+  onConfirm,
+  onCancel,
+}: {
+  open: boolean;
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  variant?: "danger" | "primary";
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 200,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(0,0,0,0.7)",
+        backdropFilter: "blur(4px)",
+        padding: 20,
+      }}
+      onClick={onCancel}
+    >
+      <div
+        style={{
+          background: "#141620",
+          border: `1px solid ${C.border}`,
+          borderRadius: 20,
+          width: "100%",
+          maxWidth: 420,
+          padding: "28px",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: "50%",
+            background: variant === "danger" ? C.dangerBg : C.goldLight,
+            border: `1px solid ${variant === "danger" ? C.dangerBorder : C.goldBorder}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 18,
+            fontSize: "1.4rem",
+          }}
+        >
+          {variant === "danger" ? "🗑️" : "ℹ️"}
+        </div>
+        <h3
+          style={{
+            color: C.text,
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            margin: "0 0 8px",
+          }}
+        >
+          {title}
+        </h3>
+        <p
+          style={{
+            color: C.textMuted,
+            fontSize: "0.88rem",
+            margin: "0 0 24px",
+            lineHeight: 1.5,
+          }}
+        >
+          {message}
+        </p>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+          <Button variant="ghost" onClick={onCancel}>
+            {cancelLabel}
+          </Button>
+          <Button
+            variant={variant === "danger" ? "danger" : "primary"}
+            onClick={onConfirm}
+          >
+            {confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Image Upload with drag & drop ──────────────────────────
+export function ImageUpload({
+  currentUrl,
+  onUpload,
+  onRemove,
+  uploading,
+  folder = "gallery",
+}: {
+  currentUrl: string;
+  onUpload: (file: File) => void;
+  onRemove: () => void;
+  uploading: boolean;
+  folder?: string;
+}) {
+  const [dragOver, setDragOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragOver(false);
+      const file = e.dataTransfer.files?.[0];
+      if (file) onUpload(file);
+    },
+    [onUpload],
+  );
+
+  return (
+    <div>
+      {currentUrl ? (
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: 180,
+            borderRadius: 12,
+            overflow: "hidden",
+            marginBottom: 10,
+            border: `1px solid ${C.border}`,
+          }}
+        >
+          <Image
+            src={currentUrl}
+            alt=""
+            fill
+            sizes="(max-width: 600px) 100vw, 544px"
+            style={{ objectFit: "cover" }}
+          />
+          <button
+            onClick={onRemove}
+            style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              background: "rgba(0,0,0,0.6)",
+              border: "none",
+              borderRadius: "50%",
+              color: "white",
+              cursor: "pointer",
+              padding: 5,
+              display: "flex",
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current?.click()}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            padding: "32px 20px",
+            border: `2px dashed ${dragOver ? C.gold : C.border}`,
+            borderRadius: 12,
+            cursor: "pointer",
+            color: C.textMuted,
+            background: dragOver ? C.goldLight : "rgba(255,255,255,0.02)",
+            transition: "all 0.2s",
+            marginBottom: 10,
+          }}
+        >
+          {uploading ? (
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                border: `3px solid ${C.goldLight}`,
+                borderTopColor: C.gold,
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }}
+            />
+          ) : (
+            <ImageIcon size={32} color={C.textDim} />
+          )}
+          <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
+            {uploading
+              ? "Yuklanmoqda..."
+              : "Rasmni shu yerga tashlang yoki bosing"}
+          </span>
+          <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
+            PNG, JPG, WEBP formatlar
+          </span>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onUpload(file);
+            }}
+            disabled={uploading}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
