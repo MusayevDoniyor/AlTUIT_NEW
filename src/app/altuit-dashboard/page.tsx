@@ -14,6 +14,7 @@ import {
   ArrowRight,
   LayoutDashboard,
 } from "lucide-react";
+import { siteConfig } from "@/lib/config";
 
 interface Counts {
   news: number;
@@ -437,7 +438,7 @@ export default function AdminDashboard() {
               "rgba(200,169,110,0.15)";
           }}
         >
-          altuit-new.vercel.app
+          {new URL(siteConfig.url).hostname}
           <ArrowRight size={14} />
         </Link>
       </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { siteConfig } from "@/lib/config";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -10,8 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
-    template: "%s | TATU Akademik Litsey",
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.shortName}`,
   },
   description:
     "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi — matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi. Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlari. 9-sinf bitiruvchilari uchun 2 yillik ta'lim. Toshkent, Yunusobod tumani.",
@@ -31,32 +32,36 @@ export const metadata: Metadata = {
     "litsey robototexnika",
     "IELTS litsey Toshkent",
   ],
-  authors: [{ name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi" }],
-  creator: "TATU Akademik Litsey",
-  publisher: "TATU Akademik Litsey",
-  metadataBase: new URL("https://tatual.uz"),
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.shortName,
+  publisher: siteConfig.shortName,
+  metadataBase: new URL(siteConfig.url),
   alternates: {
-    canonical: "/",
-    languages: {
-      "uz-UZ": "/uz",
-      "ru-RU": "/ru",
-      "en-US": "/en",
-    },
+    canonical: siteConfig.url,
   },
   openGraph: {
-    title: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
+    title: siteConfig.name,
     description:
       "Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlarida 2 yillik intensiv ta'lim. Robototexnika, Web-dasturlash, Cisco, IELTS to'garaklari. Manzil: Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
-    url: "https://tatual.uz",
-    siteName: "TATU Akademik Litsey",
+    url: siteConfig.url,
+    siteName: siteConfig.shortName,
     locale: "uz_UZ",
     type: "website",
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.shortName,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
+    title: siteConfig.name,
     description:
       "Aniq fanlar yo'nalishida 2 yillik intensiv ta'lim. Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
+    images: [`${siteConfig.url}/og-image.jpg`],
   },
   robots: {
     index: true,
@@ -91,6 +96,31 @@ export default function RootLayout({
       </head>
       <body className={inter.variable} suppressHydrationWarning>
         {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "EducationalOrganization",
+              name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
+              alternateName: "TATU Akademik Litsey",
+              url: siteConfig.url,
+              logo: `${siteConfig.url}/logo.png`,
+              description:
+                "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Bog'ishamol ko'chasi, 112",
+                addressLocality: "Toshkent",
+                addressRegion: "Yunusobod tumani",
+                addressCountry: "UZ",
+              },
+              telephone: "+998712350369",
+              email: "n.abdiyev@tuit.uz",
+              sameAs: ["https://tuit.uz/akademik-litsey", siteConfig.url],
+            }),
+          }}
+        />
       </body>
     </html>
   );

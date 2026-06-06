@@ -1,0 +1,267 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { translations, type Lang } from "@/lib/i18n";
+import { Calendar, ArrowLeft } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+interface NewsDetail {
+  id: string;
+  titleUz: string;
+  titleRu: string;
+  titleEn: string;
+  bodyUz: string;
+  bodyRu: string;
+  bodyEn: string;
+  descUz: string;
+  descRu: string;
+  descEn: string;
+  tag: { uz: string; ru: string; en: string } | string;
+  color: string;
+  imageUrl?: string;
+  date: string;
+}
+
+export default function NewsDetailClient({ news }: { news: NewsDetail }) {
+  const [lang, setLang] = useState<Lang>("uz");
+
+  const t = translations[lang];
+
+  const title =
+    lang === "uz" ? news.titleUz : lang === "ru" ? news.titleRu : news.titleEn;
+  const body =
+    lang === "uz" ? news.bodyUz : lang === "ru" ? news.bodyRu : news.bodyEn;
+  const desc =
+    lang === "uz" ? news.descUz : lang === "ru" ? news.descRu : news.descEn;
+  const tagStr =
+    typeof news.tag === "string" ? news.tag : news.tag?.[lang] || "";
+
+  return (
+    <main>
+      <Navbar lang={lang} onLangChange={setLang} />
+
+      {/* PAGE BANNER */}
+      <div className="page-banner" style={{ paddingTop: 140 }}>
+        <div
+          className="container-custom"
+          style={{ position: "relative", zIndex: 1 }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 16,
+              fontSize: "0.8rem",
+              color: "rgba(255,255,255,0.6)",
+            }}
+          >
+            <Link
+              href="/"
+              style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
+            >
+              {t.nav_home}
+            </Link>
+            <span>/</span>
+            <Link
+              href="/news"
+              style={{ color: "rgba(255,255,255,0.6)", textDecoration: "none" }}
+            >
+              {t.nav_news}
+            </Link>
+            <span>/</span>
+            <span
+              style={{
+                color: "#c8a96e",
+                maxWidth: 400,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {title}
+            </span>
+          </div>
+          <h1
+            style={{
+              color: "white",
+              fontWeight: 900,
+              fontSize: "clamp(1.5rem,4vw,2.5rem)",
+              marginBottom: 12,
+              lineHeight: 1.2,
+            }}
+          >
+            {title}
+          </h1>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+              color: "rgba(255,255,255,0.6)",
+              fontSize: "0.85rem",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <Calendar size={14} />
+              {news.date}
+            </div>
+            {tagStr && (
+              <span
+                style={{
+                  background: `${news.color || "#1a3a6e"}30`,
+                  color: news.color || "#c8a96e",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  padding: "3px 10px",
+                  borderRadius: 50,
+                  border: `1px solid ${news.color || "#1a3a6e"}40`,
+                }}
+              >
+                {tagStr}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ===== ARTICLE CONTENT ===== */}
+      <section
+        style={{ padding: "64px 0", background: "#f8f9fc", minHeight: "60vh" }}
+      >
+        <div className="container-custom" style={{ maxWidth: 860 }}>
+          {/* Back button */}
+          <Link
+            href="/news"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              color: "#1a3a6e",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              textDecoration: "none",
+              marginBottom: 32,
+              transition: "gap 0.2s",
+            }}
+          >
+            <ArrowLeft size={16} />
+            {lang === "uz"
+              ? "Yangiliklarga qaytish"
+              : lang === "ru"
+                ? "Вернуться к новостям"
+                : "Back to news"}
+          </Link>
+
+          {/* Featured image */}
+          {news.imageUrl && (
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                height: 420,
+                borderRadius: 18,
+                overflow: "hidden",
+                marginBottom: 32,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+              }}
+            >
+              <Image
+                src={news.imageUrl}
+                alt={title}
+                fill
+                sizes="(max-width: 860px) 100vw, 860px"
+                style={{ objectFit: "cover" }}
+                priority
+              />
+            </div>
+          )}
+
+          {/* Description */}
+          <p
+            style={{
+              color: "#4b5563",
+              fontSize: "1.1rem",
+              lineHeight: 1.75,
+              marginBottom: 32,
+              fontWeight: 500,
+            }}
+          >
+            {desc}
+          </p>
+
+          {/* Body */}
+          {body && (
+            <div
+              style={{
+                background: "white",
+                borderRadius: 18,
+                padding: "40px",
+                boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
+                border: "1px solid rgba(26,58,110,0.07)",
+                fontSize: "1rem",
+                color: "#374151",
+                lineHeight: 1.85,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {body.split("\n").map((paragraph, i) => (
+                <p key={i} style={{ marginBottom: paragraph ? 18 : 18 }}>
+                  {paragraph || "\u00A0"}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {/* Bottom navigation */}
+          <div
+            style={{
+              marginTop: 40,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Link
+              href="/news"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 28px",
+                background: "linear-gradient(135deg,#1a3a6e,#2d5bb5)",
+                color: "white",
+                borderRadius: 12,
+                fontWeight: 700,
+                fontSize: "0.95rem",
+                textDecoration: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.transform =
+                  "translateY(-2px)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                  "0 8px 24px rgba(26,58,110,0.3)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.transform = "none";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+              }}
+            >
+              <ArrowLeft size={16} />
+              {lang === "uz"
+                ? "Barcha yangiliklar"
+                : lang === "ru"
+                  ? "Все новости"
+                  : "All news"}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer lang={lang} />
+    </main>
+  );
+}
