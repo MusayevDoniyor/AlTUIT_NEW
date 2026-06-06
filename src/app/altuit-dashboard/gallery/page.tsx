@@ -20,6 +20,8 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  ConfirmDialog,
+  useToast,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -52,6 +54,8 @@ export default function AdminGalleryPage() {
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<GalleryItem | null>(null);
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -91,7 +95,7 @@ export default function AdminGalleryPage() {
 
   const handleSave = async () => {
     if (!editing || !editing.imageUrl) {
-      setError("Rasm yuklash majburiy!");
+      showToast("error", "Rasm yuklash majburiy!");
       return;
     }
     setSaving(true);
@@ -100,24 +104,27 @@ export default function AdminGalleryPage() {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as GalleryItem;
       await saveGallery(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast("success", editing.id ? "Tahrirlandi" : "Rasm qo'shildi");
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik yuz berdi");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: GalleryItem) => {
-    if (!confirm("Ushbu rasmni o'chirasizmi?")) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteGallery(item.id!);
-      await deleteImage(item.imageUrl);
+      await deleteGallery(deleteTarget.id!);
+      await deleteImage(deleteTarget.imageUrl);
+      showToast("success", "Rasm o'chirildi");
       await load();
     } catch {
-      setError("O'chirishda xatolik yuz berdi");
+      showToast("error", "O'chirishda xatolik yuz berdi");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -127,6 +134,13 @@ export default function AdminGalleryPage() {
   return (
     <div>
       <style>{spinStyle}</style>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Rasmni o'chirish"
+        message="Ushbu rasmni o'chirasizmi? Bu amalni qaytarib bo'lmaydi."
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <PageHeader
         title="Galereya"
         description="Litsey hayotidan olingan rasmlar va fotolavhalarni boshqarish"
@@ -250,7 +264,7 @@ export default function AdminGalleryPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />

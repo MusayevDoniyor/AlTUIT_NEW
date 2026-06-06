@@ -12,6 +12,8 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  ConfirmDialog,
+  useToast,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -33,6 +35,8 @@ export default function AdminStatsPage() {
     (Omit<StatItem, "id"> & { id?: string }) | null
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
+  const [deleteTarget, setDeleteTarget] = useState<StatItem | null>(null);
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -67,14 +71,14 @@ export default function AdminStatsPage() {
     setSaving(true);
     setError("");
     try {
-      const id = editing.id || editing.key; // use key as ID if not set
+      const id = editing.id || editing.key;
       const { id: _id, ...data } = editing as StatItem;
       await saveStat(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast("success", "Statistika saqlandi");
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik yuz berdi");
     } finally {
       setSaving(false);
     }
@@ -127,10 +131,10 @@ export default function AdminStatsPage() {
       for (const stat of initialStats) {
         await saveStat(stat.key, stat);
       }
-      setSuccess("Birlamchi statistika yaratildi!");
+      showToast("success", "Birlamchi statistika yaratildi!");
       await load();
     } catch {
-      setError("Boshlang'ich ma'lumotlarni yaratishda xatolik");
+      showToast("error", "Boshlang'ich ma'lumotlarni yaratishda xatolik");
     } finally {
       setSaving(false);
     }

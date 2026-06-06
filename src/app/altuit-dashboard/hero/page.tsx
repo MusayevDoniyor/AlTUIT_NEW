@@ -28,6 +28,8 @@ import {
   Alert,
   EmptyState,
   SectionTitle,
+  ConfirmDialog,
+  useToast,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -48,6 +50,8 @@ export default function AdminHeroPage() {
     (Omit<HeroSlideItem, "id"> & { id?: string }) | null
   >(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<HeroSlideItem | null>(null);
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -87,7 +91,7 @@ export default function AdminHeroPage() {
 
   const handleSave = async () => {
     if (!editing || !editing.imageUrl) {
-      setError("Rasm yuklash majburiy!");
+      showToast("error", "Rasm yuklash majburiy!");
       return;
     }
     setSaving(true);
@@ -96,24 +100,30 @@ export default function AdminHeroPage() {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as HeroSlideItem;
       await saveHeroSlide(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast(
+        "success",
+        editing.id ? "Slayd tahrirlandi" : "Slayd qo'shildi",
+      );
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik yuz berdi");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: HeroSlideItem) => {
-    if (!confirm("Ushbu slaydni o'chirasizmi?")) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteHeroSlide(item.id!);
-      await deleteImage(item.imageUrl);
+      await deleteHeroSlide(deleteTarget.id!);
+      await deleteImage(deleteTarget.imageUrl);
+      showToast("success", "Slayd o'chirildi");
       await load();
     } catch {
-      setError("O'chirishda xatolik yuz berdi");
+      showToast("error", "O'chirishda xatolik yuz berdi");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -133,6 +143,13 @@ export default function AdminHeroPage() {
   return (
     <div>
       <style>{spinStyle}</style>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Slaydni o'chirish"
+        message="Ushbu slaydni o'chirasizmi? Rasm ham serverdan o'chiriladi."
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <PageHeader
         title="Bosh sahifa slaydlar (Hero slider)"
         description="Bosh sahifa tepa qismida aylanuvchi premium rasmlarni boshqarish"
@@ -255,7 +272,7 @@ export default function AdminHeroPage() {
                 <Button
                   variant="outline"
                   onClick={() => toggleActive(item)}
-                  style={{ padding: "6px 12px", fontSize: "0.78rem" }}
+                  style={{ padding: "6px 10px", fontSize: "0.78rem" }}
                 >
                   {item.isActive ? "Nofaol qilish" : "Faol qilish"}
                 </Button>
@@ -270,7 +287,7 @@ export default function AdminHeroPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     aria-label="O'chirish"
                     style={{ padding: "6px 10px" }}
                   >
