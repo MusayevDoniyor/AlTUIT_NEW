@@ -222,7 +222,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                     lineHeight: 1.1,
                   }}
                 >
-                  Al-Xorazmiy
+                  TATU
                 </div>
                 <div
                   style={{
@@ -343,15 +343,50 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   paddingRight: 14,
                 }}
               >
-                {(["uz", "ru", "en"] as Lang[]).map((l) => (
-                  <button
-                    key={l}
-                    className={`language-selector-btn ${lang === l ? "active" : ""} dark-text`}
-                    onClick={() => onLangChange(l)}
-                  >
-                    {l}
-                  </button>
-                ))}
+                {(["uz", "ru", "en"] as Lang[]).map((l) => {
+                  const isActive = lang === l;
+                  return (
+                    <button
+                      key={l}
+                      onClick={() => onLangChange(l)}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          (e.currentTarget as HTMLButtonElement).style.color =
+                            "#c8a96e";
+                          (
+                            e.currentTarget as HTMLButtonElement
+                          ).style.background = "rgba(200,169,110,0.1)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          (e.currentTarget as HTMLButtonElement).style.color =
+                            "rgba(0,33,71,0.6)";
+                          (
+                            e.currentTarget as HTMLButtonElement
+                          ).style.background = "transparent";
+                        }
+                      }}
+                      style={{
+                        background: isActive
+                          ? "rgba(200,169,110,0.18)"
+                          : "transparent",
+                        color: isActive ? "#c8a96e" : "rgba(0,33,71,0.6)",
+                        fontWeight: isActive ? 700 : 600,
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "4px 8px",
+                        fontSize: "0.75rem",
+                        cursor: "pointer",
+                        transition: "all 0.2s",
+                        textTransform: "uppercase",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
               </div>
               <button
                 style={{
@@ -461,22 +496,51 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               marginBottom: "10px",
             }}
           >
-            {(["uz", "ru", "en"] as Lang[]).map((l) => (
-              <button
-                key={l}
-                className={`language-selector-btn ${lang === l ? "active" : ""} dark-text`}
-                onClick={() => {
-                  onLangChange(l);
-                  setMobileOpen(false);
-                }}
-                style={{
-                  fontSize: "0.82rem",
-                  padding: "6px 14px",
-                }}
-              >
-                {l.toUpperCase()}
-              </button>
-            ))}
+            {(["uz", "ru", "en"] as Lang[]).map((l) => {
+              const isActive = lang === l;
+              return (
+                <button
+                  key={l}
+                  onClick={() => {
+                    onLangChange(l);
+                    setMobileOpen(false);
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.color =
+                        "#c8a96e";
+                      (e.currentTarget as HTMLButtonElement).style.background =
+                        "rgba(200,169,110,0.1)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      (e.currentTarget as HTMLButtonElement).style.color =
+                        "rgba(0,33,71,0.6)";
+                      (e.currentTarget as HTMLButtonElement).style.background =
+                        "transparent";
+                    }
+                  }}
+                  style={{
+                    background: isActive
+                      ? "rgba(200,169,110,0.18)"
+                      : "transparent",
+                    color: isActive ? "#c8a96e" : "rgba(0,33,71,0.6)",
+                    fontWeight: isActive ? 700 : 600,
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "6px 14px",
+                    fontSize: "0.82rem",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    textTransform: "uppercase",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {l.toUpperCase()}
+                </button>
+              );
+            })}
           </div>
 
           {items.map((item, i) => (
