@@ -18,6 +18,8 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  ConfirmDialog,
+  useToast,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -42,6 +44,10 @@ export default function AdminAdmissionPage() {
     (Omit<AdmissionRuleItem, "id"> & { id?: string }) | null
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
+  const [deleteTarget, setDeleteTarget] = useState<AdmissionRuleItem | null>(
+    null,
+  );
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
@@ -74,23 +80,26 @@ export default function AdminAdmissionPage() {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as AdmissionRuleItem;
       await saveAdmissionRule(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast("success", editing.id ? "Tahrirlandi" : "Qo'shildi");
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik yuz berdi");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: AdmissionRuleItem) => {
-    if (!confirm(`"${item.titleUz}" qoidasini o'chirasizmi?`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteAdmissionRule(item.id!);
+      await deleteAdmissionRule(deleteTarget.id!);
+      showToast("success", `"${deleteTarget.titleUz}" o'chirildi`);
       await load();
     } catch {
-      setError("O'chirishda xatolik yuz berdi");
+      showToast("error", "O'chirishda xatolik yuz berdi");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -100,6 +109,13 @@ export default function AdminAdmissionPage() {
   return (
     <div>
       <style>{spinStyle}</style>
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Qoidani o'chirish"
+        message={`"${deleteTarget?.titleUz}" qoidasini o'chirasizmi?`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
       <PageHeader
         title="Kirish qoidalari"
         description="Qabul qilish tartibi, imtihonlar va kerakli hujjatlar qoidalarini boshqarish"
@@ -196,7 +212,7 @@ export default function AdminAdmissionPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />
