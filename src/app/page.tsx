@@ -28,29 +28,21 @@ import { getHeroSlides, getStats, getNews } from "@/lib/db";
 const dirColors = [
   { bg: "linear-gradient(135deg,#0f2347,#1a3a6e)", accent: "#c8a96e" },
   { bg: "linear-gradient(135deg,#1a3a6e,#2d5bb5)", accent: "#dfc08a" },
-  { bg: "linear-gradient(135deg,#134e3a,#1d7a55)", accent: "#86efc1" },
-  { bg: "linear-gradient(135deg,#3b1f6e,#6032bf)", accent: "#c4b5fd" },
 ];
 
-const dirIcons = [Calculator, Globe, Microscope, BookOpen];
+const dirIcons = [Calculator, Globe];
 
 const dirSubjectsUz = [
   ["Matematika", "Fizika", "Informatika", "Ingliz tili"],
   ["Matematika", "Ingliz tili", "Iqtisodiyot", "Ona tili"],
-  ["Biologiya", "Kimyo", "Matematika", "Fizika"],
-  ["Tarix", "Huquq", "Falsafa", "Geografiya"],
 ];
 const dirSubjectsRu = [
   ["Математика", "Физика", "Информатика", "Английский"],
   ["Математика", "Английский", "Экономика", "Родной язык"],
-  ["Биология", "Химия", "Математика", "Физика"],
-  ["История", "Право", "Философия", "География"],
 ];
 const dirSubjectsEn = [
   ["Mathematics", "Physics", "Informatics", "English"],
   ["Mathematics", "English", "Economics", "Native Language"],
-  ["Biology", "Chemistry", "Mathematics", "Physics"],
-  ["History", "Law", "Philosophy", "Geography"],
 ];
 
 // ===== COUNTER COMPONENT =====
@@ -186,8 +178,6 @@ export default function Home() {
   const dirs = [
     { name: t.dir1_name, desc: t.dir1_desc },
     { name: t.dir2_name, desc: t.dir2_desc },
-    { name: t.dir3_name, desc: t.dir3_desc },
-    { name: t.dir4_name, desc: t.dir4_desc },
   ];
 
   const subjects =

@@ -48,18 +48,12 @@ export const translations = {
     // Directions
     dir_title: "Ta'lim yo'nalishlari",
     dir_subtitle: "Litseyda quyidagi akademik yo'nalishlar mavjud",
-    dir1_name: "Aniq fanlar – 1",
+    dir1_name: "Aniq fanlar (Texnika)",
     dir1_desc:
       "Matematika, fizika va informatika fanlari chuqurlashtirilgan holda o'rgatiladi. Texnik oliy ta'lim muassasalariga tayyorlash.",
-    dir2_name: "Aniq fanlar – 2",
+    dir2_name: "Aniq fanlar (Iqtisod)",
     dir2_desc:
       "Matematika, ingliz tili va iqtisodiyot yo'nalishi. Xalqaro iqtisodiyot, moliya va biznes sohasiga yo'naltirish.",
-    dir3_name: "Tabiiy fanlar",
-    dir3_desc:
-      "Biologiya, kimyo va tibbiyot yo'nalishi. Tibbiyot va farmatsevtika oliy o'quv yurtlariga tayyorgarlik.",
-    dir4_name: "Ijtimoiy-gumanitar fanlar",
-    dir4_desc:
-      "Tarix, huquq, falsafa va ijtimoiy fanlar. Huquqshunoslik va gumanitar oliy ta'limga yo'naltirish.",
 
     // Admission
     adm_title: "Qabul jarayoni",
@@ -119,7 +113,7 @@ export const translations = {
       },
       {
         q: "Qanday yo'nalishlar mavjud?",
-        a: "Litseyda 4 ta akademik yo'nalish mavjud: Aniq fanlar-1, Aniq fanlar-2, Tabiiy fanlar va Ijtimoiy-gumanitar fanlar.",
+        a: "Litseyda 2 ta akademik yo'nalish mavjud: Aniq fanlar (Texnika) va Aniq fanlar (Iqtisod).",
       },
     ],
 
@@ -210,12 +204,6 @@ export const translations = {
     dir2_name: "Точные науки – 2",
     dir2_desc:
       "Математика, английский язык и экономика. Подготовка в сфере международной экономики, финансов и бизнеса.",
-    dir3_name: "Естественные науки",
-    dir3_desc:
-      "Биология, химия и медицинское направление. Подготовка к медицинским и фармацевтическим вузам.",
-    dir4_name: "Социально-гуманитарные науки",
-    dir4_desc:
-      "История, право, философия и социальные науки. Подготовка к гуманитарному высшему образованию.",
 
     adm_title: "Процедура поступления",
     adm_subtitle: "Для поступления в лицей следуйте следующим правилам",
@@ -269,7 +257,7 @@ export const translations = {
       },
       {
         q: "Какие направления существуют?",
-        a: "В лицее доступны 4 академических направления: Точные науки-1, Точные науки-2, Естественные науки и Социально-гуманитарные науки.",
+        a: "В лицее доступны 2 академических направления: Точные науки (Техника) и Точные науки (Экономика).",
       },
     ],
 
@@ -355,12 +343,6 @@ export const translations = {
     dir2_name: "Exact Sciences – 2",
     dir2_desc:
       "Mathematics, English, and economics. Preparation for international economics, finance, and business.",
-    dir3_name: "Natural Sciences",
-    dir3_desc:
-      "Biology, chemistry, and medical track. Preparation for medical and pharmaceutical higher education.",
-    dir4_name: "Social & Humanitarian Sciences",
-    dir4_desc:
-      "History, law, philosophy, and social sciences. Preparation for humanities higher education.",
 
     adm_title: "Admission Process",
     adm_subtitle: "Follow these steps to apply to the lyceum",
@@ -415,7 +397,7 @@ export const translations = {
       },
       {
         q: "What directions are available?",
-        a: "The lyceum offers 4 academic directions: Exact Sciences-1, Exact Sciences-2, Natural Sciences, and Social & Humanitarian Sciences.",
+        a: "The lyceum offers 2 academic directions: Exact Sciences (Technics) and Exact Sciences (Economics).",
       },
     ],
 
