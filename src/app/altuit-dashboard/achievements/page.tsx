@@ -17,10 +17,13 @@ import {
   Input,
   Textarea,
   Button,
-  Alert,
   EmptyState,
   SectionTitle,
   LangTabs,
+  ConfirmDialog,
+  ImageUpload,
+  useToast,
+  Select,
   C,
   spinStyle,
 } from "../_components/ui";
@@ -58,20 +61,22 @@ export default function AdminAchievementsPage() {
   const [items, setItems] = useState<AchievementItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<AchievementItem, "id"> & { id?: string }) | null
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<AchievementItem | null>(
+    null,
+  );
+  const { showToast } = useToast();
 
   const load = async () => {
     setLoading(true);
     try {
       setItems(await getAchievements());
     } catch {
-      setError("Ma'lumotlarni yuklashda xatolik yuz berdi");
+      showToast("error", "Ma'lumotlarni yuklashda xatolik");
     } finally {
       setLoading(false);
     }
@@ -85,18 +90,16 @@ export default function AdminAchievementsPage() {
   const openEdit = (item: AchievementItem) => setEditing({ ...item });
   const close = () => {
     setEditing(null);
-    setError("");
-    setSuccess("");
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0] || !editing) return;
+  const handleImageUpload = async (file: File) => {
+    if (!editing) return;
     setUploadingImage(true);
     try {
-      const url = await uploadImage(e.target.files[0], "achievements");
+      const url = await uploadImage(file, "achievements");
       setEditing((prev) => (prev ? { ...prev, imageUrl: url } : prev));
     } catch {
-      setError("Rasm yuklashda xatolik yuz berdi");
+      showToast("error", "Rasm yuklashda xatolik");
     } finally {
       setUploadingImage(false);
     }
@@ -105,29 +108,34 @@ export default function AdminAchievementsPage() {
   const handleSave = async () => {
     if (!editing) return;
     setSaving(true);
-    setError("");
     try {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as AchievementItem;
       await saveAchievement(id, data);
-      setSuccess("Muvaffaqiyatli saqlandi!");
+      showToast(
+        "success",
+        editing.id ? "Yutuq tahrirlandi" : "Yutuq qo'shildi",
+      );
       await load();
-      setTimeout(close, 1000);
+      close();
     } catch {
-      setError("Saqlashda xatolik yuz berdi");
+      showToast("error", "Saqlashda xatolik");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (item: AchievementItem) => {
-    if (!confirm(`"${item.titleUz}"ni o'chirasizmi?`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteAchievement(item.id!);
-      if (item.imageUrl) await deleteImage(item.imageUrl);
+      await deleteAchievement(deleteTarget.id!);
+      if (deleteTarget.imageUrl) await deleteImage(deleteTarget.imageUrl);
+      showToast("success", `"${deleteTarget.titleUz}" o'chirildi`);
       await load();
     } catch {
-      setError("O'chirishda xatolik yuz berdi");
+      showToast("error", "O'chirishda xatolik");
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -137,6 +145,15 @@ export default function AdminAchievementsPage() {
   return (
     <div>
       <style>{spinStyle}</style>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Yutuqni o'chirish"
+        message={`"${deleteTarget?.titleUz}" yutug'ini o'chirasizmi?`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
       <PageHeader
         title="Yutuqlar"
         description="Litsey o'quvchilari va ustozlarining yutuqlarini boshqarish"
@@ -147,8 +164,6 @@ export default function AdminAchievementsPage() {
           </Button>
         }
       />
-
-      {error && <Alert type="error" message={error} />}
 
       <Card>
         {loading ? (
@@ -166,7 +181,7 @@ export default function AdminAchievementsPage() {
             />
           </div>
         ) : items.length === 0 ? (
-          <EmptyState message="Yutuqlar ro'yxati bo'sh. Qo'shish tugmasi orqali yangi yutuq kiriting." />
+          <EmptyState message="Yutuqlar ro'yxati bo'sh." />
         ) : (
           <div>
             {items.map((item, idx) => (
@@ -191,7 +206,6 @@ export default function AdminAchievementsPage() {
                     border: `1px solid ${C.border}`,
                     display: "flex",
                     alignItems: "center",
-                    justifyItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
                   }}
@@ -273,7 +287,7 @@ export default function AdminAchievementsPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    onClick={() => handleDelete(item)}
+                    onClick={() => setDeleteTarget(item)}
                     style={{ padding: "6px 10px" }}
                   >
                     <Trash2 size={13} />
@@ -316,7 +330,6 @@ export default function AdminAchievementsPage() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyItems: "center",
                 justifyContent: "space-between",
                 marginBottom: 24,
               }}
@@ -346,9 +359,6 @@ export default function AdminAchievementsPage() {
               </button>
             </div>
 
-            {error && <Alert type="error" message={error} />}
-            {success && <Alert type="success" message={success} />}
-
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <SectionTitle>Ma'lumotlar (til bo'yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
@@ -374,7 +384,6 @@ export default function AdminAchievementsPage() {
                 }
                 placeholder="Masalan: Respublika fan olimpiadasi 1-o'rin"
               />
-
               <Textarea
                 label={`Tavsif (${lang.toUpperCase()})`}
                 value={
@@ -410,45 +419,12 @@ export default function AdminAchievementsPage() {
                   onChange={(e) => set("year", e.target.value)}
                   placeholder="Masalan: 2024"
                 />
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      color: C.textMuted,
-                      fontSize: "0.78rem",
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
-                  >
-                    Kategoriya
-                  </label>
-                  <select
-                    value={editing.category}
-                    onChange={(e) => set("category", e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "rgba(255,255,255,0.05)",
-                      border: `1px solid ${C.border}`,
-                      borderRadius: 10,
-                      color: C.text,
-                      fontSize: "0.88rem",
-                      outline: "none",
-                      boxSizing: "border-box",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    {CATEGORY_OPTIONS.map((c) => (
-                      <option
-                        key={c.value}
-                        value={c.value}
-                        style={{ background: "#141620" }}
-                      >
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <Select
+                  label="Kategoriya"
+                  value={editing.category}
+                  onChange={(e) => set("category", e.target.value)}
+                  options={CATEGORY_OPTIONS}
+                />
               </div>
 
               <div
@@ -458,45 +434,12 @@ export default function AdminAchievementsPage() {
                   gap: 12,
                 }}
               >
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      color: C.textMuted,
-                      fontSize: "0.78rem",
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
-                  >
-                    Mavzu rangi / Nishon turi
-                  </label>
-                  <select
-                    value={editing.color}
-                    onChange={(e) => set("color", e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      background: "rgba(255,255,255,0.05)",
-                      border: `1px solid ${C.border}`,
-                      borderRadius: 10,
-                      color: C.text,
-                      fontSize: "0.88rem",
-                      outline: "none",
-                      boxSizing: "border-box",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    {COLOR_OPTIONS.map((c) => (
-                      <option
-                        key={c.value}
-                        value={c.value}
-                        style={{ background: "#141620" }}
-                      >
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <Select
+                  label="Mavzu rangi / Nishon turi"
+                  value={editing.color}
+                  onChange={(e) => set("color", e.target.value)}
+                  options={COLOR_OPTIONS}
+                />
                 <Input
                   label="Tartib raqami"
                   type="number"
@@ -507,84 +450,15 @@ export default function AdminAchievementsPage() {
                 />
               </div>
 
-              {/* Image Upload */}
               <div>
                 <SectionTitle>Rasm (ixtiyoriy)</SectionTitle>
-                {editing.imageUrl && (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: 160,
-                      borderRadius: 12,
-                      overflow: "hidden",
-                      marginBottom: 10,
-                      border: `1px solid ${C.border}`,
-                    }}
-                  >
-                    <Image
-                      src={editing.imageUrl}
-                      alt=""
-                      fill
-                      sizes="(max-width: 600px) 100vw, 544px"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <button
-                      onClick={() => set("imageUrl", "")}
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "rgba(0,0,0,0.6)",
-                        border: "none",
-                        borderRadius: "50%",
-                        color: "white",
-                        cursor: "pointer",
-                        padding: 5,
-                        display: "flex",
-                      }}
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                )}
-                <label
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "9px 14px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px dashed ${C.border}`,
-                    borderRadius: 10,
-                    cursor: "pointer",
-                    color: C.textMuted,
-                    fontSize: "0.83rem",
-                  }}
-                >
-                  {uploadingImage ? (
-                    <div
-                      style={{
-                        width: 14,
-                        height: 14,
-                        border: `2px solid ${C.goldLight}`,
-                        borderTopColor: C.gold,
-                        borderRadius: "50%",
-                        animation: "spin 0.8s linear infinite",
-                      }}
-                    />
-                  ) : (
-                    "📷"
-                  )}
-                  {uploadingImage ? "Yuklanmoqda..." : "Rasm yuklash"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                  />
-                </label>
+                <ImageUpload
+                  currentUrl={editing.imageUrl || ""}
+                  onUpload={handleImageUpload}
+                  onRemove={() => set("imageUrl", "")}
+                  uploading={uploadingImage}
+                  folder="achievements"
+                />
               </div>
             </div>
 
