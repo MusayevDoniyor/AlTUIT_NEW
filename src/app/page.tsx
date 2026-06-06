@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { translations, type Lang } from "@/lib/i18n";
 import {
   ChevronLeft,
@@ -78,12 +78,173 @@ function Counter({
   );
 }
 
+// ===== HERO SLIDE WRAPPER =====
+function HeroSlide({
+  slideImage,
+  hasText,
+  slideTitle,
+  slideDesc,
+  t,
+  lang,
+  priority,
+}: {
+  slideImage: string;
+  hasText: boolean;
+  slideTitle: string;
+  slideDesc: string;
+  t: Record<string, string>;
+  lang: Lang;
+  priority: boolean;
+}) {
+  return (
+    <>
+      {slideImage && (
+        <Image
+          src={slideImage}
+          alt="Hero background"
+          fill
+          priority={priority}
+          className="object-cover"
+          style={{ zIndex: -1 }}
+          sizes="100vw"
+        />
+      )}
+      {hasText ? (
+        <>
+          <div
+            className="carousel-overlay"
+            style={{
+              background:
+                "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
+            }}
+          />
+          <div
+            className="container-custom"
+            style={{
+              position: "relative",
+              zIndex: 2,
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ maxWidth: 850 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 28,
+                    background: "rgba(255,255,255,0.08)",
+                    backdropFilter: "blur(5px)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    borderRadius: 100,
+                    padding: "8px 24px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: "#c8a96e",
+                    }}
+                  />
+                  <span
+                    style={{
+                      color: "white",
+                      fontSize: "0.8rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {t.hero_badge}
+                  </span>
+                </div>
+
+                <h1
+                  style={{
+                    color: "white",
+                    fontWeight: 900,
+                    fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                    lineHeight: 1.1,
+                    marginBottom: 25,
+                  }}
+                >
+                  {slideTitle}
+                </h1>
+
+                <p
+                  style={{
+                    color: "rgba(255,255,255,0.85)",
+                    fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
+                    lineHeight: 1.6,
+                    marginBottom: 40,
+                    maxWidth: 650,
+                  }}
+                >
+                  {slideDesc}
+                </p>
+
+                <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                  <Link
+                    href="/admission"
+                    className="btn-primary"
+                    style={{
+                      padding: "18px 40px",
+                      borderRadius: 12,
+                      fontSize: "1rem",
+                      background: "#c8a96e",
+                      color: "#002147",
+                    }}
+                  >
+                    {t.hero_cta} <ArrowRight size={20} />
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="btn-outline"
+                    style={{
+                      padding: "18px 40px",
+                      borderRadius: 12,
+                      fontSize: "1rem",
+                      borderColor: "rgba(255,255,255,0.4)",
+                      borderWidth: 2,
+                    }}
+                  >
+                    {t.hero_cta2}
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div
+          className="carousel-overlay"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,33,71,0.2) 0%, rgba(0,33,71,0.65) 100%)",
+          }}
+        />
+      )}
+    </>
+  );
+}
+
 // ===== MAIN PAGE =====
 export default function Home() {
   const [lang, setLang] = useState<Lang>("uz");
   const [current, setCurrent] = useState(0);
+  const prevIndex = useRef(0);
   const [statsInView, setStatsInView] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
+  const transitioningRef = useRef(false);
 
   const [dbSlides, setDbSlides] = useState<any[]>([]);
   const [dbStats, setDbStats] = useState<any[]>([]);
@@ -129,33 +290,7 @@ export default function Home() {
           },
         ];
 
-  const t = translations[lang];
-
-  const next = useCallback(
-    () => setCurrent((prev) => (prev + 1) % activeSlides.length),
-    [activeSlides.length],
-  );
-  const prev = () =>
-    setCurrent(
-      (prev) => (prev - 1 + activeSlides.length) % activeSlides.length,
-    );
-
-  useEffect(() => {
-    if (activeSlides.length === 0) return;
-    const timer = setInterval(next, 7000);
-    return () => clearInterval(timer);
-  }, [next, activeSlides.length]);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) setStatsInView(true);
-      },
-      { threshold: 0.3 },
-    );
-    if (statsRef.current) obs.observe(statsRef.current);
-    return () => obs.disconnect();
-  }, []);
+  const t = translations[lang] as unknown as Record<string, string>;
 
   const slide = activeSlides[current];
   const slideImage = slide?.imageUrl || slide?.image || "";
@@ -175,6 +310,56 @@ export default function Home() {
         : slide.descEn
     : "";
 
+  const prevSlide = activeSlides[prevIndex.current];
+  const prevImage = prevSlide?.imageUrl || prevSlide?.image || "";
+  const prevHasText = !!(
+    prevSlide?.titleUz ||
+    prevSlide?.titleRu ||
+    prevSlide?.titleEn
+  );
+
+  const goTo = useCallback(
+    (i: number) => {
+      if (transitioningRef.current) return;
+      transitioningRef.current = true;
+      prevIndex.current = current;
+      setCurrent(i);
+      setTimeout(() => {
+        transitioningRef.current = false;
+      }, 1200);
+    },
+    [current],
+  );
+
+  const next = useCallback(
+    () => goTo((current + 1) % activeSlides.length),
+    [goTo, current, activeSlides.length],
+  );
+  const prev = useCallback(
+    () => goTo((current - 1 + activeSlides.length) % activeSlides.length),
+    [goTo, current, activeSlides.length],
+  );
+
+  useEffect(() => {
+    if (activeSlides.length === 0) return;
+    const timer = setInterval(
+      () => goTo((current + 1) % activeSlides.length),
+      7000,
+    );
+    return () => clearInterval(timer);
+  }, [goTo, current, activeSlides.length]);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setStatsInView(true);
+      },
+      { threshold: 0.3 },
+    );
+    if (statsRef.current) obs.observe(statsRef.current);
+    return () => obs.disconnect();
+  }, []);
+
   const dirs = [
     { name: t.dir1_name, desc: t.dir1_desc },
     { name: t.dir2_name, desc: t.dir2_desc },
@@ -189,7 +374,7 @@ export default function Home() {
 
   const activeStats =
     dbStats.length > 0
-      ? dbStats.map((s) => {
+      ? dbStats.map((s: any) => {
           let Icon = GraduationCap;
           if (s.key === "teachers") Icon = Users2;
           else if (s.key === "uni_rate") Icon = TrendingUp;
@@ -211,162 +396,63 @@ export default function Home() {
     <main>
       <Navbar lang={lang} onLangChange={setLang} />
 
-      {/* ===== HERO CAROUSEL ===== */}
+      {/* ===== HERO CAROUSEL (crossfade) ===== */}
       <section
         className="carousel-container"
-        style={{ height: "100vh", background: "#002147" }}
+        style={{ height: "100vh", background: "#002147", overflow: "hidden" }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            className="carousel-slide"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.2 }}
-            style={{ position: "absolute", inset: 0 }}
-          >
-            {slideImage && (
-              <Image
-                src={slideImage}
-                alt="Hero background"
-                fill
-                priority={current === 0}
-                className="object-cover"
-                style={{ zIndex: -1, opacity: hasText ? 0.4 : 0.85 }}
-                sizes="100vw"
-              />
-            )}
-            {hasText ? (
-              <>
-                <div
-                  className="carousel-overlay"
-                  style={{
-                    background:
-                      "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
-                  }}
-                />
-                <div
-                  className="container-custom"
-                  style={{
-                    position: "relative",
-                    zIndex: 2,
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <div style={{ maxWidth: 850 }}>
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.8 }}
-                    >
-                      <div
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 12,
-                          marginBottom: 28,
-                          background: "rgba(255,255,255,0.08)",
-                          backdropFilter: "blur(5px)",
-                          border: "1px solid rgba(255,255,255,0.15)",
-                          borderRadius: 100,
-                          padding: "8px 24px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: 8,
-                            height: 8,
-                            borderRadius: "50%",
-                            background: "#c8a96e",
-                          }}
-                        />
-                        <span
-                          style={{
-                            color: "white",
-                            fontSize: "0.8rem",
-                            fontWeight: 700,
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {t.hero_badge}
-                        </span>
-                      </div>
+        {/* Prev slide fading out */}
+        <div
+          key={"prev-" + prevIndex.current}
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0,
+            animation: "heroFadeOut 0.8s ease forwards",
+          }}
+        >
+          {prevImage && (
+            <Image
+              src={prevImage}
+              alt=""
+              fill
+              className="object-cover"
+              style={{ zIndex: -1 }}
+              sizes="100vw"
+            />
+          )}
+          {prevHasText && prevImage && (
+            <div
+              className="carousel-overlay"
+              style={{
+                background:
+                  "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
+              }}
+            />
+          )}
+        </div>
 
-                      <h1
-                        style={{
-                          color: "white",
-                          fontWeight: 900,
-                          fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                          lineHeight: 1.1,
-                          marginBottom: 25,
-                        }}
-                      >
-                        {slideTitle}
-                      </h1>
+        {/* Current slide fading in */}
+        <div
+          key={"cur-" + current}
+          style={{
+            position: "absolute",
+            inset: 0,
+            animation: "heroFadeIn 1s ease forwards",
+          }}
+        >
+          <HeroSlide
+            slideImage={slideImage}
+            hasText={hasText}
+            slideTitle={slideTitle}
+            slideDesc={slideDesc}
+            t={t}
+            lang={lang}
+            priority={current === 0}
+          />
+        </div>
 
-                      <p
-                        style={{
-                          color: "rgba(255,255,255,0.85)",
-                          fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                          lineHeight: 1.6,
-                          marginBottom: 40,
-                          maxWidth: 650,
-                        }}
-                      >
-                        {slideDesc}
-                      </p>
-
-                      <div
-                        style={{ display: "flex", gap: 20, flexWrap: "wrap" }}
-                      >
-                        <Link
-                          href="/admission"
-                          className="btn-primary"
-                          style={{
-                            padding: "18px 40px",
-                            borderRadius: 12,
-                            fontSize: "1rem",
-                            background: "#c8a96e",
-                            color: "#002147",
-                          }}
-                        >
-                          {t.hero_cta} <ArrowRight size={20} />
-                        </Link>
-                        <Link
-                          href="/about"
-                          className="btn-outline"
-                          style={{
-                            padding: "18px 40px",
-                            borderRadius: 12,
-                            fontSize: "1rem",
-                            borderColor: "rgba(255,255,255,0.4)",
-                            borderWidth: 2,
-                          }}
-                        >
-                          {t.hero_cta2}
-                        </Link>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div
-                className="carousel-overlay"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(0,33,71,0.2) 0%, rgba(0,33,71,0.65) 100%)",
-                }}
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Navigation Arrows & Indicators */}
+        {/* Navigation Indicators */}
         <div
           className="container-custom"
           style={{
@@ -379,10 +465,10 @@ export default function Home() {
             gap: 12,
           }}
         >
-          {activeSlides.map((_, i) => (
+          {activeSlides.map((_: any, i: number) => (
             <button
               key={i}
-              onClick={() => setCurrent(i)}
+              onClick={() => goTo(i)}
               aria-label={`Slayd ${i + 1}`}
               style={{
                 width: current === i ? 40 : 10,
@@ -396,10 +482,27 @@ export default function Home() {
             />
           ))}
         </div>
+
         <style jsx>{`
           @media (max-width: 768px) {
             .hidden-mobile {
               display: none !important;
+            }
+          }
+          @keyframes heroFadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+          @keyframes heroFadeOut {
+            from {
+              opacity: 0.8;
+            }
+            to {
+              opacity: 0;
             }
           }
         `}</style>
@@ -439,7 +542,7 @@ export default function Home() {
                 </p>
               </div>
             ) : (
-              activeStats.map((s, i) => (
+              activeStats.map((s: any, i: number) => (
                 <div
                   key={i}
                   style={{ textAlign: "center", padding: "24px 16px" }}
@@ -968,7 +1071,7 @@ export default function Home() {
                 gap: 24,
               }}
             >
-              {activeNews.map((item) => {
+              {activeNews.map((item: any) => {
                 const title =
                   lang === "uz"
                     ? item.titleUz
