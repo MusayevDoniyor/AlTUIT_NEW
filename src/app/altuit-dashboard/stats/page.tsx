@@ -16,6 +16,7 @@ import {
   useToast,
   C,
   spinStyle,
+  CardSkeleton,
 } from "../_components/ui";
 
 const COLOR_OPTIONS = [
@@ -170,20 +171,8 @@ export default function AdminStatsPage() {
         }}
       >
         {loading ? (
-          <div
-            style={{ padding: 48, textAlign: "center", gridColumn: "1 / -1" }}
-          >
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                border: `3px solid ${C.goldLight}`,
-                borderTopColor: C.gold,
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto",
-              }}
-            />
+          <div style={{ gridColumn: "1 / -1" }}>
+            <CardSkeleton count={4} />
           </div>
         ) : items.length === 0 ? (
           <div style={{ gridColumn: "1 / -1" }}>

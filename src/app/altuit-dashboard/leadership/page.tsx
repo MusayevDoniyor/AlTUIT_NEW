@@ -33,6 +33,7 @@ import {
   ImageUpload,
   C,
   spinStyle,
+  TableSkeleton,
 } from "../_components/ui";
 
 const COLORS = [
@@ -170,18 +171,8 @@ export default function AdminLeadershipPage() {
 
       <Card>
         {loading ? (
-          <div style={{ padding: 48, textAlign: "center" }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                border: `3px solid ${C.goldLight}`,
-                borderTopColor: C.gold,
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto",
-              }}
-            />
+          <div style={{ padding: 16 }}>
+            <TableSkeleton rows={5} />
           </div>
         ) : items.length === 0 ? (
           <EmptyState message="Rahbariyat ma'lumotlari yo'q." />

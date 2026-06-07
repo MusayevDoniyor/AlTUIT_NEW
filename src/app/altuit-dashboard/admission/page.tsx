@@ -22,6 +22,7 @@ import {
   useToast,
   C,
   spinStyle,
+  TableSkeleton,
 } from "../_components/ui";
 
 const EMPTY: Omit<AdmissionRuleItem, "id"> = {
@@ -131,18 +132,8 @@ export default function AdminAdmissionPage() {
 
       <Card>
         {loading ? (
-          <div style={{ padding: 48, textAlign: "center" }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                border: `3px solid ${C.goldLight}`,
-                borderTopColor: C.gold,
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto",
-              }}
-            />
+          <div style={{ padding: 16 }}>
+            <TableSkeleton rows={5} />
           </div>
         ) : items.length === 0 ? (
           <EmptyState message="Qoidalar ro'yxati bo'sh. Qo'shish tugmasi orqali yangi kirish qoidasi/bandini qo'shing." />

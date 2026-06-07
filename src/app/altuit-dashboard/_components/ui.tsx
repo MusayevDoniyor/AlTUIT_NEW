@@ -32,6 +32,110 @@ export const C = {
   successBorder: "rgba(34,197,94,0.25)",
 };
 
+// ─── Skeleton loading component ─────────────────────────────
+const skeletonAnim = `
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+`;
+const skeletonBg = `linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%)`;
+const skeletonSize = `background-size: 200% 100%`;
+
+export function Skeleton({
+  width,
+  height,
+  borderRadius = 8,
+  style,
+}: {
+  width?: string | number;
+  height?: string | number;
+  borderRadius?: number;
+  style?: CSSProperties;
+}) {
+  return (
+    <>
+      <style>{skeletonAnim}</style>
+      <div
+        style={{
+          width: width ?? "100%",
+          height: height ?? 16,
+          borderRadius,
+          background: skeletonBg,
+          backgroundSize: "200% 100%",
+          animation: "shimmer 1.5s infinite linear",
+          ...style,
+        }}
+      />
+    </>
+  );
+}
+
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {Array.from({ length: rows }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            gap: 12,
+            alignItems: "center",
+            padding: "16px 20px",
+            borderRadius: 12,
+            background: "rgba(255,255,255,0.03)",
+          }}
+        >
+          <Skeleton width={40} height={40} borderRadius={10} />
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+            }}
+          >
+            <Skeleton width="60%" height={14} />
+            <Skeleton width="35%" height={11} />
+          </div>
+          <Skeleton width={70} height={30} borderRadius={8} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function CardSkeleton({ count = 3 }: { count?: number }) {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+        gap: 16,
+      }}
+    >
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            borderRadius: 12,
+            padding: 24,
+            background: "rgba(255,255,255,0.03)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <Skeleton width={48} height={48} borderRadius={12} />
+          <Skeleton width="80%" height={16} />
+          <Skeleton width="55%" height={12} />
+          <Skeleton width="40%" height={12} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ─── Modal portal helper ────────────────────────────────────
 export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }} input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }`;
 

@@ -24,6 +24,7 @@ import {
   useToast,
   C,
   spinStyle,
+  CardSkeleton,
 } from "../_components/ui";
 
 const EMPTY: Omit<GalleryItem, "id"> = {
@@ -155,21 +156,7 @@ export default function AdminGalleryPage() {
       {error && <Alert type="error" message={error} />}
 
       {loading ? (
-        <Card>
-          <div style={{ padding: 48, textAlign: "center" }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                border: `3px solid ${C.goldLight}`,
-                borderTopColor: C.gold,
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto",
-              }}
-            />
-          </div>
-        </Card>
+        <CardSkeleton count={6} />
       ) : items.length === 0 ? (
         <Card>
           <EmptyState message="Galereya bo'sh. Sayt galereyasini to'ldirish uchun rasm qo'shing." />
