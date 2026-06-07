@@ -22,6 +22,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getHeroSlides, getStats, getNews } from "@/lib/db";
+import { PubStatBlock, PubCard } from "@/components/Skeleton";
 
 // ===== DATA =====
 
@@ -249,10 +250,12 @@ export default function Home() {
   const [dbSlides, setDbSlides] = useState<any[]>([]);
   const [dbStats, setDbStats] = useState<any[]>([]);
   const [dbNews, setDbNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       try {
+        setLoading(true);
         const fetchedSlides = await getHeroSlides();
         if (fetchedSlides && fetchedSlides.length > 0) {
           setDbSlides(fetchedSlides);
@@ -269,6 +272,8 @@ export default function Home() {
         }
       } catch (err) {
         console.error("Failed to load dynamic data:", err);
+      } finally {
+        setLoading(false);
       }
     }
     loadData();
@@ -524,7 +529,11 @@ export default function Home() {
               gap: 24,
             }}
           >
-            {activeStats.length === 0 ? (
+            {loading ? (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <PubStatBlock count={4} />
+              </div>
+            ) : activeStats.length === 0 ? (
               <div
                 style={{
                   textAlign: "center",
@@ -1051,7 +1060,19 @@ export default function Home() {
             </Link>
           </div>
 
-          {activeNews.length === 0 ? (
+          {loading ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: 24,
+              }}
+            >
+              <PubCard />
+              <PubCard />
+              <PubCard />
+            </div>
+          ) : activeNews.length === 0 ? (
             <div
               style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
             >
