@@ -216,11 +216,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 <div
                   style={{
                     color: "#002147",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     fontSize: scrolled ? "0.7rem" : "0.78rem",
                     transition: "all 0.4s",
-                    lineHeight: 1.2,
-                    maxWidth: 200,
+                    lineHeight: 1.15,
+                    maxWidth: 210,
                   }}
                 >
                   Muhammad Al-Xorazmiy nomidagi

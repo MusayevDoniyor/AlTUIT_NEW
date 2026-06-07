@@ -192,7 +192,7 @@ export default function AdminLayout({
               style={{
                 color: "white",
                 fontWeight: 700,
-                fontSize: "0.78rem",
+                fontSize: "0.7rem",
                 lineHeight: 1.25,
               }}
             >
