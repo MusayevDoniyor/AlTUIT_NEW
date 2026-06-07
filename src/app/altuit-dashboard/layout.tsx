@@ -192,19 +192,31 @@ export default function AdminLayout({
               style={{
                 color: "white",
                 fontWeight: 700,
-                fontSize: "0.85rem",
-                lineHeight: 1.2,
+                fontSize: "0.78rem",
+                lineHeight: 1.25,
               }}
             >
-              Al-Xorazmiy
+              Muhammad Al-Xorazmiy nomidagi
+            </div>
+            <div
+              style={{
+                color: "white",
+                fontWeight: 700,
+                fontSize: "0.85rem",
+                lineHeight: 1.2,
+                marginTop: 2,
+              }}
+            >
+              TATU akademik litseyi
             </div>
             <div
               style={{
                 color: "#c8a96e",
-                fontSize: "0.65rem",
+                fontSize: "0.6rem",
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
+                marginTop: 2,
               }}
             >
               Admin Panel

@@ -216,25 +216,26 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 <div
                   style={{
                     color: "#002147",
-                    fontWeight: 900,
-                    fontSize: scrolled ? "1rem" : "1.2rem",
+                    fontWeight: 700,
+                    fontSize: scrolled ? "0.7rem" : "0.78rem",
                     transition: "all 0.4s",
-                    lineHeight: 1.1,
+                    lineHeight: 1.2,
+                    maxWidth: 200,
                   }}
                 >
-                  TATU
+                  Muhammad Al-Xorazmiy nomidagi
                 </div>
                 <div
                   style={{
                     color: "#c8a96e",
-                    fontSize: scrolled ? "0.6rem" : "0.75rem",
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
+                    fontSize: scrolled ? "0.6rem" : "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.05em",
                     marginTop: 1,
+                    lineHeight: 1.2,
                   }}
                 >
-                  Akademik Litseyi
+                  TATU akademik litseyi
                 </div>
               </div>
             </Link>
