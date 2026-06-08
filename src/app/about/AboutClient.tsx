@@ -31,48 +31,55 @@ import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
 const LEADERSHIP: any[] = [];
 
-const DEPARTMENTS = [
+interface Dept {
+  nameUz: string;
+  nameRu: string;
+  nameEn: string;
+  color: string;
+  keywords: string[];
+}
+const DEPARTMENTS: Dept[] = [
   {
     nameUz: "Matematika va fizika",
     nameRu: "Математика и физика",
     nameEn: "Mathematics & Physics",
-    teachersCount: 12,
     color: "#1a3a6e",
+    keywords: ["matematik", "fizik", "algebra", "geometri"],
   },
   {
     nameUz: "Informatika va texnologiya",
     nameRu: "Информатика и технологии",
     nameEn: "Informatics & Technology",
-    teachersCount: 8,
     color: "#2d5bb5",
+    keywords: ["informatik", "texnolog", "dasturlash", "kompyuter"],
   },
   {
     nameUz: "Kimyo va biologiya",
     nameRu: "Химия и биология",
     nameEn: "Chemistry & Biology",
-    teachersCount: 9,
     color: "#1d7a55",
+    keywords: ["kimyo", "biologi"],
   },
   {
     nameUz: "Tarix va ijtimoiy fanlar",
     nameRu: "История и обществознание",
     nameEn: "History & Social Studies",
-    teachersCount: 7,
     color: "#c8a96e",
+    keywords: ["tarix", "ijtimoiy", "huquq", "iqtisod"],
   },
   {
     nameUz: "Chet tillari",
     nameRu: "Иностранные языки",
     nameEn: "Foreign Languages",
-    teachersCount: 11,
     color: "#6032bf",
+    keywords: ["ingliz", "chet tili", "nemis", "fransuz"],
   },
   {
     nameUz: "Ona tili va adabiyot",
     nameRu: "Родной язык и литература",
     nameEn: "Native Language & Literature",
-    teachersCount: 6,
     color: "#b91c1c",
+    keywords: ["ona tili", "adabiyot"],
   },
 ];
 
@@ -83,6 +90,7 @@ export default function AboutClient() {
   const [dbLeadership, setDbLeadership] = useState<LeadershipItem[]>([]);
   const [dbTeachers, setDbTeachers] = useState<TeacherItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openDept, setOpenDept] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -718,7 +726,12 @@ export default function AboutClient() {
                         border: `1px solid ${dept.color}30`,
                       }}
                     >
-                      {dept.teachersCount}{" "}
+                      {
+                        dbTeachers.filter((t) => {
+                          const subj = (t.subjectUz || "").toLowerCase();
+                          return dept.keywords.some((k) => subj.includes(k));
+                        }).length
+                      }{" "}
                       {lang === "uz"
                         ? "o'qituvchi"
                         : lang === "ru"
@@ -836,8 +849,30 @@ export default function AboutClient() {
             </div>
           </div>
 
-          {/* O'qituvchilar ro'yxati */}
+          {/* Kafedralar accordion */}
           {loading ? (
+            <div
+              style={{
+                marginTop: 64,
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: "white",
+                    borderRadius: 16,
+                    padding: "20px 24px",
+                  }}
+                >
+                  <PubSkeleton width="50%" height={18} />
+                </div>
+              ))}
+            </div>
+          ) : dbTeachers.length > 0 ? (
             <div style={{ marginTop: 64 }}>
               <h3
                 style={{
@@ -849,148 +884,213 @@ export default function AboutClient() {
                 }}
               >
                 {lang === "uz"
-                  ? "Pedagoglarimiz"
+                  ? "Kafedralar bo'yicha pedagoglar"
                   : lang === "ru"
-                    ? "Наши педагоги"
-                    : "Our Teachers"}
+                    ? "Педагоги по кафедрам"
+                    : "Teachers by Department"}
               </h3>
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                  gap: 24,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 12,
+                  maxWidth: 900,
+                  margin: "0 auto",
                 }}
               >
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div
-                    key={i}
-                    style={{
-                      background: "white",
-                      borderRadius: 16,
-                      padding: "24px 16px",
-                      textAlign: "center",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: 10,
-                    }}
-                  >
-                    <PubSkeleton width={80} height={80} borderRadius={40} />
-                    <PubSkeleton width="70%" height={14} />
-                    <PubSkeleton width="50%" height={11} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            dbTeachers.length > 0 && (
-              <div style={{ marginTop: 64 }}>
-                <h3
-                  style={{
-                    color: "#1a1f2e",
-                    fontWeight: 800,
-                    fontSize: "1.4rem",
-                    textAlign: "center",
-                    marginBottom: 36,
-                  }}
-                >
-                  {lang === "uz"
-                    ? "Pedagoglarimiz"
-                    : lang === "ru"
-                      ? "Наши педагоги"
-                      : "Our Teachers"}
-                </h3>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                      "repeat(auto-fill, minmax(200px, 1fr))",
-                    gap: 24,
-                  }}
-                >
-                  {dbTeachers.map((teacher) => {
-                    const name =
-                      lang === "uz"
-                        ? teacher.fullNameUz
-                        : lang === "ru"
-                          ? teacher.fullNameRu
-                          : teacher.fullNameEn;
-                    const subject =
-                      lang === "uz"
-                        ? teacher.subjectUz
-                        : lang === "ru"
-                          ? teacher.subjectRu
-                          : teacher.subjectEn;
-                    return (
-                      <div
-                        key={teacher.id}
-                        className="card-hover"
+                {DEPARTMENTS.map((dept, di) => {
+                  const deptName =
+                    lang === "uz"
+                      ? dept.nameUz
+                      : lang === "ru"
+                        ? dept.nameRu
+                        : dept.nameEn;
+                  const deptTeachers = dbTeachers.filter((t) => {
+                    const subj = (t.subjectUz || "").toLowerCase();
+                    return dept.keywords.some((k) => subj.includes(k));
+                  });
+                  const isOpen = openDept === di;
+                  return (
+                    <div
+                      key={di}
+                      style={{
+                        background: "white",
+                        borderRadius: 16,
+                        border: "1px solid rgba(26,58,110,0.07)",
+                        boxShadow: "0 4px 16px rgba(26,58,110,0.05)",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <button
+                        onClick={() => setOpenDept(isOpen ? null : di)}
                         style={{
-                          background: "white",
-                          borderRadius: 16,
-                          padding: "24px 16px",
-                          border: "1px solid rgba(26,58,110,0.07)",
-                          boxShadow: "0 4px 16px rgba(26,58,110,0.04)",
-                          textAlign: "center",
+                          width: "100%",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "18px 24px",
+                          borderLeft: `4px solid ${dept.color}`,
+                          fontFamily: "inherit",
                         }}
                       >
                         <div
                           style={{
-                            width: 80,
-                            height: 80,
-                            borderRadius: "50%",
-                            overflow: "hidden",
-                            margin: "0 auto 16px",
-                            background: "rgba(200,169,110,0.1)",
-                            border: "2px solid rgba(200,169,110,0.2)",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
+                            gap: 12,
                           }}
                         >
-                          {teacher.photoUrl ? (
-                            <Image
-                              src={teacher.photoUrl}
-                              alt=""
-                              width={80}
-                              height={80}
-                              style={{
-                                objectFit: "cover",
-                                width: "100%",
-                                height: "100%",
-                              }}
-                            />
+                          <h3
+                            style={{
+                              color: "#1a1f2e",
+                              fontWeight: 700,
+                              fontSize: "0.97rem",
+                              margin: 0,
+                            }}
+                          >
+                            {deptName}
+                          </h3>
+                          <span
+                            style={{
+                              background: `${dept.color}18`,
+                              color: dept.color,
+                              fontSize: "0.78rem",
+                              fontWeight: 700,
+                              padding: "2px 10px",
+                              borderRadius: 50,
+                              border: `1px solid ${dept.color}30`,
+                            }}
+                          >
+                            {deptTeachers.length}{" "}
+                            {lang === "uz"
+                              ? "o'qituvchi"
+                              : lang === "ru"
+                                ? "педагогов"
+                                : "teachers"}
+                          </span>
+                        </div>
+                        {isOpen ? (
+                          <ChevronUp size={18} color="#1a3a6e" />
+                        ) : (
+                          <ChevronDown size={18} color="#1a3a6e" />
+                        )}
+                      </button>
+                      {isOpen && (
+                        <div
+                          style={{
+                            padding: "0 24px 20px",
+                            display: "grid",
+                            gridTemplateColumns:
+                              "repeat(auto-fill, minmax(180px, 1fr))",
+                            gap: 16,
+                          }}
+                        >
+                          {deptTeachers.length > 0 ? (
+                            deptTeachers.map((t) => {
+                              const name =
+                                lang === "uz"
+                                  ? t.fullNameUz
+                                  : lang === "ru"
+                                    ? t.fullNameRu
+                                    : t.fullNameEn;
+                              const subject =
+                                lang === "uz"
+                                  ? t.subjectUz
+                                  : lang === "ru"
+                                    ? t.subjectRu
+                                    : t.subjectEn;
+                              return (
+                                <div
+                                  key={t.id}
+                                  style={{
+                                    background: "#f8f9fc",
+                                    borderRadius: 12,
+                                    padding: "16px 12px",
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  <div
+                                    style={{
+                                      width: 56,
+                                      height: 56,
+                                      borderRadius: "50%",
+                                      overflow: "hidden",
+                                      margin: "0 auto 10px",
+                                      background: "rgba(200,169,110,0.1)",
+                                      border: "2px solid rgba(200,169,110,0.2)",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    {t.photoUrl ? (
+                                      <Image
+                                        src={t.photoUrl}
+                                        alt=""
+                                        width={56}
+                                        height={56}
+                                        style={{
+                                          objectFit: "cover",
+                                          width: "100%",
+                                          height: "100%",
+                                        }}
+                                      />
+                                    ) : (
+                                      <span style={{ fontSize: "1.4rem" }}>
+                                        👨‍🏫
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h4
+                                    style={{
+                                      color: "#1a1f2e",
+                                      fontWeight: 700,
+                                      fontSize: "0.82rem",
+                                      margin: "0 0 4px",
+                                      lineHeight: 1.3,
+                                    }}
+                                  >
+                                    {name}
+                                  </h4>
+                                  <p
+                                    style={{
+                                      color: "#6b7280",
+                                      fontSize: "0.72rem",
+                                      margin: 0,
+                                    }}
+                                  >
+                                    {subject}
+                                  </p>
+                                </div>
+                              );
+                            })
                           ) : (
-                            <span style={{ fontSize: "1.8rem" }}>👨‍🏫</span>
+                            <p
+                              style={{
+                                color: "#9ca3af",
+                                fontSize: "0.85rem",
+                                gridColumn: "1 / -1",
+                                textAlign: "center",
+                              }}
+                            >
+                              {lang === "uz"
+                                ? "Hozircha o'qituvchilar mavjud emas"
+                                : lang === "ru"
+                                  ? "Педагоги пока отсутствуют"
+                                  : "No teachers available yet"}
+                            </p>
                           )}
                         </div>
-                        <h4
-                          style={{
-                            color: "#1a1f2e",
-                            fontWeight: 700,
-                            fontSize: "0.9rem",
-                            margin: "0 0 6px",
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {name}
-                        </h4>
-                        <p
-                          style={{
-                            color: "#6b7280",
-                            fontSize: "0.78rem",
-                            margin: 0,
-                          }}
-                        >
-                          {subject}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-            )
-          )}
+            </div>
+          ) : null}
         </div>
       </section>
 
