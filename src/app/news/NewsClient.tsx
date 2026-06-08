@@ -8,6 +8,7 @@ import { Calendar, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getNews } from "@/lib/db";
+import { PubCard } from "@/components/Skeleton";
 
 export default function NewsClient() {
   const [lang, setLang] = useState<Lang>("uz");
@@ -35,26 +36,41 @@ export default function NewsClient() {
 
   if (loading) {
     return (
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "#0f1117",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            border: "3px solid rgba(200,169,110,0.2)",
-            borderTopColor: "#c8a96e",
-            borderRadius: "50%",
-            animation: "spin 0.8s linear infinite",
-          }}
-        />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); }}`}</style>
+      <main>
+        <Navbar lang={lang} onLangChange={setLang} />
+        <div className="page-banner" style={{ paddingTop: 140 }}>
+          <div
+            className="container-custom"
+            style={{ position: "relative", zIndex: 1 }}
+          >
+            <h1
+              style={{
+                color: "white",
+                fontWeight: 900,
+                fontSize: "clamp(2rem,5vw,3rem)",
+                marginBottom: 12,
+              }}
+            >
+              {t.news_title}
+            </h1>
+          </div>
+        </div>
+        <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
+          <div className="container-custom">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))",
+                gap: 28,
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <PubCard key={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+        <Footer lang={lang} />
       </main>
     );
   }

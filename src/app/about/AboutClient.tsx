@@ -27,6 +27,7 @@ import {
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
 const LEADERSHIP: any[] = [];
 
@@ -441,7 +442,35 @@ export default function AboutClient() {
             </h2>
           </div>
 
-          {dbLeadership.length === 0 ? (
+          {loading ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+                gap: 24,
+              }}
+            >
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: "white",
+                    borderRadius: 18,
+                    padding: "32px 24px",
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  <PubSkeleton width={90} height={90} borderRadius={45} />
+                  <PubSkeleton width="60%" height={16} />
+                  <PubSkeleton width="40%" height={12} />
+                </div>
+              ))}
+            </div>
+          ) : dbLeadership.length === 0 ? (
             <div
               style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
             >
@@ -808,7 +837,7 @@ export default function AboutClient() {
           </div>
 
           {/* O'qituvchilar ro'yxati */}
-          {dbTeachers.length > 0 && (
+          {loading ? (
             <div style={{ marginTop: 64 }}>
               <h3
                 style={{
@@ -832,87 +861,135 @@ export default function AboutClient() {
                   gap: 24,
                 }}
               >
-                {dbTeachers.map((teacher) => {
-                  const name =
-                    lang === "uz"
-                      ? teacher.fullNameUz
-                      : lang === "ru"
-                        ? teacher.fullNameRu
-                        : teacher.fullNameEn;
-                  const subject =
-                    lang === "uz"
-                      ? teacher.subjectUz
-                      : lang === "ru"
-                        ? teacher.subjectRu
-                        : teacher.subjectEn;
-                  return (
-                    <div
-                      key={teacher.id}
-                      className="card-hover"
-                      style={{
-                        background: "white",
-                        borderRadius: 16,
-                        padding: "24px 16px",
-                        border: "1px solid rgba(26,58,110,0.07)",
-                        boxShadow: "0 4px 16px rgba(26,58,110,0.04)",
-                        textAlign: "center",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 80,
-                          height: 80,
-                          borderRadius: "50%",
-                          overflow: "hidden",
-                          margin: "0 auto 16px",
-                          background: "rgba(200,169,110,0.1)",
-                          border: "2px solid rgba(200,169,110,0.2)",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        {teacher.photoUrl ? (
-                          <Image
-                            src={teacher.photoUrl}
-                            alt=""
-                            width={80}
-                            height={80}
-                            style={{
-                              objectFit: "cover",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          />
-                        ) : (
-                          <span style={{ fontSize: "1.8rem" }}>👨‍🏫</span>
-                        )}
-                      </div>
-                      <h4
-                        style={{
-                          color: "#1a1f2e",
-                          fontWeight: 700,
-                          fontSize: "0.9rem",
-                          margin: "0 0 6px",
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {name}
-                      </h4>
-                      <p
-                        style={{
-                          color: "#6b7280",
-                          fontSize: "0.78rem",
-                          margin: 0,
-                        }}
-                      >
-                        {subject}
-                      </p>
-                    </div>
-                  );
-                })}
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: "white",
+                      borderRadius: 16,
+                      padding: "24px 16px",
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 10,
+                    }}
+                  >
+                    <PubSkeleton width={80} height={80} borderRadius={40} />
+                    <PubSkeleton width="70%" height={14} />
+                    <PubSkeleton width="50%" height={11} />
+                  </div>
+                ))}
               </div>
             </div>
+          ) : (
+            dbTeachers.length > 0 && (
+              <div style={{ marginTop: 64 }}>
+                <h3
+                  style={{
+                    color: "#1a1f2e",
+                    fontWeight: 800,
+                    fontSize: "1.4rem",
+                    textAlign: "center",
+                    marginBottom: 36,
+                  }}
+                >
+                  {lang === "uz"
+                    ? "Pedagoglarimiz"
+                    : lang === "ru"
+                      ? "Наши педагоги"
+                      : "Our Teachers"}
+                </h3>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                    gap: 24,
+                  }}
+                >
+                  {dbTeachers.map((teacher) => {
+                    const name =
+                      lang === "uz"
+                        ? teacher.fullNameUz
+                        : lang === "ru"
+                          ? teacher.fullNameRu
+                          : teacher.fullNameEn;
+                    const subject =
+                      lang === "uz"
+                        ? teacher.subjectUz
+                        : lang === "ru"
+                          ? teacher.subjectRu
+                          : teacher.subjectEn;
+                    return (
+                      <div
+                        key={teacher.id}
+                        className="card-hover"
+                        style={{
+                          background: "white",
+                          borderRadius: 16,
+                          padding: "24px 16px",
+                          border: "1px solid rgba(26,58,110,0.07)",
+                          boxShadow: "0 4px 16px rgba(26,58,110,0.04)",
+                          textAlign: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: "50%",
+                            overflow: "hidden",
+                            margin: "0 auto 16px",
+                            background: "rgba(200,169,110,0.1)",
+                            border: "2px solid rgba(200,169,110,0.2)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {teacher.photoUrl ? (
+                            <Image
+                              src={teacher.photoUrl}
+                              alt=""
+                              width={80}
+                              height={80}
+                              style={{
+                                objectFit: "cover",
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            />
+                          ) : (
+                            <span style={{ fontSize: "1.8rem" }}>👨‍🏫</span>
+                          )}
+                        </div>
+                        <h4
+                          style={{
+                            color: "#1a1f2e",
+                            fontWeight: 700,
+                            fontSize: "0.9rem",
+                            margin: "0 0 6px",
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {name}
+                        </h4>
+                        <p
+                          style={{
+                            color: "#6b7280",
+                            fontSize: "0.78rem",
+                            margin: 0,
+                          }}
+                        >
+                          {subject}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )
           )}
         </div>
       </section>

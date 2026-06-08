@@ -13,6 +13,7 @@ import {
   type AchievementItem,
   type StatItem,
 } from "@/lib/db";
+import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
 export default function ScienceClient() {
   const [lang, setLang] = useState<Lang>("uz");
@@ -143,19 +144,37 @@ export default function ScienceClient() {
           </div>
 
           {loading ? (
-            <div style={{ textAlign: "center", padding: "48px 0" }}>
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  border: "3px solid rgba(26,58,110,0.15)",
-                  borderTopColor: "#1a3a6e",
-                  borderRadius: "50%",
-                  animation: "spin 0.8s linear infinite",
-                  margin: "0 auto",
-                }}
-              />
-              <style>{`@keyframes spin { to { transform: rotate(360deg); }}`}</style>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+                gap: 24,
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: "#f8f9fc",
+                    borderRadius: 18,
+                    padding: "28px 24px",
+                  }}
+                >
+                  <PubSkeleton width={50} height={50} borderRadius={14} />
+                  <div
+                    style={{
+                      marginTop: 16,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                    }}
+                  >
+                    <PubSkeleton width="75%" height={15} />
+                    <PubSkeleton width="100%" height={11} />
+                    <PubSkeleton width="60%" height={11} />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : achievements.length === 0 ? (
             <div
