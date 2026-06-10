@@ -1,15 +1,27 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
-import { Newspaper, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import {
+  Newspaper,
+  Plus,
+  Pencil,
+  Trash2,
+  X,
+  Check,
+  Eye,
+  Save,
+  Send,
+} from "lucide-react";
 import {
   getNews,
   saveNews,
   deleteNews,
   uploadImage,
   deleteImage,
+  deleteNewsWithImages,
   NewsItem,
+  type ImageItem,
 } from "@/lib/db";
 import {
   PageHeader,
@@ -23,12 +35,14 @@ import {
   LangTabs,
   SearchInput,
   ConfirmDialog,
-  ImageUpload,
   useToast,
   C,
   spinStyle,
   TableSkeleton,
 } from "../_components/ui";
+import RichTextEditor from "@/components/admin/RichTextEditor";
+import NewsImageUpload from "@/components/admin/NewsImageUpload";
+import NewsPreview from "@/components/admin/NewsPreview";
 
 const COLORS = [
   "#1a3a6e",
@@ -174,6 +188,16 @@ export default function AdminNewsPage() {
       setDeleteTarget(null);
     }
   };
+
+  const images: ImageItem[] = (() => {
+    if (!editing?.images) return [];
+    try {
+      const parsed = JSON.parse(editing.images);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  })();
 
   const set = (field: string, val: unknown) =>
     setEditing((prev) => (prev ? { ...prev, [field]: val } : prev));
@@ -561,28 +585,6 @@ export default function AdminNewsPage() {
                     style={{ minHeight: 80 }}
                     placeholder="Qisqa tavsif (maks 160 belgi)"
                   />
-                  <Textarea
-                    label={`To'liq matn (${lang.toUpperCase()})`}
-                    value={
-                      lang === "uz"
-                        ? editing.bodyUz
-                        : lang === "ru"
-                          ? editing.bodyRu
-                          : editing.bodyEn
-                    }
-                    onChange={(e) =>
-                      set(
-                        lang === "uz"
-                          ? "bodyUz"
-                          : lang === "ru"
-                            ? "bodyRu"
-                            : "bodyEn",
-                        e.target.value,
-                      )
-                    }
-                    style={{ minHeight: 120 }}
-                    placeholder="Yangilikning to'liq matni..."
-                  />
                   <Input
                     label={`Teg/Kategoriya (${lang.toUpperCase()})`}
                     value={
@@ -623,17 +625,74 @@ export default function AdminNewsPage() {
                 </div>
               </div>
 
-              {/* Image */}
+              {/* Multiple Images */}
               <div>
-                <SectionTitle>Rasm</SectionTitle>
-                <ImageUpload
-                  currentUrl={editing.imageUrl || ""}
-                  onUpload={handleImageUpload}
-                  onRemove={() => set("imageUrl", "")}
-                  uploading={uploadingImage}
-                  folder="news"
+                <SectionTitle>Rasmlar</SectionTitle>
+                <NewsImageUpload
+                  images={images}
+                  onChange={(newImages) =>
+                    set("images", JSON.stringify(newImages))
+                  }
+                  maxImages={5}
                 />
               </div>
+
+              {/* Full text body using RichTextEditor */}
+              <div>
+                <SectionTitle>To'liq matn ({lang.toUpperCase()})</SectionTitle>
+                <RichTextEditor
+                  content={
+                    lang === "uz"
+                      ? editing.bodyUz
+                      : lang === "ru"
+                        ? editing.bodyRu
+                        : editing.bodyEn
+                  }
+                  onChange={(html) =>
+                    set(
+                      lang === "uz"
+                        ? "bodyUz"
+                        : lang === "ru"
+                          ? "bodyRu"
+                          : "bodyEn",
+                      html,
+                    )
+                  }
+                  placeholder={`Yangilik matnini yozing (${lang.toUpperCase()})...`}
+                />
+              </div>
+            </div>
+
+            {/* Preview */}
+            <div style={{ marginTop: 24 }}>
+              <SectionTitle>Ko'rinish</SectionTitle>
+              <NewsPreview
+                data={{
+                  title:
+                    lang === "uz"
+                      ? editing.titleUz
+                      : lang === "ru"
+                        ? editing.titleRu
+                        : editing.titleEn,
+                  desc:
+                    lang === "uz"
+                      ? editing.descUz
+                      : lang === "ru"
+                        ? editing.descRu
+                        : editing.descEn,
+                  body:
+                    lang === "uz"
+                      ? editing.bodyUz
+                      : lang === "ru"
+                        ? editing.bodyRu
+                        : editing.bodyEn,
+                  tag: editing.tag[lang] || "",
+                  color: editing.color,
+                  date: editing.date,
+                  images,
+                }}
+                lang={lang}
+              />
             </div>
 
             {/* Actions — sticky */}
@@ -653,8 +712,18 @@ export default function AdminNewsPage() {
               <Button variant="ghost" onClick={close}>
                 Bekor qilish
               </Button>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  set("isPublished", false);
+                  await handleSave();
+                }}
+                style={{ color: C.textMuted, borderColor: C.border }}
+              >
+                <Save size={14} /> Draft
+              </Button>
               <Button onClick={handleSave} loading={saving}>
-                <Check size={14} /> Saqlash
+                <Send size={14} /> Chop etish
               </Button>
             </div>
           </div>
