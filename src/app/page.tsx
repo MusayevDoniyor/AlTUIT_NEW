@@ -34,16 +34,16 @@ const dirColors = [
 const dirIcons = [Calculator, Globe];
 
 const dirSubjectsUz = [
-  ["Matematika", "Fizika", "Informatika", "Ingliz tili"],
-  ["Matematika", "Ingliz tili", "Iqtisodiyot", "Ona tili"],
+  ["Matematika", "Fizika"],
+  ["Matematika", "Ingliz tili"],
 ];
 const dirSubjectsRu = [
-  ["Математика", "Физика", "Информатика", "Английский"],
-  ["Математика", "Английский", "Экономика", "Родной язык"],
+  ["Математика", "Физика"],
+  ["Математика", "Английский"],
 ];
 const dirSubjectsEn = [
-  ["Mathematics", "Physics", "Informatics", "English"],
-  ["Mathematics", "English", "Economics", "Native Language"],
+  ["Mathematics", "Physics"],
+  ["Mathematics", "English"],
 ];
 
 // ===== COUNTER COMPONENT =====

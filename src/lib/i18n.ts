@@ -48,12 +48,12 @@ export const translations = {
     // Directions
     dir_title: "Ta'lim yo'nalishlari",
     dir_subtitle: "Litseyda quyidagi akademik yo'nalishlar mavjud",
-    dir1_name: "Aniq fanlar (Texnika)",
+    dir1_name: "Matematika, Fizika",
     dir1_desc:
-      "Matematika, fizika va informatika fanlari chuqurlashtirilgan holda o'rgatiladi. Texnik oliy ta'lim muassasalariga tayyorlash.",
-    dir2_name: "Aniq fanlar (Iqtisod)",
+      "Matematika va fizika fanlari chuqurlashtirilgan holda o'rgatiladi. Texnik oliy ta'lim muassasalariga tayyorlash.",
+    dir2_name: "Matematika, Ingliz tili",
     dir2_desc:
-      "Matematika, ingliz tili va iqtisodiyot yo'nalishi. Xalqaro iqtisodiyot, moliya va biznes sohasiga yo'naltirish.",
+      "Matematika va ingliz tili fanlariga ixtisoslashgan yo'nalish. Xalqaro standartlar asosida o'qitish.",
 
     // Admission
     adm_title: "Qabul jarayoni",
@@ -198,12 +198,12 @@ export const translations = {
 
     dir_title: "Образовательные направления",
     dir_subtitle: "В лицее представлены следующие академические направления",
-    dir1_name: "Точные науки – 1",
+    dir1_name: "Математика, Физика",
     dir1_desc:
-      "Углублённое изучение математики, физики и информатики. Подготовка к техническим высшим учебным заведениям.",
-    dir2_name: "Точные науки – 2",
+      "Углублённое изучение математики и физики. Подготовка к техническим высшим учебным заведениям.",
+    dir2_name: "Математика, Английский язык",
     dir2_desc:
-      "Математика, английский язык и экономика. Подготовка в сфере международной экономики, финансов и бизнеса.",
+      "Специализация на математике и английском языке. Обучение по международным стандартам.",
 
     adm_title: "Процедура поступления",
     adm_subtitle: "Для поступления в лицей следуйте следующим правилам",
@@ -337,12 +337,12 @@ export const translations = {
 
     dir_title: "Academic Directions",
     dir_subtitle: "The lyceum offers the following academic tracks",
-    dir1_name: "Exact Sciences – 1",
+    dir1_name: "Mathematics, Physics",
     dir1_desc:
-      "In-depth study of mathematics, physics, and computer science. Preparation for technical universities.",
-    dir2_name: "Exact Sciences – 2",
+      "In-depth study of mathematics and physics. Preparation for technical universities.",
+    dir2_name: "Mathematics, English",
     dir2_desc:
-      "Mathematics, English, and economics. Preparation for international economics, finance, and business.",
+      "Specialization in mathematics and English. Teaching based on international standards.",
 
     adm_title: "Admission Process",
     adm_subtitle: "Follow these steps to apply to the lyceum",
