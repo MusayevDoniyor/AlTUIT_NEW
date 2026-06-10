@@ -39,6 +39,62 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
   const tagStr =
     typeof news.tag === "string" ? news.tag : news.tag?.[lang] || "";
 
+  /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
+  function renderBody(text: string) {
+    // Check if text contains HTML tags
+    const isHtml = /<[a-z][\s\S]*>/i.test(text);
+
+    if (isHtml) {
+      return (
+        <div
+          style={{
+            fontSize: "1rem",
+            color: "#374151",
+            lineHeight: 1.85,
+          }}
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      );
+    }
+
+    // Fallback: plain text with Markdown image support ![alt](url)
+    const parts = text.split(/(!\[.*?\]\(.*?\))/g);
+    return parts.map((part, i) => {
+      const imgMatch = part.match(/^!\[(.*?)\]\((.*?)\)$/);
+      if (imgMatch) {
+        const alt = imgMatch[1];
+        const url = imgMatch[2];
+        return (
+          <div
+            key={i}
+            style={{
+              position: "relative",
+              width: "100%",
+              height: 380,
+              borderRadius: 14,
+              overflow: "hidden",
+              margin: "24px 0",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+            }}
+          >
+            <Image
+              src={url}
+              alt={alt}
+              fill
+              sizes="(max-width: 860px) 100vw, 860px"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+        );
+      }
+      return (
+        <p key={i} style={{ marginBottom: 18, whiteSpace: "pre-wrap" }}>
+          {part || "\u00A0"}
+        </p>
+      );
+    });
+  }
+
   return (
     <main>
       <Navbar lang={lang} onLangChange={setLang} />
@@ -205,14 +261,9 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 fontSize: "1rem",
                 color: "#374151",
                 lineHeight: 1.85,
-                whiteSpace: "pre-wrap",
               }}
             >
-              {body.split("\n").map((paragraph, i) => (
-                <p key={i} style={{ marginBottom: paragraph ? 18 : 18 }}>
-                  {paragraph || "\u00A0"}
-                </p>
-              ))}
+              {renderBody(body)}
             </div>
           )}
 

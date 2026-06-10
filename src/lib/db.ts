@@ -53,7 +53,14 @@ export interface NewsItem {
   tag: { uz: string; ru: string; en: string };
   color: string;
   imageUrl?: string;
+  images?: string; // JSON string of ImageItem[]
   isPublished?: boolean;
+}
+
+export interface ImageItem {
+  url: string;
+  order: number;
+  isMain: boolean;
 }
 
 export async function getNews(): Promise<NewsItem[]> {
@@ -89,6 +96,76 @@ export async function saveNews(
 export async function deleteNews(id: string): Promise<void> {
   const { error } = await supabase.from("news").delete().eq("id", id);
   if (error) throw error;
+}
+
+/** Create news with images array support */
+export async function createNews(
+  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
+): Promise<string> {
+  const mainImage = data.images?.find((img) => img.isMain);
+  const row = toRow({
+    ...data,
+    imageUrl: mainImage?.url || data.imageUrl || "",
+    images: data.images ? JSON.stringify(data.images) : undefined,
+  });
+  const { error } = await supabase
+    .from("news")
+    .insert(row)
+    .select("id")
+    .single();
+  if (error) throw error;
+  return "";
+}
+
+/** Update news with images array support */
+export async function updateNews(
+  id: string,
+  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
+): Promise<void> {
+  const mainImage = data.images?.find((img) => img.isMain);
+  const row = toRow({
+    ...data,
+    imageUrl: mainImage?.url || data.imageUrl || "",
+    images: data.images ? JSON.stringify(data.images) : undefined,
+  });
+  const { error } = await supabase.from("news").update(row).eq("id", id);
+  if (error) throw error;
+}
+
+/** Delete news and its images from storage */
+export async function deleteNewsWithImages(id: string): Promise<void> {
+  const { data: news } = await supabase
+    .from("news")
+    .select("images")
+    .eq("id", id)
+    .single();
+
+  if (news?.images) {
+    let images: ImageItem[] = [];
+    try {
+      images =
+        typeof news.images === "string" ? JSON.parse(news.images) : news.images;
+    } catch {
+      // ignore parse errors
+    }
+    for (const img of images) {
+      const path = extractStoragePath(img.url);
+      if (path) {
+        await supabase.storage.from("images").remove([path]);
+      }
+    }
+  }
+
+  const { error } = await supabase.from("news").delete().eq("id", id);
+  if (error) throw error;
+}
+
+/** Extract storage path from a Supabase public URL */
+function extractStoragePath(url: string): string | null {
+  const marker = "/storage/v1/object/public/images/";
+  const markerIndex = url.indexOf(marker);
+  if (markerIndex === -1) return null;
+  return url.substring(markerIndex + marker.length);
 }
 
 // ----------------------------------------------------
@@ -174,8 +251,6 @@ export async function deleteTeacher(id: string): Promise<void> {
   const { error } = await supabase.from("teachers").delete().eq("id", id);
   if (error) throw error;
 }
-
-
 
 // ----------------------------------------------------
 // 5. Achievements
