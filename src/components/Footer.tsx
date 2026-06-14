@@ -9,7 +9,6 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
   FaInstagram,
-  FaYoutube,
   FaFacebookF,
   FaTelegramPlane,
 } from "react-icons/fa";
@@ -110,14 +109,9 @@ export default function Footer({ lang }: FooterProps) {
                   icon: FaTelegramPlane,
                 },
                 {
-                  href: "https://instagram.com/altuit_lyceum",
+                  href: "https://www.instagram.com/tatu_lyceum/",
                   label: "Instagram",
                   icon: FaInstagram,
-                },
-                {
-                  href: "https://youtube.com/@tatual",
-                  label: "YouTube",
-                  icon: FaYoutube,
                 },
               ].map((s) => (
                 <a

@@ -11,7 +11,6 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
   FaInstagram,
-  FaYoutube,
   FaFacebookF,
   FaTelegramPlane,
   FaClock,
@@ -132,18 +131,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   <FaTelegramPlane size={14} />
                 </a>
                 <a
-                  href="https://instagram.com/altuit_lyceum"
+                  href="https://www.instagram.com/tatu_lyceum/"
                   aria-label="Instagram"
                   style={{ color: "white", opacity: 0.8 }}
                 >
                   <FaInstagram size={14} />
-                </a>
-                <a
-                  href="https://youtube.com/@tatual"
-                  aria-label="YouTube"
-                  style={{ color: "white", opacity: 0.8 }}
-                >
-                  <FaYoutube size={14} />
                 </a>
               </div>
               <div
