@@ -21,7 +21,14 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getHeroSlides, getStats, getNews, type StatItem, type HeroSlideItem, type NewsItem } from "@/lib/db";
+import {
+  getHeroSlides,
+  getStats,
+  getNews,
+  type StatItem,
+  type HeroSlideItem,
+  type NewsItem,
+} from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
 import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
@@ -1053,18 +1060,18 @@ export default function Home() {
               }}
             >
               {activeNews.map((item: NewsItem) => {
-                const title =
-                  lang === "uz"
-                    ? item.titleUz
-                    : lang === "ru"
-                      ? item.titleRu
-                      : item.titleEn;
-                const desc =
-                  lang === "uz"
-                    ? item.descUz
-                    : lang === "ru"
-                      ? item.descRu
-                      : item.descEn;
+                  const title =
+                    (lang === "uz"
+                      ? item.titleUz
+                      : lang === "ru"
+                        ? item.titleRu
+                        : item.titleEn) ?? "";
+                  const desc =
+                    (lang === "uz"
+                      ? item.descUz
+                      : lang === "ru"
+                        ? item.descRu
+                        : item.descEn) ?? "";
                 const tagStr =
                   typeof item.tag === "string"
                     ? item.tag
@@ -1098,7 +1105,7 @@ export default function Home() {
                       >
                         <Image
                           src={item.imageUrl}
-                          alt={title}
+                          alt={title || ""}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           style={{ objectFit: "cover" }}
