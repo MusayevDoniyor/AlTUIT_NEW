@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getHeroSlides, getStats, getNews } from "@/lib/db";
+import { getHeroSlides, getStats, getNews, type StatItem, type HeroSlideItem, type NewsItem } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
 import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
@@ -224,7 +224,7 @@ function HeroSlide({
 export default function Home() {
   const [lang, setLang] = useState<Lang>("uz");
   const [current, setCurrent] = useState(0);
-  const prevIndex = useRef(0);
+  const [prevIndex, setPrevIndex] = useState(0);
   const [statsInView, setStatsInView] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   const transitioningRef = useRef(false);
@@ -280,7 +280,7 @@ export default function Home() {
         : (slide.descEn ?? "")
     : "";
 
-  const prevSlide = activeSlides[prevIndex.current];
+  const prevSlide = activeSlides[prevIndex];
   const prevImage = prevSlide?.imageUrl || "";
   const prevHasText = !!(
     prevSlide?.titleUz ||
@@ -292,7 +292,7 @@ export default function Home() {
     (i: number) => {
       if (transitioningRef.current) return;
       transitioningRef.current = true;
-      prevIndex.current = current;
+      setPrevIndex(current);
       setCurrent(i);
       setTimeout(() => {
         transitioningRef.current = false;
@@ -339,7 +339,7 @@ export default function Home() {
 
   const activeStats =
     dbStats.length > 0
-      ? dbStats.map((s: any) => {
+      ? dbStats.map((s: StatItem) => {
           let Icon = GraduationCap;
           if (s.key === "teachers") Icon = Users2;
           else if (s.key === "uni_rate") Icon = TrendingUp;
@@ -368,7 +368,7 @@ export default function Home() {
       >
         {/* Prev slide fading out */}
         <div
-          key={"prev-" + prevIndex.current}
+          key={"prev-" + prevIndex}
           style={{
             position: "absolute",
             inset: 0,
@@ -430,7 +430,7 @@ export default function Home() {
             gap: 12,
           }}
         >
-          {activeSlides.map((_: any, i: number) => (
+          {activeSlides.map((_, i: number) => (
             <button
               key={i}
               onClick={() => goTo(i)}
@@ -511,7 +511,7 @@ export default function Home() {
                 </p>
               </div>
             ) : (
-              activeStats.map((s: any, i: number) => (
+              activeStats.map((s, i: number) => (
                 <div
                   key={i}
                   style={{ textAlign: "center", padding: "24px 16px" }}
@@ -1052,7 +1052,7 @@ export default function Home() {
                 gap: 24,
               }}
             >
-              {activeNews.map((item: any) => {
+              {activeNews.map((item: NewsItem) => {
                 const title =
                   lang === "uz"
                     ? item.titleUz
