@@ -2,15 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  Newspaper,
-  Plus,
-  Pencil,
-  Trash2,
-  X,
-  Save,
-  Send,
-} from "lucide-react";
+import { Newspaper, Plus, Pencil, Trash2, X, Save, Send } from "lucide-react";
 import {
   getNews,
   saveNews,
@@ -142,8 +134,10 @@ export default function AdminNewsPage() {
     const errs: Record<string, string> = {};
     if (!editing) return false;
     if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha (O'zbekcha) majburiy";
-    if (!editing.descUz.trim()) errs.descUz = "Qisqa tavsif (O'zbekcha) majburiy";
-    if (!editing.bodyUz.trim()) errs.bodyUz = "Yangilik matni (O'zbekcha) majburiy";
+    if (!editing.descUz.trim())
+      errs.descUz = "Qisqa tavsif (O'zbekcha) majburiy";
+    if (!editing.bodyUz.trim())
+      errs.bodyUz = "Yangilik matni (O'zbekcha) majburiy";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };

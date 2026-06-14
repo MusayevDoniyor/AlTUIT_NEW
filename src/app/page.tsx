@@ -284,8 +284,7 @@ export default function Home() {
       ? dbSlides
       : [
           {
-            imageUrl:
-              "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
+            imageUrl: "",
             titleUz: "",
             titleRu: "",
             titleEn: "",
