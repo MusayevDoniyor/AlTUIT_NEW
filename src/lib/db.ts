@@ -223,6 +223,12 @@ export interface TeacherItem {
   subjectUz: string;
   subjectRu: string;
   subjectEn: string;
+  infoUz: string;
+  infoRu: string;
+  infoEn: string;
+  certificatesUz: string;
+  certificatesRu: string;
+  certificatesEn: string;
   photoUrl?: string;
   orderIndex: number;
 }

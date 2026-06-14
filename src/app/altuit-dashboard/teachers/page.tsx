@@ -15,6 +15,7 @@ import {
   PageHeader,
   Card,
   Input,
+  Textarea,
   Button,
   EmptyState,
   SectionTitle,
@@ -34,6 +35,12 @@ const EMPTY: Omit<TeacherItem, "id"> = {
   subjectUz: "",
   subjectRu: "",
   subjectEn: "",
+  infoUz: "",
+  infoRu: "",
+  infoEn: "",
+  certificatesUz: "",
+  certificatesRu: "",
+  certificatesEn: "",
   orderIndex: 0,
 };
 
@@ -348,6 +355,50 @@ export default function AdminTeachersPage() {
                   }
                 />
               </div>
+              <Textarea
+                label={`Qo'shimcha ma'lumot (${lang.toUpperCase()})`}
+                value={
+                  lang === "uz"
+                    ? editing.infoUz
+                    : lang === "ru"
+                      ? editing.infoRu
+                      : editing.infoEn
+                }
+                onChange={(e) =>
+                  set(
+                    lang === "uz"
+                      ? "infoUz"
+                      : lang === "ru"
+                        ? "infoRu"
+                        : "infoEn",
+                    e.target.value,
+                  )
+                }
+                placeholder="O'qituvchi haqida qisqa ma'lumot yoki lavozim, yo'nalish, tajriba..."
+                style={{ minHeight: 120 }}
+              />
+              <Textarea
+                label={`Sertifikatlar / yutuqlar (${lang.toUpperCase()})`}
+                value={
+                  lang === "uz"
+                    ? editing.certificatesUz
+                    : lang === "ru"
+                      ? editing.certificatesRu
+                      : editing.certificatesEn
+                }
+                onChange={(e) =>
+                  set(
+                    lang === "uz"
+                      ? "certificatesUz"
+                      : lang === "ru"
+                        ? "certificatesRu"
+                        : "certificatesEn",
+                    e.target.value,
+                  )
+                }
+                placeholder="O'qituchining sertifikatlari yoki boshqa muhim ma'lumotlar..."
+                style={{ minHeight: 120 }}
+              />
               <Input
                 label="Tartib raqami"
                 type="number"

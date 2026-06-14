@@ -41,10 +41,7 @@ const navItems = (t: Record<string, string>) => [
       { label: t.nav_faq, href: "/about#faq" },
     ],
   },
-  {
-    label: t.nav_science,
-    children: [{ label: t.nav_achievements, href: "/science" }],
-  },
+  { label: t.nav_science, href: "/science" },
   { label: t.nav_news, href: "/news" },
   { label: t.nav_contact, href: "/contact" },
 ];

@@ -1,6 +1,106 @@
 export type Lang = "uz" | "ru" | "en";
 
-export const translations = {
+export interface FAQItem {
+  q: string;
+  a: string;
+}
+
+export interface TranslationStructure {
+  nav_home: string;
+  nav_about: string;
+  nav_about_short: string;
+  nav_leadership: string;
+  nav_teachers: string;
+  nav_base: string;
+  nav_admissions: string;
+  nav_directions: string;
+  nav_rules: string;
+  nav_docs: string;
+  nav_faq: string;
+  nav_science: string;
+  nav_partners: string;
+  nav_achievements: string;
+  nav_news: string;
+  nav_contact: string;
+
+  header_admin: string;
+  header_hours: string;
+  header_transport: string;
+
+  hero_badge: string;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_cta: string;
+  hero_cta2: string;
+  hero_stat1: string;
+  hero_stat2: string;
+  hero_stat3: string;
+  hero_stat4: string;
+
+  about_title: string;
+  about_p1: string;
+  about_p2: string;
+  about_p3: string;
+
+  dir_title: string;
+  dir_subtitle: string;
+  dir1_name: string;
+  dir1_desc: string;
+  dir2_name: string;
+  dir2_desc: string;
+
+  adm_title: string;
+  adm_subtitle: string;
+  adm_step1_title: string;
+  adm_step1_desc: string;
+  adm_step2_title: string;
+  adm_step2_desc: string;
+  adm_step3_title: string;
+  adm_step3_desc: string;
+  adm_step4_title: string;
+  adm_step4_desc: string;
+
+  docs_title: string;
+  docs_list: string[];
+  docs_deadline: string;
+  docs_deadline_val: string;
+  docs_exam: string;
+  docs_exam_val: string;
+
+  faq_title: string;
+  faq_items: FAQItem[];
+
+  partners_title: string;
+  partners_subtitle: string;
+
+  ach_title: string;
+  ach_subtitle: string;
+
+  news_title: string;
+  news_all: string;
+  news_read: string;
+
+  contact_title: string;
+  contact_address: string;
+  contact_address_val: string;
+  contact_phone: string;
+  contact_phone_val: string;
+  contact_email: string;
+  contact_email_val: string;
+  contact_schedule: string;
+  contact_schedule_val: string;
+  contact_send: string;
+  contact_name: string;
+  contact_msg: string;
+  contact_submit: string;
+
+  footer_desc: string;
+  footer_links: string;
+  footer_contact: string;
+  footer_copy: string;
+}
+
+export const translations: Record<Lang, TranslationStructure> = {
   uz: {
     // Nav
     nav_home: "Bosh sahifa",
@@ -11,7 +111,7 @@ export const translations = {
     nav_base: "Moddiy-texnik baza",
     nav_admissions: "Abituriyentlar",
     nav_directions: "Yo'nalishlar",
-    nav_rules: "Kirish qoidalari",
+    nav_rules: "Qabul",
     nav_docs: "Hujjatlar va muddatlar",
     nav_faq: "Ko'p beriladigan savollar",
     nav_science: "Yutuqlar",
@@ -101,7 +201,7 @@ export const translations = {
       },
       {
         q: "O'qish muddati qancha?",
-        a: "Litsey ta'limi 3 yil davom etadi (10, 11, 12-sinflar).",
+        a: "Litsey ta'limi 2 yil davom etadi (10, 11-sinflar).",
       },
       {
         q: "Imtiyozlar mavjudmi?",
@@ -109,7 +209,7 @@ export const translations = {
       },
       {
         q: "Litseyda yotoqxona bormi?",
-        a: "Litsey tomonidan yotoqxona xizmati taqdim etiladi. Batafsil ma'lumot uchun litseyga murojaat qiling.",
+        a: "Litseyda yotoqxona mavjud emas.",
       },
       {
         q: "Qanday yo'nalishlar mavjud?",
@@ -164,7 +264,7 @@ export const translations = {
     nav_base: "Материально-техническая база",
     nav_admissions: "Абитуриентам",
     nav_directions: "Направления",
-    nav_rules: "Правила приёма",
+    nav_rules: "Приём",
     nav_docs: "Документы и сроки",
     nav_faq: "Часто задаваемые вопросы",
     nav_science: "Достижения",
@@ -245,7 +345,7 @@ export const translations = {
       },
       {
         q: "Сколько длится обучение?",
-        a: "Обучение в лицее длится 3 года (10, 11, 12 классы).",
+        a: "Обучение в лицее длится 2 года (10 и 11 классы).", // Fixed from 10-12
       },
       {
         q: "Существуют ли льготы?",
@@ -253,7 +353,7 @@ export const translations = {
       },
       {
         q: "Есть ли общежитие?",
-        a: "Лицей предоставляет услуги общежития. Для получения подробной информации обратитесь в лицей.",
+        a: "В лицее общежития нет.",
       },
       {
         q: "Какие направления существуют?",
@@ -303,7 +403,7 @@ export const translations = {
     nav_base: "Facilities",
     nav_admissions: "Admissions",
     nav_directions: "Directions",
-    nav_rules: "Admission Rules",
+    nav_rules: "Admission",
     nav_docs: "Documents & Deadlines",
     nav_faq: "FAQ",
     nav_science: "Achievements",
@@ -343,7 +443,6 @@ export const translations = {
     dir2_name: "Mathematics, English",
     dir2_desc:
       "Specialization in mathematics and English. Teaching based on international standards.",
-
     adm_title: "Admission Process",
     adm_subtitle: "Follow these steps to apply to the lyceum",
     adm_step1_title: "Registration",
@@ -385,7 +484,7 @@ export const translations = {
       },
       {
         q: "How long is the study period?",
-        a: "The lyceum education lasts 3 years (grades 10, 11, 12).",
+        a: "The study period is 2 years (grades 10 and 11).", // Fixed from 10-12
       },
       {
         q: "Are there any privileges?",
@@ -393,7 +492,7 @@ export const translations = {
       },
       {
         q: "Is there a dormitory?",
-        a: "The lyceum provides dormitory services. Contact the lyceum for details.",
+        a: "There is no dormitory at the lyceum.",
       },
       {
         q: "What directions are available?",
@@ -432,6 +531,6 @@ export const translations = {
     footer_contact: "Contact",
     footer_copy: "All rights reserved.",
   },
-} as const;
+};
 
-export type TranslationKey = keyof typeof translations.uz;
+export type TranslationKey = keyof TranslationStructure;

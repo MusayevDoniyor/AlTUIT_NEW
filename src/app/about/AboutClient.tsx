@@ -91,6 +91,7 @@ export default function AboutClient() {
   const [dbTeachers, setDbTeachers] = useState<TeacherItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDept, setOpenDept] = useState<number | null>(null);
+  const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -1003,13 +1004,18 @@ export default function AboutClient() {
                                     ? t.subjectRu
                                     : t.subjectEn;
                               return (
-                                <div
+                                <button
                                   key={t.id}
+                                  type="button"
+                                  onClick={() => setSelectedTeacher(t)}
                                   style={{
                                     background: "#f8f9fc",
                                     borderRadius: 12,
                                     padding: "16px 12px",
                                     textAlign: "center",
+                                    border: "1px solid transparent",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s",
                                   }}
                                 >
                                   <div
@@ -1064,7 +1070,7 @@ export default function AboutClient() {
                                   >
                                     {subject}
                                   </p>
-                                </div>
+                                </button>
                               );
                             })
                           ) : (
@@ -1208,6 +1214,200 @@ export default function AboutClient() {
           </div>
         </div>
       </section>
+
+      {selectedTeacher && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1200,
+            background: "rgba(0,0,0,0.65)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20,
+          }}
+          onClick={() => setSelectedTeacher(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "100%",
+              maxWidth: 720,
+              background: "white",
+              borderRadius: 24,
+              overflow: "hidden",
+              boxShadow: "0 30px 90px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "24px 28px",
+                borderBottom: "1px solid #e2e8f0",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    background: "rgba(200,169,110,0.1)",
+                    border: "2px solid rgba(200,169,110,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {selectedTeacher.photoUrl ? (
+                    <Image
+                      src={selectedTeacher.photoUrl}
+                      alt=""
+                      width={72}
+                      height={72}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: "2rem" }}>👨‍🏫</span>
+                  )}
+                </div>
+                <div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: "1.2rem",
+                      fontWeight: 800,
+                      color: "#1a1f2e",
+                    }}
+                  >
+                    {lang === "uz"
+                      ? selectedTeacher.fullNameUz
+                      : lang === "ru"
+                        ? selectedTeacher.fullNameRu
+                        : selectedTeacher.fullNameEn}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "6px 0 0",
+                      color: "#475569",
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    {lang === "uz"
+                      ? selectedTeacher.subjectUz
+                      : lang === "ru"
+                        ? selectedTeacher.subjectRu
+                        : selectedTeacher.subjectEn}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedTeacher(null)}
+                style={{
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  fontSize: "1.35rem",
+                  lineHeight: 1,
+                  color: "#475569",
+                }}
+                aria-label="Close teacher details"
+              >
+                ×
+              </button>
+            </div>
+            <div style={{ padding: "24px 28px", display: "grid", gap: 20 }}>
+              {(() => {
+                const info =
+                  lang === "uz"
+                    ? selectedTeacher.infoUz
+                    : lang === "ru"
+                      ? selectedTeacher.infoRu
+                      : selectedTeacher.infoEn;
+                const certificates =
+                  lang === "uz"
+                    ? selectedTeacher.certificatesUz
+                    : lang === "ru"
+                      ? selectedTeacher.certificatesRu
+                      : selectedTeacher.certificatesEn;
+                return (
+                  <>
+                    {info && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: 0,
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz" ? "Ma'lumot" : lang === "ru" ? "Информация" : "Information"}
+                        </h4>
+                        <p
+                          style={{
+                            margin: "10px 0 0",
+                            color: "#475569",
+                            lineHeight: 1.8,
+                          }}
+                        >
+                          {info}
+                        </p>
+                      </div>
+                    )}
+                    {certificates && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: 0,
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz" ? "Sertifikatlar" : lang === "ru" ? "Сертификаты" : "Certificates"}
+                        </h4>
+                        <p
+                          style={{
+                            margin: "10px 0 0",
+                            color: "#475569",
+                            lineHeight: 1.8,
+                          }}
+                        >
+                          {certificates}
+                        </p>
+                      </div>
+                    )}
+                    {!info && !certificates && (
+                      <p
+                        style={{
+                          margin: 0,
+                          color: "#64748b",
+                          fontSize: "0.95rem",
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {lang === "uz"
+                          ? "O'qituvchi haqida qo'shimcha ma'lumotlar hali kiritilmagan."
+                          : lang === "ru"
+                            ? "Дополнительная информация об учителе пока не добавлена."
+                            : "Additional teacher details have not been added yet."}
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer lang={lang} />
     </main>
