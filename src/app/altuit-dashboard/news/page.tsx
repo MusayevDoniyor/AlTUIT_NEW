@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Newspaper,
@@ -8,8 +8,6 @@ import {
   Pencil,
   Trash2,
   X,
-  Check,
-  Eye,
   Save,
   Send,
 } from "lucide-react";
@@ -19,7 +17,6 @@ import {
   deleteNews,
   uploadImage,
   deleteImage,
-  deleteNewsWithImages,
   NewsItem,
   type ImageItem,
 } from "@/lib/db";
