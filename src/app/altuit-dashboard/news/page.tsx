@@ -524,8 +524,8 @@ export default function AdminNewsPage() {
                       lang === "uz"
                         ? editing.titleUz
                         : lang === "ru"
-                          ? editing.titleRu
-                          : editing.titleEn
+                          ? (editing.titleRu ?? "")
+                          : (editing.titleEn ?? "")
                     }
                     onChange={(e) =>
                       set(
@@ -554,8 +554,8 @@ export default function AdminNewsPage() {
                       lang === "uz"
                         ? editing.descUz
                         : lang === "ru"
-                          ? editing.descRu
-                          : editing.descEn
+                          ? (editing.descRu ?? "")
+                          : (editing.descEn ?? "")
                     }
                     onChange={(e) =>
                       set(
@@ -639,8 +639,8 @@ export default function AdminNewsPage() {
                     lang === "uz"
                       ? editing.bodyUz
                       : lang === "ru"
-                        ? editing.bodyRu
-                        : editing.bodyEn
+                        ? (editing.bodyRu ?? "")
+                        : (editing.bodyEn ?? "")
                   }
                   onChange={(html) =>
                     set(
@@ -666,20 +666,20 @@ export default function AdminNewsPage() {
                     lang === "uz"
                       ? editing.titleUz
                       : lang === "ru"
-                        ? editing.titleRu
-                        : editing.titleEn,
+                        ? (editing.titleRu ?? "")
+                        : (editing.titleEn ?? ""),
                   desc:
                     lang === "uz"
                       ? editing.descUz
                       : lang === "ru"
-                        ? editing.descRu
-                        : editing.descEn,
+                        ? (editing.descRu ?? "")
+                        : (editing.descEn ?? ""),
                   body:
                     lang === "uz"
                       ? editing.bodyUz
                       : lang === "ru"
-                        ? editing.bodyRu
-                        : editing.bodyEn,
+                        ? (editing.bodyRu ?? "")
+                        : (editing.bodyEn ?? ""),
                   tag: editing.tag[lang] || "",
                   color: editing.color,
                   date: editing.date,
