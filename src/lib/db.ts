@@ -98,40 +98,6 @@ export async function deleteNews(id: string): Promise<void> {
   if (error) throw error;
 }
 
-/** Create news with images array support */
-export async function createNews(
-  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
-): Promise<string> {
-  const mainImage = data.images?.find((img) => img.isMain);
-  const row = toRow({
-    ...data,
-    imageUrl: mainImage?.url || data.imageUrl || "",
-    images: data.images ? JSON.stringify(data.images) : undefined,
-  });
-  const { error } = await supabase
-    .from("news")
-    .insert(row)
-    .select("id")
-    .single();
-  if (error) throw error;
-  return "";
-}
-
-/** Update news with images array support */
-export async function updateNews(
-  id: string,
-  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
-): Promise<void> {
-  const mainImage = data.images?.find((img) => img.isMain);
-  const row = toRow({
-    ...data,
-    imageUrl: mainImage?.url || data.imageUrl || "",
-    images: data.images ? JSON.stringify(data.images) : undefined,
-  });
-  const { error } = await supabase.from("news").update(row).eq("id", id);
-  if (error) throw error;
-}
-
 /** Delete news and its images from storage */
 export async function deleteNewsWithImages(id: string): Promise<void> {
   const { data: news } = await supabase
