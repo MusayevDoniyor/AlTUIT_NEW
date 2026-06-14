@@ -384,6 +384,13 @@ export async function deleteGallery(id: string): Promise<void> {
 export interface HeroSlideItem {
   id?: string;
   imageUrl: string;
+  // Optional localized titles/descriptions used by frontend
+  titleUz?: string;
+  titleRu?: string;
+  titleEn?: string;
+  descUz?: string;
+  descRu?: string;
+  descEn?: string;
   orderIndex: number;
   isActive: boolean;
 }

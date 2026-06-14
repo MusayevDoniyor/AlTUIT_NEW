@@ -230,7 +230,7 @@ function AdminLoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@tatual.uz"
+              placeholder="email"
               style={{
                 width: "100%",
                 padding: "12px 16px",

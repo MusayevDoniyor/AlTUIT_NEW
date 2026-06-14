@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
@@ -8,31 +8,15 @@ import { Calendar, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getNews } from "@/lib/db";
+import { useAsyncData } from "@/lib/useAsyncData";
 import { PubCard } from "@/components/Skeleton";
 
 export default function NewsClient() {
   const [lang, setLang] = useState<Lang>("uz");
-  const [dbNews, setDbNews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const fetched = await getNews();
-        if (fetched && fetched.length > 0) {
-          setDbNews(fetched);
-        }
-      } catch (err) {
-        console.error("Failed to fetch news list:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+  const { data: dbNews, loading } = useAsyncData(() => getNews(), []);
 
   const t = translations[lang];
-  const activeNews = dbNews;
+  const activeNews = dbNews ?? [];
 
   if (loading) {
     return (

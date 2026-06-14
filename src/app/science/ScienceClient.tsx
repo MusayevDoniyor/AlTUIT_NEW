@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
@@ -13,31 +13,20 @@ import {
   type AchievementItem,
   type StatItem,
 } from "@/lib/db";
+import { useAsyncData } from "@/lib/useAsyncData";
 import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
 export default function ScienceClient() {
   const [lang, setLang] = useState<Lang>("uz");
-  const [achievements, setAchievements] = useState<AchievementItem[]>([]);
-  const [stats, setStats] = useState<StatItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const [achData, statsData] = await Promise.all([
-          getAchievements(),
-          getStats(),
-        ]);
-        setAchievements(achData);
-        setStats(statsData);
-      } catch (err) {
-        console.error("Failed to load science page data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+  const { data: scienceData, loading } = useAsyncData(async () => {
+    const [achievements, stats] = await Promise.all([
+      getAchievements(),
+      getStats(),
+    ]);
+    return { achievements, stats };
   }, []);
+  const achievements = scienceData?.achievements ?? [];
+  const stats = scienceData?.stats ?? [];
 
   const t = translations[lang];
 

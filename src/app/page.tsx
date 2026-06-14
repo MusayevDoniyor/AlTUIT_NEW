@@ -22,29 +22,11 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getHeroSlides, getStats, getNews } from "@/lib/db";
+import { useAsyncData } from "@/lib/useAsyncData";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
+import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
 
 // ===== DATA =====
-
-const dirColors = [
-  { bg: "linear-gradient(135deg,#0f2347,#1a3a6e)", accent: "#c8a96e" },
-  { bg: "linear-gradient(135deg,#1a3a6e,#2d5bb5)", accent: "#dfc08a" },
-];
-
-const dirIcons = [Calculator, Globe];
-
-const dirSubjectsUz = [
-  ["Matematika", "Fizika"],
-  ["Matematika", "Ingliz tili"],
-];
-const dirSubjectsRu = [
-  ["Математика", "Физика"],
-  ["Математика", "Английский"],
-];
-const dirSubjectsEn = [
-  ["Mathematics", "Physics"],
-  ["Mathematics", "English"],
-];
 
 // ===== COUNTER COMPONENT =====
 function Counter({
@@ -247,37 +229,21 @@ export default function Home() {
   const statsRef = useRef<HTMLDivElement>(null);
   const transitioningRef = useRef(false);
 
-  const [dbSlides, setDbSlides] = useState<any[]>([]);
-  const [dbStats, setDbStats] = useState<any[]>([]);
-  const [dbNews, setDbNews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        const fetchedSlides = await getHeroSlides();
-        if (fetchedSlides && fetchedSlides.length > 0) {
-          setDbSlides(fetchedSlides);
-        }
-
-        const fetchedStats = await getStats();
-        if (fetchedStats && fetchedStats.length > 0) {
-          setDbStats(fetchedStats);
-        }
-
-        const fetchedNews = await getNews();
-        if (fetchedNews && fetchedNews.length > 0) {
-          setDbNews(fetchedNews.slice(0, 3));
-        }
-      } catch (err) {
-        console.error("Failed to load dynamic data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
+  const { data: homeData, loading } = useAsyncData(async () => {
+    const [slides, stats, news] = await Promise.all([
+      getHeroSlides(),
+      getStats(),
+      getNews(),
+    ]);
+    return {
+      slides,
+      stats,
+      news: news.slice(0, 3),
+    };
   }, []);
+  const dbSlides = homeData?.slides ?? [];
+  const dbStats = homeData?.stats ?? [];
+  const dbNews = homeData?.news ?? [];
 
   const activeSlides =
     dbSlides.length > 0
@@ -297,25 +263,25 @@ export default function Home() {
   const t = translations[lang] as unknown as Record<string, string>;
 
   const slide = activeSlides[current];
-  const slideImage = slide?.imageUrl || slide?.image || "";
+  const slideImage = slide?.imageUrl || "";
   const hasText = !!(slide?.titleUz || slide?.titleRu || slide?.titleEn);
   const slideTitle = hasText
     ? lang === "uz"
-      ? slide.titleUz
+      ? (slide.titleUz ?? "")
       : lang === "ru"
-        ? slide.titleRu
-        : slide.titleEn
+        ? (slide.titleRu ?? "")
+        : (slide.titleEn ?? "")
     : "";
   const slideDesc = hasText
     ? lang === "uz"
-      ? slide.descUz
+      ? (slide.descUz ?? "")
       : lang === "ru"
-        ? slide.descRu
-        : slide.descEn
+        ? (slide.descRu ?? "")
+        : (slide.descEn ?? "")
     : "";
 
   const prevSlide = activeSlides[prevIndex.current];
-  const prevImage = prevSlide?.imageUrl || prevSlide?.image || "";
+  const prevImage = prevSlide?.imageUrl || "";
   const prevHasText = !!(
     prevSlide?.titleUz ||
     prevSlide?.titleRu ||
@@ -369,12 +335,7 @@ export default function Home() {
     { name: t.dir2_name, desc: t.dir2_desc },
   ];
 
-  const subjects =
-    lang === "uz"
-      ? dirSubjectsUz
-      : lang === "ru"
-        ? dirSubjectsRu
-        : dirSubjectsEn;
+  const subjects = dirSubjects[lang];
 
   const activeStats =
     dbStats.length > 0

@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CONTACT_DEPARTMENTS } from "@/lib/static";
 
 export default function ContactClient() {
   const [lang, setLang] = useState<Lang>("uz");
@@ -61,32 +62,7 @@ export default function ContactClient() {
     },
   ];
 
-  const departments = [
-    {
-      titleUz: "Qabul bo'limi",
-      titleRu: "Приёмная комиссия",
-      titleEn: "Admissions Office",
-      phone: "+998 71 235 03 69",
-      email: "qabul@tatual.uz",
-      color: "#1a3a6e",
-    },
-    {
-      titleUz: "O'quv ishlari bo'limi",
-      titleRu: "Учебный отдел",
-      titleEn: "Academic Department",
-      phone: "+998 71 235 03 70",
-      email: "akademik@tatual.uz",
-      color: "#2d5bb5",
-    },
-    {
-      titleUz: "Moddiy-texnik bo'lim",
-      titleRu: "Хозяйственный отдел",
-      titleEn: "Facilities Department",
-      phone: "+998 71 235 03 72",
-      email: "texnik@tatual.uz",
-      color: "#1d7a55",
-    },
-  ];
+  const departments = CONTACT_DEPARTMENTS;
 
   return (
     <main>

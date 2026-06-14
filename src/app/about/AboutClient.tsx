@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
@@ -10,6 +10,8 @@ import {
   LeadershipItem,
   TeacherItem,
 } from "@/lib/db";
+import { ABOUT_DEPARTMENTS } from "@/lib/static";
+import { useAsyncData } from "@/lib/useAsyncData";
 import {
   Target,
   Eye,
@@ -29,86 +31,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
-const LEADERSHIP: any[] = [];
-
-interface Dept {
-  nameUz: string;
-  nameRu: string;
-  nameEn: string;
-  color: string;
-  keywords: string[];
-}
-const DEPARTMENTS: Dept[] = [
-  {
-    nameUz: "Matematika va fizika",
-    nameRu: "Математика и физика",
-    nameEn: "Mathematics & Physics",
-    color: "#1a3a6e",
-    keywords: ["matematik", "fizik", "algebra", "geometri"],
-  },
-  {
-    nameUz: "Informatika va texnologiya",
-    nameRu: "Информатика и технологии",
-    nameEn: "Informatics & Technology",
-    color: "#2d5bb5",
-    keywords: ["informatik", "texnolog", "dasturlash", "kompyuter"],
-  },
-  {
-    nameUz: "Kimyo va biologiya",
-    nameRu: "Химия и биология",
-    nameEn: "Chemistry & Biology",
-    color: "#1d7a55",
-    keywords: ["kimyo", "biologi"],
-  },
-  {
-    nameUz: "Tarix va ijtimoiy fanlar",
-    nameRu: "История и обществознание",
-    nameEn: "History & Social Studies",
-    color: "#c8a96e",
-    keywords: ["tarix", "ijtimoiy", "huquq", "iqtisod"],
-  },
-  {
-    nameUz: "Chet tillari",
-    nameRu: "Иностранные языки",
-    nameEn: "Foreign Languages",
-    color: "#6032bf",
-    keywords: ["ingliz", "chet tili", "nemis", "fransuz"],
-  },
-  {
-    nameUz: "Ona tili va adabiyot",
-    nameRu: "Родной язык и литература",
-    nameEn: "Native Language & Literature",
-    color: "#b91c1c",
-    keywords: ["ona tili", "adabiyot"],
-  },
-];
-
 export default function AboutClient() {
   const [lang, setLang] = useState<Lang>("uz");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const [dbLeadership, setDbLeadership] = useState<LeadershipItem[]>([]);
-  const [dbTeachers, setDbTeachers] = useState<TeacherItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: aboutData, loading } = useAsyncData(
+    async () => ({
+      leadership: await getLeadership(),
+      teachers: await getTeachers(),
+    }),
+    [],
+  );
+  const dbLeadership = aboutData?.leadership ?? [];
+  const dbTeachers = aboutData?.teachers ?? [];
   const [openDept, setOpenDept] = useState<number | null>(null);
-  const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(null);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const leaders = await getLeadership();
-        if (leaders && leaders.length > 0) setDbLeadership(leaders);
-
-        const teachers = await getTeachers();
-        if (teachers && teachers.length > 0) setDbTeachers(teachers);
-      } catch (err) {
-        console.error("Failed to load about page data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+  const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(
+    null,
+  );
 
   const t = translations[lang];
 
@@ -683,7 +622,7 @@ export default function AboutClient() {
               gap: 20,
             }}
           >
-            {DEPARTMENTS.map((dept, i) => {
+            {ABOUT_DEPARTMENTS.map((dept, i) => {
               const name =
                 lang === "uz"
                   ? dept.nameUz
@@ -899,7 +838,7 @@ export default function AboutClient() {
                   margin: "0 auto",
                 }}
               >
-                {DEPARTMENTS.map((dept, di) => {
+                {ABOUT_DEPARTMENTS.map((dept, di) => {
                   const deptName =
                     lang === "uz"
                       ? dept.nameUz
@@ -1272,7 +1211,11 @@ export default function AboutClient() {
                       alt=""
                       width={72}
                       height={72}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                   ) : (
                     <span style={{ fontSize: "2rem" }}>👨‍🏫</span>
@@ -1349,7 +1292,11 @@ export default function AboutClient() {
                             color: "#1a1f2e",
                           }}
                         >
-                          {lang === "uz" ? "Ma'lumot" : lang === "ru" ? "Информация" : "Information"}
+                          {lang === "uz"
+                            ? "Ma'lumot"
+                            : lang === "ru"
+                              ? "Информация"
+                              : "Information"}
                         </h4>
                         <p
                           style={{
@@ -1372,7 +1319,11 @@ export default function AboutClient() {
                             color: "#1a1f2e",
                           }}
                         >
-                          {lang === "uz" ? "Sertifikatlar" : lang === "ru" ? "Сертификаты" : "Certificates"}
+                          {lang === "uz"
+                            ? "Sertifikatlar"
+                            : lang === "ru"
+                              ? "Сертификаты"
+                              : "Certificates"}
                         </h4>
                         <p
                           style={{
