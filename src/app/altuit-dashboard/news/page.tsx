@@ -144,12 +144,9 @@ export default function AdminNewsPage() {
   const validate = () => {
     const errs: Record<string, string> = {};
     if (!editing) return false;
-    if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha majburiy";
-    if (!editing.titleRu.trim()) errs.titleRu = "Sarlavha majburiy";
-    if (!editing.titleEn.trim()) errs.titleEn = "Sarlavha majburiy";
-    if (!editing.descUz.trim()) errs.descUz = "Qisqa tavsif majburiy";
-    if (!editing.descRu.trim()) errs.descRu = "Qisqa tavsif majburiy";
-    if (!editing.descEn.trim()) errs.descEn = "Qisqa tavsif majburiy";
+    if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha (O'zbekcha) majburiy";
+    if (!editing.descUz.trim()) errs.descUz = "Qisqa tavsif (O'zbekcha) majburiy";
+    if (!editing.bodyUz.trim()) errs.bodyUz = "Yangilik matni (O'zbekcha) majburiy";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };

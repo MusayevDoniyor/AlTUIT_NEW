@@ -152,18 +152,18 @@ export default function NewsClient() {
                   lang === "uz"
                     ? item.titleUz
                     : lang === "ru"
-                      ? item.titleRu
-                      : item.titleEn;
+                      ? item.titleRu?.trim() || item.titleUz
+                      : item.titleEn?.trim() || item.titleUz;
                 const desc =
                   lang === "uz"
                     ? item.descUz
                     : lang === "ru"
-                      ? item.descRu
-                      : item.descEn;
+                      ? item.descRu?.trim() || item.descUz
+                      : item.descEn?.trim() || item.descUz;
                 const tagStr =
                   typeof item.tag === "string"
                     ? item.tag
-                    : item.tag?.[lang] || "";
+                    : item.tag?.[lang] || item.tag?.uz || item.tag?.en || "";
 
                 return (
                   <Link

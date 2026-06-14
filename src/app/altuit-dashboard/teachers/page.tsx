@@ -30,17 +30,9 @@ import {
 
 const EMPTY: Omit<TeacherItem, "id"> = {
   fullNameUz: "",
-  fullNameRu: "",
-  fullNameEn: "",
   subjectUz: "",
-  subjectRu: "",
-  subjectEn: "",
   infoUz: "",
-  infoRu: "",
-  infoEn: "",
   certificatesUz: "",
-  certificatesRu: "",
-  certificatesEn: "",
   orderIndex: 0,
 };
 
@@ -92,6 +84,19 @@ export default function AdminTeachersPage() {
 
   const handleSave = async () => {
     if (!editing) return;
+
+    const requiredUzFields = [
+      editing.fullNameUz,
+      editing.subjectUz,
+      editing.infoUz,
+      editing.certificatesUz,
+    ];
+
+    if (requiredUzFields.some((value) => !value?.trim())) {
+      showToast("error", "Iltimos, barcha O'zbekcha maydonlarni to'ldiring");
+      return;
+    }
+
     setSaving(true);
     try {
       const id = editing.id || Date.now().toString();
@@ -307,6 +312,16 @@ export default function AdminTeachersPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <SectionTitle>Ism va fan (til bo'yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
+              <p
+                style={{
+                  color: C.textMuted,
+                  fontSize: "0.8rem",
+                  margin: "0 0 10px",
+                }}
+              >
+                O'zbekcha maydonlar majburiy, Ruscha va Inglizcha maydonlar esa
+                kerak bo'lganda to'ldiriladi.
+              </p>
               <div
                 style={{
                   display: "grid",
