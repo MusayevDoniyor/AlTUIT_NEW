@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TELEGRAM_BOT_TOKEN =
-  process.env.TELEGRAM_BOT_TOKEN ||
-  "7715117776:AAF-EWZnyhRNDiS0hL1wIYxsn093HAu5noY";
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "2044475931";
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 export async function POST(request: NextRequest) {
   try {
@@ -90,7 +88,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Server xatoligi yuz berdi" },
+      {
+        error:
+          error instanceof Error ? error.message : "Server xatoligi yuz berdi",
+      },
       { status: 500 },
     );
   }
