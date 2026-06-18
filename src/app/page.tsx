@@ -1060,18 +1060,18 @@ export default function Home() {
               }}
             >
               {activeNews.map((item: NewsItem) => {
-                  const title =
-                    (lang === "uz"
-                      ? item.titleUz
-                      : lang === "ru"
-                        ? item.titleRu
-                        : item.titleEn) ?? "";
-                  const desc =
-                    (lang === "uz"
-                      ? item.descUz
-                      : lang === "ru"
-                        ? item.descRu
-                        : item.descEn) ?? "";
+                const title =
+                  (lang === "uz"
+                    ? item.titleUz
+                    : lang === "ru"
+                      ? item.titleRu
+                      : item.titleEn) ?? "";
+                const desc =
+                  (lang === "uz"
+                    ? item.descUz
+                    : lang === "ru"
+                      ? item.descRu
+                      : item.descEn) ?? "";
                 const tagStr =
                   typeof item.tag === "string"
                     ? item.tag
