@@ -484,7 +484,7 @@ body {
     display: none !important;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .hidden-mobile {
     display: none !important;
   }
@@ -492,9 +492,18 @@ body {
     display: block !important;
   }
 }
-@media (min-width: 1025px) {
+@media (min-width: 1201px) {
   .show-mobile {
     display: none !important;
+  }
+}
+@media (min-width: 1201px) and (max-width: 1366px) {
+  .nav-link {
+    padding: 8px 10px !important;
+    font-size: 0.68rem !important;
+  }
+  .header-main .container-custom {
+    padding: 0 16px !important;
   }
 }
 @media (max-width: 768px) {

@@ -12,6 +12,7 @@ import {
 } from "@/lib/db";
 import { ABOUT_DEPARTMENTS } from "@/lib/static";
 import { useAsyncData } from "@/lib/useAsyncData";
+import { parseTeacherInfo, parseTeacherCertificates } from "@/lib/teacherUtils";
 import {
   Target,
   Eye,
@@ -931,17 +932,17 @@ export default function AboutClient() {
                           {deptTeachers.length > 0 ? (
                             deptTeachers.map((t) => {
                               const name =
-                                lang === "uz"
+                                (lang === "uz"
                                   ? t.fullNameUz
                                   : lang === "ru"
                                     ? t.fullNameRu
-                                    : t.fullNameEn;
+                                    : t.fullNameEn) || t.fullNameUz;
                               const subject =
-                                lang === "uz"
+                                (lang === "uz"
                                   ? t.subjectUz
                                   : lang === "ru"
                                     ? t.subjectRu
-                                    : t.subjectEn;
+                                    : t.subjectEn) || t.subjectUz;
                               return (
                                 <button
                                   key={t.id}
@@ -1230,11 +1231,11 @@ export default function AboutClient() {
                       color: "#1a1f2e",
                     }}
                   >
-                    {lang === "uz"
+                    {(lang === "uz"
                       ? selectedTeacher.fullNameUz
                       : lang === "ru"
                         ? selectedTeacher.fullNameRu
-                        : selectedTeacher.fullNameEn}
+                        : selectedTeacher.fullNameEn) || selectedTeacher.fullNameUz}
                   </h3>
                   <p
                     style={{
@@ -1243,11 +1244,11 @@ export default function AboutClient() {
                       fontSize: "0.95rem",
                     }}
                   >
-                    {lang === "uz"
+                    {(lang === "uz"
                       ? selectedTeacher.subjectUz
                       : lang === "ru"
                         ? selectedTeacher.subjectRu
-                        : selectedTeacher.subjectEn}
+                        : selectedTeacher.subjectEn) || selectedTeacher.subjectUz}
                   </p>
                 </div>
               </div>
@@ -1268,75 +1269,148 @@ export default function AboutClient() {
             </div>
             <div style={{ padding: "24px 28px", display: "grid", gap: 20 }}>
               {(() => {
-                const info =
+                const infoRaw =
                   lang === "uz"
                     ? selectedTeacher.infoUz
                     : lang === "ru"
                       ? selectedTeacher.infoRu
                       : selectedTeacher.infoEn;
-                const certificates =
+                const certRaw =
                   lang === "uz"
                     ? selectedTeacher.certificatesUz
                     : lang === "ru"
                       ? selectedTeacher.certificatesRu
                       : selectedTeacher.certificatesEn;
+
+                const { description, experience } = parseTeacherInfo(infoRaw);
+                const { certificates } = parseTeacherCertificates(certRaw);
+
                 return (
                   <>
-                    {info && (
+                    {description && (
                       <div>
                         <h4
                           style={{
-                            margin: 0,
+                            margin: "0 0 10px",
                             fontSize: "1rem",
                             fontWeight: 700,
                             color: "#1a1f2e",
                           }}
                         >
                           {lang === "uz"
-                            ? "Ma'lumot"
+                            ? "Ma'lumot (Tavsif)"
                             : lang === "ru"
                               ? "Информация"
-                              : "Information"}
+                              : "About"}
                         </h4>
                         <p
                           style={{
-                            margin: "10px 0 0",
+                            margin: 0,
                             color: "#475569",
                             lineHeight: 1.8,
+                            fontSize: "0.95rem",
                           }}
                         >
-                          {info}
+                          {description}
                         </p>
                       </div>
                     )}
-                    {certificates && (
+
+                    {experience && experience.length > 0 && (
                       <div>
                         <h4
                           style={{
-                            margin: 0,
+                            margin: "0 0 12px",
                             fontSize: "1rem",
                             fontWeight: 700,
                             color: "#1a1f2e",
                           }}
                         >
                           {lang === "uz"
-                            ? "Sertifikatlar"
+                            ? "Tajriba"
                             : lang === "ru"
-                              ? "Сертификаты"
-                              : "Certificates"}
+                              ? "Опыт работы"
+                              : "Experience"}
                         </h4>
-                        <p
-                          style={{
-                            margin: "10px 0 0",
-                            color: "#475569",
-                            lineHeight: 1.8,
-                          }}
-                        >
-                          {certificates}
-                        </p>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                          {experience.map((exp, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                gap: 12,
+                                alignItems: "flex-start",
+                                background: "#f8f9fc",
+                                padding: "12px 16px",
+                                borderRadius: 12,
+                                border: "1px solid #e2e8f0",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: 28,
+                                  height: 28,
+                                  borderRadius: 8,
+                                  background: "rgba(26,58,110,0.08)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                <span style={{ fontSize: "0.85rem" }}>💼</span>
+                              </div>
+                              <p style={{ margin: 0, color: "#475569", fontSize: "0.9rem", lineHeight: 1.5, fontWeight: 550 }}>
+                                {exp}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
-                    {!info && !certificates && (
+
+                    {certificates && certificates.length > 0 && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: "0 0 12px",
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz"
+                            ? "Sertifikatlar va yutuqlar"
+                            : lang === "ru"
+                              ? "Сертификаты и достижения"
+                              : "Certificates & Achievements"}
+                        </h4>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                          {certificates.map((cert, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
+                                background: "rgba(200,169,110,0.1)",
+                                border: "1px solid rgba(200,169,110,0.25)",
+                                color: "#9c7c3c",
+                                padding: "6px 14px",
+                                borderRadius: 50,
+                                fontSize: "0.82rem",
+                                fontWeight: 600,
+                              }}
+                            >
+                              <Award size={13} color="#c8a96e" />
+                              <span>{cert}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {!description && (!experience || experience.length === 0) && (!certificates || certificates.length === 0) && (
                       <p
                         style={{
                           margin: 0,

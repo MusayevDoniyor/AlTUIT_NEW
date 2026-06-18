@@ -12,6 +12,12 @@ import {
   TeacherItem,
 } from "@/lib/db";
 import {
+  parseTeacherInfo,
+  parseTeacherCertificates,
+  serializeTeacherInfo,
+  serializeTeacherCertificates,
+} from "@/lib/teacherUtils";
+import {
   PageHeader,
   Card,
   Input,
@@ -47,6 +53,94 @@ export default function AdminTeachersPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<TeacherItem | null>(null);
   const { showToast } = useToast();
+
+  // Local state for structured fields
+  const [descUz, setDescUz] = useState("");
+  const [descRu, setDescRu] = useState("");
+  const [descEn, setDescEn] = useState("");
+  const [expUz, setExpUz] = useState<string[]>([]);
+  const [expRu, setExpRu] = useState<string[]>([]);
+  const [expEn, setExpEn] = useState<string[]>([]);
+  const [certsUz, setCertsUz] = useState<string[]>([]);
+  const [certsRu, setCertsRu] = useState<string[]>([]);
+  const [certsEn, setCertsEn] = useState<string[]>([]);
+
+  // Local state for list inputs
+  const [newExpInput, setNewExpInput] = useState("");
+  const [newCertInput, setNewCertInput] = useState("");
+
+  // Sync state when editing item changes
+  useEffect(() => {
+    if (editing) {
+      const parsedUz = parseTeacherInfo(editing.infoUz);
+      const parsedRu = parseTeacherInfo(editing.infoRu);
+      const parsedEn = parseTeacherInfo(editing.infoEn);
+
+      const parsedCertsUz = parseTeacherCertificates(editing.certificatesUz);
+      const parsedCertsRu = parseTeacherCertificates(editing.certificatesRu);
+      const parsedCertsEn = parseTeacherCertificates(editing.certificatesEn);
+
+      setDescUz(parsedUz.description);
+      setDescRu(parsedRu.description);
+      setDescEn(parsedEn.description);
+
+      setExpUz(parsedUz.experience);
+      setExpRu(parsedRu.experience);
+      setExpEn(parsedEn.experience);
+
+      setCertsUz(parsedCertsUz.certificates);
+      setCertsRu(parsedCertsRu.certificates);
+      setCertsEn(parsedCertsEn.certificates);
+    } else {
+      setDescUz("");
+      setDescRu("");
+      setDescEn("");
+      setExpUz([]);
+      setExpRu([]);
+      setExpEn([]);
+      setCertsUz([]);
+      setCertsRu([]);
+      setCertsEn([]);
+    }
+    setNewExpInput("");
+    setNewCertInput("");
+  }, [editing]);
+
+  // Clear sub-inputs when language tab changes
+  useEffect(() => {
+    setNewExpInput("");
+    setNewCertInput("");
+  }, [lang]);
+
+  const addExperience = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!newExpInput.trim()) return;
+    if (lang === "uz") setExpUz([...expUz, newExpInput.trim()]);
+    else if (lang === "ru") setExpRu([...expRu, newExpInput.trim()]);
+    else setExpEn([...expEn, newExpInput.trim()]);
+    setNewExpInput("");
+  };
+
+  const removeExperience = (index: number) => {
+    if (lang === "uz") setExpUz(expUz.filter((_, i) => i !== index));
+    else if (lang === "ru") setExpRu(expRu.filter((_, i) => i !== index));
+    else setExpEn(expEn.filter((_, i) => i !== index));
+  };
+
+  const addCertificate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!newCertInput.trim()) return;
+    if (lang === "uz") setCertsUz([...certsUz, newCertInput.trim()]);
+    else if (lang === "ru") setCertsRu([...certsRu, newCertInput.trim()]);
+    else setCertsEn([...certsEn, newCertInput.trim()]);
+    setNewCertInput("");
+  };
+
+  const removeCertificate = (index: number) => {
+    if (lang === "uz") setCertsUz(certsUz.filter((_, i) => i !== index));
+    else if (lang === "ru") setCertsRu(certsRu.filter((_, i) => i !== index));
+    else setCertsEn(certsEn.filter((_, i) => i !== index));
+  };
 
   const load = async () => {
     setLoading(true);
@@ -85,22 +179,68 @@ export default function AdminTeachersPage() {
   const handleSave = async () => {
     if (!editing) return;
 
-    const requiredUzFields = [
-      editing.fullNameUz,
-      editing.subjectUz,
-      editing.infoUz,
-      editing.certificatesUz,
-    ];
-
-    if (requiredUzFields.some((value) => !value?.trim())) {
-      showToast("error", "Iltimos, barcha O'zbekcha maydonlarni to'ldiring");
+    if (!editing.fullNameUz?.trim() || !editing.subjectUz?.trim()) {
+      showToast("error", "Iltimos, ism va fanni kiriting");
       return;
     }
 
     setSaving(true);
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as TeacherItem;
+      const { id: _id, ...rawEditing } = editing as TeacherItem;
+
+      // Auto-append any typed but un-added experience/certificate input before saving
+      const finalExpUz =
+        newExpInput.trim() && lang === "uz"
+          ? [...expUz, newExpInput.trim()]
+          : expUz;
+      const finalExpRu =
+        newExpInput.trim() && lang === "ru"
+          ? [...expRu, newExpInput.trim()]
+          : expRu;
+      const finalExpEn =
+        newExpInput.trim() && lang === "en"
+          ? [...expEn, newExpInput.trim()]
+          : expEn;
+
+      const finalCertsUz =
+        newCertInput.trim() && lang === "uz"
+          ? [...certsUz, newCertInput.trim()]
+          : certsUz;
+      const finalCertsRu =
+        newCertInput.trim() && lang === "ru"
+          ? [...certsRu, newCertInput.trim()]
+          : certsRu;
+      const finalCertsEn =
+        newCertInput.trim() && lang === "en"
+          ? [...certsEn, newCertInput.trim()]
+          : certsEn;
+
+      const infoUz = serializeTeacherInfo(descUz, finalExpUz);
+      const infoRu = serializeTeacherInfo(descRu, finalExpRu);
+      const infoEn = serializeTeacherInfo(descEn, finalExpEn);
+
+      const certificatesUz = serializeTeacherCertificates(finalCertsUz);
+      const certificatesRu = serializeTeacherCertificates(finalCertsRu);
+      const certificatesEn = serializeTeacherCertificates(finalCertsEn);
+
+      const data: Omit<TeacherItem, "id"> = {
+        fullNameUz: rawEditing.fullNameUz || "",
+        fullNameRu: rawEditing.fullNameRu || "",
+        fullNameEn: rawEditing.fullNameEn || "",
+        subjectUz: rawEditing.subjectUz || "",
+        subjectRu: rawEditing.subjectRu || "",
+        subjectEn: rawEditing.subjectEn || "",
+        photoUrl: rawEditing.photoUrl || "",
+        orderIndex: rawEditing.orderIndex || 0,
+        infoUz,
+        infoRu,
+        infoEn,
+        certificatesUz,
+        certificatesRu,
+        certificatesEn,
+      };
+
       await saveTeacher(id, data);
       showToast(
         "success",
@@ -371,49 +511,223 @@ export default function AdminTeachersPage() {
                 />
               </div>
               <Textarea
-                label={`Qo'shimcha ma'lumot (${lang.toUpperCase()})`}
-                value={
-                  lang === "uz"
-                    ? editing.infoUz
-                    : lang === "ru"
-                      ? editing.infoRu
-                      : editing.infoEn
-                }
-                onChange={(e) =>
-                  set(
-                    lang === "uz"
-                      ? "infoUz"
-                      : lang === "ru"
-                        ? "infoRu"
-                        : "infoEn",
-                    e.target.value,
-                  )
-                }
-                placeholder="O'qituvchi haqida qisqa ma'lumot yoki lavozim, yo'nalish, tajriba..."
-                style={{ minHeight: 120 }}
+                label={`Tavsif (Description) (${lang.toUpperCase()})`}
+                value={lang === "uz" ? descUz : lang === "ru" ? descRu : descEn}
+                onChange={(e) => {
+                  if (lang === "uz") setDescUz(e.target.value);
+                  else if (lang === "ru") setDescRu(e.target.value);
+                  else setDescEn(e.target.value);
+                }}
+                placeholder="O'qituvchi haqida batafsil ma'lumot..."
+                style={{ minHeight: 100 }}
               />
-              <Textarea
-                label={`Sertifikatlar / yutuqlar (${lang.toUpperCase()})`}
-                value={
-                  lang === "uz"
-                    ? editing.certificatesUz
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    color: C.text,
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    marginBottom: 8,
+                  }}
+                >
+                  Tajriba (Experience) ({lang.toUpperCase()})
+                </label>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                  <div style={{ flex: 1 }}>
+                    <Input
+                      value={newExpInput}
+                      onChange={(e) => setNewExpInput(e.target.value)}
+                      placeholder="Tajriba qo'shish (masalan: 5 yil TATU litseyi)"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addExperience();
+                        }
+                      }}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={() => addExperience()}
+                    style={{
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "0 16px",
+                    }}
+                  >
+                    <Plus size={16} />
+                  </Button>
+                </div>
+
+                {/* List of current experiences */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                    maxHeight: 150,
+                    overflowY: "auto",
+                    paddingRight: 4,
+                  }}
+                >
+                  {(lang === "uz" ? expUz : lang === "ru" ? expRu : expEn).map(
+                    (exp, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          background: "rgba(255,255,255,0.03)",
+                          border: `1px solid ${C.border}`,
+                          borderRadius: 10,
+                          padding: "8px 12px",
+                          fontSize: "0.85rem",
+                          color: C.text,
+                        }}
+                      >
+                        <span style={{ flex: 1, marginRight: 8 }}>{exp}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeExperience(idx)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            color: C.textMuted,
+                            cursor: "pointer",
+                            display: "flex",
+                            padding: 2,
+                          }}
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ),
+                  )}
+                  {(lang === "uz" ? expUz : lang === "ru" ? expRu : expEn)
+                    .length === 0 && (
+                    <p
+                      style={{
+                        color: C.textMuted,
+                        fontSize: "0.8rem",
+                        fontStyle: "italic",
+                        margin: 0,
+                      }}
+                    >
+                      Hozircha tajriba qo'shilmagan.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    color: C.text,
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    marginBottom: 8,
+                  }}
+                >
+                  Sertifikatlar (Certificates) ({lang.toUpperCase()})
+                </label>
+                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                  <div style={{ flex: 1 }}>
+                    <Input
+                      value={newCertInput}
+                      onChange={(e) => setNewCertInput(e.target.value)}
+                      placeholder="Sertifikat qo'shish (masalan: IELTS 7.5)"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addCertificate();
+                        }
+                      }}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={() => addCertificate()}
+                    style={{
+                      height: "42px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "0 16px",
+                    }}
+                  >
+                    <Plus size={16} />
+                  </Button>
+                </div>
+
+                {/* List of current certificates */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                    maxHeight: 150,
+                    overflowY: "auto",
+                    paddingRight: 4,
+                  }}
+                >
+                  {(lang === "uz"
+                    ? certsUz
                     : lang === "ru"
-                      ? editing.certificatesRu
-                      : editing.certificatesEn
-                }
-                onChange={(e) =>
-                  set(
-                    lang === "uz"
-                      ? "certificatesUz"
-                      : lang === "ru"
-                        ? "certificatesRu"
-                        : "certificatesEn",
-                    e.target.value,
-                  )
-                }
-                placeholder="O'qituchining sertifikatlari yoki boshqa muhim ma'lumotlar..."
-                style={{ minHeight: 120 }}
-              />
+                      ? certsRu
+                      : certsEn
+                  ).map((cert, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        background: "rgba(255,255,255,0.03)",
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 10,
+                        padding: "8px 12px",
+                        fontSize: "0.85rem",
+                        color: C.text,
+                      }}
+                    >
+                      <span style={{ flex: 1, marginRight: 8 }}>{cert}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeCertificate(idx)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: C.textMuted,
+                          cursor: "pointer",
+                          display: "flex",
+                          padding: 2,
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  {(lang === "uz" ? certsUz : lang === "ru" ? certsRu : certsEn)
+                    .length === 0 && (
+                    <p
+                      style={{
+                        color: C.textMuted,
+                        fontSize: "0.8rem",
+                        fontStyle: "italic",
+                        margin: 0,
+                      }}
+                    >
+                      Hozircha sertifikat qo'shilmagan.
+                    </p>
+                  )}
+                </div>
+              </div>
               <Input
                 label="Tartib raqami"
                 type="number"

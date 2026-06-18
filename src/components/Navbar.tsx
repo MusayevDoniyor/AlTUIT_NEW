@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
-import { Menu, X, ChevronDown, Search } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -378,19 +378,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   );
                 })}
               </div>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#002147",
-                  padding: 8,
-                  opacity: 0.6,
-                }}
-                aria-label="Search"
-              >
-                <Search size={18} />
-              </button>
 
               <a
                 href="tel:+998712350369"
