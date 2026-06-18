@@ -33,7 +33,7 @@ const navItems = [
   },
   { label: "Yutuqlar", href: "/altuit-dashboard/achievements", icon: Trophy },
   {
-    label: "Kirish qoidalari",
+    label: "Qabul",
     href: "/altuit-dashboard/admission",
     icon: FileText,
   },

@@ -5,13 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
-import { Menu, X, ChevronDown, Search } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
   FaInstagram,
-  FaYoutube,
   FaFacebookF,
   FaTelegramPlane,
   FaClock,
@@ -41,10 +40,7 @@ const navItems = (t: Record<string, string>) => [
       { label: t.nav_faq, href: "/about#faq" },
     ],
   },
-  {
-    label: t.nav_science,
-    children: [{ label: t.nav_achievements, href: "/science" }],
-  },
+  { label: t.nav_science, href: "/science" },
   { label: t.nav_news, href: "/news" },
   { label: t.nav_contact, href: "/contact" },
 ];
@@ -135,18 +131,11 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   <FaTelegramPlane size={14} />
                 </a>
                 <a
-                  href="https://instagram.com/altuit_lyceum"
+                  href="https://www.instagram.com/tatu_lyceum/"
                   aria-label="Instagram"
                   style={{ color: "white", opacity: 0.8 }}
                 >
                   <FaInstagram size={14} />
-                </a>
-                <a
-                  href="https://youtube.com/@tatual"
-                  aria-label="YouTube"
-                  style={{ color: "white", opacity: 0.8 }}
-                >
-                  <FaYoutube size={14} />
                 </a>
               </div>
               <div
@@ -389,19 +378,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   );
                 })}
               </div>
-              <button
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#002147",
-                  padding: 8,
-                  opacity: 0.6,
-                }}
-                aria-label="Search"
-              >
-                <Search size={18} />
-              </button>
 
               <a
                 href="tel:+998712350369"

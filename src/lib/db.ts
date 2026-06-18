@@ -42,14 +42,14 @@ export interface NewsItem {
   id?: string;
   date: string;
   titleUz: string;
-  titleRu: string;
-  titleEn: string;
+  titleRu?: string;
+  titleEn?: string;
   bodyUz: string;
-  bodyRu: string;
-  bodyEn: string;
+  bodyRu?: string;
+  bodyEn?: string;
   descUz: string;
-  descRu: string;
-  descEn: string;
+  descRu?: string;
+  descEn?: string;
   tag: { uz: string; ru: string; en: string };
   color: string;
   imageUrl?: string;
@@ -95,40 +95,6 @@ export async function saveNews(
 
 export async function deleteNews(id: string): Promise<void> {
   const { error } = await supabase.from("news").delete().eq("id", id);
-  if (error) throw error;
-}
-
-/** Create news with images array support */
-export async function createNews(
-  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
-): Promise<string> {
-  const mainImage = data.images?.find((img) => img.isMain);
-  const row = toRow({
-    ...data,
-    imageUrl: mainImage?.url || data.imageUrl || "",
-    images: data.images ? JSON.stringify(data.images) : undefined,
-  });
-  const { error } = await supabase
-    .from("news")
-    .insert(row)
-    .select("id")
-    .single();
-  if (error) throw error;
-  return "";
-}
-
-/** Update news with images array support */
-export async function updateNews(
-  id: string,
-  data: Omit<NewsItem, "id"> & { images?: ImageItem[] },
-): Promise<void> {
-  const mainImage = data.images?.find((img) => img.isMain);
-  const row = toRow({
-    ...data,
-    imageUrl: mainImage?.url || data.imageUrl || "",
-    images: data.images ? JSON.stringify(data.images) : undefined,
-  });
-  const { error } = await supabase.from("news").update(row).eq("id", id);
   if (error) throw error;
 }
 
@@ -218,11 +184,17 @@ export async function deleteLeadership(id: string): Promise<void> {
 export interface TeacherItem {
   id?: string;
   fullNameUz: string;
-  fullNameRu: string;
-  fullNameEn: string;
+  fullNameRu?: string;
+  fullNameEn?: string;
   subjectUz: string;
-  subjectRu: string;
-  subjectEn: string;
+  subjectRu?: string;
+  subjectEn?: string;
+  infoUz: string;
+  infoRu?: string;
+  infoEn?: string;
+  certificatesUz: string;
+  certificatesRu?: string;
+  certificatesEn?: string;
   photoUrl?: string;
   orderIndex: number;
 }
@@ -412,6 +384,13 @@ export async function deleteGallery(id: string): Promise<void> {
 export interface HeroSlideItem {
   id?: string;
   imageUrl: string;
+  // Optional localized titles/descriptions used by frontend
+  titleUz?: string;
+  titleRu?: string;
+  titleEn?: string;
+  descUz?: string;
+  descRu?: string;
+  descEn?: string;
   orderIndex: number;
   isActive: boolean;
 }
@@ -468,6 +447,9 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 function toRow(obj: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(obj)) {
+    // Skip undefined values entirely so optional fields do not become null.
+    if (v === undefined) continue;
+
     // Special case: nested tag object stored as JSONB
     if (k === "tag" && typeof v === "object" && v !== null) {
       out["tag"] = v;

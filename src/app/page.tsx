@@ -21,30 +21,19 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getHeroSlides, getStats, getNews } from "@/lib/db";
+import {
+  getHeroSlides,
+  getStats,
+  getNews,
+  type StatItem,
+  type HeroSlideItem,
+  type NewsItem,
+} from "@/lib/db";
+import { useAsyncData } from "@/lib/useAsyncData";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
+import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
 
 // ===== DATA =====
-
-const dirColors = [
-  { bg: "linear-gradient(135deg,#0f2347,#1a3a6e)", accent: "#c8a96e" },
-  { bg: "linear-gradient(135deg,#1a3a6e,#2d5bb5)", accent: "#dfc08a" },
-];
-
-const dirIcons = [Calculator, Globe];
-
-const dirSubjectsUz = [
-  ["Matematika", "Fizika", "Informatika", "Ingliz tili"],
-  ["Matematika", "Ingliz tili", "Iqtisodiyot", "Ona tili"],
-];
-const dirSubjectsRu = [
-  ["Математика", "Физика", "Информатика", "Английский"],
-  ["Математика", "Английский", "Экономика", "Родной язык"],
-];
-const dirSubjectsEn = [
-  ["Mathematics", "Physics", "Informatics", "English"],
-  ["Mathematics", "English", "Economics", "Native Language"],
-];
 
 // ===== COUNTER COMPONENT =====
 function Counter({
@@ -242,50 +231,33 @@ function HeroSlide({
 export default function Home() {
   const [lang, setLang] = useState<Lang>("uz");
   const [current, setCurrent] = useState(0);
-  const prevIndex = useRef(0);
+  const [prevIndex, setPrevIndex] = useState(0);
   const [statsInView, setStatsInView] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   const transitioningRef = useRef(false);
 
-  const [dbSlides, setDbSlides] = useState<any[]>([]);
-  const [dbStats, setDbStats] = useState<any[]>([]);
-  const [dbNews, setDbNews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        const fetchedSlides = await getHeroSlides();
-        if (fetchedSlides && fetchedSlides.length > 0) {
-          setDbSlides(fetchedSlides);
-        }
-
-        const fetchedStats = await getStats();
-        if (fetchedStats && fetchedStats.length > 0) {
-          setDbStats(fetchedStats);
-        }
-
-        const fetchedNews = await getNews();
-        if (fetchedNews && fetchedNews.length > 0) {
-          setDbNews(fetchedNews.slice(0, 3));
-        }
-      } catch (err) {
-        console.error("Failed to load dynamic data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
+  const { data: homeData, loading } = useAsyncData(async () => {
+    const [slides, stats, news] = await Promise.all([
+      getHeroSlides(),
+      getStats(),
+      getNews(),
+    ]);
+    return {
+      slides,
+      stats,
+      news: news.slice(0, 3),
+    };
   }, []);
+  const dbSlides = homeData?.slides ?? [];
+  const dbStats = homeData?.stats ?? [];
+  const dbNews = homeData?.news ?? [];
 
   const activeSlides =
     dbSlides.length > 0
       ? dbSlides
       : [
           {
-            imageUrl:
-              "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop",
+            imageUrl: "",
             titleUz: "",
             titleRu: "",
             titleEn: "",
@@ -298,25 +270,25 @@ export default function Home() {
   const t = translations[lang] as unknown as Record<string, string>;
 
   const slide = activeSlides[current];
-  const slideImage = slide?.imageUrl || slide?.image || "";
+  const slideImage = slide?.imageUrl || "";
   const hasText = !!(slide?.titleUz || slide?.titleRu || slide?.titleEn);
   const slideTitle = hasText
     ? lang === "uz"
-      ? slide.titleUz
+      ? (slide.titleUz ?? "")
       : lang === "ru"
-        ? slide.titleRu
-        : slide.titleEn
+        ? (slide.titleRu ?? "")
+        : (slide.titleEn ?? "")
     : "";
   const slideDesc = hasText
     ? lang === "uz"
-      ? slide.descUz
+      ? (slide.descUz ?? "")
       : lang === "ru"
-        ? slide.descRu
-        : slide.descEn
+        ? (slide.descRu ?? "")
+        : (slide.descEn ?? "")
     : "";
 
-  const prevSlide = activeSlides[prevIndex.current];
-  const prevImage = prevSlide?.imageUrl || prevSlide?.image || "";
+  const prevSlide = activeSlides[prevIndex];
+  const prevImage = prevSlide?.imageUrl || "";
   const prevHasText = !!(
     prevSlide?.titleUz ||
     prevSlide?.titleRu ||
@@ -327,7 +299,7 @@ export default function Home() {
     (i: number) => {
       if (transitioningRef.current) return;
       transitioningRef.current = true;
-      prevIndex.current = current;
+      setPrevIndex(current);
       setCurrent(i);
       setTimeout(() => {
         transitioningRef.current = false;
@@ -370,16 +342,11 @@ export default function Home() {
     { name: t.dir2_name, desc: t.dir2_desc },
   ];
 
-  const subjects =
-    lang === "uz"
-      ? dirSubjectsUz
-      : lang === "ru"
-        ? dirSubjectsRu
-        : dirSubjectsEn;
+  const subjects = dirSubjects[lang];
 
   const activeStats =
     dbStats.length > 0
-      ? dbStats.map((s: any) => {
+      ? dbStats.map((s: StatItem) => {
           let Icon = GraduationCap;
           if (s.key === "teachers") Icon = Users2;
           else if (s.key === "uni_rate") Icon = TrendingUp;
@@ -408,7 +375,7 @@ export default function Home() {
       >
         {/* Prev slide fading out */}
         <div
-          key={"prev-" + prevIndex.current}
+          key={"prev-" + prevIndex}
           style={{
             position: "absolute",
             inset: 0,
@@ -470,7 +437,7 @@ export default function Home() {
             gap: 12,
           }}
         >
-          {activeSlides.map((_: any, i: number) => (
+          {activeSlides.map((_, i: number) => (
             <button
               key={i}
               onClick={() => goTo(i)}
@@ -551,7 +518,7 @@ export default function Home() {
                 </p>
               </div>
             ) : (
-              activeStats.map((s: any, i: number) => (
+              activeStats.map((s, i: number) => (
                 <div
                   key={i}
                   style={{ textAlign: "center", padding: "24px 16px" }}
@@ -1092,19 +1059,19 @@ export default function Home() {
                 gap: 24,
               }}
             >
-              {activeNews.map((item: any) => {
+              {activeNews.map((item: NewsItem) => {
                 const title =
-                  lang === "uz"
+                  (lang === "uz"
                     ? item.titleUz
                     : lang === "ru"
                       ? item.titleRu
-                      : item.titleEn;
+                      : item.titleEn) ?? "";
                 const desc =
-                  lang === "uz"
+                  (lang === "uz"
                     ? item.descUz
                     : lang === "ru"
                       ? item.descRu
-                      : item.descEn;
+                      : item.descEn) ?? "";
                 const tagStr =
                   typeof item.tag === "string"
                     ? item.tag
@@ -1138,7 +1105,7 @@ export default function Home() {
                       >
                         <Image
                           src={item.imageUrl}
-                          alt={title}
+                          alt={title || ""}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           style={{ objectFit: "cover" }}

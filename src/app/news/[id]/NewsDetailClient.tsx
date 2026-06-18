@@ -11,14 +11,14 @@ import Footer from "@/components/Footer";
 interface NewsDetail {
   id: string;
   titleUz: string;
-  titleRu: string;
-  titleEn: string;
+  titleRu?: string;
+  titleEn?: string;
   bodyUz: string;
-  bodyRu: string;
-  bodyEn: string;
+  bodyRu?: string;
+  bodyEn?: string;
   descUz: string;
-  descRu: string;
-  descEn: string;
+  descRu?: string;
+  descEn?: string;
   tag: { uz: string; ru: string; en: string } | string;
   color: string;
   imageUrl?: string;
@@ -31,13 +31,27 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
   const t = translations[lang];
 
   const title =
-    lang === "uz" ? news.titleUz : lang === "ru" ? news.titleRu : news.titleEn;
+    lang === "uz"
+      ? news.titleUz
+      : lang === "ru"
+        ? news.titleRu?.trim() || news.titleUz
+        : news.titleEn?.trim() || news.titleUz;
   const body =
-    lang === "uz" ? news.bodyUz : lang === "ru" ? news.bodyRu : news.bodyEn;
+    lang === "uz"
+      ? news.bodyUz
+      : lang === "ru"
+        ? news.bodyRu?.trim() || news.bodyUz
+        : news.bodyEn?.trim() || news.bodyUz;
   const desc =
-    lang === "uz" ? news.descUz : lang === "ru" ? news.descRu : news.descEn;
+    lang === "uz"
+      ? news.descUz
+      : lang === "ru"
+        ? news.descRu?.trim() || news.descUz
+        : news.descEn?.trim() || news.descUz;
   const tagStr =
-    typeof news.tag === "string" ? news.tag : news.tag?.[lang] || "";
+    typeof news.tag === "string"
+      ? news.tag
+      : news.tag?.[lang] || news.tag?.uz || news.tag?.en || "";
 
   /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
   function renderBody(text: string) {

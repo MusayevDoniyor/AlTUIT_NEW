@@ -49,6 +49,12 @@ CREATE TABLE IF NOT EXISTS teachers (
   subject_uz TEXT NOT NULL DEFAULT '',
   subject_ru TEXT NOT NULL DEFAULT '',
   subject_en TEXT NOT NULL DEFAULT '',
+  info_uz TEXT NOT NULL DEFAULT '',
+  info_ru TEXT NOT NULL DEFAULT '',
+  info_en TEXT NOT NULL DEFAULT '',
+  certificates_uz TEXT NOT NULL DEFAULT '',
+  certificates_ru TEXT NOT NULL DEFAULT '',
+  certificates_en TEXT NOT NULL DEFAULT '',
   photo_url TEXT DEFAULT '',
   order_index INTEGER NOT NULL DEFAULT 0
 );

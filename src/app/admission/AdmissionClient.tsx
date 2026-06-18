@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
+import { useAsyncData } from "@/lib/useAsyncData";
 import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
 import { FaFileAlt, FaCalendarAlt, FaPenNib, FaPhoneAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
@@ -18,22 +19,11 @@ const APPLY_BTN = {
 
 export default function AdmissionClient() {
   const [lang, setLang] = useState<Lang>("uz");
-  const [rules, setRules] = useState<AdmissionRuleItem[]>([]);
-  const [loadingRules, setLoadingRules] = useState(true);
-
-  useEffect(() => {
-    async function loadRules() {
-      try {
-        const data = await getAdmissionRules();
-        setRules(data);
-      } catch (err) {
-        console.error("Failed to load admission rules:", err);
-      } finally {
-        setLoadingRules(false);
-      }
-    }
-    loadRules();
-  }, []);
+  const { data: rulesData, loading: loadingRules } = useAsyncData(
+    () => getAdmissionRules(),
+    [],
+  );
+  const rules = rulesData ?? [];
   const t = translations[lang];
 
   const steps = [

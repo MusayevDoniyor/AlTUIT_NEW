@@ -12,24 +12,52 @@ import {
 } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { CONTACT_DEPARTMENTS } from "@/lib/static";
 
 export default function ContactClient() {
   const [lang, setLang] = useState<Lang>("uz");
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    phone: "",
+    telegram: "",
     subject: "",
     message: "",
   });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const t = translations[lang];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-    setForm({ name: "", email: "", subject: "", message: "" });
+    if (sending) return;
+
+    setSending(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Xatolik yuz berdi");
+      }
+
+      setSent(true);
+      setForm({ name: "", phone: "", telegram: "", subject: "", message: "" });
+      setTimeout(() => setSent(false), 5000);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Xatolik yuz berdi";
+      setError(msg);
+      setTimeout(() => setError(""), 5000);
+    } finally {
+      setSending(false);
+    }
   };
 
   const info = [
@@ -61,32 +89,7 @@ export default function ContactClient() {
     },
   ];
 
-  const departments = [
-    {
-      titleUz: "Qabul bo'limi",
-      titleRu: "Приёмная комиссия",
-      titleEn: "Admissions Office",
-      phone: "+998 71 235 03 69",
-      email: "qabul@tatual.uz",
-      color: "#1a3a6e",
-    },
-    {
-      titleUz: "O'quv ishlari bo'limi",
-      titleRu: "Учебный отдел",
-      titleEn: "Academic Department",
-      phone: "+998 71 235 03 70",
-      email: "akademik@tatual.uz",
-      color: "#2d5bb5",
-    },
-    {
-      titleUz: "Moddiy-texnik bo'lim",
-      titleRu: "Хозяйственный отдел",
-      titleEn: "Facilities Department",
-      phone: "+998 71 235 03 72",
-      email: "texnik@tatual.uz",
-      color: "#1d7a55",
-    },
-  ];
+  const departments = CONTACT_DEPARTMENTS;
 
   return (
     <main>
@@ -419,16 +422,20 @@ export default function ContactClient() {
                         marginBottom: 8,
                       }}
                     >
-                      Email
+                      {lang === "uz"
+                        ? "Telefon raqamingiz"
+                        : lang === "ru"
+                          ? "Номер телефона"
+                          : "Phone number"}
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       required
-                      value={form.email}
+                      value={form.phone}
                       onChange={(e) =>
-                        setForm((f) => ({ ...f, email: e.target.value }))
+                        setForm((f) => ({ ...f, phone: e.target.value }))
                       }
-                      placeholder="email@misol.uz"
+                      placeholder="+998 (90) 123-45-67"
                       style={{
                         width: "100%",
                         padding: "12px 16px",
@@ -446,50 +453,96 @@ export default function ContactClient() {
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      color: "#374151",
-                      fontSize: "0.84rem",
-                      fontWeight: 600,
-                      marginBottom: 8,
-                    }}
-                  >
-                    {lang === "uz"
-                      ? "Mavzu"
-                      : lang === "ru"
-                        ? "Тема"
-                        : "Subject"}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={form.subject}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, subject: e.target.value }))
-                    }
-                    placeholder={
-                      lang === "uz"
-                        ? "Xabar mavzusi"
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 16,
+                  }}
+                >
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        color: "#374151",
+                        fontSize: "0.84rem",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      {lang === "uz"
+                        ? "Telegram (ixtiyoriy)"
                         : lang === "ru"
-                          ? "Тема сообщения"
-                          : "Message subject"
-                    }
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      borderRadius: 10,
-                      border: "1.5px solid #e5e7eb",
-                      fontSize: "0.9rem",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                      boxSizing: "border-box",
-                      fontFamily: "Inter, sans-serif",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#1a3a6e")}
-                    onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
-                  />
+                          ? "Telegram (опция)"
+                          : "Telegram (optional)"}
+                    </label>
+                    <input
+                      type="text"
+                      value={form.telegram}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, telegram: e.target.value }))
+                      }
+                      placeholder="@username"
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        borderRadius: 10,
+                        border: "1.5px solid #e5e7eb",
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                        boxSizing: "border-box",
+                        fontFamily: "Inter, sans-serif",
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = "#1a3a6e")}
+                      onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        display: "block",
+                        color: "#374151",
+                        fontSize: "0.84rem",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                      }}
+                    >
+                      {lang === "uz"
+                        ? "Mavzu"
+                        : lang === "ru"
+                          ? "Тема"
+                          : "Subject"}
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={form.subject}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, subject: e.target.value }))
+                      }
+                      placeholder={
+                        lang === "uz"
+                          ? "Xabar mavzusi"
+                          : lang === "ru"
+                            ? "Тема сообщения"
+                            : "Message subject"
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        borderRadius: 10,
+                        border: "1.5px solid #e5e7eb",
+                        fontSize: "0.9rem",
+                        outline: "none",
+                        transition: "border-color 0.2s",
+                        boxSizing: "border-box",
+                        fontFamily: "Inter, sans-serif",
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = "#1a3a6e")}
+                      onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -537,7 +590,7 @@ export default function ContactClient() {
 
                 <button
                   type="submit"
-                  disabled={sent}
+                  disabled={sent || sending}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -546,18 +599,21 @@ export default function ContactClient() {
                     padding: "15px",
                     borderRadius: 10,
                     border: "none",
-                    cursor: sent ? "default" : "pointer",
+                    cursor: sent || sending ? "default" : "pointer",
                     fontWeight: 700,
                     fontSize: "0.95rem",
                     fontFamily: "Inter, sans-serif",
                     background: sent
                       ? "linear-gradient(135deg,#1d7a55,#134e3a)"
-                      : "linear-gradient(135deg,#1a3a6e,#2d5bb5)",
+                      : error
+                        ? "linear-gradient(135deg,#b91c1c,#991b1b)"
+                        : "linear-gradient(135deg,#1a3a6e,#2d5bb5)",
                     color: "white",
                     transition: "all 0.3s ease",
+                    opacity: sending ? 0.7 : 1,
                   }}
                   onMouseEnter={(e) => {
-                    if (!sent)
+                    if (!sent && !sending)
                       (e.currentTarget as HTMLButtonElement).style.transform =
                         "translateY(-2px)";
                   }}
@@ -575,12 +631,37 @@ export default function ContactClient() {
                           ? "Отправлено!"
                           : "Sent!"}
                     </>
+                  ) : sending ? (
+                    <>
+                      {lang === "uz"
+                        ? "Yuborilmoqda..."
+                        : lang === "ru"
+                          ? "Отправка..."
+                          : "Sending..."}
+                    </>
                   ) : (
                     <>
                       <FaPaperPlane size={16} /> {t.contact_submit}
                     </>
                   )}
                 </button>
+
+                {error && (
+                  <div
+                    style={{
+                      background: "rgba(185,28,28,0.08)",
+                      border: "1px solid rgba(185,28,28,0.2)",
+                      borderRadius: 10,
+                      padding: "12px 16px",
+                      color: "#b91c1c",
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      textAlign: "center",
+                    }}
+                  >
+                    ⚠️ {error}
+                  </div>
+                )}
               </form>
             </div>
           </div>

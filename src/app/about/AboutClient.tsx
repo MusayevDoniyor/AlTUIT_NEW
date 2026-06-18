@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
@@ -10,6 +10,9 @@ import {
   LeadershipItem,
   TeacherItem,
 } from "@/lib/db";
+import { ABOUT_DEPARTMENTS } from "@/lib/static";
+import { useAsyncData } from "@/lib/useAsyncData";
+import { parseTeacherInfo, parseTeacherCertificates } from "@/lib/teacherUtils";
 import {
   Target,
   Eye,
@@ -29,85 +32,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PubSkeleton, PubBlock } from "@/components/Skeleton";
 
-const LEADERSHIP: any[] = [];
-
-interface Dept {
-  nameUz: string;
-  nameRu: string;
-  nameEn: string;
-  color: string;
-  keywords: string[];
-}
-const DEPARTMENTS: Dept[] = [
-  {
-    nameUz: "Matematika va fizika",
-    nameRu: "Математика и физика",
-    nameEn: "Mathematics & Physics",
-    color: "#1a3a6e",
-    keywords: ["matematik", "fizik", "algebra", "geometri"],
-  },
-  {
-    nameUz: "Informatika va texnologiya",
-    nameRu: "Информатика и технологии",
-    nameEn: "Informatics & Technology",
-    color: "#2d5bb5",
-    keywords: ["informatik", "texnolog", "dasturlash", "kompyuter"],
-  },
-  {
-    nameUz: "Kimyo va biologiya",
-    nameRu: "Химия и биология",
-    nameEn: "Chemistry & Biology",
-    color: "#1d7a55",
-    keywords: ["kimyo", "biologi"],
-  },
-  {
-    nameUz: "Tarix va ijtimoiy fanlar",
-    nameRu: "История и обществознание",
-    nameEn: "History & Social Studies",
-    color: "#c8a96e",
-    keywords: ["tarix", "ijtimoiy", "huquq", "iqtisod"],
-  },
-  {
-    nameUz: "Chet tillari",
-    nameRu: "Иностранные языки",
-    nameEn: "Foreign Languages",
-    color: "#6032bf",
-    keywords: ["ingliz", "chet tili", "nemis", "fransuz"],
-  },
-  {
-    nameUz: "Ona tili va adabiyot",
-    nameRu: "Родной язык и литература",
-    nameEn: "Native Language & Literature",
-    color: "#b91c1c",
-    keywords: ["ona tili", "adabiyot"],
-  },
-];
-
 export default function AboutClient() {
   const [lang, setLang] = useState<Lang>("uz");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const [dbLeadership, setDbLeadership] = useState<LeadershipItem[]>([]);
-  const [dbTeachers, setDbTeachers] = useState<TeacherItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: aboutData, loading } = useAsyncData(
+    async () => ({
+      leadership: await getLeadership(),
+      teachers: await getTeachers(),
+    }),
+    [],
+  );
+  const dbLeadership = aboutData?.leadership ?? [];
+  const dbTeachers = aboutData?.teachers ?? [];
   const [openDept, setOpenDept] = useState<number | null>(null);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const leaders = await getLeadership();
-        if (leaders && leaders.length > 0) setDbLeadership(leaders);
-
-        const teachers = await getTeachers();
-        if (teachers && teachers.length > 0) setDbTeachers(teachers);
-      } catch (err) {
-        console.error("Failed to load about page data:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
+  const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(
+    null,
+  );
 
   const t = translations[lang];
 
@@ -682,7 +623,7 @@ export default function AboutClient() {
               gap: 20,
             }}
           >
-            {DEPARTMENTS.map((dept, i) => {
+            {ABOUT_DEPARTMENTS.map((dept, i) => {
               const name =
                 lang === "uz"
                   ? dept.nameUz
@@ -898,7 +839,7 @@ export default function AboutClient() {
                   margin: "0 auto",
                 }}
               >
-                {DEPARTMENTS.map((dept, di) => {
+                {ABOUT_DEPARTMENTS.map((dept, di) => {
                   const deptName =
                     lang === "uz"
                       ? dept.nameUz
@@ -991,25 +932,30 @@ export default function AboutClient() {
                           {deptTeachers.length > 0 ? (
                             deptTeachers.map((t) => {
                               const name =
-                                lang === "uz"
+                                (lang === "uz"
                                   ? t.fullNameUz
                                   : lang === "ru"
                                     ? t.fullNameRu
-                                    : t.fullNameEn;
+                                    : t.fullNameEn) || t.fullNameUz;
                               const subject =
-                                lang === "uz"
+                                (lang === "uz"
                                   ? t.subjectUz
                                   : lang === "ru"
                                     ? t.subjectRu
-                                    : t.subjectEn;
+                                    : t.subjectEn) || t.subjectUz;
                               return (
-                                <div
+                                <button
                                   key={t.id}
+                                  type="button"
+                                  onClick={() => setSelectedTeacher(t)}
                                   style={{
                                     background: "#f8f9fc",
                                     borderRadius: 12,
                                     padding: "16px 12px",
                                     textAlign: "center",
+                                    border: "1px solid transparent",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s",
                                   }}
                                 >
                                   <div
@@ -1064,7 +1010,7 @@ export default function AboutClient() {
                                   >
                                     {subject}
                                   </p>
-                                </div>
+                                </button>
                               );
                             })
                           ) : (
@@ -1208,6 +1154,285 @@ export default function AboutClient() {
           </div>
         </div>
       </section>
+
+      {selectedTeacher && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 1200,
+            background: "rgba(0,0,0,0.65)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20,
+          }}
+          onClick={() => setSelectedTeacher(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "100%",
+              maxWidth: 720,
+              background: "white",
+              borderRadius: 24,
+              overflow: "hidden",
+              boxShadow: "0 30px 90px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "24px 28px",
+                borderBottom: "1px solid #e2e8f0",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    background: "rgba(200,169,110,0.1)",
+                    border: "2px solid rgba(200,169,110,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {selectedTeacher.photoUrl ? (
+                    <Image
+                      src={selectedTeacher.photoUrl}
+                      alt=""
+                      width={72}
+                      height={72}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: "2rem" }}>👨‍🏫</span>
+                  )}
+                </div>
+                <div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: "1.2rem",
+                      fontWeight: 800,
+                      color: "#1a1f2e",
+                    }}
+                  >
+                    {(lang === "uz"
+                      ? selectedTeacher.fullNameUz
+                      : lang === "ru"
+                        ? selectedTeacher.fullNameRu
+                        : selectedTeacher.fullNameEn) || selectedTeacher.fullNameUz}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "6px 0 0",
+                      color: "#475569",
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    {(lang === "uz"
+                      ? selectedTeacher.subjectUz
+                      : lang === "ru"
+                        ? selectedTeacher.subjectRu
+                        : selectedTeacher.subjectEn) || selectedTeacher.subjectUz}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedTeacher(null)}
+                style={{
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  fontSize: "1.35rem",
+                  lineHeight: 1,
+                  color: "#475569",
+                }}
+                aria-label="Close teacher details"
+              >
+                ×
+              </button>
+            </div>
+            <div style={{ padding: "24px 28px", display: "grid", gap: 20 }}>
+              {(() => {
+                const infoRaw =
+                  lang === "uz"
+                    ? selectedTeacher.infoUz
+                    : lang === "ru"
+                      ? selectedTeacher.infoRu
+                      : selectedTeacher.infoEn;
+                const certRaw =
+                  lang === "uz"
+                    ? selectedTeacher.certificatesUz
+                    : lang === "ru"
+                      ? selectedTeacher.certificatesRu
+                      : selectedTeacher.certificatesEn;
+
+                const { description, experience } = parseTeacherInfo(infoRaw);
+                const { certificates } = parseTeacherCertificates(certRaw);
+
+                return (
+                  <>
+                    {description && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: "0 0 10px",
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz"
+                            ? "Ma'lumot (Tavsif)"
+                            : lang === "ru"
+                              ? "Информация"
+                              : "About"}
+                        </h4>
+                        <p
+                          style={{
+                            margin: 0,
+                            color: "#475569",
+                            lineHeight: 1.8,
+                            fontSize: "0.95rem",
+                          }}
+                        >
+                          {description}
+                        </p>
+                      </div>
+                    )}
+
+                    {experience && experience.length > 0 && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: "0 0 12px",
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz"
+                            ? "Tajriba"
+                            : lang === "ru"
+                              ? "Опыт работы"
+                              : "Experience"}
+                        </h4>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                          {experience.map((exp, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                gap: 12,
+                                alignItems: "flex-start",
+                                background: "#f8f9fc",
+                                padding: "12px 16px",
+                                borderRadius: 12,
+                                border: "1px solid #e2e8f0",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: 28,
+                                  height: 28,
+                                  borderRadius: 8,
+                                  background: "rgba(26,58,110,0.08)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                <span style={{ fontSize: "0.85rem" }}>💼</span>
+                              </div>
+                              <p style={{ margin: 0, color: "#475569", fontSize: "0.9rem", lineHeight: 1.5, fontWeight: 550 }}>
+                                {exp}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {certificates && certificates.length > 0 && (
+                      <div>
+                        <h4
+                          style={{
+                            margin: "0 0 12px",
+                            fontSize: "1rem",
+                            fontWeight: 700,
+                            color: "#1a1f2e",
+                          }}
+                        >
+                          {lang === "uz"
+                            ? "Sertifikatlar va yutuqlar"
+                            : lang === "ru"
+                              ? "Сертификаты и достижения"
+                              : "Certificates & Achievements"}
+                        </h4>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                          {certificates.map((cert, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
+                                background: "rgba(200,169,110,0.1)",
+                                border: "1px solid rgba(200,169,110,0.25)",
+                                color: "#9c7c3c",
+                                padding: "6px 14px",
+                                borderRadius: 50,
+                                fontSize: "0.82rem",
+                                fontWeight: 600,
+                              }}
+                            >
+                              <Award size={13} color="#c8a96e" />
+                              <span>{cert}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {!description && (!experience || experience.length === 0) && (!certificates || certificates.length === 0) && (
+                      <p
+                        style={{
+                          margin: 0,
+                          color: "#64748b",
+                          fontSize: "0.95rem",
+                          lineHeight: 1.7,
+                        }}
+                      >
+                        {lang === "uz"
+                          ? "O'qituvchi haqida qo'shimcha ma'lumotlar hali kiritilmagan."
+                          : lang === "ru"
+                            ? "Дополнительная информация об учителе пока не добавлена."
+                            : "Additional teacher details have not been added yet."}
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer lang={lang} />
     </main>

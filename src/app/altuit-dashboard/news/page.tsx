@@ -1,25 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  Newspaper,
-  Plus,
-  Pencil,
-  Trash2,
-  X,
-  Check,
-  Eye,
-  Save,
-  Send,
-} from "lucide-react";
+import { Newspaper, Plus, Pencil, Trash2, X, Save, Send } from "lucide-react";
 import {
   getNews,
   saveNews,
   deleteNews,
   uploadImage,
   deleteImage,
-  deleteNewsWithImages,
   NewsItem,
   type ImageItem,
 } from "@/lib/db";
@@ -144,12 +133,11 @@ export default function AdminNewsPage() {
   const validate = () => {
     const errs: Record<string, string> = {};
     if (!editing) return false;
-    if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha majburiy";
-    if (!editing.titleRu.trim()) errs.titleRu = "Sarlavha majburiy";
-    if (!editing.titleEn.trim()) errs.titleEn = "Sarlavha majburiy";
-    if (!editing.descUz.trim()) errs.descUz = "Qisqa tavsif majburiy";
-    if (!editing.descRu.trim()) errs.descRu = "Qisqa tavsif majburiy";
-    if (!editing.descEn.trim()) errs.descEn = "Qisqa tavsif majburiy";
+    if (!editing.titleUz.trim()) errs.titleUz = "Sarlavha (O'zbekcha) majburiy";
+    if (!editing.descUz.trim())
+      errs.descUz = "Qisqa tavsif (O'zbekcha) majburiy";
+    if (!editing.bodyUz.trim())
+      errs.bodyUz = "Yangilik matni (O'zbekcha) majburiy";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -530,8 +518,8 @@ export default function AdminNewsPage() {
                       lang === "uz"
                         ? editing.titleUz
                         : lang === "ru"
-                          ? editing.titleRu
-                          : editing.titleEn
+                          ? (editing.titleRu ?? "")
+                          : (editing.titleEn ?? "")
                     }
                     onChange={(e) =>
                       set(
@@ -560,8 +548,8 @@ export default function AdminNewsPage() {
                       lang === "uz"
                         ? editing.descUz
                         : lang === "ru"
-                          ? editing.descRu
-                          : editing.descEn
+                          ? (editing.descRu ?? "")
+                          : (editing.descEn ?? "")
                     }
                     onChange={(e) =>
                       set(
@@ -645,8 +633,8 @@ export default function AdminNewsPage() {
                     lang === "uz"
                       ? editing.bodyUz
                       : lang === "ru"
-                        ? editing.bodyRu
-                        : editing.bodyEn
+                        ? (editing.bodyRu ?? "")
+                        : (editing.bodyEn ?? "")
                   }
                   onChange={(html) =>
                     set(
@@ -672,20 +660,20 @@ export default function AdminNewsPage() {
                     lang === "uz"
                       ? editing.titleUz
                       : lang === "ru"
-                        ? editing.titleRu
-                        : editing.titleEn,
+                        ? (editing.titleRu ?? "")
+                        : (editing.titleEn ?? ""),
                   desc:
                     lang === "uz"
                       ? editing.descUz
                       : lang === "ru"
-                        ? editing.descRu
-                        : editing.descEn,
+                        ? (editing.descRu ?? "")
+                        : (editing.descEn ?? ""),
                   body:
                     lang === "uz"
                       ? editing.bodyUz
                       : lang === "ru"
-                        ? editing.bodyRu
-                        : editing.bodyEn,
+                        ? (editing.bodyRu ?? "")
+                        : (editing.bodyEn ?? ""),
                   tag: editing.tag[lang] || "",
                   color: editing.color,
                   date: editing.date,
