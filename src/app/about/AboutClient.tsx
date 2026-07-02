@@ -246,7 +246,7 @@ export default function AboutClient() {
                       lineHeight: 1,
                     }}
                   >
-                    1993
+                    2006
                   </div>
                   <div
                     style={{
@@ -1235,7 +1235,8 @@ export default function AboutClient() {
                       ? selectedTeacher.fullNameUz
                       : lang === "ru"
                         ? selectedTeacher.fullNameRu
-                        : selectedTeacher.fullNameEn) || selectedTeacher.fullNameUz}
+                        : selectedTeacher.fullNameEn) ||
+                      selectedTeacher.fullNameUz}
                   </h3>
                   <p
                     style={{
@@ -1248,7 +1249,8 @@ export default function AboutClient() {
                       ? selectedTeacher.subjectUz
                       : lang === "ru"
                         ? selectedTeacher.subjectRu
-                        : selectedTeacher.subjectEn) || selectedTeacher.subjectUz}
+                        : selectedTeacher.subjectEn) ||
+                      selectedTeacher.subjectUz}
                   </p>
                 </div>
               </div>
@@ -1332,7 +1334,13 @@ export default function AboutClient() {
                               ? "Опыт работы"
                               : "Experience"}
                         </h4>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 10,
+                          }}
+                        >
                           {experience.map((exp, index) => (
                             <div
                               key={index}
@@ -1360,7 +1368,15 @@ export default function AboutClient() {
                               >
                                 <span style={{ fontSize: "0.85rem" }}>💼</span>
                               </div>
-                              <p style={{ margin: 0, color: "#475569", fontSize: "0.9rem", lineHeight: 1.5, fontWeight: 550 }}>
+                              <p
+                                style={{
+                                  margin: 0,
+                                  color: "#475569",
+                                  fontSize: "0.9rem",
+                                  lineHeight: 1.5,
+                                  fontWeight: 550,
+                                }}
+                              >
                                 {exp}
                               </p>
                             </div>
@@ -1385,7 +1401,9 @@ export default function AboutClient() {
                               ? "Сертификаты и достижения"
                               : "Certificates & Achievements"}
                         </h4>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                        <div
+                          style={{ display: "flex", flexWrap: "wrap", gap: 8 }}
+                        >
                           {certificates.map((cert, index) => (
                             <div
                               key={index}
@@ -1410,22 +1428,24 @@ export default function AboutClient() {
                       </div>
                     )}
 
-                    {!description && (!experience || experience.length === 0) && (!certificates || certificates.length === 0) && (
-                      <p
-                        style={{
-                          margin: 0,
-                          color: "#64748b",
-                          fontSize: "0.95rem",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        {lang === "uz"
-                          ? "O'qituvchi haqida qo'shimcha ma'lumotlar hali kiritilmagan."
-                          : lang === "ru"
-                            ? "Дополнительная информация об учителе пока не добавлена."
-                            : "Additional teacher details have not been added yet."}
-                      </p>
-                    )}
+                    {!description &&
+                      (!experience || experience.length === 0) &&
+                      (!certificates || certificates.length === 0) && (
+                        <p
+                          style={{
+                            margin: 0,
+                            color: "#64748b",
+                            fontSize: "0.95rem",
+                            lineHeight: 1.7,
+                          }}
+                        >
+                          {lang === "uz"
+                            ? "O'qituvchi haqida qo'shimcha ma'lumotlar hali kiritilmagan."
+                            : lang === "ru"
+                              ? "Дополнительная информация об учителе пока не добавлена."
+                              : "Additional teacher details have not been added yet."}
+                        </p>
+                      )}
                   </>
                 );
               })()}

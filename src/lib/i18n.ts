@@ -128,7 +128,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     hero_badge: "Toshkent axborot texnologiyalari universiteti",
     hero_title: "Muhammad al-Xorazmiy Akademik Litseyi",
     hero_subtitle:
-      "Biz 1993-yildan beri iqtidorli oʻquvchilarni amaliy fanlarga tayyorlaymiz. Ilmiy yoʻnalishlar va shaxsiy rivojlanishga alohida eʼtibor qaratiladi.",
+      "Biz 2006-yildan beri iqtidorli oʻquvchilarni amaliy fanlarga tayyorlaymiz. Ilmiy yoʻnalishlar va shaxsiy rivojlanishga alohida eʼtibor qaratiladi.",
     hero_cta: "Qabul haqida",
     hero_cta2: "Litsey haqida",
     hero_stat1: "O'quvchi",
@@ -139,7 +139,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     // About section
     about_title: "Litsey haqida",
     about_p1:
-      "Muhammad al-Xorazmiy nomidagi Akademik Litsey – Toshkent axborot texnologiyalari universiteti (TATU) huzurida faoliyat yurituvchi davlat akademik litseyi hisoblanadi. Litsey 1993-yilda tashkil etilgan bo'lib, Toshkent shahri Bog'ishamol ko'chasida joylashgan.",
+      "Muhammad al-Xorazmiy nomidagi Akademik Litsey – Toshkent axborot texnologiyalari universiteti (TATU) huzurida faoliyat yurituvchi davlat akademik litseyi hisoblanadi. Litsey 2006-yilda tashkil etilgan bo'lib, Toshkent shahri Bog'ishamol ko'chasida joylashgan.",
     about_p2:
       "Litsey o'z oldiga qo'ygan asosiy maqsad — iqtidorli yoshlarni aniqlash, ularni zamonaviy bilim va ko'nikmalar bilan qurollantirish hamda oliy o'quv yurtlariga munosib tayyorgarlik ko'rishga yordam berishdir.",
     about_p3:
@@ -290,7 +290,7 @@ export const translations: Record<Lang, TranslationStructure> = {
 
     about_title: "О лицее",
     about_p1:
-      "Академический лицей имени Мухаммада аль-Хорезми — государственный академический лицей при Ташкентском университете информационных технологий (ТУИТ). Лицей основан в 1993 году и расположен на улице Богишамол в Ташкенте.",
+      "Академический лицей имени Мухаммада аль-Хорезми — государственный академический лицей при Ташкентском университете информационных технологий (ТУИТ). Лицей основан в 2006 году и расположен на улице Богишамол в Ташкенте.",
     about_p2:
       "Основная цель лицея — выявление талантливых молодых людей, вооружение их современными знаниями и навыками, а также подготовка к поступлению в ведущие высшие учебные заведения.",
     about_p3:
@@ -429,7 +429,7 @@ export const translations: Record<Lang, TranslationStructure> = {
 
     about_title: "About the Lyceum",
     about_p1:
-      "The Muhammad al-Khwarizmi Academic Lyceum is a state academic lyceum operating under the Tashkent University of Information Technology (TUIT). Founded in 1993, it is located on Bogishamol Street in Tashkent.",
+      "The Muhammad al-Khwarizmi Academic Lyceum is a state academic lyceum operating under the Tashkent University of Information Technology (TUIT). Founded in 2006, it is located on Bogishamol Street in Tashkent.",
     about_p2:
       "The lyceum's primary mission is to identify talented young people, equip them with modern knowledge and skills, and help them prepare for admission to leading higher education institutions.",
     about_p3:
