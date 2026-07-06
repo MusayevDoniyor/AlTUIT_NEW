@@ -656,8 +656,14 @@ export default function AdmissionClient() {
                 className="btn-primary"
                 style={{ textDecoration: "none" }}
               >
-                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 71 235
-                03 69
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 71 235-03-69
+              </a>
+              <a
+                href="tel:+998932220611"
+                className="btn-outline"
+                style={{ color: "#1a3a6e", borderColor: "#1a3a6e", textDecoration: "none" }}
+              >
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 93 222-06-11
               </a>
               <Link
                 href="/contact"

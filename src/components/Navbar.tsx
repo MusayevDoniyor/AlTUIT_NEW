@@ -397,7 +397,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 }}
               >
                 <FaPhoneAlt size={12} />
-                <span>+998 71 235 03 69</span>
+                <span>+998 71 235-03-69</span>
               </a>
 
               <button
@@ -629,7 +629,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               textDecoration: "none",
             }}
           >
-            +998 71 235 03 69
+            +998 71 235-03-69
           </a>
         </div>
       </div>

@@ -224,6 +224,7 @@ export default function Footer({ lang }: FooterProps) {
               {[
                 { icon: FaMapMarkerAlt, text: t.contact_address_val },
                 { icon: FaPhoneAlt, text: t.contact_phone_val },
+                { icon: FaPhoneAlt, text: t.contact_phone_mobile_val },
                 { icon: FaEnvelope, text: t.contact_email_val },
               ].map((c, i) => (
                 <div

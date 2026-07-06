@@ -75,6 +75,13 @@ export default function ContactClient() {
       href: "tel:+998712350369",
     },
     {
+      icon: FaPhoneAlt,
+      label: t.contact_phone_mobile,
+      value: t.contact_phone_mobile_val,
+      color: "#6032bf",
+      href: "tel:+998932220611",
+    },
+    {
       icon: FaEnvelope,
       label: t.contact_email,
       value: t.contact_email_val,

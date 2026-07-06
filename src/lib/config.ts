@@ -6,6 +6,7 @@ export const siteConfig = {
     "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
   email: "n.abdiyev@tuit.uz",
   phone: "+998 71 235-03-69",
+  phoneMobile: "+998 93 222-06-11",
   address: "Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112",
   telegram: "https://t.me/tuituz_official",
 };

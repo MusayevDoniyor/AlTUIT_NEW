@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/config";
 export const metadata: Metadata = {
   title: "Bog'lanish",
   description:
-    "TATU Akademik Litseyi manzili: Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112. Tel: +998 71 235-03-69. Bodomzor metro bekati yaqinida.",
+    "TATU Akademik Litseyi manzili: Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112. Tel: +998 71 235-03-69, +998 93 222-06-11. Bodomzor metro bekati yaqinida.",
   keywords: [
     "TATU litsey manzil",
     "akademik litsey telefon",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Bog'lanish | ${siteConfig.shortName}`,
     description:
-      "TATU Akademik Litseyi manzili: Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112. Tel: +998 71 235-03-69.",
+      "TATU Akademik Litseyi manzili: Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112. Tel: +998 71 235-03-69, +998 93 222-06-11.",
     url: `${siteConfig.url}/contact`,
   },
 };

@@ -85,6 +85,8 @@ export interface TranslationStructure {
   contact_address_val: string;
   contact_phone: string;
   contact_phone_val: string;
+  contact_phone_mobile: string;
+  contact_phone_mobile_val: string;
   contact_email: string;
   contact_email_val: string;
   contact_schedule: string;
@@ -237,7 +239,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address: "Manzil",
     contact_address_val: "Toshkent shahri, Bog'ishamol ko'chasi, 112-uy",
     contact_phone: "Telefon",
-    contact_phone_val: "+998 71 235 03 69",
+    contact_phone_val: "+998 71 235-03-69",
+    contact_phone_mobile: "Tez aloqa",
+    contact_phone_mobile_val: "+998 93 222-06-11",
     contact_email: "Elektron pochta",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Ish vaqti",
@@ -377,7 +381,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address: "Адрес",
     contact_address_val: "Ташкент, улица Богишамол, 112",
     contact_phone: "Телефон",
-    contact_phone_val: "+998 71 235 03 69",
+    contact_phone_val: "+998 71 235-03-69",
+    contact_phone_mobile: "Быстрая связь",
+    contact_phone_mobile_val: "+998 93 222-06-11",
     contact_email: "Эл. почта",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Режим работы",
@@ -515,7 +521,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address: "Address",
     contact_address_val: "112 Bogishamol Street, Tashkent",
     contact_phone: "Phone",
-    contact_phone_val: "+998 71 235 03 69",
+    contact_phone_val: "+998 71 235-03-69",
+    contact_phone_mobile: "Quick contact",
+    contact_phone_mobile_val: "+998 93 222-06-11",
     contact_email: "Email",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Working Hours",
