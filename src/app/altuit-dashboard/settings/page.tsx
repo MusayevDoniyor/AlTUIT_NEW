@@ -28,9 +28,7 @@ export default function AdminSettingsPage() {
         setMaintenanceMode(settings.maintenanceMode);
       })
       .catch(() => {
-        setError(
-          "Sozlamalarni yuklab bo'lmadi. Supabase da site_settings jadvali yaratilganini tekshiring.",
-        );
+        setError("Sozlamalarni yuklab bo'lmadi.");
       })
       .finally(() => setLoading(false));
   }, []);

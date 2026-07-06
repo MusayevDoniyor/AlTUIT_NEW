@@ -1,5 +1,7 @@
 import { supabase } from "./supabase";
 
+const MAINTENANCE_STAT_KEY = "maintenance_mode";
+
 // Generic Upload file helper using Supabase Storage
 export async function uploadImage(file: File, folder: string): Promise<string> {
   const fileExtension = file.name.split(".").pop();
@@ -326,7 +328,9 @@ export interface StatItem {
 export async function getStats(): Promise<StatItem[]> {
   const { data, error } = await supabase.from("stats").select("*");
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || [])
+    .map(mapRow)
+    .filter((item: StatItem) => item.key !== MAINTENANCE_STAT_KEY);
 }
 
 export async function saveStat(
@@ -440,7 +444,7 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 10. Site Settings
+// 10. Site Settings (stored in stats table — no extra migration)
 // ----------------------------------------------------
 export interface SiteSettings {
   maintenanceMode: boolean;
@@ -448,30 +452,30 @@ export interface SiteSettings {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   const { data, error } = await supabase
-    .from("site_settings")
-    .select("maintenance_mode")
-    .eq("id", "site")
+    .from("stats")
+    .select("value")
+    .eq("key", MAINTENANCE_STAT_KEY)
     .maybeSingle();
 
   if (error || !data) {
-    return { maintenanceMode: false };
+    return { maintenanceMode: true };
   }
 
-  return { maintenanceMode: !!data.maintenance_mode };
+  return { maintenanceMode: Number(data.value) === 1 };
 }
 
 export async function saveSiteSettings(
   settings: SiteSettings,
 ): Promise<void> {
-  const { error } = await supabase.from("site_settings").upsert(
-    {
-      id: "site",
-      maintenance_mode: settings.maintenanceMode,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "id" },
-  );
-  if (error) throw error;
+  await saveStat(MAINTENANCE_STAT_KEY, {
+    key: MAINTENANCE_STAT_KEY,
+    value: settings.maintenanceMode ? 1 : 0,
+    suffix: "",
+    labelUz: "Texnik ishlar rejimi",
+    labelRu: "Режим обслуживания",
+    labelEn: "Maintenance mode",
+    color: "#f59e0b",
+  });
 }
 
 // ----------------------------------------------------
