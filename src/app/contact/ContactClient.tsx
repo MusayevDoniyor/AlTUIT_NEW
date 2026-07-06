@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CONTACT_DEPARTMENTS } from "@/lib/static";
 
 export default function ContactClient() {
   const [lang, setLang] = useState<Lang>("uz");
@@ -95,8 +94,6 @@ export default function ContactClient() {
       color: "#c8a96e",
     },
   ];
-
-  const departments = CONTACT_DEPARTMENTS;
 
   return (
     <main>
@@ -671,96 +668,6 @@ export default function ContactClient() {
                 )}
               </form>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== DEPARTMENT CONTACTS ===== */}
-      <section style={{ padding: "72px 0", background: "white" }}>
-        <div className="container-custom">
-          <h2
-            style={{
-              color: "#1a3a6e",
-              fontWeight: 800,
-              fontSize: "1.4rem",
-              marginBottom: 36,
-              textAlign: "center",
-            }}
-          >
-            {lang === "uz"
-              ? "Bo'limlar"
-              : lang === "ru"
-                ? "Отделы"
-                : "Departments"}
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-              gap: 20,
-            }}
-          >
-            {departments.map((d, i) => {
-              const title =
-                lang === "uz"
-                  ? d.titleUz
-                  : lang === "ru"
-                    ? d.titleRu
-                    : d.titleEn;
-              return (
-                <div
-                  key={i}
-                  style={{
-                    background: "#f8f9fc",
-                    borderRadius: 16,
-                    padding: "24px",
-                    border: `2px solid ${d.color}22`,
-                    borderLeft: `4px solid ${d.color}`,
-                  }}
-                >
-                  <h3
-                    style={{
-                      color: "#1a1f2e",
-                      fontWeight: 700,
-                      fontSize: "0.97rem",
-                      marginBottom: 14,
-                    }}
-                  >
-                    {title}
-                  </h3>
-                  <div
-                    style={{ display: "flex", flexDirection: "column", gap: 8 }}
-                  >
-                    <a
-                      href={`tel:${d.phone}`}
-                      style={{
-                        color: "#6b7280",
-                        fontSize: "0.85rem",
-                        textDecoration: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                      }}
-                    >
-                      <FaPhoneAlt size={13} color={d.color} /> {d.phone}
-                    </a>
-                    <a
-                      href={`mailto:${d.email}`}
-                      style={{
-                        color: "#6b7280",
-                        fontSize: "0.85rem",
-                        textDecoration: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                      }}
-                    >
-                      <FaEnvelope size={13} color={d.color} /> {d.email}
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

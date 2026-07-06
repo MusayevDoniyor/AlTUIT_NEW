@@ -104,7 +104,7 @@ export default function RootLayout({
                 addressCountry: "UZ",
               },
               telephone: ["+998712350369", "+998932220611"],
-              email: "n.abdiyev@tuit.uz",
+              email: "info@tatual.uz",
               sameAs: ["https://tuit.uz/akademik-litsey", siteConfig.url],
             }),
           }}

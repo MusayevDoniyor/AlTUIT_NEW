@@ -263,16 +263,6 @@ export default function AdminLeadershipPage() {
                   </p>
                 </div>
 
-                <p
-                  style={{
-                    color: C.textDim,
-                    fontSize: "0.75rem",
-                    flexShrink: 0,
-                    display: "none",
-                  }}
-                >
-                  {item.phone}
-                </p>
 
                 <div style={{ display: "flex", gap: 6 }}>
                   <Button
@@ -410,29 +400,7 @@ export default function AdminLeadershipPage() {
                 />
               </div>
 
-              {/* Contact */}
-              <SectionTitle>Aloqa ma'lumotlari</SectionTitle>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                }}
-              >
-                <Input
-                  label="Telefon"
-                  value={editing.phone}
-                  onChange={(e) => set("phone", e.target.value)}
-                  placeholder="+998 90 123 45 67"
-                />
-                <Input
-                  label="Email"
-                  type="email"
-                  value={editing.email}
-                  onChange={(e) => set("email", e.target.value)}
-                  placeholder="direktor@tatual.uz"
-                />
-              </div>
+
               <div
                 style={{
                   display: "grid",

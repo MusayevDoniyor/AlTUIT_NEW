@@ -4,7 +4,7 @@ export const siteConfig = {
   shortName: "TATU Akademik Litsey",
   description:
     "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
-  email: "n.abdiyev@tuit.uz",
+  email: "info@tatual.uz",
   phone: "+998 71 235-03-69",
   phoneMobile: "+998 93 222-06-11",
   address: "Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112",

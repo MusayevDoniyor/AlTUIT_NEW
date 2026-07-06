@@ -66,30 +66,3 @@ export const ABOUT_DEPARTMENTS = [
     keywords: ["ona tili", "adabiyot"],
   },
 ];
-
-export const CONTACT_DEPARTMENTS = [
-  {
-    titleUz: "Qabul bo'limi",
-    titleRu: "Приёмная комиссия",
-    titleEn: "Admissions Office",
-    phone: "+998 71 235-03-69",
-    email: "qabul@tatual.uz",
-    color: "#1a3a6e",
-  },
-  {
-    titleUz: "O'quv ishlari bo'limi",
-    titleRu: "Учебный отдел",
-    titleEn: "Academic Department",
-    phone: "+998 93 222-06-11",
-    email: "akademik@tatual.uz",
-    color: "#2d5bb5",
-  },
-  {
-    titleUz: "Moddiy-texnik bo'lim",
-    titleRu: "Хозяйственный отдел",
-    titleEn: "Facilities Department",
-    phone: "+998 93 222-06-11",
-    email: "texnik@tatual.uz",
-    color: "#1d7a55",
-  },
-];

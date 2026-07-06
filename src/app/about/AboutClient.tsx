@@ -27,7 +27,6 @@ import {
   Wifi,
   Library,
 } from "lucide-react";
-import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PubSkeleton, PubBlock } from "@/components/Skeleton";
@@ -524,36 +523,6 @@ export default function AboutClient() {
                     >
                       {role}
                     </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 8,
-                      }}
-                    >
-                      <a
-                        href={`tel:${person.phone}`}
-                        style={{
-                          color: "#6b7280",
-                          fontSize: "0.82rem",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <FaPhoneAlt size={12} style={{ marginRight: 6 }} />{" "}
-                        {person.phone}
-                      </a>
-                      <a
-                        href={`mailto:${person.email}`}
-                        style={{
-                          color: "#6b7280",
-                          fontSize: "0.82rem",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <FaEnvelope size={12} style={{ marginRight: 6 }} />{" "}
-                        {person.email}
-                      </a>
-                    </div>
                   </div>
                 );
               })}
