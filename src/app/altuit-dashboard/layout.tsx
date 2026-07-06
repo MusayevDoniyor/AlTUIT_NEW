@@ -19,6 +19,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  Settings,
 } from "lucide-react";
 import { ToastProvider } from "./_components/ui";
 
@@ -44,6 +45,7 @@ const navItems = [
   },
   { label: "Galereya", href: "/altuit-dashboard/gallery", icon: ImageIcon },
   { label: "Hero slider", href: "/altuit-dashboard/hero", icon: Sliders },
+  { label: "Sozlamalar", href: "/altuit-dashboard/settings", icon: Settings },
 ];
 
 export default function AdminLayout({

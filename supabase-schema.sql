@@ -132,6 +132,17 @@ CREATE TABLE IF NOT EXISTS hero_slides (
   is_active BOOLEAN NOT NULL DEFAULT true
 );
 
+-- 10. Site Settings (Sayt sozlamalari)
+CREATE TABLE IF NOT EXISTS site_settings (
+  id TEXT PRIMARY KEY DEFAULT 'site',
+  maintenance_mode BOOLEAN NOT NULL DEFAULT false,
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+INSERT INTO site_settings (id, maintenance_mode)
+VALUES ('site', true)
+ON CONFLICT (id) DO NOTHING;
+
 -- ============================================
 -- Row Level Security (RLS) — Hamma o'qishi mumkin, faqat auth'd users yozishi mumkin
 -- ============================================
@@ -146,6 +157,7 @@ ALTER TABLE admission_rules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery ENABLE ROW LEVEL SECURITY;
 ALTER TABLE hero_slides ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
 -- Public read access (website visitors can see all data)
 CREATE POLICY "Public read" ON news FOR SELECT USING (true);
@@ -157,6 +169,7 @@ CREATE POLICY "Public read" ON admission_rules FOR SELECT USING (true);
 CREATE POLICY "Public read" ON stats FOR SELECT USING (true);
 CREATE POLICY "Public read" ON gallery FOR SELECT USING (true);
 CREATE POLICY "Public read" ON hero_slides FOR SELECT USING (true);
+CREATE POLICY "Public read" ON site_settings FOR SELECT USING (true);
 
 -- Authenticated users can INSERT, UPDATE, DELETE
 CREATE POLICY "Auth insert" ON news FOR INSERT WITH CHECK (auth.role() = 'authenticated');
@@ -194,6 +207,10 @@ CREATE POLICY "Auth delete" ON gallery FOR DELETE USING (auth.role() = 'authenti
 CREATE POLICY "Auth insert" ON hero_slides FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update" ON hero_slides FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth delete" ON hero_slides FOR DELETE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Auth insert" ON site_settings FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Auth update" ON site_settings FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth delete" ON site_settings FOR DELETE USING (auth.role() = 'authenticated');
 
 -- ============================================
 -- Storage bucket (rasmlar uchun)

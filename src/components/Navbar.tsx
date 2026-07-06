@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
+import MaintenanceBanner from "@/components/MaintenanceBanner";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
   FaPhoneAlt,
@@ -85,6 +86,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
+        <MaintenanceBanner lang={lang} />
         {/* ROW 1: UPPER INFO BAR */}
         <div
           className="header-top"

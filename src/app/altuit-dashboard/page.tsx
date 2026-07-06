@@ -13,6 +13,7 @@ import {
   TrendingUp,
   ArrowRight,
   LayoutDashboard,
+  Settings,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 
@@ -60,6 +61,13 @@ const quickLinks = [
     icon: Sliders,
     color: "#b91c1c",
     desc: "Bosh sahifa sliderini boshqarish",
+  },
+  {
+    label: "Sayt sozlamalari",
+    href: "/altuit-dashboard/settings",
+    icon: Settings,
+    color: "#f59e0b",
+    desc: "Texnik ishlar rejimini boshqarish",
   },
 ];
 

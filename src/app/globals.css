@@ -24,6 +24,10 @@ body {
   max-width: 100%;
 }
 
+body[data-maintenance="true"] .page-banner {
+  padding-top: 172px !important;
+}
+
 img,
 svg,
 video,

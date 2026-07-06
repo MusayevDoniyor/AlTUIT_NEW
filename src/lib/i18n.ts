@@ -100,6 +100,8 @@ export interface TranslationStructure {
   footer_links: string;
   footer_contact: string;
   footer_copy: string;
+
+  maintenance_notice: string;
 }
 
 export const translations: Record<Lang, TranslationStructure> = {
@@ -257,6 +259,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_links: "Tezkor havolalar",
     footer_contact: "Aloqa",
     footer_copy: "Barcha huquqlar himoyalangan.",
+
+    maintenance_notice:
+      "Diqqat: Sayt hozirda texnik ishlar olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha to'liq ishlamasligi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69 yoki +998 93 222-06-11.",
   },
 
   ru: {
@@ -398,6 +403,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_links: "Быстрые ссылки",
     footer_contact: "Контакты",
     footer_copy: "Все права защищены.",
+
+    maintenance_notice:
+      "Внимание: сайт находится на техническом обслуживании. Некоторая информация и каналы связи могут временно работать неполно. Телефоны: +998 71 235-03-69, +998 93 222-06-11.",
   },
 
   en: {
@@ -538,6 +546,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_links: "Quick Links",
     footer_contact: "Contact",
     footer_copy: "All rights reserved.",
+
+    maintenance_notice:
+      "Notice: this website is under maintenance. Some information and contact channels may be temporarily unavailable. For urgent inquiries: +998 71 235-03-69 or +998 93 222-06-11.",
   },
 };
 

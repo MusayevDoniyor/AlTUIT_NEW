@@ -440,6 +440,41 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
+// 10. Site Settings
+// ----------------------------------------------------
+export interface SiteSettings {
+  maintenanceMode: boolean;
+}
+
+export async function getSiteSettings(): Promise<SiteSettings> {
+  const { data, error } = await supabase
+    .from("site_settings")
+    .select("maintenance_mode")
+    .eq("id", "site")
+    .maybeSingle();
+
+  if (error || !data) {
+    return { maintenanceMode: false };
+  }
+
+  return { maintenanceMode: !!data.maintenance_mode };
+}
+
+export async function saveSiteSettings(
+  settings: SiteSettings,
+): Promise<void> {
+  const { error } = await supabase.from("site_settings").upsert(
+    {
+      id: "site",
+      maintenance_mode: settings.maintenanceMode,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "id" },
+  );
+  if (error) throw error;
+}
+
+// ----------------------------------------------------
 // Helpers: camelCase ↔ snake_case mapping
 // ----------------------------------------------------
 

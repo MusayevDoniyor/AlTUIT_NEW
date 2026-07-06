@@ -12,6 +12,8 @@ import {
 } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MaintenanceBanner from "@/components/MaintenanceBanner";
+import { useSiteSettings } from "@/lib/site-settings-context";
 
 export default function ContactClient() {
   const [lang, setLang] = useState<Lang>("uz");
@@ -27,6 +29,7 @@ export default function ContactClient() {
   const [error, setError] = useState("");
 
   const t = translations[lang];
+  const { maintenanceMode } = useSiteSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -340,6 +343,11 @@ export default function ContactClient() {
                 border: "1px solid rgba(26,58,110,0.07)",
               }}
             >
+              {maintenanceMode && (
+                <div style={{ marginBottom: 20 }}>
+                  <MaintenanceBanner lang={lang} compact />
+                </div>
+              )}
               <h3
                 style={{
                   color: "#1a1f2e",
@@ -357,11 +365,17 @@ export default function ContactClient() {
                   marginBottom: 28,
                 }}
               >
-                {lang === "uz"
-                  ? "Xabaringizga 24 soat ichida javob beramiz"
-                  : lang === "ru"
-                    ? "Мы ответим на ваше сообщение в течение 24 часов"
-                    : "We will respond to your message within 24 hours"}
+                {maintenanceMode
+                  ? lang === "uz"
+                    ? "Sayt hozir yangilanmoqda. Murojaatingiz qabul qilinadi, lekin javob biroz kechikishi mumkin."
+                    : lang === "ru"
+                      ? "Сайт обновляется. Ваше обращение будет принято, но ответ может прийти с задержкой."
+                      : "The site is being updated. Your message will be received, but a reply may be delayed."
+                  : lang === "uz"
+                    ? "Xabaringizga 48 soat ichida javob beramiz"
+                    : lang === "ru"
+                      ? "Мы ответим на ваше сообщение в течение 48 часов"
+                      : "We will respond to your message within 48 hours"}
               </p>
 
               <form
