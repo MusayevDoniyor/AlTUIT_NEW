@@ -960,6 +960,134 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== LEADERSHIP ===== */}
+      <section
+        style={{
+          padding: "96px 0",
+          background: "linear-gradient(135deg,#f0f4ff,#e8eeff)",
+        }}
+      >
+        <div className="container-custom">
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: 620,
+              margin: "0 auto 56px",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-block",
+                background: "rgba(26,58,110,0.08)",
+                color: "#1a3a6e",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                padding: "5px 14px",
+                borderRadius: 50,
+                marginBottom: 16,
+                textTransform: "uppercase",
+              }}
+            >
+              {lang === "uz"
+                ? "Rahbariyat"
+                : lang === "ru"
+                  ? "Руководство"
+                  : "Leadership"}
+            </div>
+            <h2 className="section-title" style={{ marginBottom: 12 }}>
+              {lang === "uz"
+                ? "Litsey rahbariyati"
+                : lang === "ru"
+                  ? "Руководство лицея"
+                  : "Lyceum Leadership"}
+            </h2>
+            <p className="section-subtitle" style={{ margin: "0 auto" }}>
+              {lang === "uz"
+                ? "Akademik litsey ma'muriyati va rahbarlari"
+                : lang === "ru"
+                  ? "Администрация и руководители академического лицея"
+                  : "Administration and leaders of the academic lyceum"}
+            </p>
+          </div>
+
+          <div
+            style={{
+              maxWidth: 500,
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <div
+              style={{
+                width: 180,
+                height: 180,
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "4px solid #c8a96e",
+                boxShadow: "0 8px 32px rgba(0,33,71,0.15)",
+                marginBottom: 28,
+                flexShrink: 0,
+                position: "relative",
+              }}
+            >
+              <Image
+                src="/image.png"
+                alt="Abdiyev Nosir Raximovich"
+                width={180}
+                height={180}
+                style={{
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                backdropFilter: "blur(10px)",
+                borderRadius: 20,
+                padding: "32px 40px",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                border: "1px solid rgba(255,255,255,0.8)",
+                width: "100%",
+              }}
+            >
+              <h3
+                style={{
+                  color: "#1a1f2e",
+                  fontWeight: 800,
+                  fontSize: "1.35rem",
+                  marginBottom: 6,
+                  lineHeight: 1.3,
+                }}
+              >
+                Abdiyev Nosir Raximovich
+              </h3>
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: "0.92rem",
+                  fontWeight: 500,
+                  margin: 0,
+                }}
+              >
+                {lang === "uz"
+                  ? "Akademik litsey direktori"
+                  : lang === "ru"
+                    ? "Директор академического лицея"
+                    : "Director of Academic Lyceum"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== NEWS PREVIEW ===== */}
       <section style={{ padding: "96px 0", background: "#f8f9fc" }}>
         <div className="container-custom">

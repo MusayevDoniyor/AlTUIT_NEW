@@ -4,12 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
-import {
-  getLeadership,
-  getTeachers,
-  LeadershipItem,
-  TeacherItem,
-} from "@/lib/db";
+import { getTeachers, TeacherItem } from "@/lib/db";
 import { ABOUT_DEPARTMENTS } from "@/lib/static";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { parseTeacherInfo, parseTeacherCertificates } from "@/lib/teacherUtils";
@@ -37,12 +32,10 @@ export default function AboutClient() {
 
   const { data: aboutData, loading } = useAsyncData(
     async () => ({
-      leadership: await getLeadership(),
       teachers: await getTeachers(),
     }),
     [],
   );
-  const dbLeadership = aboutData?.leadership ?? [];
   const dbTeachers = aboutData?.teachers ?? [];
   const [openDept, setOpenDept] = useState<number | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(
@@ -357,7 +350,7 @@ export default function AboutClient() {
           <div
             style={{
               textAlign: "center",
-              maxWidth: 580,
+              maxWidth: 620,
               margin: "0 auto 56px",
             }}
           >
@@ -388,146 +381,89 @@ export default function AboutClient() {
                   ? "Руководство лицея"
                   : "Lyceum Leadership"}
             </h2>
+            <p className="section-subtitle" style={{ margin: "0 auto" }}>
+              {lang === "uz"
+                ? "Akademik litsey ma'muriyati va rahbarlari"
+                : lang === "ru"
+                  ? "Администрация и руководители академического лицея"
+                  : "Administration and leaders of the academic lyceum"}
+            </p>
           </div>
 
-          {loading ? (
+          <div
+            style={{
+              maxWidth: 500,
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-                gap: 24,
+                width: 180,
+                height: 180,
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "4px solid #c8a96e",
+                boxShadow: "0 8px 32px rgba(0,33,71,0.15)",
+                marginBottom: 28,
+                flexShrink: 0,
+                position: "relative",
               }}
             >
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: "white",
-                    borderRadius: 18,
-                    padding: "32px 24px",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 12,
-                  }}
-                >
-                  <PubSkeleton width={90} height={90} borderRadius={45} />
-                  <PubSkeleton width="60%" height={16} />
-                  <PubSkeleton width="40%" height={12} />
-                </div>
-              ))}
+              <Image
+                src="/image.png"
+                alt="Abdiyev Nosir Raximovich"
+                width={180}
+                height={180}
+                style={{
+                  objectFit: "cover",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
             </div>
-          ) : dbLeadership.length === 0 ? (
+
             <div
-              style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                backdropFilter: "blur(10px)",
+                borderRadius: 20,
+                padding: "32px 40px",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                border: "1px solid rgba(255,255,255,0.8)",
+                width: "100%",
+              }}
             >
-              <p style={{ color: "#6b7280", fontSize: "1.1rem", margin: 0 }}>
+              <h3
+                style={{
+                  color: "#1a1f2e",
+                  fontWeight: 800,
+                  fontSize: "1.35rem",
+                  marginBottom: 6,
+                  lineHeight: 1.3,
+                }}
+              >
+                Abdiyev Nosir Raximovich
+              </h3>
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: "0.92rem",
+                  fontWeight: 500,
+                  margin: 0,
+                }}
+              >
                 {lang === "uz"
-                  ? "Rahbariyat ma'lumotlari mavjud emas"
+                  ? "Akademik litsey direktori"
                   : lang === "ru"
-                    ? "Информация о руководстве отсутствует"
-                    : "No leadership information available"}
+                    ? "Директор академического лицея"
+                    : "Director of Academic Lyceum"}
               </p>
             </div>
-          ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-                gap: 24,
-              }}
-            >
-              {dbLeadership.map((person, i) => {
-                const name =
-                  lang === "uz"
-                    ? person.nameUz
-                    : lang === "ru"
-                      ? person.nameRu
-                      : person.nameEn;
-                const role =
-                  lang === "uz"
-                    ? person.roleUz
-                    : lang === "ru"
-                      ? person.roleRu
-                      : person.roleEn;
-                return (
-                  <div
-                    key={(person as any).id || i}
-                    className="card-hover"
-                    style={{
-                      background: "white",
-                      borderRadius: 18,
-                      padding: "32px 24px",
-                      border: "1px solid rgba(26,58,110,0.08)",
-                      boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 90,
-                        height: 90,
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        margin: "0 auto 20px",
-                        background: `linear-gradient(135deg, ${person.color || "#1a3a6e"}, ${person.color || "#1a3a6e"}aa)`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        border: "3px solid rgba(200,169,110,0.15)",
-                      }}
-                    >
-                      {person.photoUrl ? (
-                        <Image
-                          src={person.photoUrl}
-                          alt=""
-                          width={90}
-                          height={90}
-                          style={{
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                          }}
-                        />
-                      ) : (
-                        <span
-                          style={{
-                            fontSize: "1.6rem",
-                            fontWeight: 900,
-                            color: "white",
-                          }}
-                        >
-                          {person.initials || name.charAt(0)}
-                        </span>
-                      )}
-                    </div>
-                    <h3
-                      style={{
-                        color: "#1a1f2e",
-                        fontWeight: 700,
-                        fontSize: "1rem",
-                        marginBottom: 8,
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {name}
-                    </h3>
-                    <p
-                      style={{
-                        color: person.color,
-                        fontSize: "0.82rem",
-                        fontWeight: 600,
-                        marginBottom: 18,
-                      }}
-                    >
-                      {role}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          </div>
         </div>
       </section>
 
