@@ -1032,6 +1032,10 @@ export default function Home() {
                 marginBottom: 28,
                 flexShrink: 0,
                 position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#1a3a6e15",
               }}
             >
               <Image
@@ -1043,6 +1047,14 @@ export default function Home() {
                   objectFit: "cover",
                   width: "100%",
                   height: "100%",
+                }}
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = "none";
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = `<span style="font-size:3.5rem;font-weight:900;color:#1a3a6e;">AN</span>`;
+                  }
                 }}
               />
             </div>
