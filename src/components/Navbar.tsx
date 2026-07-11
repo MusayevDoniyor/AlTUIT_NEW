@@ -126,7 +126,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <a
-                  href="https://t.me/altuit_lyceum"
+                  href="https://t.me/tatu_akademik_litseyi"
                   aria-label="Telegram"
                   style={{ color: "white", opacity: 0.8 }}
                 >

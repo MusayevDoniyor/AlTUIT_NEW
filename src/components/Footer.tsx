@@ -104,7 +104,7 @@ export default function Footer({ lang }: FooterProps) {
             <div style={{ display: "flex", gap: 10 }}>
               {[
                 {
-                  href: "https://t.me/altuit_lyceum",
+                  href: "https://t.me/tatu_akademik_litseyi",
                   label: "Telegram",
                   icon: FaTelegramPlane,
                 },
@@ -298,7 +298,7 @@ export default function Footer({ lang }: FooterProps) {
               {lang === "uz" ? "Kanal" : lang === "ru" ? "Канал" : "Channel"}
             </h4>
             <a
-              href="https://t.me/altuit_lyceum"
+              href="https://t.me/tatu_akademik_litseyi"
               target="_blank"
               rel="noopener noreferrer"
               style={{
