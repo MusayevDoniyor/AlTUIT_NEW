@@ -78,14 +78,14 @@ export default function AdminSettingsPage() {
   return (
     <div>
       <PageHeader
-        icon={Settings}
+        icon={<Settings size={18} color={C.gold} />}
         title="Sayt sozlamalari"
-        subtitle="Saytning umumiy holatini boshqarish"
+        description="Saytning umumiy holatini boshqarish"
       />
 
       {error && (
         <div style={{ marginBottom: 20 }}>
-          <Alert type="error">{error}</Alert>
+          <Alert type="error" message={error} />
         </div>
       )}
 
@@ -147,16 +147,26 @@ export default function AdminSettingsPage() {
                   }}
                 >
                   Hozir:{" "}
-                  <strong style={{ color: maintenanceMode ? "#f59e0b" : "#22c55e" }}>
+                  <strong
+                    style={{ color: maintenanceMode ? "#f59e0b" : "#22c55e" }}
+                  >
                     {maintenanceMode ? "Yoqilgan" : "O'chirilgan"}
                   </strong>
                 </p>
               </div>
             </div>
-            <p style={{ color: C.textMuted, fontSize: "0.85rem", lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                color: C.textMuted,
+                fontSize: "0.85rem",
+                lineHeight: 1.6,
+                margin: 0,
+              }}
+            >
               Yoqilganda saytning barcha sahifalarida foydalanuvchilarga texnik
-              ishlar olib borilayotgani haqida ogohlantirish banneri ko&apos;rinadi.
-              Bog&apos;lanish sahifasida ham qo&apos;shimcha eslatma chiqadi.
+              ishlar olib borilayotgani haqida ogohlantirish banneri
+              ko&apos;rinadi. Bog&apos;lanish sahifasida ham qo&apos;shimcha
+              eslatma chiqadi.
             </p>
           </div>
 
