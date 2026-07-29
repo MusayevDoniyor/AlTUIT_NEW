@@ -102,16 +102,7 @@ export default function Footer({ lang }: FooterProps) {
                 </div>
               </div>
             </div>
-            <p
-              style={{
-                fontSize: "0.84rem",
-                lineHeight: 1.8,
-                marginBottom: 22,
-                color: "rgba(255,255,255,0.5)",
-              }}
-            >
-              {t.footer_desc}
-            </p>
+
             <div style={{ display: "flex", gap: 10 }}>
               {[
                 {
