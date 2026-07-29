@@ -243,7 +243,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_phone: "Telefon",
     contact_phone_val: "+998 71 235-03-69",
     contact_phone_mobile: "Tez aloqa",
-    contact_phone_mobile_val: "+998931033245",
+    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Elektron pochta",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Ish vaqti",
@@ -261,7 +261,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_copy: "Barcha huquqlar himoyalangan.",
 
     maintenance_notice:
-      "Diqqat: Sayt hozirda texnik ishlar olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha to'liq ishlamasligi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69 yoki +998931033245.",
+      "Diqqat: Sayt hozirda texnik ishlar olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha to'liq ishlamasligi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69 yoki +998 93 103-32-45.",
   },
 
   ru: {
@@ -388,7 +388,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_phone: "Телефон",
     contact_phone_val: "+998 71 235-03-69",
     contact_phone_mobile: "Быстрая связь",
-    contact_phone_mobile_val: "+998931033245",
+    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Эл. почта",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Режим работы",
@@ -405,7 +405,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_copy: "Все права защищены.",
 
     maintenance_notice:
-      "Внимание: сайт находится на техническом обслуживании. Некоторая информация и каналы связи могут временно работать неполно. Телефоны: +998 71 235-03-69, +998931033245.",
+      "Внимание: сайт находится на техническом обслуживании. Некоторая информация и каналы связи могут временно работать неполно. Телефоны: +998 71 235-03-69, +998 93 103-32-45.",
   },
 
   en: {
@@ -531,7 +531,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_phone: "Phone",
     contact_phone_val: "+998 71 235-03-69",
     contact_phone_mobile: "Quick contact",
-    contact_phone_mobile_val: "+998931033245",
+    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Email",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Working Hours",
@@ -548,7 +548,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_copy: "All rights reserved.",
 
     maintenance_notice:
-      "Notice: this website is under maintenance. Some information and contact channels may be temporarily unavailable. For urgent inquiries: +998 71 235-03-69 or +998931033245.",
+      "Notice: this website is under maintenance. Some information and contact channels may be temporarily unavailable. For urgent inquiries: +998 71 235-03-69 or +998 93 103-32-45.",
   },
 };
 
