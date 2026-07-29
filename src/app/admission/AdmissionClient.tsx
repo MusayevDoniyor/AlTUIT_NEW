@@ -663,7 +663,7 @@ export default function AdmissionClient() {
                 className="btn-outline"
                 style={{ color: "#1a3a6e", borderColor: "#1a3a6e", textDecoration: "none" }}
               >
-                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 93 222-06-11
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998931033245
               </a>
               <Link
                 href="/contact"
