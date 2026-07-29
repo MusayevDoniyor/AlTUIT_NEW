@@ -80,14 +80,25 @@ export default function Footer({ lang }: FooterProps) {
                 <div
                   style={{
                     color: "white",
-                    fontWeight: 700,
-                    fontSize: "0.9rem",
+                    fontWeight: 800,
+                    fontSize: "0.78rem",
+                    lineHeight: 1.15,
+                    maxWidth: 210,
                   }}
                 >
-                  Al-Xorazmiy
+                  Muhammad Al-Xorazmiy nomidagi
                 </div>
-                <div style={{ color: "#c8a96e", fontSize: "0.72rem" }}>
-                  Akademik Litsey
+                <div
+                  style={{
+                    color: "#c8a96e",
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.05em",
+                    marginTop: 1,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  TATU akademik litseyi
                 </div>
               </div>
             </div>
