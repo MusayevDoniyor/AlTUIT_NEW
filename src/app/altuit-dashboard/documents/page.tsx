@@ -94,7 +94,8 @@ export default function AdminDocumentsPage() {
         setUploading(false);
       }
       const id = editing.isNew ? Date.now().toString() : editing.id!;
-      await saveDocument(id, { ...editing, fileUrl, fileSize });
+      const { isNew, id: _id, ...data } = editing;
+      await saveDocument(id, { ...data, fileUrl, fileSize });
       showToast("success", editing.isNew ? "Qo'shildi" : "Tahrirlandi");
       await load();
       close();
