@@ -45,6 +45,7 @@ const navItems = [
   },
   { label: "Galereya", href: "/altuit-dashboard/gallery", icon: ImageIcon },
   { label: "Hero slider", href: "/altuit-dashboard/hero", icon: Sliders },
+  { label: "Hujjatlar", href: "/altuit-dashboard/documents", icon: FileText },
   { label: "Sozlamalar", href: "/altuit-dashboard/settings", icon: Settings },
 ];
 

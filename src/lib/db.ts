@@ -20,6 +20,28 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
   return publicUrl;
 }
 
+// Generic Upload file helper for documents (PDF, DOC, etc.)
+export async function uploadFile(
+  file: File,
+  folder: string,
+  bucket = "documents",
+): Promise<string> {
+  const fileExtension = file.name.split(".").pop();
+  const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExtension}`;
+
+  const { error } = await supabase.storage
+    .from(bucket)
+    .upload(fileName, file, { cacheControl: "3600", upsert: false });
+
+  if (error) throw error;
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucket).getPublicUrl(fileName);
+
+  return publicUrl;
+}
+
 // Generic Delete file helper using Supabase Storage
 export async function deleteImage(url: string): Promise<void> {
   try {
@@ -34,6 +56,25 @@ export async function deleteImage(url: string): Promise<void> {
     if (error) throw error;
   } catch (error) {
     console.error("Failed to delete image from Supabase storage:", error);
+  }
+}
+
+export async function deleteFile(
+  url: string,
+  bucket = "documents",
+): Promise<void> {
+  try {
+    const marker = `/storage/v1/object/public/${bucket}/`;
+    const markerIndex = url.indexOf(marker);
+    if (markerIndex === -1) {
+      console.warn("Could not parse file path from URL:", url);
+      return;
+    }
+    const path = url.substring(markerIndex + marker.length);
+    const { error } = await supabase.storage.from(bucket).remove([path]);
+    if (error) throw error;
+  } catch (error) {
+    console.error("Failed to delete file from Supabase storage:", error);
   }
 }
 
@@ -444,7 +485,45 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 10. Site Settings (stored in stats table — no extra migration)
+// 10. Documents
+// ----------------------------------------------------
+export interface DocumentItem {
+  id?: string;
+  titleUz: string;
+  titleRu: string;
+  titleEn: string;
+  fileUrl: string;
+  fileSize: number;
+  createdAt?: string;
+}
+
+export async function getDocuments(): Promise<DocumentItem[]> {
+  const { data, error } = await supabase
+    .from("documents")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data || []).map(mapRow);
+}
+
+export async function saveDocument(
+  id: string,
+  data: Omit<DocumentItem, "id">,
+): Promise<void> {
+  const row = toRow({ id, ...data });
+  const { error } = await supabase
+    .from("documents")
+    .upsert(row, { onConflict: "id" });
+  if (error) throw error;
+}
+
+export async function deleteDocument(id: string): Promise<void> {
+  const { error } = await supabase.from("documents").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ----------------------------------------------------
+// 11. Site Settings (stored in stats table — no extra migration)
 // ----------------------------------------------------
 export interface SiteSettings {
   maintenanceMode: boolean;

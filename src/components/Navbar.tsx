@@ -38,6 +38,7 @@ const navItems = (t: Record<string, string>) => [
       { label: t.nav_directions, href: "/#directions" },
       { label: t.nav_rules, href: "/admission" },
       { label: t.nav_docs, href: "/admission#documents" },
+      { label: t.nav_documents, href: "/documents" },
       { label: t.nav_faq, href: "/about#faq" },
     ],
   },
