@@ -9,7 +9,9 @@ import {
   deleteTeacher,
   uploadImage,
   deleteImage,
+  getDepartments,
   TeacherItem,
+  DepartmentItem,
 } from "@/lib/db";
 import {
   parseTeacherInfo,
@@ -39,6 +41,7 @@ const EMPTY: Omit<TeacherItem, "id"> = {
   subjectUz: "",
   infoUz: "",
   certificatesUz: "",
+  departmentId: "",
   orderIndex: 0,
 };
 
@@ -52,6 +55,7 @@ export default function AdminTeachersPage() {
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const [uploadingImage, setUploadingImage] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<TeacherItem | null>(null);
+  const [departments, setDepartments] = useState<DepartmentItem[]>([]);
   const { showToast } = useToast();
 
   // Local state for structured fields
@@ -145,7 +149,12 @@ export default function AdminTeachersPage() {
   const load = async () => {
     setLoading(true);
     try {
-      setItems(await getTeachers());
+      const [teachers, depts] = await Promise.all([
+        getTeachers(),
+        getDepartments(),
+      ]);
+      setItems(teachers);
+      setDepartments(depts);
     } catch {
       showToast("error", "Xatolik yuz berdi");
     } finally {
@@ -509,6 +518,32 @@ export default function AdminTeachersPage() {
                     )
                   }
                 />
+                <div>
+                  <label style={{ display: "block", color: C.textMuted, fontSize: "0.78rem", fontWeight: 600, marginBottom: 6 }}>
+                    Kafedra
+                  </label>
+                  <select
+                    value={editing.departmentId || ""}
+                    onChange={(e) => set("departmentId", e.target.value || "")}
+                    style={{
+                      width: "100%", padding: "10px 14px",
+                      background: "rgba(255,255,255,0.05)",
+                      border: `1px solid ${C.border}`, borderRadius: 10,
+                      color: C.text, fontSize: "0.88rem", outline: "none",
+                      boxSizing: "border-box", fontFamily: "inherit", cursor: "pointer",
+                    }}
+                  >
+                    <option value="" style={{ background: "#141620" }}>— Kafedra tanlanmagan —</option>
+                    {departments.map((d) => {
+                      const deptName = lang === "uz" ? d.nameUz : lang === "ru" ? d.nameRu : d.nameEn;
+                      return (
+                        <option key={d.id} value={d.id} style={{ background: "#141620" }}>
+                          {deptName}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
               <Textarea
                 label={`Tavsif (Description) (${lang.toUpperCase()})`}

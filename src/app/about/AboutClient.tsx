@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
-import { getTeachers, TeacherItem } from "@/lib/db";
-import { ABOUT_DEPARTMENTS } from "@/lib/static";
+import { getTeachers, getDepartments, TeacherItem, DepartmentItem } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { parseTeacherInfo, parseTeacherCertificates } from "@/lib/teacherUtils";
 import {
@@ -15,6 +14,7 @@ import {
   BookOpen,
   ChevronDown,
   ChevronUp,
+  ChevronRight,
   Users,
   Award,
   Building2,
@@ -31,12 +31,17 @@ export default function AboutClient() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const { data: aboutData, loading } = useAsyncData(
-    async () => ({
-      teachers: await getTeachers(),
-    }),
+    async () => {
+      const [teachers, depts] = await Promise.all([
+        getTeachers(),
+        getDepartments(),
+      ]);
+      return { teachers, depts };
+    },
     [],
   );
   const dbTeachers = aboutData?.teachers ?? [];
+  const dbDepartments = aboutData?.depts ?? [];
   const [openDept, setOpenDept] = useState<number | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<TeacherItem | null>(
     null,
@@ -517,21 +522,49 @@ export default function AboutClient() {
             </div>
             <h2 className="section-title" style={{ marginBottom: 12 }}>
               {lang === "uz"
-                ? "Kafedra va bo'limlar"
+                ? "Kafedralar"
                 : lang === "ru"
-                  ? "Кафедры и отделы"
+                  ? "Кафедры"
                   : "Departments"}
             </h2>
             <p
               style={{ color: "#6b7280", fontSize: "0.97rem", lineHeight: 1.6 }}
             >
               {lang === "uz"
-                ? "85+ malakali pedagoglar 6 ta kafedrada dars olib boradi"
+                ? `${dbTeachers.length} malakali pedagog ${dbDepartments.length} ta kafedrada dars olib boradi`
                 : lang === "ru"
-                  ? "85+ квалифицированных педагогов ведут занятия на 6 кафедрах"
-                  : "85+ qualified teachers conduct classes in 6 departments"}
+                  ? `${dbTeachers.length} квалифицированных педагогов ведут занятия на ${dbDepartments.length} кафедрах`
+                  : `${dbTeachers.length} qualified teachers conduct classes in ${dbDepartments.length} departments`}
             </p>
           </div>
+
+          <Link
+            href="/departments"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              marginBottom: 28,
+              color: "#c8a96e",
+              fontWeight: 600,
+              fontSize: "0.88rem",
+              textDecoration: "none",
+              transition: "gap 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.gap = "12px";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.gap = "8px";
+            }}
+          >
+            {lang === "uz"
+              ? "Barcha kafedralarni ko'rish"
+              : lang === "ru"
+                ? "Все кафедры"
+                : "View all departments"}
+            <ChevronRight size={15} />
+          </Link>
 
           <div
             style={{
@@ -540,16 +573,26 @@ export default function AboutClient() {
               gap: 20,
             }}
           >
-            {ABOUT_DEPARTMENTS.map((dept, i) => {
+            {dbDepartments.map((dept, i) => {
               const name =
                 lang === "uz"
                   ? dept.nameUz
                   : lang === "ru"
                     ? dept.nameRu
                     : dept.nameEn;
+              const count = dbTeachers.filter(
+                (t) => t.departmentId === dept.id,
+              ).length;
+              const colors = [
+                "#1a3a6e", "#2d5bb5", "#1d7a55",
+                "#c8a96e", "#6032bf", "#b91c1c",
+                "#0891b2", "#0f766e", "#b45309",
+              ];
+              const color = colors[i % colors.length];
               return (
-                <div
-                  key={i}
+                <Link
+                  key={dept.id}
+                  href="/departments"
                   className="card-hover"
                   style={{
                     background: "white",
@@ -557,7 +600,9 @@ export default function AboutClient() {
                     padding: "24px",
                     border: "1px solid rgba(26,58,110,0.07)",
                     boxShadow: "0 4px 16px rgba(26,58,110,0.05)",
-                    borderLeft: `4px solid ${dept.color}`,
+                    borderLeft: `4px solid ${color}`,
+                    textDecoration: "none",
+                    transition: "all 0.2s",
                   }}
                 >
                   <h3
@@ -575,21 +620,16 @@ export default function AboutClient() {
                   >
                     <div
                       style={{
-                        background: `${dept.color}18`,
-                        color: dept.color,
+                        background: `${color}18`,
+                        color: color,
                         fontSize: "0.82rem",
                         fontWeight: 700,
                         padding: "4px 12px",
                         borderRadius: 50,
-                        border: `1px solid ${dept.color}30`,
+                        border: `1px solid ${color}30`,
                       }}
                     >
-                      {
-                        dbTeachers.filter((t) => {
-                          const subj = (t.subjectUz || "").toLowerCase();
-                          return dept.keywords.some((k) => subj.includes(k));
-                        }).length
-                      }{" "}
+                      {count}{" "}
                       {lang === "uz"
                         ? "o'qituvchi"
                         : lang === "ru"
@@ -597,7 +637,7 @@ export default function AboutClient() {
                           : "teachers"}
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -756,17 +796,18 @@ export default function AboutClient() {
                   margin: "0 auto",
                 }}
               >
-                {ABOUT_DEPARTMENTS.map((dept, di) => {
+                {(() => {
+                  const accColors = ["#1a3a6e","#2d5bb5","#1d7a55","#c8a96e","#6032bf","#b91c1c","#0891b2","#0f766e","#b45309"];
+                  return dbDepartments.map((dept, di) => {
                   const deptName =
                     lang === "uz"
                       ? dept.nameUz
                       : lang === "ru"
                         ? dept.nameRu
                         : dept.nameEn;
-                  const deptTeachers = dbTeachers.filter((t) => {
-                    const subj = (t.subjectUz || "").toLowerCase();
-                    return dept.keywords.some((k) => subj.includes(k));
-                  });
+                  const deptTeachers = dbTeachers.filter(
+                    (t) => t.departmentId === dept.id,
+                  );
                   const isOpen = openDept === di;
                   return (
                     <div
@@ -790,7 +831,7 @@ export default function AboutClient() {
                           alignItems: "center",
                           justifyContent: "space-between",
                           padding: "18px 24px",
-                          borderLeft: `4px solid ${dept.color}`,
+                          borderLeft: `4px solid ${accColors[di % accColors.length]}`,
                           fontFamily: "inherit",
                         }}
                       >
@@ -813,13 +854,13 @@ export default function AboutClient() {
                           </h3>
                           <span
                             style={{
-                              background: `${dept.color}18`,
-                              color: dept.color,
+                              background: `${accColors[di % accColors.length]}18`,
+                              color: accColors[di % accColors.length],
                               fontSize: "0.78rem",
                               fontWeight: 700,
                               padding: "2px 10px",
                               borderRadius: 50,
-                              border: `1px solid ${dept.color}30`,
+                              border: `1px solid ${accColors[di % accColors.length]}30`,
                             }}
                           >
                             {deptTeachers.length}{" "}
@@ -950,7 +991,7 @@ export default function AboutClient() {
                       )}
                     </div>
                   );
-                })}
+                })})()}
               </div>
             </div>
           ) : null}

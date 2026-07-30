@@ -241,6 +241,7 @@ export interface TeacherItem {
   certificatesRu?: string;
   certificatesEn?: string;
   photoUrl?: string;
+  departmentId?: string;
   orderIndex: number;
 }
 
@@ -270,7 +271,54 @@ export async function deleteTeacher(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 5. Achievements
+// 5. Departments
+// ----------------------------------------------------
+export interface DepartmentItem {
+  id?: string;
+  nameUz: string;
+  nameRu: string;
+  nameEn: string;
+  headTeacherId?: string | null;
+  orderIndex: number;
+}
+
+export async function getDepartments(): Promise<DepartmentItem[]> {
+  const { data, error } = await supabase
+    .from("departments")
+    .select("*")
+    .order("order_index", { ascending: true });
+  if (error) throw error;
+  return (data || []).map(mapRow);
+}
+
+export async function getDepartmentById(id: string): Promise<DepartmentItem | null> {
+  const { data, error } = await supabase
+    .from("departments")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) return null;
+  return data ? mapRow(data) : null;
+}
+
+export async function saveDepartment(
+  id: string,
+  data: Omit<DepartmentItem, "id">,
+): Promise<void> {
+  const row = toRow({ id, ...data });
+  const { error } = await supabase
+    .from("departments")
+    .upsert(row, { onConflict: "id" });
+  if (error) throw error;
+}
+
+export async function deleteDepartment(id: string): Promise<void> {
+  const { error } = await supabase.from("departments").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ----------------------------------------------------
+// 6. Achievements
 // ----------------------------------------------------
 export interface AchievementItem {
   id?: string;
@@ -313,7 +361,7 @@ export async function deleteAchievement(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 6. Admission Rules
+// 7. Admission Rules
 // ----------------------------------------------------
 export interface AdmissionRuleItem {
   id?: string;
@@ -355,7 +403,7 @@ export async function deleteAdmissionRule(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 7. Stats
+// 8. Stats
 // ----------------------------------------------------
 export interface StatItem {
   id?: string;
@@ -388,7 +436,7 @@ export async function saveStat(
 }
 
 // ----------------------------------------------------
-// 8. Gallery
+// 9. Gallery
 // ----------------------------------------------------
 export interface GalleryItem {
   id?: string;
@@ -426,7 +474,7 @@ export async function deleteGallery(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 9. Hero Slides
+// 10. Hero Slides
 // ----------------------------------------------------
 export interface HeroSlideItem {
   id?: string;
@@ -487,7 +535,7 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 10. Documents
+// 11. Documents
 // ----------------------------------------------------
 export interface DocumentItem {
   id?: string;
@@ -525,7 +573,7 @@ export async function deleteDocument(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 11. Site Settings (stored in stats table — no extra migration)
+// 12. Site Settings (stored in stats table — no extra migration)
 // ----------------------------------------------------
 export interface SiteSettings {
   maintenanceMode: boolean;

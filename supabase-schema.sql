@@ -42,7 +42,18 @@ CREATE TABLE IF NOT EXISTS leadership (
   order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 3. Teachers (O'qituvchilar)
+-- 3. Departments (Kafedralar)
+CREATE TABLE IF NOT EXISTS departments (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  name_uz TEXT NOT NULL DEFAULT '',
+  name_ru TEXT NOT NULL DEFAULT '',
+  name_en TEXT NOT NULL DEFAULT '',
+  head_teacher_id TEXT DEFAULT NULL,
+  order_index INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 4. Teachers (O'qituvchilar)
 CREATE TABLE IF NOT EXISTS teachers (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   full_name_uz TEXT NOT NULL DEFAULT '',
@@ -58,10 +69,11 @@ CREATE TABLE IF NOT EXISTS teachers (
   certificates_ru TEXT NOT NULL DEFAULT '',
   certificates_en TEXT NOT NULL DEFAULT '',
   photo_url TEXT DEFAULT '',
+  department_id TEXT DEFAULT NULL,
   order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 4. Facilities (Moddiy-texnik baza)
+-- 5. Facilities (Moddiy-texnik baza)
 CREATE TABLE IF NOT EXISTS facilities (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   title_uz TEXT NOT NULL DEFAULT '',
@@ -75,7 +87,7 @@ CREATE TABLE IF NOT EXISTS facilities (
   order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 5. Achievements (Yutuqlar)
+-- 6. Achievements (Yutuqlar)
 CREATE TABLE IF NOT EXISTS achievements (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   title_uz TEXT NOT NULL DEFAULT '',
@@ -91,7 +103,7 @@ CREATE TABLE IF NOT EXISTS achievements (
   order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 6. Admission Rules (Kirish qoidalari)
+-- 7. Admission Rules (Kirish qoidalari)
 CREATE TABLE IF NOT EXISTS admission_rules (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   title_uz TEXT NOT NULL DEFAULT '',
@@ -103,7 +115,7 @@ CREATE TABLE IF NOT EXISTS admission_rules (
   order_index INTEGER NOT NULL DEFAULT 0
 );
 
--- 7. Stats (Statistika raqamlari)
+-- 8. Stats (Statistika raqamlari)
 CREATE TABLE IF NOT EXISTS stats (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   key TEXT NOT NULL DEFAULT '',
@@ -115,7 +127,7 @@ CREATE TABLE IF NOT EXISTS stats (
   color TEXT NOT NULL DEFAULT '#1a3a6e'
 );
 
--- 8. Gallery (Galereya)
+-- 9. Gallery (Galereya)
 CREATE TABLE IF NOT EXISTS gallery (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   image_url TEXT NOT NULL DEFAULT '',
@@ -126,7 +138,7 @@ CREATE TABLE IF NOT EXISTS gallery (
   created_at BIGINT NOT NULL DEFAULT 0
 );
 
--- 9. Hero Slides (Bosh sahifa slaydlari)
+-- 10. Hero Slides (Bosh sahifa slaydlari)
 CREATE TABLE IF NOT EXISTS hero_slides (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   image_url TEXT NOT NULL DEFAULT '',
@@ -134,7 +146,7 @@ CREATE TABLE IF NOT EXISTS hero_slides (
   is_active BOOLEAN NOT NULL DEFAULT true
 );
 
--- 10. Documents (PDF hujjatlar / Mandat natijalari)
+-- 11. Documents (PDF hujjatlar / Mandat natijalari)
 CREATE TABLE IF NOT EXISTS documents (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   title_uz TEXT NOT NULL DEFAULT '',
@@ -145,7 +157,7 @@ CREATE TABLE IF NOT EXISTS documents (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 11. Site Settings (Sayt sozlamalari)
+-- 12. Site Settings (Sayt sozlamalari)
 CREATE TABLE IF NOT EXISTS site_settings (
   id TEXT PRIMARY KEY DEFAULT 'site',
   maintenance_mode BOOLEAN NOT NULL DEFAULT false,
@@ -164,6 +176,7 @@ ON CONFLICT (id) DO NOTHING;
 ALTER TABLE news ENABLE ROW LEVEL SECURITY;
 ALTER TABLE leadership ENABLE ROW LEVEL SECURITY;
 ALTER TABLE teachers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE departments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE facilities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admission_rules ENABLE ROW LEVEL SECURITY;
@@ -178,6 +191,7 @@ CREATE POLICY "Public read" ON news FOR SELECT USING (true);
 CREATE POLICY "Public read" ON leadership FOR SELECT USING (true);
 CREATE POLICY "Public read" ON teachers FOR SELECT USING (true);
 CREATE POLICY "Public read" ON facilities FOR SELECT USING (true);
+CREATE POLICY "Public read" ON departments FOR SELECT USING (true);
 CREATE POLICY "Public read" ON achievements FOR SELECT USING (true);
 CREATE POLICY "Public read" ON admission_rules FOR SELECT USING (true);
 CREATE POLICY "Public read" ON stats FOR SELECT USING (true);
@@ -202,6 +216,10 @@ CREATE POLICY "Auth delete" ON teachers FOR DELETE USING (auth.role() = 'authent
 CREATE POLICY "Auth insert" ON facilities FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update" ON facilities FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth delete" ON facilities FOR DELETE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Auth insert" ON departments FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "Auth update" ON departments FOR UPDATE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth delete" ON departments FOR DELETE USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Auth insert" ON achievements FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update" ON achievements FOR UPDATE USING (auth.role() = 'authenticated');

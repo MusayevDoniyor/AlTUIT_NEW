@@ -15,6 +15,7 @@ import {
   BarChart2,
   ImageIcon,
   Sliders,
+  Building2,
   LogOut,
   Menu,
   X,
@@ -32,6 +33,7 @@ const navItems = [
     href: "/altuit-dashboard/teachers",
     icon: GraduationCap,
   },
+  { label: "Kafedralar", href: "/altuit-dashboard/departments", icon: Building2 },
   { label: "Yutuqlar", href: "/altuit-dashboard/achievements", icon: Trophy },
   {
     label: "Qabul",
