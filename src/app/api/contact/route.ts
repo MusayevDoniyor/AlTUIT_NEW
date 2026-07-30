@@ -6,12 +6,12 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, phone, telegram, subject, message } = body;
+    const { name, phone, telegram, message } = body;
 
     // Validate required fields
-    if (!name || !phone || !subject || !message) {
+    if (!name || !phone || !message) {
       return NextResponse.json(
-        { error: "Barcha maydonlar to'ldirilishi shart" },
+        { error: "Ism, telefon va xabar matni to'ldirilishi shart" },
         { status: 400 },
       );
     }
@@ -51,8 +51,6 @@ export async function POST(request: NextRequest) {
       `👤 <b>Foydalanuvchi:</b> ${escapeHTML(name)}`,
       `📞 <b>Telefon:</b> ${escapeHTML(phone)}`,
       telegram ? `✈️ <b>Telegram:</b> ${escapeHTML(telegram)}` : ``,
-      `📌 <b>Mavzu:</b> ${escapeHTML(subject)}`,
-      `━━━━━━━━━━━━━━━━━━━━━━`,
       `💬 <b>Xabar matni:</b>`,
       `<i>${escapeHTML(message)}</i>`,
       `━━━━━━━━━━━━━━━━━━━━━━`,

@@ -21,7 +21,6 @@ export default function ContactClient() {
     name: "",
     phone: "",
     telegram: "",
-    subject: "",
     message: "",
   });
   const [sent, setSent] = useState(false);
@@ -51,7 +50,7 @@ export default function ContactClient() {
       }
 
       setSent(true);
-      setForm({ name: "", phone: "", telegram: "", subject: "", message: "" });
+      setForm({ name: "", phone: "", telegram: "", message: "" });
       setTimeout(() => setSent(false), 5000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Xatolik yuz berdi";
@@ -501,51 +500,6 @@ export default function ContactClient() {
                         setForm((f) => ({ ...f, telegram: e.target.value }))
                       }
                       placeholder="@username"
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        borderRadius: 10,
-                        border: "1.5px solid #e5e7eb",
-                        fontSize: "0.9rem",
-                        outline: "none",
-                        transition: "border-color 0.2s",
-                        boxSizing: "border-box",
-                        fontFamily: "Inter, sans-serif",
-                      }}
-                      onFocus={(e) => (e.target.style.borderColor = "#1a3a6e")}
-                      onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      style={{
-                        display: "block",
-                        color: "#374151",
-                        fontSize: "0.84rem",
-                        fontWeight: 600,
-                        marginBottom: 8,
-                      }}
-                    >
-                      {lang === "uz"
-                        ? "Mavzu"
-                        : lang === "ru"
-                          ? "Тема"
-                          : "Subject"}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={form.subject}
-                      onChange={(e) =>
-                        setForm((f) => ({ ...f, subject: e.target.value }))
-                      }
-                      placeholder={
-                        lang === "uz"
-                          ? "Xabar mavzusi"
-                          : lang === "ru"
-                            ? "Тема сообщения"
-                            : "Message subject"
-                      }
                       style={{
                         width: "100%",
                         padding: "12px 16px",
