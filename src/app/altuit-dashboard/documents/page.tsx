@@ -265,7 +265,7 @@ export default function AdminDocumentsPage() {
                 <input
                   value={editing.titleUz}
                   onChange={(e) => set("titleUz", e.target.value)}
-                  placeholder="Masalan: Mandat natijalari 2025"
+                  placeholder="Masalan: Mandat natijalari 2026"
                   style={{
                     width: "100%", padding: "10px 14px",
                     background: "rgba(255,255,255,0.05)",
