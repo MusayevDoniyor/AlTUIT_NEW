@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Newspaper, Plus, Pencil, Trash2, X, Save, Send } from "lucide-react";
+import { Newspaper, Plus, Pencil, Trash2, X, Save, Send, FileText, ExternalLink } from "lucide-react";
 import {
   getNews,
   saveNews,
@@ -56,6 +56,8 @@ const EMPTY: Omit<NewsItem, "id"> = {
   tag: { uz: "", ru: "", en: "" },
   color: COLORS[0],
   imageUrl: "",
+  fileUrl: "",
+  fileName: "",
   isPublished: true,
 };
 
@@ -168,6 +170,10 @@ export default function AdminNewsPage() {
     try {
       await deleteNews(deleteTarget.id!);
       if (deleteTarget.imageUrl) await deleteImage(deleteTarget.imageUrl);
+      if (deleteTarget.fileUrl) {
+        const { deleteFile } = await import("@/lib/db");
+        await deleteFile(deleteTarget.fileUrl);
+      }
       showToast("success", `"${deleteTarget.titleUz}" o'chirildi`);
       await load();
     } catch {
@@ -623,6 +629,92 @@ export default function AdminNewsPage() {
                   }
                   maxImages={5}
                 />
+              </div>
+
+              {/* File attachment */}
+              <div>
+                <SectionTitle>Fayl biriktirish (PDF)</SectionTitle>
+                <div>
+                  {editing.fileUrl ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        padding: "10px 14px",
+                        background: "rgba(255,255,255,0.05)",
+                        borderRadius: 10,
+                        marginBottom: 10,
+                        border: `1px solid ${C.border}`,
+                      }}
+                    >
+                      <FileText size={16} color={C.gold} />
+                      <span style={{ color: C.textMuted, fontSize: "0.82rem", flex: 1 }}>
+                        {editing.fileName || "Fayl biriktirilgan"}
+                      </span>
+                      <a
+                        href={editing.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: C.gold, display: "flex" }}
+                      >
+                        <ExternalLink size={14} />
+                      </a>
+                      <button
+                        onClick={() => {
+                          set("fileUrl", "");
+                          set("fileName", "");
+                        }}
+                        style={{ background: "none", border: "none", color: C.danger, cursor: "pointer", display: "flex" }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ) : null}
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    style={{ display: "none" }}
+                    id="news-file-upload"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const { uploadFile } = await import("@/lib/db");
+                        const url = await uploadFile(file, "news-files");
+                        set("fileUrl", url);
+                        set("fileName", file.name);
+                      } catch {
+                        showToast("error", "Fayl yuklashda xatolik");
+                      }
+                      e.target.value = "";
+                    }}
+                  />
+                  <label
+                    htmlFor="news-file-upload"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "9px 16px",
+                      borderRadius: 10,
+                      background: "rgba(200,169,110,0.1)",
+                      border: `1px solid rgba(200,169,110,0.25)`,
+                      color: C.gold,
+                      fontSize: "0.85rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    <FileText size={14} />
+                    {editing.fileUrl ? "Faylni almashtirish" : "PDF fayl tanlash"}
+                  </label>
+                  <p style={{ color: C.textDim, fontSize: "0.72rem", margin: "6px 0 0" }}>
+                    PDF format, maks 10MB
+                  </p>
+                </div>
               </div>
 
               {/* Full text body using RichTextEditor */}

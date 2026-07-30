@@ -97,6 +97,8 @@ export interface NewsItem {
   color: string;
   imageUrl?: string;
   images?: string; // JSON string of ImageItem[]
+  fileUrl?: string;
+  fileName?: string;
   isPublished?: boolean;
 }
 

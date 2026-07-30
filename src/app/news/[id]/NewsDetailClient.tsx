@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
-import { Calendar, ArrowLeft } from "lucide-react";
+import { Calendar, ArrowLeft, FileText, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -22,6 +22,8 @@ interface NewsDetail {
   tag: { uz: string; ru: string; en: string } | string;
   color: string;
   imageUrl?: string;
+  fileUrl?: string;
+  fileName?: string;
   date: string;
 }
 
@@ -278,6 +280,80 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               }}
             >
               {renderBody(body)}
+            </div>
+          )}
+
+          {/* File download */}
+          {news.fileUrl && (
+            <div
+              style={{
+                marginTop: 32,
+                background: "white",
+                borderRadius: 18,
+                padding: "24px 32px",
+                boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
+                border: "1px solid rgba(26,58,110,0.07)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 16,
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 12,
+                    background: "rgba(200,169,110,0.12)",
+                    border: "1px solid rgba(200,169,110,0.25)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <FileText size={22} color="#c8a96e" />
+                </div>
+                <div>
+                  <p style={{ color: "#1a3a6e", fontWeight: 700, fontSize: "0.9rem", margin: 0 }}>
+                    {news.fileName || (lang === "uz" ? "Yuklab olish" : lang === "ru" ? "Скачать" : "Download")}
+                  </p>
+                  <p style={{ color: "#6b7280", fontSize: "0.8rem", margin: "4px 0 0" }}>
+                    {lang === "uz" ? "PDF faylni yuklab olish" : lang === "ru" ? "Скачать PDF файл" : "Download PDF file"}
+                  </p>
+                </div>
+              </div>
+              <a
+                href={news.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "12px 24px",
+                  background: "linear-gradient(135deg,#c8a96e,#dfc08a)",
+                  color: "#0f2347",
+                  borderRadius: 10,
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  textDecoration: "none",
+                  transition: "all 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 24px rgba(200,169,110,0.35)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "none";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+                }}
+              >
+                <Download size={16} />
+                {lang === "uz" ? "Yuklab olish" : lang === "ru" ? "Скачать" : "Download"}
+              </a>
             </div>
           )}
 
