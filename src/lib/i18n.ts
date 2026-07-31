@@ -13,12 +13,14 @@ export interface TranslationStructure {
   nav_teachers: string;
   nav_admissions: string;
   nav_directions: string;
+  nav_departments: string;
   nav_rules: string;
   nav_docs: string;
   nav_faq: string;
   nav_science: string;
   nav_achievements: string;
   nav_news: string;
+  nav_gallery: string;
   nav_contact: string;
 
   header_admin: string;
@@ -103,12 +105,14 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_teachers: "Pedagog xodimlar",
     nav_admissions: "Abituriyentlar",
     nav_directions: "Yo'nalishlar",
+    nav_departments: "Kafedralar",
     nav_rules: "Qabul",
     nav_docs: "Hujjatlar va muddatlar",
     nav_faq: "Ko'p beriladigan savollar",
     nav_science: "Yutuqlar",
     nav_achievements: "Yutuqlar",
     nav_news: "Yangiliklar",
+    nav_gallery: "Galereya",
     nav_contact: "Bog'lanish",
 
     header_admin: "Litsey ma'muriyati",
@@ -247,12 +251,14 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_teachers: "Педагогический состав",
     nav_admissions: "Абитуриентам",
     nav_directions: "Направления",
+    nav_departments: "Кафедры",
     nav_rules: "Приём",
     nav_docs: "Документы и сроки",
     nav_faq: "Часто задаваемые вопросы",
     nav_science: "Достижения",
     nav_achievements: "Достижения",
     nav_news: "Новости",
+    nav_gallery: "Галерея",
     nav_contact: "Контакты",
 
     header_admin: "Администрация лицея",
@@ -378,12 +384,14 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_teachers: "Teaching Staff",
     nav_admissions: "Admissions",
     nav_directions: "Directions",
+    nav_departments: "Departments",
     nav_rules: "Admission",
     nav_docs: "Documents & Deadlines",
     nav_faq: "FAQ",
     nav_science: "Achievements",
     nav_achievements: "Achievements",
     nav_news: "News",
+    nav_gallery: "Gallery",
     nav_contact: "Contact",
 
     header_admin: "Lyceum administration",

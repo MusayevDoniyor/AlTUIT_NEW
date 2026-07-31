@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { translations } from "@/lib/i18n";
+import { siteConfig } from "@/lib/config";
 import { useLang } from "@/lib/useLang";
 import {
   FaMapMarkerAlt,
@@ -74,21 +75,21 @@ export default function ContactClient() {
       label: t.contact_phone,
       value: t.contact_phone_val,
       color: "#2d5bb5",
-      href: "tel:+998712350369",
+      href: `tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`,
     },
     {
       icon: FaPhoneAlt,
       label: t.contact_phone_mobile,
       value: t.contact_phone_mobile_val,
       color: "#6032bf",
-      href: "tel:+998931033245",
+      href: `tel:${siteConfig.phoneMobile.replace(/[^\d+]/g, "")}`,
     },
     {
       icon: FaEnvelope,
       label: t.contact_email,
       value: t.contact_email_val,
       color: "#1d7a55",
-      href: "mailto:info@tatual.uz",
+      href: `mailto:${siteConfig.email}`,
     },
     {
       icon: FaRegClock,

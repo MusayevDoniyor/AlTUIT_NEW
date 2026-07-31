@@ -9,4 +9,5 @@ export const siteConfig = {
   phoneMobile: "+998 93 103-32-45",
   address: "Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112",
   telegram: "https://t.me/tatu_akademik_litseyi",
+  instagram: "https://www.instagram.com/tatu_lyceum/",
 };

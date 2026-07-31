@@ -120,7 +120,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 style={{ display: "flex", alignItems: "center", gap: 6 }}
               >
                 <FaEnvelope size={12} color="#c8a96e" />
-                <span>info@tatual.uz</span>
+                <span>{siteConfig.email}</span>
               </div>
             </div>
             <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
@@ -133,7 +133,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                   <FaTelegramPlane size={14} />
                 </a>
                 <a
-                  href="https://www.instagram.com/tatu_lyceum/"
+                  href={siteConfig.instagram}
                   aria-label="Instagram"
                   style={{ color: "white", opacity: 0.8 }}
                 >
@@ -382,7 +382,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               </div>
 
               <a
-                href="tel:+998712350369"
+                href={`tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`}
                 className="hidden-mobile"
                 style={{
                   display: "flex",
@@ -399,7 +399,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 }}
               >
                 <FaPhoneAlt size={12} />
-                <span>+998 71 235-03-69</span>
+                <span>{siteConfig.phone}</span>
               </a>
 
               <button
@@ -623,7 +623,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             {t.header_admin}
           </div>
           <a
-            href="tel:+998712350369"
+            href={`tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`}
             style={{
               fontSize: "1.4rem",
               fontWeight: 900,
@@ -631,7 +631,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
               textDecoration: "none",
             }}
           >
-            +998 71 235-03-69
+            {siteConfig.phone}
           </a>
         </div>
       </div>

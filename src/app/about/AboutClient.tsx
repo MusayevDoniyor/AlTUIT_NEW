@@ -619,7 +619,25 @@ export default function AboutClient() {
               gap: 20,
             }}
           >
-            {dbDepartments.map((dept, i) => {
+            {dbDepartments.length === 0 ? (
+              <p
+                style={{
+                  color: "#6b7280",
+                  fontSize: "0.95rem",
+                  margin: 0,
+                  gridColumn: "1 / -1",
+                  textAlign: "center",
+                  padding: "24px 0",
+                }}
+              >
+                {lang === "uz"
+                  ? "Kafedralar haqida ma'lumot mavjud emas"
+                  : lang === "ru"
+                    ? "Информация о кафедрах отсутствует"
+                    : "No department information available"}
+              </p>
+            ) : (
+              dbDepartments.map((dept, i) => {
               const name =
                 lang === "uz"
                   ? dept.nameUz
@@ -685,7 +703,8 @@ export default function AboutClient() {
                   </div>
                 </Link>
               );
-            })}
+              })
+            )}
           </div>
 
           {/* Total teachers badge */}
@@ -711,7 +730,7 @@ export default function AboutClient() {
                   lineHeight: 1,
                 }}
               >
-                85+
+                {dbTeachers.length > 0 ? `${dbTeachers.length}+` : "85+"}
               </div>
               <div
                 style={{
@@ -1040,7 +1059,22 @@ export default function AboutClient() {
                 })})()}
               </div>
             </div>
-          ) : null}
+          ) : (
+            <p
+              style={{
+                color: "#6b7280",
+                fontSize: "0.95rem",
+                margin: "64px 0 0",
+                textAlign: "center",
+              }}
+            >
+              {lang === "uz"
+                ? "O'qituvchilar haqida ma'lumot mavjud emas"
+                : lang === "ru"
+                  ? "Информация о педагогах отсутствует"
+                  : "No teacher information available"}
+            </p>
+          )}
         </div>
       </section>
 

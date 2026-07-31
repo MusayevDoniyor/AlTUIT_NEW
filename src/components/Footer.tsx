@@ -23,11 +23,13 @@ export default function Footer({ lang }: FooterProps) {
   const links = [
     { label: t.nav_about_short, href: "/about" },
     { label: t.nav_directions, href: "/#directions" },
+    { label: t.nav_departments, href: "/departments" },
     { label: t.nav_rules, href: "/admission" },
     { label: t.nav_docs, href: "/admission#documents" },
     { label: t.nav_faq, href: "/about#faq" },
     { label: t.nav_achievements, href: "/science" },
     { label: t.nav_news, href: "/news" },
+    { label: t.nav_gallery, href: "/gallery" },
     { label: t.nav_contact, href: "/contact" },
   ];
 
@@ -111,7 +113,7 @@ export default function Footer({ lang }: FooterProps) {
                   icon: FaTelegramPlane,
                 },
                 {
-                  href: "https://www.instagram.com/tatu_lyceum/",
+                  href: siteConfig.instagram,
                   label: "Instagram",
                   icon: FaInstagram,
                 },
@@ -370,7 +372,7 @@ export default function Footer({ lang }: FooterProps) {
                   marginTop: 10,
                 }}
               >
-                @altuit_lyceum →
+                {siteConfig.telegram.replace("https://t.me/", "@")} →
               </p>
             </a>
           </div>

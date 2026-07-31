@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { translations } from "@/lib/i18n";
+import { siteConfig } from "@/lib/config";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
 import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
@@ -653,18 +654,18 @@ export default function AdmissionClient() {
             </div>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <a
-                href="tel:+998712350369"
+                href={`tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`}
                 className="btn-primary"
                 style={{ textDecoration: "none" }}
               >
-                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 71 235-03-69
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> {siteConfig.phone}
               </a>
               <a
-                href="tel:+998931033245"
+                href={`tel:${siteConfig.phoneMobile.replace(/[^\d+]/g, "")}`}
                 className="btn-outline"
                 style={{ color: "#1a3a6e", borderColor: "#1a3a6e", textDecoration: "none" }}
               >
-                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> +998 93 103-32-45
+                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> {siteConfig.phoneMobile}
               </a>
               <Link
                 href="/contact"
