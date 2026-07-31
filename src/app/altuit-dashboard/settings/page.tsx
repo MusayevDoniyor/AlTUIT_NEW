@@ -92,6 +92,7 @@ export default function AdminSettingsPage() {
       <Card>
         <div
           style={{
+            padding: 24,
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-between",

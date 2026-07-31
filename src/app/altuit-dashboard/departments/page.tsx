@@ -7,6 +7,7 @@ import {
   saveDepartment,
   deleteDepartment,
   getTeachers,
+  saveTeacher,
   DepartmentItem,
   TeacherItem,
 } from "@/lib/db";
@@ -73,6 +74,16 @@ export default function AdminDepartmentsPage() {
       const id = editing.isNew ? Date.now().toString() : editing.id!;
       const { isNew, id: _id, ...data } = editing;
       await saveDepartment(id, data);
+
+      // Auto-assign the head teacher to this department
+      if (editing.headTeacherId) {
+        const head = teachers.find((t) => t.id === editing.headTeacherId);
+        if (head && head.departmentId !== id) {
+          const { id: hid, ...headData } = head as TeacherItem;
+          await saveTeacher(hid!, { ...headData, departmentId: id });
+        }
+      }
+
       showToast("success", editing.isNew ? "Qo'shildi" : "Tahrirlandi");
       await load();
       close();
@@ -87,6 +98,11 @@ export default function AdminDepartmentsPage() {
     if (!deleteTarget) return;
     try {
       await deleteDepartment(deleteTarget.id!);
+      // Clear department assignment from its teachers
+      for (const t of teachers.filter((t) => t.departmentId === deleteTarget.id)) {
+        const { id: tid, ...tData } = t as TeacherItem;
+        await saveTeacher(tid!, { ...tData, departmentId: "" });
+      }
       showToast("success", `"${deleteTarget.nameUz}" o'chirildi`);
       await load();
     } catch {
@@ -256,16 +272,14 @@ export default function AdminDepartmentsPage() {
                   }}
                 >
                   <option value="" style={{ background: "#141620" }}>— Mudir belgilanmagan —</option>
-                  {teachers
-                    .filter((t) => !t.departmentId || t.departmentId === editing.id || editing.isNew)
-                    .map((t) => (
-                      <option key={t.id} value={t.id} style={{ background: "#141620" }}>
-                        {t.fullNameUz} ({t.subjectUz})
-                      </option>
-                    ))}
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id} style={{ background: "#141620" }}>
+                      {t.fullNameUz} ({t.subjectUz})
+                    </option>
+                  ))}
                 </select>
                 <p style={{ color: C.textDim, fontSize: "0.72rem", margin: "4px 0 0" }}>
-                  Avval o'qituvchini qo'shib, keyin kafedrasini belgilang
+                  Mudir tanlanganda o'qituvchi avtomatik shu kafedraga biriktiriladi
                 </p>
               </div>
             </div>

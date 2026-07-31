@@ -241,6 +241,7 @@ export default function AdminTeachersPage() {
         subjectRu: rawEditing.subjectRu || "",
         subjectEn: rawEditing.subjectEn || "",
         photoUrl: rawEditing.photoUrl || "",
+        departmentId: rawEditing.departmentId || "",
         orderIndex: rawEditing.orderIndex || 0,
         infoUz,
         infoRu,
@@ -313,7 +314,9 @@ export default function AdminTeachersPage() {
           <EmptyState message="O'qituvchilar yo'q." />
         ) : (
           <div>
-            {items.map((item, idx) => (
+            {items.map((item, idx) => {
+              const dept = departments.find((d) => d.id === item.departmentId);
+              return (
               <div
                 key={item.id}
                 style={{
@@ -374,6 +377,15 @@ export default function AdminTeachersPage() {
                     }}
                   >
                     {item.subjectUz}
+                    {dept
+                      ? ` · ${
+                          lang === "uz"
+                            ? dept.nameUz
+                            : lang === "ru"
+                              ? dept.nameRu
+                              : dept.nameEn
+                        }`
+                      : ""}
                   </p>
                 </div>
                 <div style={{ display: "flex", gap: 6 }}>
@@ -393,7 +405,8 @@ export default function AdminTeachersPage() {
                   </Button>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         )}
       </Card>
