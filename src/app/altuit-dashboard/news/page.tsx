@@ -67,7 +67,6 @@ export default function AdminNewsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<NewsItem, "id"> & { id?: string }) | null
   >(null);
@@ -116,7 +115,6 @@ export default function AdminNewsPage() {
   const close = () => {
     setEditing(null);
     setError("");
-    setSuccess("");
     setErrors({});
   };
 

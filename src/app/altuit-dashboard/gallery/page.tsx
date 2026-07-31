@@ -49,7 +49,6 @@ export default function AdminGalleryPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<GalleryItem, "id"> & { id?: string }) | null
   >(null);
@@ -78,7 +77,6 @@ export default function AdminGalleryPage() {
   const close = () => {
     setEditing(null);
     setError("");
-    setSuccess("");
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -325,7 +323,6 @@ export default function AdminGalleryPage() {
             </div>
 
             {error && <Alert type="error" message={error} />}
-            {success && <Alert type="success" message={success} />}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Image upload section (MUST be at the top) */}

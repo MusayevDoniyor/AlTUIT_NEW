@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import { useAsyncData } from "@/lib/useAsyncData";
+import { useLang } from "@/lib/useLang";
 import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
 import { FaFileAlt, FaCalendarAlt, FaPenNib, FaPhoneAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
@@ -18,7 +19,7 @@ const APPLY_BTN = {
 };
 
 export default function AdmissionClient() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const { data: rulesData, loading: loadingRules } = useAsyncData(
     () => getAdmissionRules(),
     [],

@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DOMPurify from "dompurify";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { useLang } from "@/lib/useLang";
 import { Calendar, ArrowLeft, FileText, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -29,7 +30,7 @@ interface NewsDetail {
 }
 
 export default function NewsDetailClient({ news }: { news: NewsDetail }) {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
 
   const t = translations[lang];
 

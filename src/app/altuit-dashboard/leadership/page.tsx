@@ -66,7 +66,6 @@ export default function AdminLeadershipPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<LeadershipItem, "id"> & { id?: string }) | null
   >(null);
@@ -95,7 +94,6 @@ export default function AdminLeadershipPage() {
   const close = () => {
     setEditing(null);
     setError("");
-    setSuccess("");
   };
 
   const handleImageUpload = async (file: File) => {
@@ -457,7 +455,6 @@ export default function AdminLeadershipPage() {
                   onUpload={handleImageUpload}
                   onRemove={() => set("photoUrl", "")}
                   uploading={uploadingImage}
-                  folder="leadership"
                 />
               </div>
             </div>

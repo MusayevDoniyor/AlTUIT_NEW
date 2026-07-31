@@ -98,26 +98,7 @@ body {
   border: 2px solid #f8f9fc;
 }
 
-/* ===== GLASSMORPHISM ===== */
-.glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
 /* ===== HERO GRADIENT ===== */
-.hero-gradient {
-  background: linear-gradient(
-    135deg,
-    #0f2347 0%,
-    #1a3a6e 40%,
-    #1e4d8c 70%,
-    #2d5bb5 100%
-  );
-}
-
-/* ===== GOLD ACCENT ===== */
 .accent-underline {
   position: relative;
 }
@@ -144,34 +125,6 @@ body {
 }
 
 /* ===== ANIMATE IN ===== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-up {
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.animate-fade {
-  animation: fadeIn 0.5s ease forwards;
-}
-
 /* ===== SECTION STYLES ===== */
 .section-title {
   font-size: 2rem;
@@ -252,15 +205,6 @@ body {
 }
 
 /* ===== STAT COUNTER ===== */
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #c8a96e, #dfc08a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* ===== DROPDOWN ===== */
 .dropdown-menu {
   position: absolute;
@@ -316,13 +260,6 @@ body {
   overflow: hidden;
 }
 
-.carousel-slide {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-}
-
 .carousel-overlay {
   position: absolute;
   inset: 0;
@@ -331,54 +268,6 @@ body {
     rgba(0, 21, 71, 0.85) 0%,
     rgba(0, 21, 71, 0.4) 100%
   );
-}
-
-.carousel-dots {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  z-index: 10;
-}
-
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.carousel-dot.active {
-  background: #c8a96e;
-  width: 28px;
-  border-radius: 5px;
-}
-
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s;
-  backdrop-filter: blur(4px);
-}
-
-.carousel-arrow:hover {
-  background: #c8a96e;
-  transform: translateY(-50%) scale(1.1);
 }
 
 /* ===== MOBILE MENU REDESIGN ===== */
@@ -447,41 +336,6 @@ body {
   box-shadow: 0 4px 16px rgba(26, 58, 110, 0.08);
 }
 
-.language-selector-btn {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  background: transparent;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.language-selector-btn.light-text {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.language-selector-btn.light-text:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.language-selector-btn.dark-text {
-  color: #64748b;
-}
-
-.language-selector-btn.dark-text:hover {
-  color: #002147;
-  background: rgba(0, 33, 71, 0.05);
-}
-
-.language-selector-btn.active {
-  background: #c8a96e;
-  color: #ffffff !important;
-}
-
 /* NAVBAR RESPONSIVE UTILITIES */
 @media (max-width: 1100px) {
   .hidden-tablet {
@@ -542,34 +396,6 @@ body {
   .carousel-container {
     height: 68dvh !important;
     min-height: 420px !important;
-  }
-}
-
-/* Yearly stats responsive */
-@media (max-width: 640px) {
-  .yearly-stats-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* Stats counter responsive */
-@media (max-width: 480px) {
-  .stat-number {
-    font-size: 1.8rem !important;
-  }
-}
-
-/* Direction cards on mobile */
-@media (max-width: 640px) {
-  .directions-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-/* News grid on mobile */
-@media (max-width: 640px) {
-  .news-grid {
-    grid-template-columns: 1fr !important;
   }
 }
 

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
+import { useLang } from "@/lib/useLang";
 import {
   FaMapMarkerAlt,
   FaPhoneAlt,
@@ -16,7 +17,7 @@ import MaintenanceBanner from "@/components/MaintenanceBanner";
 import { useSiteSettings } from "@/lib/site-settings-context";
 
 export default function ContactClient() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const [form, setForm] = useState({
     name: "",
     phone: "",

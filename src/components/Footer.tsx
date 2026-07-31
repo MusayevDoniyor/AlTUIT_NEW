@@ -3,13 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { translations, type Lang } from "@/lib/i18n";
+import { siteConfig } from "@/lib/config";
 import { ExternalLink, Bus } from "lucide-react";
 import {
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
   FaInstagram,
-  FaFacebookF,
   FaTelegramPlane,
 } from "react-icons/fa";
 
@@ -106,7 +106,7 @@ export default function Footer({ lang }: FooterProps) {
             <div style={{ display: "flex", gap: 10 }}>
               {[
                 {
-                  href: "https://t.me/tatu_akademik_litseyi",
+                  href: siteConfig.telegram,
                   label: "Telegram",
                   icon: FaTelegramPlane,
                 },
@@ -300,7 +300,7 @@ export default function Footer({ lang }: FooterProps) {
               {lang === "uz" ? "Kanal" : lang === "ru" ? "Канал" : "Channel"}
             </h4>
             <a
-              href="https://t.me/tatu_akademik_litseyi"
+              href={siteConfig.telegram}
               target="_blank"
               rel="noopener noreferrer"
               style={{

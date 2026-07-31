@@ -8,10 +8,34 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { name, phone, telegram, message } = body;
 
-    // Validate required fields
-    if (!name || !phone || !message) {
+    if (typeof name !== "string" || typeof phone !== "string" || typeof message !== "string") {
+      return NextResponse.json(
+        { error: "Noto'g'ri ma'lumot formati" },
+        { status: 400 },
+      );
+    }
+    if (typeof telegram !== "string") {
+      return NextResponse.json(
+        { error: "Noto'g'ri ma'lumot formati" },
+        { status: 400 },
+      );
+    }
+
+    const nameTrimmed = name.trim();
+    const phoneTrimmed = phone.trim();
+    const messageTrimmed = message.trim();
+    const telegramTrimmed = telegram.trim();
+
+    if (!nameTrimmed || !phoneTrimmed || !messageTrimmed) {
       return NextResponse.json(
         { error: "Ism, telefon va xabar matni to'ldirilishi shart" },
+        { status: 400 },
+      );
+    }
+
+    if (nameTrimmed.length > 100 || phoneTrimmed.length > 30 || messageTrimmed.length > 4000 || telegramTrimmed.length > 100) {
+      return NextResponse.json(
+        { error: "Ma'lumotlar juda uzun" },
         { status: 400 },
       );
     }
@@ -48,11 +72,11 @@ export async function POST(request: NextRequest) {
     const telegramMessage = [
       `<b>📩 Yangi Murojaat — TATUAL</b>`,
       `━━━━━━━━━━━━━━━━━━━━━━`,
-      `👤 <b>Foydalanuvchi:</b> ${escapeHTML(name)}`,
-      `📞 <b>Telefon:</b> ${escapeHTML(phone)}`,
-      telegram ? `✈️ <b>Telegram:</b> ${escapeHTML(telegram)}` : ``,
+      `👤 <b>Foydalanuvchi:</b> ${escapeHTML(nameTrimmed)}`,
+      `📞 <b>Telefon:</b> ${escapeHTML(phoneTrimmed)}`,
+      telegramTrimmed ? `✈️ <b>Telegram:</b> ${escapeHTML(telegramTrimmed)}` : ``,
       `💬 <b>Xabar matni:</b>`,
-      `<i>${escapeHTML(message)}</i>`,
+      `<i>${escapeHTML(messageTrimmed)}</i>`,
       `━━━━━━━━━━━━━━━━━━━━━━`,
       `📅 <b>Yuborilgan sana:</b> <i>${formattedDate}</i>`,
     ]
@@ -104,3 +128,4 @@ function escapeHTML(text: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
+

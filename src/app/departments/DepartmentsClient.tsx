@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import { useAsyncData } from "@/lib/useAsyncData";
+import { useLang } from "@/lib/useLang";
 import { Building2, Users, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,7 +13,7 @@ import { getDepartments, getTeachers, type DepartmentItem, type TeacherItem } fr
 import { PubBlock } from "@/components/Skeleton";
 
 export default function DepartmentsClient() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const { data, loading } = useAsyncData(async () => {
     const [depts, teachers] = await Promise.all([
       getDepartments(),

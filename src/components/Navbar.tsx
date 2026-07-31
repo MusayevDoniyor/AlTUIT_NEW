@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
+import { siteConfig } from "@/lib/config";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
@@ -12,7 +13,6 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
   FaInstagram,
-  FaFacebookF,
   FaTelegramPlane,
   FaClock,
 } from "react-icons/fa";
@@ -126,7 +126,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
             <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
               <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
                 <a
-                  href="https://t.me/tatu_akademik_litseyi"
+                  href={siteConfig.telegram}
                   aria-label="Telegram"
                   style={{ color: "white", opacity: 0.8 }}
                 >

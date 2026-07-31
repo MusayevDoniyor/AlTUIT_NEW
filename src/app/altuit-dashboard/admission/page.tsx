@@ -40,7 +40,6 @@ export default function AdminAdmissionPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<AdmissionRuleItem, "id"> & { id?: string }) | null
   >(null);
@@ -70,7 +69,6 @@ export default function AdminAdmissionPage() {
   const close = () => {
     setEditing(null);
     setError("");
-    setSuccess("");
   };
 
   const handleSave = async () => {
@@ -277,7 +275,6 @@ export default function AdminAdmissionPage() {
             </div>
 
             {error && <Alert type="error" message={error} />}
-            {success && <Alert type="success" message={success} />}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <SectionTitle>Ma'lumotlar (til bo'yicha)</SectionTitle>

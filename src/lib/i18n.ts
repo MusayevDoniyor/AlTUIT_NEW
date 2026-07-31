@@ -11,31 +11,24 @@ export interface TranslationStructure {
   nav_about_short: string;
   nav_leadership: string;
   nav_teachers: string;
-  nav_base: string;
   nav_admissions: string;
   nav_directions: string;
   nav_rules: string;
   nav_docs: string;
   nav_faq: string;
   nav_science: string;
-  nav_partners: string;
   nav_achievements: string;
   nav_news: string;
   nav_contact: string;
 
   header_admin: string;
   header_hours: string;
-  header_transport: string;
 
   hero_badge: string;
   hero_title: string;
   hero_subtitle: string;
   hero_cta: string;
   hero_cta2: string;
-  hero_stat1: string;
-  hero_stat2: string;
-  hero_stat3: string;
-  hero_stat4: string;
 
   about_title: string;
   about_p1: string;
@@ -70,9 +63,6 @@ export interface TranslationStructure {
   faq_title: string;
   faq_items: FAQItem[];
 
-  partners_title: string;
-  partners_subtitle: string;
-
   ach_title: string;
   ach_subtitle: string;
 
@@ -96,7 +86,6 @@ export interface TranslationStructure {
   contact_msg: string;
   contact_submit: string;
 
-  footer_desc: string;
   footer_links: string;
   footer_contact: string;
   footer_copy: string;
@@ -112,21 +101,18 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Litsey haqida qisqa ma'lumot",
     nav_leadership: "Rahbariyat",
     nav_teachers: "Pedagog xodimlar",
-    nav_base: "Moddiy-texnik baza",
     nav_admissions: "Abituriyentlar",
     nav_directions: "Yo'nalishlar",
     nav_rules: "Qabul",
     nav_docs: "Hujjatlar va muddatlar",
     nav_faq: "Ko'p beriladigan savollar",
     nav_science: "Yutuqlar",
-    nav_partners: "Hamkorlik",
     nav_achievements: "Yutuqlar",
     nav_news: "Yangiliklar",
     nav_contact: "Bog'lanish",
 
     header_admin: "Litsey ma'muriyati",
     header_hours: "Dushanba - Shanba, 8:30 - 16:00",
-    header_transport: "Jamoat transportlari: 19, 38, 50, 63, 115",
 
     // Hero
     hero_badge: "Toshkent axborot texnologiyalari universiteti",
@@ -135,10 +121,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       "Biz 2006-yildan beri iqtidorli oʻquvchilarni amaliy fanlarga tayyorlaymiz. Ilmiy yoʻnalishlar va shaxsiy rivojlanishga alohida eʼtibor qaratiladi.",
     hero_cta: "Qabul haqida",
     hero_cta2: "Litsey haqida",
-    hero_stat1: "O'quvchi",
-    hero_stat2: "Pedagog",
-    hero_stat3: "Yo'nalish",
-    hero_stat4: "Yil tajriba",
 
     // About section
     about_title: "Litsey haqida",
@@ -221,11 +203,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       },
     ],
 
-    // Partners
-    partners_title: "Hamkorlar",
-    partners_subtitle:
-      "Litsey turli xalqaro va mahalliy tashkilotlar bilan faol hamkorlik qiladi",
-
     // Achievements
     ach_title: "Yutuqlar va mukofotlar",
     ach_subtitle:
@@ -254,8 +231,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_submit: "Yuborish",
 
     // Footer
-    footer_desc:
-      "TATU huzuridagi Muhammad al-Xorazmiy nomidagi Akademik Litsey — yuqori sifatli akademik ta'lim markazi.",
     footer_links: "Tezkor havolalar",
     footer_contact: "Aloqa",
     footer_copy: "Barcha huquqlar himoyalangan.",
@@ -270,21 +245,18 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Краткая информация",
     nav_leadership: "Руководство",
     nav_teachers: "Педагогический состав",
-    nav_base: "Материально-техническая база",
     nav_admissions: "Абитуриентам",
     nav_directions: "Направления",
     nav_rules: "Приём",
     nav_docs: "Документы и сроки",
     nav_faq: "Часто задаваемые вопросы",
     nav_science: "Достижения",
-    nav_partners: "Сотрудничество",
     nav_achievements: "Достижения",
     nav_news: "Новости",
     nav_contact: "Контакты",
 
     header_admin: "Администрация лицея",
     header_hours: "Понедельник - Суббота, 8:30 - 16:00",
-    header_transport: "Общественный транспорт: 19, 38, 50, 63, 115",
 
     hero_badge: "Ташкентский университет информационных технологий",
     hero_title: "Академический лицей имени Мухаммада аль-Хорезми",
@@ -292,10 +264,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       "Знания, наука и будущее — всё в одном месте. Качественное академическое образование в современной среде.",
     hero_cta: "Поступление",
     hero_cta2: "О лицее",
-    hero_stat1: "Учеников",
-    hero_stat2: "Педагогов",
-    hero_stat3: "Направлений",
-    hero_stat4: "Лет опыта",
 
     about_title: "О лицее",
     about_p1:
@@ -370,10 +338,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       },
     ],
 
-    partners_title: "Партнёры",
-    partners_subtitle:
-      "Лицей активно сотрудничает с различными международными и отечественными организациями",
-
     ach_title: "Достижения и награды",
     ach_subtitle:
       "Результаты наших учеников на международном и республиканском уровне",
@@ -398,8 +362,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_msg: "Сообщение",
     contact_submit: "Отправить",
 
-    footer_desc:
-      "Академический лицей имени Мухаммада аль-Хорезми при ТУИТ — центр качественного академического образования.",
     footer_links: "Быстрые ссылки",
     footer_contact: "Контакты",
     footer_copy: "Все права защищены.",
@@ -414,21 +376,18 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Brief Information",
     nav_leadership: "Leadership",
     nav_teachers: "Teaching Staff",
-    nav_base: "Facilities",
     nav_admissions: "Admissions",
     nav_directions: "Directions",
     nav_rules: "Admission",
     nav_docs: "Documents & Deadlines",
     nav_faq: "FAQ",
     nav_science: "Achievements",
-    nav_partners: "Partners",
     nav_achievements: "Achievements",
     nav_news: "News",
     nav_contact: "Contact",
 
     header_admin: "Lyceum administration",
     header_hours: "Monday - Saturday, 8:30 - 16:00",
-    header_transport: "Public transport: 19, 38, 50, 63, 115",
 
     hero_badge: "Tashkent University of Information Technology",
     hero_title: "Muhammad al-Khwarizmi Academic Lyceum",
@@ -436,10 +395,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       "Knowledge, science, and the future — all in one place. High-quality academic education in a modern environment.",
     hero_cta: "Apply Now",
     hero_cta2: "About Us",
-    hero_stat1: "Students",
-    hero_stat2: "Teachers",
-    hero_stat3: "Directions",
-    hero_stat4: "Years of Experience",
 
     about_title: "About the Lyceum",
     about_p1:
@@ -514,10 +469,6 @@ export const translations: Record<Lang, TranslationStructure> = {
       },
     ],
 
-    partners_title: "Partners",
-    partners_subtitle:
-      "The lyceum actively cooperates with various international and local organizations",
-
     ach_title: "Achievements & Awards",
     ach_subtitle: "Our students' results at international and national level",
 
@@ -541,8 +492,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_msg: "Message",
     contact_submit: "Send",
 
-    footer_desc:
-      "Muhammad al-Khwarizmi Academic Lyceum at TUIT — a center of quality academic education.",
     footer_links: "Quick Links",
     footer_contact: "Contact",
     footer_copy: "All rights reserved.",

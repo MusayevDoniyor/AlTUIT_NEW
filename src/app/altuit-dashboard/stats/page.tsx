@@ -31,7 +31,6 @@ export default function AdminStatsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [editing, setEditing] = useState<
     (Omit<StatItem, "id"> & { id?: string }) | null
   >(null);
@@ -64,7 +63,6 @@ export default function AdminStatsPage() {
   const close = () => {
     setEditing(null);
     setError("");
-    setSuccess("");
   };
 
   const handleSave = async () => {
@@ -161,7 +159,6 @@ export default function AdminStatsPage() {
       />
 
       {error && <Alert type="error" message={error} />}
-      {success && <Alert type="success" message={success} />}
 
       <div
         style={{

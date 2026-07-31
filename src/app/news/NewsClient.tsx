@@ -3,16 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import { Calendar, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getNews } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
+import { useLang } from "@/lib/useLang";
 import { PubCard } from "@/components/Skeleton";
 
 export default function NewsClient() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const { data: dbNews, loading } = useAsyncData(() => getNews(), []);
 
   const t = translations[lang];

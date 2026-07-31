@@ -4,19 +4,13 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import {
-  ChevronLeft,
-  ChevronRight,
   ArrowRight,
   GraduationCap,
   Users2,
   TrendingUp,
   Trophy,
-  Calculator,
-  Globe,
-  Microscope,
-  BookOpen,
   Calendar,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -25,11 +19,12 @@ import {
   getHeroSlides,
   getStats,
   getNews,
+  getLeadership,
   type StatItem,
-  type HeroSlideItem,
   type NewsItem,
 } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
+import { useLang } from "@/lib/useLang";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
 import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
 
@@ -207,7 +202,7 @@ function HeroSlide({
 
 // ===== MAIN PAGE =====
 export default function Home() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const [current, setCurrent] = useState(0);
   const [prevIndex, setPrevIndex] = useState(0);
   const [statsInView, setStatsInView] = useState(false);
@@ -215,20 +210,23 @@ export default function Home() {
   const transitioningRef = useRef(false);
 
   const { data: homeData, loading } = useAsyncData(async () => {
-    const [slides, stats, news] = await Promise.all([
+    const [slides, stats, news, leadership] = await Promise.all([
       getHeroSlides(),
       getStats(),
       getNews(),
+      getLeadership(),
     ]);
     return {
       slides,
       stats,
       news: news.slice(0, 3),
+      leadership,
     };
   }, []);
   const dbSlides = homeData?.slides ?? [];
   const dbStats = homeData?.stats ?? [];
   const dbNews = homeData?.news ?? [];
+  const dbLeadership = homeData?.leadership ?? [];
 
   const activeSlides = dbSlides.length > 0 ? dbSlides : [{ imageUrl: "" }];
 
@@ -687,220 +685,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== YEARLY STATISTICS ===== */}
-      <section
-        style={{
-          padding: "96px 0",
-          background: "linear-gradient(135deg, #002147, #003366)",
-          color: "white",
-        }}
-      >
-        <div className="container-custom">
-          <div
-            style={{
-              textAlign: "center",
-              maxWidth: 800,
-              margin: "0 auto 64px",
-            }}
-          >
-            <h2
-              style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: 16 }}
-            >
-              {lang === "uz"
-                ? "3 yillik o'quv statistikasi"
-                : lang === "ru"
-                  ? "3-летняя статистика обучения"
-                  : "3-Year Educational Statistics"}
-            </h2>
-            <div
-              style={{
-                width: 80,
-                height: 4,
-                background: "#c8a96e",
-                margin: "0 auto",
-              }}
-            ></div>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 32,
-            }}
-          >
-            {[
-              { year: 2021, perc: 81, grad: 239, uni: 19 },
-              { year: 2022, perc: 85, grad: 211, uni: 190 },
-              { year: 2023, perc: 90, grad: 390, uni: 370 },
-            ].map((stat, idx) => (
-              <motion.div
-                key={stat.year}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                style={{
-                  background: "rgba(255,255,255,0.05)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: 24,
-                  padding: "40px 32px",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -20,
-                    right: -10,
-                    fontSize: "6rem",
-                    fontWeight: 900,
-                    color: "rgba(255,255,255,0.03)",
-                    zIndex: 0,
-                  }}
-                >
-                  {stat.year}
-                </div>
-
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 800,
-                    color: "#c8a96e",
-                    marginBottom: 32,
-                    position: "relative",
-                    zIndex: 1,
-                  }}
-                >
-                  {stat.year}-yil
-                </h3>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 24,
-                    position: "relative",
-                    zIndex: 1,
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: 8,
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.9rem",
-                          color: "rgba(255,255,255,0.6)",
-                        }}
-                      >
-                        {lang === "uz"
-                          ? "OTMga kirish ko'rsatkichi"
-                          : lang === "ru"
-                            ? "Показатель поступления в ВУЗ"
-                            : "Admission Rate"}
-                      </span>
-                      <span style={{ fontWeight: 800, color: "#c8a96e" }}>
-                        {stat.perc}%
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        height: 8,
-                        background: "rgba(255,255,255,0.1)",
-                        borderRadius: 10,
-                      }}
-                    >
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${stat.perc}%` }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        style={{
-                          height: "100%",
-                          background:
-                            "linear-gradient(90deg, #c8a96e, #dfc08a)",
-                          borderRadius: 10,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      gap: 20,
-                      paddingTop: 10,
-                    }}
-                  >
-                    <div
-                      style={{
-                        background: "rgba(255,255,255,0.05)",
-                        padding: "16px",
-                        borderRadius: 16,
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "rgba(255,255,255,0.5)",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {lang === "uz"
-                          ? "Bitiruvchilar"
-                          : lang === "ru"
-                            ? "Выпускников"
-                            : "Graduates"}
-                      </p>
-                      <p style={{ fontSize: "1.3rem", fontWeight: 800 }}>
-                        {stat.grad}
-                      </p>
-                    </div>
-                    <div
-                      style={{
-                        background: "rgba(255,255,255,0.05)",
-                        padding: "16px",
-                        borderRadius: 16,
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "rgba(255,255,255,0.5)",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {lang === "uz"
-                          ? "OTMga kirganlar"
-                          : lang === "ru"
-                            ? "Поступили в ВУЗ"
-                            : "Admitted"}
-                      </p>
-                      <p
-                        style={{
-                          fontSize: "1.3rem",
-                          fontWeight: 800,
-                          color: "#c8a96e",
-                        }}
-                      >
-                        {stat.uni}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ===== LEADERSHIP ===== */}
       <section
         style={{
@@ -954,89 +738,136 @@ export default function Home() {
 
           <div
             style={{
-              maxWidth: 500,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+              gap: 28,
+              maxWidth: 1100,
               margin: "0 auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
             }}
           >
-            <div
-              style={{
-                width: 180,
-                height: 180,
-                borderRadius: "50%",
-                overflow: "hidden",
-                border: "4px solid #c8a96e",
-                boxShadow: "0 8px 32px rgba(0,33,71,0.15)",
-                marginBottom: 28,
-                flexShrink: 0,
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "#1a3a6e15",
-              }}
-            >
-              <Image
-                src="/image.png"
-                alt="Abdiyev Nosir Raximovich"
-                width={180}
-                height={180}
-                style={{
-                  objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
-                }}
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = "none";
-                  const parent = target.parentElement;
-                  if (parent) {
-                    parent.innerHTML = `<span style="font-size:3.5rem;font-weight:900;color:#1a3a6e;">AN</span>`;
-                  }
-                }}
-              />
-            </div>
-
-            <div
-              style={{
-                background: "rgba(255,255,255,0.9)",
-                backdropFilter: "blur(10px)",
-                borderRadius: 20,
-                padding: "32px 40px",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-                border: "1px solid rgba(255,255,255,0.8)",
-                width: "100%",
-              }}
-            >
-              <h3
-                style={{
-                  color: "#1a1f2e",
-                  fontWeight: 800,
-                  fontSize: "1.35rem",
-                  marginBottom: 6,
-                  lineHeight: 1.3,
-                }}
-              >
-                Abdiyev Nosir Raximovich
-              </h3>
+            {loading ? (
+              <div style={{ gridColumn: "1 / -1" }}>
+                <PubCard />
+              </div>
+            ) : dbLeadership.length === 0 ? (
               <p
                 style={{
                   color: "#6b7280",
-                  fontSize: "0.92rem",
-                  fontWeight: 500,
+                  fontSize: "0.95rem",
                   margin: 0,
+                  gridColumn: "1 / -1",
+                  textAlign: "center",
                 }}
               >
                 {lang === "uz"
-                  ? "Akademik litsey direktori"
+                  ? "Rahbariyat haqida ma'lumot mavjud emas"
                   : lang === "ru"
-                    ? "Директор академического лицея"
-                    : "Director of Academic Lyceum"}
+                    ? "Информация о руководстве отсутствует"
+                    : "No leadership info available"}
               </p>
-            </div>
+            ) : (
+              dbLeadership.map((m) => {
+                const name =
+                  lang === "uz"
+                    ? m.nameUz
+                    : lang === "ru"
+                      ? m.nameRu || m.nameUz
+                      : m.nameEn || m.nameUz;
+                const role =
+                  lang === "uz"
+                    ? m.roleUz
+                    : lang === "ru"
+                      ? m.roleRu || m.roleUz
+                      : m.roleEn || m.roleUz;
+                const initials =
+                  m.initials ||
+                  name
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase();
+                return (
+                  <div
+                    key={m.id || name}
+                    style={{
+                      background: "rgba(255,255,255,0.9)",
+                      backdropFilter: "blur(10px)",
+                      borderRadius: 20,
+                      padding: "36px 28px",
+                      boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                      border: "1px solid rgba(255,255,255,0.8)",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        border: "4px solid #c8a96e",
+                        boxShadow: "0 8px 32px rgba(0,33,71,0.15)",
+                        marginBottom: 24,
+                        flexShrink: 0,
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: `${m.color || "#1a3a6e"}18`,
+                      }}
+                    >
+                      {m.photoUrl ? (
+                        <Image
+                          src={m.photoUrl}
+                          alt={name}
+                          fill
+                          sizes="140px"
+                          style={{ objectFit: "cover" }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: "2.4rem",
+                            fontWeight: 900,
+                            color: m.color || "#1a3a6e",
+                          }}
+                        >
+                          {initials}
+                        </span>
+                      )}
+                    </div>
+                    <h3
+                      style={{
+                        color: "#1a1f2e",
+                        fontWeight: 800,
+                        fontSize: "1.2rem",
+                        marginBottom: 6,
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {name}
+                    </h3>
+                    <p
+                      style={{
+                        color: "#6b7280",
+                        fontSize: "0.9rem",
+                        fontWeight: 500,
+                        margin: 0,
+                      }}
+                    >
+                      {role}
+                    </p>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       </section>

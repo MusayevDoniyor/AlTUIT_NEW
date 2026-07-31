@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import { Trophy } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,10 +14,11 @@ import {
   type StatItem,
 } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
-import { PubSkeleton, PubBlock } from "@/components/Skeleton";
+import { useLang } from "@/lib/useLang";
+import { PubSkeleton } from "@/components/Skeleton";
 
 export default function ScienceClient() {
-  const [lang, setLang] = useState<Lang>("uz");
+  const [lang, setLang] = useLang();
   const { data: scienceData, loading } = useAsyncData(async () => {
     const [achievements, stats] = await Promise.all([
       getAchievements(),
@@ -196,19 +197,19 @@ export default function ScienceClient() {
                 gap: 24,
               }}
             >
-              {(achievements as any[]).map((a, i) => {
+              {achievements.map((a, i) => {
                 const title =
                   lang === "uz"
                     ? a.titleUz
                     : lang === "ru"
-                      ? a.titleRu
-                      : a.titleEn;
+                      ? a.titleRu || a.titleUz
+                      : a.titleEn || a.titleUz;
                 const desc =
                   lang === "uz"
                     ? a.descUz
                     : lang === "ru"
-                      ? a.descRu
-                      : a.descEn;
+                      ? a.descRu || a.descUz
+                      : a.descEn || a.descUz;
                 const color = a.color || "#c8a96e";
                 return (
                   <div
@@ -303,13 +304,13 @@ export default function ScienceClient() {
                 gap: 24,
               }}
             >
-              {(stats as any[]).map((s, i) => {
+              {stats.map((s, i) => {
                 const label =
                   lang === "uz"
                     ? s.labelUz
                     : lang === "ru"
-                      ? s.labelRu
-                      : s.labelEn;
+                      ? s.labelRu || s.labelUz
+                      : s.labelEn || s.labelUz;
                 return (
                   <div
                     key={s.id || i}

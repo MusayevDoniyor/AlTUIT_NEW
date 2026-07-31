@@ -448,7 +448,6 @@ export default function AdminAchievementsPage() {
                   onUpload={handleImageUpload}
                   onRemove={() => set("imageUrl", "")}
                   uploading={uploadingImage}
-                  folder="achievements"
                 />
               </div>
             </div>

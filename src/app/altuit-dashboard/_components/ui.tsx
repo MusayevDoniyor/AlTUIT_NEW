@@ -459,41 +459,16 @@ export function Button({
           style={{
             width: 14,
             height: 14,
-            border: "2px solid rgba(0,0,0,0.3)",
-            borderTopColor: "#0f2347",
+            border: "2px solid currentColor",
+            borderTopColor: "transparent",
             borderRadius: "50%",
             animation: "spin 0.8s linear infinite",
+            opacity: 0.7,
           }}
         />
       ) : null}
       {children}
     </button>
-  );
-}
-
-// ─── Badge ────────────────────────────────────────────────────
-export function Badge({
-  children,
-  color = "#1a3a6e",
-}: {
-  children: React.ReactNode;
-  color?: string;
-}) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "2px 10px",
-        background: `${color}20`,
-        color,
-        border: `1px solid ${color}30`,
-        borderRadius: 20,
-        fontSize: "0.72rem",
-        fontWeight: 700,
-      }}
-    >
-      {children}
-    </span>
   );
 }
 
@@ -747,6 +722,7 @@ export function ConfirmDialog({
   variant = "danger",
   onConfirm,
   onCancel,
+  loading = false,
 }: {
   open: boolean;
   title: string;
@@ -756,6 +732,7 @@ export function ConfirmDialog({
   variant?: "danger" | "primary";
   onConfirm: () => void;
   onCancel: () => void;
+  loading?: boolean;
 }) {
   if (!open) return null;
 
@@ -822,12 +799,13 @@ export function ConfirmDialog({
           {message}
         </p>
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <Button variant="ghost" onClick={onCancel}>
+          <Button variant="ghost" onClick={onCancel} disabled={loading}>
             {cancelLabel}
           </Button>
           <Button
             variant={variant === "danger" ? "danger" : "primary"}
             onClick={onConfirm}
+            loading={loading}
           >
             {confirmLabel}
           </Button>
@@ -843,13 +821,11 @@ export function ImageUpload({
   onUpload,
   onRemove,
   uploading,
-  folder = "gallery",
 }: {
   currentUrl: string;
   onUpload: (file: File) => void;
   onRemove: () => void;
   uploading: boolean;
-  folder?: string;
 }) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

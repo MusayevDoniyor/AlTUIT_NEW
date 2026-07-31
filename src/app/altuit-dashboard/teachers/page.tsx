@@ -792,7 +792,6 @@ export default function AdminTeachersPage() {
                   onUpload={handleImageUpload}
                   onRemove={() => set("photoUrl", "")}
                   uploading={uploadingImage}
-                  folder="teachers"
                 />
               </div>
             </div>
