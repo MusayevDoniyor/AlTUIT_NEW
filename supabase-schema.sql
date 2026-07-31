@@ -144,7 +144,13 @@ CREATE TABLE IF NOT EXISTS hero_slides (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   image_url TEXT NOT NULL DEFAULT '',
   order_index INTEGER NOT NULL DEFAULT 0,
-  is_active BOOLEAN NOT NULL DEFAULT true
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  title_uz TEXT NOT NULL DEFAULT '',
+  title_ru TEXT NOT NULL DEFAULT '',
+  title_en TEXT NOT NULL DEFAULT '',
+  desc_uz TEXT NOT NULL DEFAULT '',
+  desc_ru TEXT NOT NULL DEFAULT '',
+  desc_en TEXT NOT NULL DEFAULT ''
 );
 
 -- 11. Site Settings (Sayt sozlamalari)

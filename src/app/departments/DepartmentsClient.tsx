@@ -16,8 +16,8 @@ export default function DepartmentsClient() {
   const [lang, setLang] = useLang();
   const { data, loading } = useAsyncData(async () => {
     const [depts, teachers] = await Promise.all([
-      getDepartments(),
-      getTeachers(),
+      getDepartments().catch(() => []),
+      getTeachers().catch(() => []),
     ]);
     return { depts, teachers };
   }, []);

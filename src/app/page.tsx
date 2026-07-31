@@ -64,10 +64,14 @@ function Counter({
 // ===== HERO SLIDE WRAPPER =====
 function HeroSlide({
   slideImage,
+  title,
+  subtitle,
   t,
   priority,
 }: {
   slideImage: string;
+  title: string;
+  subtitle: string;
   t: Record<string, string>;
   priority: boolean;
 }) {
@@ -150,7 +154,7 @@ function HeroSlide({
                 marginBottom: 25,
               }}
             >
-              {t.hero_title}
+              {title || t.hero_title}
             </h1>
 
             <p
@@ -162,7 +166,7 @@ function HeroSlide({
                 maxWidth: 650,
               }}
             >
-              {t.hero_subtitle}
+              {subtitle || t.hero_subtitle}
             </p>
 
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
@@ -211,10 +215,10 @@ export default function Home() {
 
   const { data: homeData, loading } = useAsyncData(async () => {
     const [slides, stats, news, leadership] = await Promise.all([
-      getHeroSlides(),
-      getStats(),
-      getNews(),
-      getLeadership(),
+      getHeroSlides().catch(() => []),
+      getStats().catch(() => []),
+      getNews().catch(() => []),
+      getLeadership().catch(() => []),
     ]);
     return {
       slides,
@@ -228,12 +232,27 @@ export default function Home() {
   const dbNews = homeData?.news ?? [];
   const dbLeadership = homeData?.leadership ?? [];
 
-  const activeSlides = dbSlides.length > 0 ? dbSlides : [{ imageUrl: "" }];
+  const activeSlides =
+    dbSlides.length > 0
+      ? dbSlides
+      : [{ imageUrl: "", orderIndex: 0, isActive: true }];
 
   const t = translations[lang] as unknown as Record<string, string>;
 
   const slide = activeSlides[current];
   const slideImage = slide?.imageUrl || "";
+  const slideTitle =
+    lang === "uz"
+      ? slide?.titleUz || ""
+      : lang === "ru"
+        ? slide?.titleRu || slide?.titleUz || ""
+        : slide?.titleEn || slide?.titleUz || "";
+  const slideSubtitle =
+    lang === "uz"
+      ? slide?.descUz || ""
+      : lang === "ru"
+        ? slide?.descRu || slide?.descUz || ""
+        : slide?.descEn || slide?.descUz || "";
 
   const prevSlide = activeSlides[prevIndex];
   const prevImage = prevSlide?.imageUrl || "";
@@ -358,6 +377,8 @@ export default function Home() {
         >
           <HeroSlide
             slideImage={slideImage}
+            title={slideTitle}
+            subtitle={slideSubtitle}
             t={t}
             priority={current === 0}
           />

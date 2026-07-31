@@ -481,6 +481,12 @@ export interface HeroSlideItem {
   imageUrl: string;
   orderIndex: number;
   isActive: boolean;
+  titleUz?: string;
+  titleRu?: string;
+  titleEn?: string;
+  descUz?: string;
+  descRu?: string;
+  descEn?: string;
 }
 
 export async function getHeroSlides(): Promise<HeroSlideItem[]> {

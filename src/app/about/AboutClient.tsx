@@ -30,9 +30,9 @@ export default function AboutClient() {
   const { data: aboutData, loading } = useAsyncData(
     async () => {
       const [teachers, depts, leadership] = await Promise.all([
-        getTeachers(),
-        getDepartments(),
-        getLeadership(),
+        getTeachers().catch(() => []),
+        getDepartments().catch(() => []),
+        getLeadership().catch(() => []),
       ]);
       return { teachers, depts, leadership };
     },

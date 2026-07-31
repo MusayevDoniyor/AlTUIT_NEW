@@ -24,6 +24,7 @@ import {
   PageHeader,
   Card,
   Input,
+  Textarea,
   Button,
   Alert,
   EmptyState,
@@ -39,6 +40,12 @@ const EMPTY: Omit<HeroSlideItem, "id"> = {
   imageUrl: "",
   orderIndex: 0,
   isActive: true,
+  titleUz: "",
+  titleRu: "",
+  titleEn: "",
+  descUz: "",
+  descRu: "",
+  descEn: "",
 };
 
 export default function AdminHeroPage() {
@@ -51,6 +58,7 @@ export default function AdminHeroPage() {
   >(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<HeroSlideItem | null>(null);
+  const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
   const { showToast } = useToast();
 
   const load = async () => {
@@ -356,8 +364,7 @@ export default function AdminHeroPage() {
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Image upload */}
               <div>
-                <SectionTitle>Slayd rasmi</SectionTitle>
-                {editing.imageUrl ? (
+                <SectionTitle>Slayd rasmi</SectionTitle>                {editing.imageUrl ? (
                   <div
                     style={{
                       position: "relative",
@@ -443,6 +450,79 @@ export default function AdminHeroPage() {
                     />
                   </label>
                 )}
+              </div>
+
+              <div>
+                <SectionTitle>Slayd matni (ixtiyoriy)</SectionTitle>
+                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                  {(["uz", "ru", "en"] as const).map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => setLang(l)}
+                      style={{
+                        padding: "7px 14px",
+                        borderRadius: 8,
+                        border:
+                          lang === l
+                            ? `1px solid ${C.goldBorder}`
+                            : `1px solid ${C.border}`,
+                        background: lang === l ? C.goldLight : "transparent",
+                        color: lang === l ? C.gold : C.textMuted,
+                        fontSize: "0.8rem",
+                        fontWeight: lang === l ? 700 : 500,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      {l === "uz" ? "O'zbek" : l === "ru" ? "Rus" : "Ingliz"}
+                    </button>
+                  ))}
+                </div>
+                <Input
+                  label={`Sarlavha (${lang.toUpperCase()})`}
+                  value={
+                    lang === "uz"
+                      ? editing.titleUz || ""
+                      : lang === "ru"
+                        ? editing.titleRu || ""
+                        : editing.titleEn || ""
+                  }
+                  onChange={(e) =>
+                    set(
+                      lang === "uz"
+                        ? "titleUz"
+                        : lang === "ru"
+                          ? "titleRu"
+                          : "titleEn",
+                      e.target.value,
+                    )
+                  }
+                  placeholder="Masalan: Bilim sari yo'l"
+                />
+                <div style={{ marginTop: 12 }}>
+                  <Textarea
+                    label={`Tavsif (${lang.toUpperCase()})`}
+                    value={
+                      lang === "uz"
+                        ? editing.descUz || ""
+                        : lang === "ru"
+                          ? editing.descRu || ""
+                          : editing.descEn || ""
+                    }
+                    onChange={(e) =>
+                      set(
+                        lang === "uz"
+                          ? "descUz"
+                          : lang === "ru"
+                            ? "descRu"
+                            : "descEn",
+                        e.target.value,
+                      )
+                    }
+                    placeholder="Slayd uchun qisqa tavsif (bo'sh bo'lsa umumiy matn ko'rsatiladi)"
+                    rows={3}
+                  />
+                </div>
               </div>
 
               <div
