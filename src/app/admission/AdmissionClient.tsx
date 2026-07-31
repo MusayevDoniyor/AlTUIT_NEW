@@ -352,38 +352,6 @@ export default function AdmissionClient() {
                   </li>
                 ))}
               </ul>
-              <div style={{ marginTop: 20 }}>
-                <Link
-                  href="/documents"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "10px 18px",
-                    background: "rgba(200,169,110,0.12)",
-                    border: "1px solid rgba(200,169,110,0.3)",
-                    borderRadius: 10,
-                    color: "#c8a96e",
-                    fontSize: "0.85rem",
-                    fontWeight: 600,
-                    textDecoration: "none",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(200,169,110,0.2)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(200,169,110,0.12)";
-                  }}
-                >
-                  <FaFileAlt size={14} />
-                  {lang === "uz"
-                    ? "Yuklab olish uchun hujjatlar"
-                    : lang === "ru"
-                      ? "Документы для скачивания"
-                      : "Downloadable Documents"}
-                </Link>
-              </div>
             </div>
 
             {/* Right column */}

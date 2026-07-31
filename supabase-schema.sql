@@ -146,18 +146,7 @@ CREATE TABLE IF NOT EXISTS hero_slides (
   is_active BOOLEAN NOT NULL DEFAULT true
 );
 
--- 11. Documents (PDF hujjatlar / Mandat natijalari)
-CREATE TABLE IF NOT EXISTS documents (
-  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  title_uz TEXT NOT NULL DEFAULT '',
-  title_ru TEXT NOT NULL DEFAULT '',
-  title_en TEXT NOT NULL DEFAULT '',
-  file_url TEXT NOT NULL DEFAULT '',
-  file_size BIGINT NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- 12. Site Settings (Sayt sozlamalari)
+-- 11. Site Settings (Sayt sozlamalari)
 CREATE TABLE IF NOT EXISTS site_settings (
   id TEXT PRIMARY KEY DEFAULT 'site',
   maintenance_mode BOOLEAN NOT NULL DEFAULT false,
@@ -183,7 +172,6 @@ ALTER TABLE admission_rules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery ENABLE ROW LEVEL SECURITY;
 ALTER TABLE hero_slides ENABLE ROW LEVEL SECURITY;
-ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
 -- Public read access (website visitors can see all data)
@@ -198,7 +186,6 @@ CREATE POLICY "Public read" ON stats FOR SELECT USING (true);
 CREATE POLICY "Public read" ON gallery FOR SELECT USING (true);
 CREATE POLICY "Public read" ON hero_slides FOR SELECT USING (true);
 CREATE POLICY "Public read" ON site_settings FOR SELECT USING (true);
-CREATE POLICY "Public read" ON documents FOR SELECT USING (true);
 
 -- Authenticated users can INSERT, UPDATE, DELETE
 CREATE POLICY "Auth insert" ON news FOR INSERT WITH CHECK (auth.role() = 'authenticated');
@@ -245,10 +232,6 @@ CREATE POLICY "Auth insert" ON site_settings FOR INSERT WITH CHECK (auth.role() 
 CREATE POLICY "Auth update" ON site_settings FOR UPDATE USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth delete" ON site_settings FOR DELETE USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Auth insert" ON documents FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON documents FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON documents FOR DELETE USING (auth.role() = 'authenticated');
-
 -- ============================================
 -- Storage bucket (rasmlar uchun)
 -- ============================================
@@ -263,7 +246,7 @@ CREATE POLICY "Auth image upload" ON storage.objects FOR INSERT WITH CHECK (buck
 CREATE POLICY "Auth image update" ON storage.objects FOR UPDATE USING (bucket_id = 'images' AND auth.role() = 'authenticated');
 CREATE POLICY "Auth image delete" ON storage.objects FOR DELETE USING (bucket_id = 'images' AND auth.role() = 'authenticated');
 
--- Documents storage bucket
+-- Documents storage bucket (news PDF biriktirmalari uchun)
 INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', true)
 ON CONFLICT (id) DO NOTHING;
 

@@ -124,6 +124,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | ------------ | ------------------------------------------------------------- |
 | `/`          | Homepage with hero slider, stats, directions, and latest news |
 | `/about`     | About the lyceum — leadership, teachers, departments, FAQ     |
+| `/departments` | Departments and their teaching staff                        |
 | `/admission` | Admission steps, required documents, deadlines, rules         |
 | `/news`      | News list with pagination                                     |
 | `/news/[id]` | Individual news article with full content                     |
@@ -140,6 +141,7 @@ All admin routes are protected via Supabase Auth and middleware cookie check.
 | `/altuit-dashboard/news`         | Create, edit, delete news articles           |
 | `/altuit-dashboard/leadership`   | Manage leadership team                       |
 | `/altuit-dashboard/teachers`     | Manage teaching staff                        |
+| `/altuit-dashboard/departments`  | Manage departments and head teachers         |
 | `/altuit-dashboard/achievements` | Manage student achievements                  |
 | `/altuit-dashboard/gallery`      | Manage photo gallery                         |
 | `/altuit-dashboard/hero`         | Manage homepage hero slides                  |

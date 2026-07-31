@@ -535,44 +535,6 @@ export async function deleteHeroSlide(id: string): Promise<void> {
 }
 
 // ----------------------------------------------------
-// 11. Documents
-// ----------------------------------------------------
-export interface DocumentItem {
-  id?: string;
-  titleUz: string;
-  titleRu: string;
-  titleEn: string;
-  fileUrl: string;
-  fileSize: number;
-  createdAt?: string;
-}
-
-export async function getDocuments(): Promise<DocumentItem[]> {
-  const { data, error } = await supabase
-    .from("documents")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return (data || []).map(mapRow);
-}
-
-export async function saveDocument(
-  id: string,
-  data: Omit<DocumentItem, "id">,
-): Promise<void> {
-  const row = toRow({ id, ...data });
-  const { error } = await supabase
-    .from("documents")
-    .upsert(row, { onConflict: "id" });
-  if (error) throw error;
-}
-
-export async function deleteDocument(id: string): Promise<void> {
-  const { error } = await supabase.from("documents").delete().eq("id", id);
-  if (error) throw error;
-}
-
-// ----------------------------------------------------
 // 12. Site Settings (stored in stats table — no extra migration)
 // ----------------------------------------------------
 export interface SiteSettings {

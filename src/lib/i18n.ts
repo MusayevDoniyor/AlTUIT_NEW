@@ -16,7 +16,6 @@ export interface TranslationStructure {
   nav_directions: string;
   nav_rules: string;
   nav_docs: string;
-  nav_documents: string;
   nav_faq: string;
   nav_science: string;
   nav_partners: string;
@@ -118,7 +117,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_directions: "Yo'nalishlar",
     nav_rules: "Qabul",
     nav_docs: "Hujjatlar va muddatlar",
-    nav_documents: "Hujjatlar",
     nav_faq: "Ko'p beriladigan savollar",
     nav_science: "Yutuqlar",
     nav_partners: "Hamkorlik",
@@ -277,7 +275,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_directions: "Направления",
     nav_rules: "Приём",
     nav_docs: "Документы и сроки",
-    nav_documents: "Документы",
     nav_faq: "Часто задаваемые вопросы",
     nav_science: "Достижения",
     nav_partners: "Сотрудничество",
@@ -422,7 +419,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_directions: "Directions",
     nav_rules: "Admission",
     nav_docs: "Documents & Deadlines",
-    nav_documents: "Documents",
     nav_faq: "FAQ",
     nav_science: "Achievements",
     nav_partners: "Partners",
