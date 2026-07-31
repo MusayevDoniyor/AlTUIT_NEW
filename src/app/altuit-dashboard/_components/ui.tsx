@@ -648,14 +648,19 @@ export function SearchInput({
         color: C.text,
         fontSize: "0.83rem",
         outline: "none",
+        transition: "border-color 0.2s, box-shadow 0.2s, background 0.2s",
         boxSizing: "border-box",
         fontFamily: "inherit",
       }}
       onFocus={(e) => {
         e.target.style.borderColor = C.borderFocus;
+        e.target.style.boxShadow = "0 0 0 3px rgba(200,169,110,0.12)";
+        e.target.style.background = "rgba(255,255,255,0.07)";
       }}
       onBlur={(e) => {
         e.target.style.borderColor = C.border;
+        e.target.style.boxShadow = "none";
+        e.target.style.background = "rgba(255,255,255,0.05)";
       }}
     />
   );
