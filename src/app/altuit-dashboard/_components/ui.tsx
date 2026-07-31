@@ -256,17 +256,23 @@ export function Input({ label, error, style, ...props }: InputProps) {
           color: C.text,
           fontSize: "0.88rem",
           outline: "none",
-          transition: "border-color 0.2s",
+          transition: "border-color 0.2s, box-shadow 0.2s, background 0.2s",
           boxSizing: "border-box",
           fontFamily: "inherit",
           ...style,
         }}
         onFocus={(e) => {
           e.target.style.borderColor = error ? C.borderError : C.borderFocus;
+          e.target.style.boxShadow = `0 0 0 3px ${
+            error ? "rgba(239,68,68,0.15)" : "rgba(200,169,110,0.12)"
+          }`;
+          e.target.style.background = "rgba(255,255,255,0.07)";
           props.onFocus?.(e);
         }}
         onBlur={(e) => {
           e.target.style.borderColor = error ? C.borderError : C.border;
+          e.target.style.boxShadow = "none";
+          e.target.style.background = "rgba(255,255,255,0.05)";
           props.onBlur?.(e);
         }}
       />
@@ -311,7 +317,7 @@ export function Textarea({ label, error, style, ...props }: TextareaProps) {
           color: C.text,
           fontSize: "0.88rem",
           outline: "none",
-          transition: "border-color 0.2s",
+          transition: "border-color 0.2s, box-shadow 0.2s, background 0.2s",
           boxSizing: "border-box",
           fontFamily: "inherit",
           resize: "vertical",
@@ -320,10 +326,16 @@ export function Textarea({ label, error, style, ...props }: TextareaProps) {
         }}
         onFocus={(e) => {
           e.target.style.borderColor = error ? C.borderError : C.borderFocus;
+          e.target.style.boxShadow = `0 0 0 3px ${
+            error ? "rgba(239,68,68,0.15)" : "rgba(200,169,110,0.12)"
+          }`;
+          e.target.style.background = "rgba(255,255,255,0.07)";
           props.onFocus?.(e);
         }}
         onBlur={(e) => {
           e.target.style.borderColor = error ? C.borderError : C.border;
+          e.target.style.boxShadow = "none";
+          e.target.style.background = "rgba(255,255,255,0.05)";
           props.onBlur?.(e);
         }}
       />
@@ -368,10 +380,23 @@ export function Select({ label, options, style, ...props }: SelectProps) {
           color: C.text,
           fontSize: "0.88rem",
           outline: "none",
+          transition: "border-color 0.2s, box-shadow 0.2s, background 0.2s",
           boxSizing: "border-box",
           fontFamily: "inherit",
           cursor: "pointer",
           ...style,
+        }}
+        onFocus={(e) => {
+          e.target.style.borderColor = C.borderFocus;
+          e.target.style.boxShadow = "0 0 0 3px rgba(200,169,110,0.12)";
+          e.target.style.background = "rgba(255,255,255,0.07)";
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          e.target.style.borderColor = C.border;
+          e.target.style.boxShadow = "none";
+          e.target.style.background = "rgba(255,255,255,0.05)";
+          props.onBlur?.(e);
         }}
       >
         {options.map((o) => (
@@ -450,8 +475,18 @@ export function Button({
         transition: "all 0.2s",
         fontFamily: "inherit",
         whiteSpace: "nowrap",
+        boxShadow: variant === "primary" ? "0 2px 12px rgba(200,169,110,0.2)" : "none",
         ...styles[variant],
         ...style,
+      }}
+      onMouseEnter={(e) => {
+        if (disabled || loading) return;
+        e.currentTarget.style.filter = "brightness(1.08)";
+        e.currentTarget.style.transform = "translateY(-1px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.filter = "none";
+        e.currentTarget.style.transform = "none";
       }}
     >
       {loading ? (

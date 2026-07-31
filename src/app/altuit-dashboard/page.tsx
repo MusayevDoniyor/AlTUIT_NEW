@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { getAllNews } from "@/lib/db";
+import type { NewsItem } from "@/lib/db";
 import {
   Newspaper,
   Users,
@@ -14,6 +16,9 @@ import {
   ArrowRight,
   LayoutDashboard,
   Settings,
+  Calendar,
+  Clock,
+  Plus,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 
@@ -81,6 +86,7 @@ export default function AdminDashboard() {
     heroSlides: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [recentNews, setRecentNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
     async function loadCounts() {
@@ -113,7 +119,17 @@ export default function AdminDashboard() {
       }
     }
     loadCounts();
+    getAllNews()
+      .then((items) => setRecentNews(items.slice(0, 5)))
+      .catch((e) => console.error("Failed to load recent news:", e));
   }, []);
+
+  const formatDate = (d: string) =>
+    new Date(d).toLocaleDateString("uz-UZ", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
 
   const stats = [
     {
@@ -278,6 +294,202 @@ export default function AdminDashboard() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* Recent news */}
+      <div style={{ marginBottom: 32 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 16,
+          }}
+        >
+          <h2
+            style={{
+              color: "rgba(255,255,255,0.6)",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              margin: 0,
+            }}
+          >
+            So'nggi yangiliklar
+          </h2>
+          <Link
+            href="/altuit-dashboard/news"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              color: "#c8a96e",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              textDecoration: "none",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget as HTMLAnchorElement).style.opacity = "0.7"
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget as HTMLAnchorElement).style.opacity = "1"
+            }
+          >
+            Barchasi
+            <ArrowRight size={13} />
+          </Link>
+        </div>
+        <div
+          style={{
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: 16,
+            overflow: "hidden",
+          }}
+        >
+          {recentNews.length === 0 ? (
+            <div
+              style={{
+                padding: "28px 20px",
+                textAlign: "center",
+                color: "rgba(255,255,255,0.35)",
+                fontSize: "0.83rem",
+              }}
+            >
+              {loading ? "Yuklanmoqda..." : "Hozircha yangiliklar yo'q"}
+            </div>
+          ) : (
+            recentNews.map((n, i) => (
+              <div
+                key={n.id ?? i}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 14,
+                  padding: "14px 18px",
+                  borderBottom:
+                    i < recentNews.length - 1
+                      ? "1px solid rgba(255,255,255,0.05)"
+                      : "none",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget as HTMLDivElement).style.background =
+                    "rgba(255,255,255,0.04)"
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget as HTMLDivElement).style.background =
+                    "transparent"
+                }
+              >
+                <div
+                  style={{
+                    width: 42,
+                    height: 42,
+                    borderRadius: 10,
+                    background: `${n.color}22`,
+                    border: `1px solid ${n.color}33`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    overflow: "hidden",
+                  }}
+                >
+                  {n.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={n.imageUrl}
+                      alt=""
+                      width={42}
+                      height={42}
+                      style={{ objectFit: "cover" }}
+                    />
+                  ) : (
+                    <Newspaper size={18} color={n.color} />
+                  )}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      color: "white",
+                      fontSize: "0.86rem",
+                      fontWeight: 600,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {n.titleUz}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      marginTop: 3,
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 4,
+                        color: "rgba(255,255,255,0.35)",
+                        fontSize: "0.72rem",
+                      }}
+                    >
+                      <Calendar size={11} />
+                      {formatDate(n.date)}
+                    </span>
+                    {!n.isPublished && (
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          color: "#f59e0b",
+                          fontSize: "0.72rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        <Clock size={11} />
+                        Qoralama
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <Link
+                  href="/altuit-dashboard/news"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    color: "rgba(255,255,255,0.3)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textDecoration: "none",
+                    flexShrink: 0,
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget as HTMLAnchorElement).style.color =
+                      "#c8a96e"
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget as HTMLAnchorElement).style.color =
+                      "rgba(255,255,255,0.3)"
+                  }
+                >
+                  Tahrirlash
+                  <Plus size={12} />
+                </Link>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Quick actions */}
