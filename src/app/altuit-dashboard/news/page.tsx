@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Newspaper, Plus, Pencil, Trash2, X, Save, Send, FileText, ExternalLink } from "lucide-react";
 import {
-  getNews,
+  getAllNews,
   saveNews,
-  deleteNews,
+  deleteNewsWithImages,
   uploadImage,
   deleteImage,
+  deleteFile,
   NewsItem,
-  type ImageItem,
+  ImageItem,
 } from "@/lib/db";
 import {
   PageHeader,
@@ -80,7 +81,7 @@ export default function AdminNewsPage() {
   const load = async () => {
     setLoading(true);
     try {
-      setItems(await getNews());
+      setItems(await getAllNews());
     } catch {
       setError("Ma'lumotlarni yuklashda xatolik");
     } finally {
@@ -144,14 +145,14 @@ export default function AdminNewsPage() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSave = async () => {
-    if (!editing || !validate()) return;
+  const handleSave = async (publish = true) => {
+    if (!editing || !validate() || saving) return;
     setSaving(true);
     setError("");
     try {
       const id = editing.id || Date.now().toString();
       const { id: _id, ...data } = editing as NewsItem;
-      await saveNews(id, data);
+      await saveNews(id, { ...data, isPublished: publish });
       showToast(
         "success",
         editing.id ? "Yangilik tahrirlandi" : "Yangilik qo'shildi",
@@ -168,10 +169,8 @@ export default function AdminNewsPage() {
   const handleDelete = async () => {
     if (!deleteTarget) return;
     try {
-      await deleteNews(deleteTarget.id!);
-      if (deleteTarget.imageUrl) await deleteImage(deleteTarget.imageUrl);
+      await deleteNewsWithImages(deleteTarget.id!);
       if (deleteTarget.fileUrl) {
-        const { deleteFile } = await import("@/lib/db");
         await deleteFile(deleteTarget.fileUrl);
       }
       showToast("success", `"${deleteTarget.titleUz}" o'chirildi`);
@@ -186,7 +185,10 @@ export default function AdminNewsPage() {
   const images: ImageItem[] = (() => {
     if (!editing?.images) return [];
     try {
-      const parsed = JSON.parse(editing.images);
+      const parsed =
+        typeof editing.images === "string"
+          ? JSON.parse(editing.images)
+          : editing.images;
       return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
@@ -794,15 +796,13 @@ export default function AdminNewsPage() {
               </Button>
               <Button
                 variant="outline"
-                onClick={async () => {
-                  set("isPublished", false);
-                  await handleSave();
-                }}
+                onClick={() => handleSave(false)}
+                disabled={saving}
                 style={{ color: C.textMuted, borderColor: C.border }}
               >
                 <Save size={14} /> Draft
               </Button>
-              <Button onClick={handleSave} loading={saving}>
+              <Button onClick={() => handleSave(true)} loading={saving}>
                 <Send size={14} /> Chop etish
               </Button>
             </div>

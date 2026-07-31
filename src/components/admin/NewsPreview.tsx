@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Calendar, Star, Eye, Monitor, Smartphone } from "lucide-react";
+import DOMPurify from "dompurify";
+import { Calendar, Eye, Monitor, Smartphone } from "lucide-react";
 
 interface ImageItem {
   url: string;
@@ -44,7 +45,7 @@ export default function NewsPreview({ data, lang = "uz" }: NewsPreviewProps) {
 
   const mainImage = data.images.find((img) => img.isMain) || data.images[0];
   const otherImages = data.images.filter(
-    (img) => !img.isMain && img !== data.images[0],
+    (img) => !img.isMain && img.url !== mainImage?.url,
   );
 
   const containerWidth = viewMode === "desktop" ? "100%" : "375px";
@@ -438,7 +439,7 @@ function FullPreview({
               color: "#374151",
               lineHeight: 1.8,
             }}
-            dangerouslySetInnerHTML={{ __html: data.body }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.body) }}
           />
         ) : (
           <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>

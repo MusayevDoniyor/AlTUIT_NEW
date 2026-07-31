@@ -33,8 +33,6 @@ import { useAsyncData } from "@/lib/useAsyncData";
 import { PubStatBlock, PubCard } from "@/components/Skeleton";
 import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
 
-// ===== DATA =====
-
 // ===== COUNTER COMPONENT =====
 function Counter({
   to,
@@ -71,19 +69,11 @@ function Counter({
 // ===== HERO SLIDE WRAPPER =====
 function HeroSlide({
   slideImage,
-  hasText,
-  slideTitle,
-  slideDesc,
   t,
-  lang,
   priority,
 }: {
   slideImage: string;
-  hasText: boolean;
-  slideTitle: string;
-  slideDesc: string;
   t: Record<string, string>;
-  lang: Lang;
   priority: boolean;
 }) {
   return (
@@ -99,130 +89,118 @@ function HeroSlide({
           sizes="100vw"
         />
       )}
-      {hasText ? (
-        <>
-          <div
-            className="carousel-overlay"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
-            }}
-          />
-          <div
-            className="container-custom"
-            style={{
-              position: "relative",
-              zIndex: 2,
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-            }}
+      <div
+        className="carousel-overlay"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
+        }}
+      />
+      <div
+        className="container-custom"
+        style={{
+          position: "relative",
+          zIndex: 2,
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ maxWidth: 850 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <div style={{ maxWidth: 850 }}>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 28,
+                background: "rgba(255,255,255,0.08)",
+                backdropFilter: "blur(5px)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: 100,
+                padding: "8px 24px",
+              }}
+            >
+              <div
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: "#c8a96e",
+                }}
+              />
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}
               >
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 12,
-                    marginBottom: 28,
-                    background: "rgba(255,255,255,0.08)",
-                    backdropFilter: "blur(5px)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    borderRadius: 100,
-                    padding: "8px 24px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: "#c8a96e",
-                    }}
-                  />
-                  <span
-                    style={{
-                      color: "white",
-                      fontSize: "0.8rem",
-                      fontWeight: 700,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {t.hero_badge}
-                  </span>
-                </div>
-
-                <h1
-                  style={{
-                    color: "white",
-                    fontWeight: 900,
-                    fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                    lineHeight: 1.1,
-                    marginBottom: 25,
-                  }}
-                >
-                  {slideTitle}
-                </h1>
-
-                <p
-                  style={{
-                    color: "rgba(255,255,255,0.85)",
-                    fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                    lineHeight: 1.6,
-                    marginBottom: 40,
-                    maxWidth: 650,
-                  }}
-                >
-                  {slideDesc}
-                </p>
-
-                <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                  <Link
-                    href="/admission"
-                    className="btn-primary"
-                    style={{
-                      padding: "18px 40px",
-                      borderRadius: 12,
-                      fontSize: "1rem",
-                      background: "#c8a96e",
-                      color: "#002147",
-                    }}
-                  >
-                    {t.hero_cta} <ArrowRight size={20} />
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="btn-outline"
-                    style={{
-                      padding: "18px 40px",
-                      borderRadius: 12,
-                      fontSize: "1rem",
-                      borderColor: "rgba(255,255,255,0.4)",
-                      borderWidth: 2,
-                    }}
-                  >
-                    {t.hero_cta2}
-                  </Link>
-                </div>
-              </motion.div>
+                {t.hero_badge}
+              </span>
             </div>
-          </div>
-        </>
-      ) : (
-        <div
-          className="carousel-overlay"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,33,71,0.2) 0%, rgba(0,33,71,0.65) 100%)",
-          }}
-        />
-      )}
+
+            <h1
+              style={{
+                color: "white",
+                fontWeight: 900,
+                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                lineHeight: 1.1,
+                marginBottom: 25,
+              }}
+            >
+              {t.hero_title}
+            </h1>
+
+            <p
+              style={{
+                color: "rgba(255,255,255,0.85)",
+                fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
+                lineHeight: 1.6,
+                marginBottom: 40,
+                maxWidth: 650,
+              }}
+            >
+              {t.hero_subtitle}
+            </p>
+
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+              <Link
+                href="/admission"
+                className="btn-primary"
+                style={{
+                  padding: "18px 40px",
+                  borderRadius: 12,
+                  fontSize: "1rem",
+                  background: "#c8a96e",
+                  color: "#002147",
+                }}
+              >
+                {t.hero_cta} <ArrowRight size={20} />
+              </Link>
+              <Link
+                href="/about"
+                className="btn-outline"
+                style={{
+                  padding: "18px 40px",
+                  borderRadius: 12,
+                  fontSize: "1rem",
+                  borderColor: "rgba(255,255,255,0.4)",
+                  borderWidth: 2,
+                }}
+              >
+                {t.hero_cta2}
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </>
   );
 }
@@ -252,48 +230,15 @@ export default function Home() {
   const dbStats = homeData?.stats ?? [];
   const dbNews = homeData?.news ?? [];
 
-  const activeSlides =
-    dbSlides.length > 0
-      ? dbSlides
-      : [
-          {
-            imageUrl: "",
-            titleUz: "",
-            titleRu: "",
-            titleEn: "",
-            descUz: "",
-            descRu: "",
-            descEn: "",
-          },
-        ];
+  const activeSlides = dbSlides.length > 0 ? dbSlides : [{ imageUrl: "" }];
 
   const t = translations[lang] as unknown as Record<string, string>;
 
   const slide = activeSlides[current];
   const slideImage = slide?.imageUrl || "";
-  const hasText = !!(slide?.titleUz || slide?.titleRu || slide?.titleEn);
-  const slideTitle = hasText
-    ? lang === "uz"
-      ? (slide.titleUz ?? "")
-      : lang === "ru"
-        ? (slide.titleRu ?? "")
-        : (slide.titleEn ?? "")
-    : "";
-  const slideDesc = hasText
-    ? lang === "uz"
-      ? (slide.descUz ?? "")
-      : lang === "ru"
-        ? (slide.descRu ?? "")
-        : (slide.descEn ?? "")
-    : "";
 
   const prevSlide = activeSlides[prevIndex];
   const prevImage = prevSlide?.imageUrl || "";
-  const prevHasText = !!(
-    prevSlide?.titleUz ||
-    prevSlide?.titleRu ||
-    prevSlide?.titleEn
-  );
 
   const goTo = useCallback(
     (i: number) => {
@@ -393,7 +338,7 @@ export default function Home() {
               sizes="100vw"
             />
           )}
-          {prevHasText && prevImage && (
+          {prevImage && (
             <div
               className="carousel-overlay"
               style={{
@@ -415,11 +360,7 @@ export default function Home() {
         >
           <HeroSlide
             slideImage={slideImage}
-            hasText={hasText}
-            slideTitle={slideTitle}
-            slideDesc={slideDesc}
             t={t}
-            lang={lang}
             priority={current === 0}
           />
         </div>

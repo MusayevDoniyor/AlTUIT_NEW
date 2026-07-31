@@ -63,15 +63,19 @@ export default function AdminLayout({
 
   useEffect(() => {
     // Check current session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUserEmail(session.user.email ?? null);
-        setLoading(false);
-      } else {
-        document.cookie = "admin-session=; Max-Age=0; path=/";
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (session?.user) {
+          setUserEmail(session.user.email ?? null);
+          setLoading(false);
+        } else {
+          router.replace("/login");
+        }
+      })
+      .catch(() => {
         router.replace("/login");
-      }
-    });
+      });
 
     // Listen to auth state changes
     const {
@@ -81,7 +85,6 @@ export default function AdminLayout({
         setUserEmail(session.user.email ?? null);
         setLoading(false);
       } else {
-        document.cookie = "admin-session=; Max-Age=0; path=/";
         router.replace("/login");
       }
     });
@@ -90,7 +93,6 @@ export default function AdminLayout({
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    document.cookie = "admin-session=; Max-Age=0; path=/";
     router.replace("/login");
   };
 

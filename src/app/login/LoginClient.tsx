@@ -22,7 +22,6 @@ function AdminLoginForm() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        document.cookie = "admin-session=true; path=/; max-age=86400";
         router.replace(from);
       } else {
         setChecking(false);
@@ -55,7 +54,6 @@ function AdminLoginForm() {
       return;
     }
 
-    document.cookie = "admin-session=true; path=/; max-age=86400";
     router.replace(from);
   };
 

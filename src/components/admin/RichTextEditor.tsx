@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageExtension from "@tiptap/extension-image";
@@ -102,10 +102,7 @@ export default function RichTextEditor({
   placeholder = "Yangilik matnini yozing...",
   maxLength = 5000,
 }: RichTextEditorProps) {
-  const linkInputRef = useRef<HTMLInputElement>(null);
-
-  const editor = useEditor({
-    extensions: [
+  const editor = useEditor({    extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
       }),
@@ -139,6 +136,13 @@ export default function RichTextEditor({
       },
     },
   });
+
+  // Sync editor content when the language tab changes (content prop updates)
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "", { emitUpdate: false });
+    }
+  }, [content, editor]);
 
   const handleLinkClick = useCallback(() => {
     if (!editor) return;

@@ -104,7 +104,7 @@ export default function RootLayout({
                 addressRegion: "Yunusobod tumani",
                 addressCountry: "UZ",
               },
-              telephone: ["+998712350369", "+998932220611"],
+              telephone: ["+998712350369", "+998931033245"],
               email: "info@tatual.uz",
               sameAs: ["https://tuit.uz/akademik-litsey", siteConfig.url],
             }),

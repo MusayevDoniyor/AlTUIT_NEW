@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import { translations, type Lang } from "@/lib/i18n";
 import { Calendar, ArrowLeft, FileText, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -68,7 +69,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
             color: "#374151",
             lineHeight: 1.85,
           }}
-          dangerouslySetInnerHTML={{ __html: text }}
+          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
         />
       );
     }

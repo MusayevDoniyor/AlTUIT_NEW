@@ -80,7 +80,7 @@ export default function ContactClient() {
       label: t.contact_phone_mobile,
       value: t.contact_phone_mobile_val,
       color: "#6032bf",
-      href: "tel:+998932220611",
+      href: "tel:+998931033245",
     },
     {
       icon: FaEnvelope,

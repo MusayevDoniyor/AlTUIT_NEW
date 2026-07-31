@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Decoy: /admin → 404
@@ -8,19 +9,37 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/not-found", request.url));
   }
 
-  // Protect all /altuit-dashboard routes
+  // Protect all /altuit-dashboard routes with a verified Supabase session
   if (pathname.startsWith("/altuit-dashboard")) {
-    // Allow login page without session
-    if (pathname === "/altuit-dashboard/login") {
-      return NextResponse.next();
-    }
+    const response = NextResponse.next();
 
-    const session = request.cookies.get("admin-session")?.value;
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
+        },
+      },
+    );
 
-    if (!session || session !== "true") {
-      // Redirect to login page
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
       const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = "/altuit-dashboard/login";
+      loginUrl.pathname = "/login";
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }

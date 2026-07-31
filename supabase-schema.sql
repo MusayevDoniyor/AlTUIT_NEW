@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS news (
   tag JSONB NOT NULL DEFAULT '{"uz":"","ru":"","en":""}',
   color TEXT NOT NULL DEFAULT '#1a3a6e',
   image_url TEXT DEFAULT '',
+  images JSONB NOT NULL DEFAULT '[]',
   file_url TEXT DEFAULT '',
   file_name TEXT DEFAULT '',
   is_published BOOLEAN DEFAULT true,

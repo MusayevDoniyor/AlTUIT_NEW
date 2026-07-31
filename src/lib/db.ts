@@ -112,9 +112,20 @@ export async function getNews(): Promise<NewsItem[]> {
   const { data, error } = await supabase
     .from("news")
     .select("*")
+    .eq("is_published", true)
     .order("date", { ascending: false });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<NewsItem>(row));
+}
+
+/** Admin: all news including drafts */
+export async function getAllNews(): Promise<NewsItem[]> {
+  const { data, error } = await supabase
+    .from("news")
+    .select("*")
+    .order("date", { ascending: false });
+  if (error) throw error;
+  return (data || []).map((row) => mapRow<NewsItem>(row));
 }
 
 export async function getNewsById(id: string): Promise<NewsItem | null> {
@@ -122,8 +133,12 @@ export async function getNewsById(id: string): Promise<NewsItem | null> {
     .from("news")
     .select("*")
     .eq("id", id)
+    .eq("is_published", true)
     .single();
-  if (error) return null;
+  if (error) {
+    if (error.code === "PGRST116") return null; // not found
+    throw error;
+  }
   return data ? mapRow(data) : null;
 }
 
@@ -135,11 +150,6 @@ export async function saveNews(
   const { error } = await supabase
     .from("news")
     .upsert(row, { onConflict: "id" });
-  if (error) throw error;
-}
-
-export async function deleteNews(id: string): Promise<void> {
-  const { error } = await supabase.from("news").delete().eq("id", id);
   if (error) throw error;
 }
 
@@ -204,7 +214,7 @@ export async function getLeadership(): Promise<LeadershipItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<LeadershipItem>(row));
 }
 
 export async function saveLeadership(
@@ -251,7 +261,7 @@ export async function getTeachers(): Promise<TeacherItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<TeacherItem>(row));
 }
 
 export async function saveTeacher(
@@ -288,17 +298,7 @@ export async function getDepartments(): Promise<DepartmentItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
-}
-
-export async function getDepartmentById(id: string): Promise<DepartmentItem | null> {
-  const { data, error } = await supabase
-    .from("departments")
-    .select("*")
-    .eq("id", id)
-    .single();
-  if (error) return null;
-  return data ? mapRow(data) : null;
+  return (data || []).map((row) => mapRow<DepartmentItem>(row));
 }
 
 export async function saveDepartment(
@@ -341,7 +341,7 @@ export async function getAchievements(): Promise<AchievementItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<AchievementItem>(row));
 }
 
 export async function saveAchievement(
@@ -380,7 +380,7 @@ export async function getAdmissionRules(): Promise<AdmissionRuleItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<AdmissionRuleItem>(row));
 }
 
 export async function saveAdmissionRule(
@@ -420,7 +420,7 @@ export async function getStats(): Promise<StatItem[]> {
   const { data, error } = await supabase.from("stats").select("*");
   if (error) throw error;
   return (data || [])
-    .map(mapRow)
+    .map((row) => mapRow<StatItem>(row))
     .filter((item: StatItem) => item.key !== MAINTENANCE_STAT_KEY);
 }
 
@@ -454,7 +454,7 @@ export async function getGallery(): Promise<GalleryItem[]> {
     .select("*")
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<GalleryItem>(row));
 }
 
 export async function saveGallery(
@@ -479,13 +479,6 @@ export async function deleteGallery(id: string): Promise<void> {
 export interface HeroSlideItem {
   id?: string;
   imageUrl: string;
-  // Optional localized titles/descriptions used by frontend
-  titleUz?: string;
-  titleRu?: string;
-  titleEn?: string;
-  descUz?: string;
-  descRu?: string;
-  descEn?: string;
   orderIndex: number;
   isActive: boolean;
 }
@@ -497,16 +490,7 @@ export async function getHeroSlides(): Promise<HeroSlideItem[]> {
     .eq("is_active", true)
     .order("order_index", { ascending: true });
   if (error) throw error;
-
-  // Fallback: if no active slides, return all
-  if (!data || data.length === 0) {
-    const { data: all } = await supabase
-      .from("hero_slides")
-      .select("*")
-      .order("order_index", { ascending: true });
-    return (all || []).map(mapRow);
-  }
-  return data.map(mapRow);
+  return (data || []).map((row) => mapRow<HeroSlideItem>(row));
 }
 
 export async function getAllHeroSlides(): Promise<HeroSlideItem[]> {
@@ -515,7 +499,7 @@ export async function getAllHeroSlides(): Promise<HeroSlideItem[]> {
     .select("*")
     .order("order_index", { ascending: true });
   if (error) throw error;
-  return (data || []).map(mapRow);
+  return (data || []).map((row) => mapRow<HeroSlideItem>(row));
 }
 
 export async function saveHeroSlide(
@@ -591,8 +575,7 @@ function toRow(obj: Record<string, unknown>): Record<string, unknown> {
 }
 
 // Convert snake_case Supabase row → camelCase JS object
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mapRow<T = any>(row: Record<string, unknown>): T {
+function mapRow<T = Record<string, unknown>>(row: Record<string, unknown>): T {
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(row)) {
     out[snakeToCamel(k)] = v;
