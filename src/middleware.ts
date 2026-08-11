@@ -43,6 +43,26 @@ export async function middleware(request: NextRequest) {
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // Optional admin allowlist (defense in depth).
+    // Set ADMIN_EMAILS="admin1@...,admin2@..." to restrict dashboard
+    // access to specific accounts. When unset, any authenticated user
+    // is allowed (existing behaviour). Combine with the RLS policy in
+    // supabase-security-hardening.sql for real protection.
+    const adminEmails = (process.env.ADMIN_EMAILS ?? "")
+      .split(",")
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean);
+
+    if (
+      adminEmails.length > 0 &&
+      !adminEmails.includes((user.email ?? "").toLowerCase())
+    ) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.searchParams.set("from", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();

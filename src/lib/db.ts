@@ -539,7 +539,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     .maybeSingle();
 
   if (error || !data) {
-    return { maintenanceMode: true };
+    return { maintenanceMode: false };
   }
 
   return { maintenanceMode: Number(data.value) === 1 };

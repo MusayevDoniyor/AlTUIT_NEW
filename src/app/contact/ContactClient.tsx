@@ -24,6 +24,7 @@ export default function ContactClient() {
     phone: "",
     telegram: "",
     message: "",
+    website: "",
   });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -52,7 +53,7 @@ export default function ContactClient() {
       }
 
       setSent(true);
-      setForm({ name: "", phone: "", telegram: "", message: "" });
+      setForm({ name: "", phone: "", telegram: "", message: "", website: "" });
       setTimeout(() => setSent(false), 5000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Xatolik yuz berdi";
@@ -383,6 +384,25 @@ export default function ContactClient() {
                 onSubmit={handleSubmit}
                 style={{ display: "flex", flexDirection: "column", gap: 18 }}
               >
+                {/* Honeypot — bots fill this, humans don't see it */}
+                <input
+                  type="text"
+                  name="website"
+                  value={form.website}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, website: e.target.value }))
+                  }
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    width: "1px",
+                    height: "1px",
+                    opacity: 0,
+                  }}
+                />
                 <div
                   style={{
                     display: "grid",
@@ -448,11 +468,20 @@ export default function ContactClient() {
                           : "Phone number"}
                     </label>
                     <input
-                      type="text"
+                      type="tel"
+                      inputMode="tel"
                       required
                       value={form.phone}
                       onChange={(e) =>
                         setForm((f) => ({ ...f, phone: e.target.value }))
+                      }
+                      pattern="[0-9+()\-\s]{7,20}"
+                      title={
+                        lang === "uz"
+                          ? "Kamida 7 ta raqam kiriting"
+                          : lang === "ru"
+                            ? "Введите не менее 7 цифр"
+                            : "Enter at least 7 digits"
                       }
                       placeholder="+998 (90) 123-45-67"
                       style={{

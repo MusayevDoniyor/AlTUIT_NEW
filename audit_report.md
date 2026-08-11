@@ -1,109 +1,170 @@
-# 🔍 Sayt audit — Sadoo talablari bo'yicha tekshiruv
+# 📋 To'liq Audit Hisoboti — TATU Akademik Litsey Sayti (altuit)
 
-Quyida website egasi (Sadoo) aytgan har bir talab va hozirgi holat keltirilgan.
-
----
-
-## ✅ Bajarilgan talablar
-
-| # | Talab | Holat | Izoh |
-|---|-------|-------|------|
-| 1 | **Rahbariyat** yangilanishi kerak (dinamik) | ✅ Bajarilgan | `leadership` Supabase jadvalidan olinadi, dashboard orqali boshqariladi |
-| 2 | **Pedagog xodimlar** yangilanishi kerak | ✅ Bajarilgan | `teachers` Supabase jadvalidan olinadi, dashboard orqali boshqariladi |
-| 3 | **Moddiy-texnika baza** — rasm qo'shish | ✅ Bajarilgan | `gallery` Supabase jadvalidan olinadi, dashboardda **Gallery** bo'limi mavjud |
-| 4 | **Yo'nalishlar** — o'zgarmasin (statik) | ✅ Bajarilgan | 4 ta yo'nalish hardcoded holda [page.tsx](file:///c:/dev/altuit/src/app/page.tsx#L189-L194) da turadi |
-| 5 | **Kirish qoidalari** yangilanishi kerak | ✅ Bajarilgan | `admission_rules` Supabase jadvalidan olinadi, dashboard orqali boshqariladi |
-| 6 | **Hujjatlar va muddatlar** — statik qolsin | ✅ Bajarilgan | i18n translationlarda hardcoded turadi — [i18n.ts](file:///c:/dev/altuit/src/lib/i18n.ts#L82-L95) |
-| 7 | **Ko'p beriladigan savollar** — statik qolsin | ✅ Bajarilgan | i18n translationlarda hardcoded turadi — [i18n.ts](file:///c:/dev/altuit/src/lib/i18n.ts#L98-L124) |
-| 8 | **Yangiliklar** = `/news` bo'lishi | ✅ Bajarilgan | `/news` route mavjud, Supabasedan dinamik olinadi |
-| 9 | **Bog'lanish** sahifasida litsey ma'lumotlari | ✅ Bajarilgan | [contact/page.tsx](file:///c:/dev/altuit/src/app/contact/page.tsx) — manzil, telefon, email, ish vaqti, bo'limlar bor |
-| 10 | **Navbarda Yutuqlar** (Ilmiy hayot → Yutuqlar) | ✅ Bajarilgan | Navbarda `nav_science: "Yutuqlar"` — [i18n.ts](file:///c:/dev/altuit/src/lib/i18n.ts#L17) |
-| 11 | **Hero** — rasm slider (admindan boshqariladi) | ✅ Bajarilgan | `hero_slides` Supabase jadvalidan olinadi, dashboard orqali boshqariladi |
-| 12 | **Admin dashboard** mavjud | ✅ Bajarilgan | `/altuit-dashboard` — barcha bo'limlar uchun CRUD |
-| 13 | **Statistikalar** yangilanishi kerak | ✅ Bajarilgan | `stats` Supabase jadvalidan olinadi |
+| | |
+|---|---|
+| **Sana** | 2026-08-11 |
+| **Filial** | `main` (93ddc20) |
+| **Texnologiya** | Next.js 16 (App Router), React 19, Tailwind 4, Supabase |
+| **Build** | ✅ Muvaffaqiyatli (25 route, TypeScript xatosiz) |
+| **Lint** | ⚠️ 88 muammo (40 error, 48 warning) |
 
 ---
 
-## ⚠️ Muammolar / To'liq bajarilmagan joylar
+## 1. Xulosa (TL;DR)
 
-### 1. 🔴 "Ilmiy hayot" → "Yutuqlar" — sahifa sarlavhasida eski nom
+Sayt **ishlayapti** va asosiy talablar bajarilgan: 8 ta dinamik bo'lim (yangiliklar, rahbariyat, pedagoglar, kafedralar, yutuqlar, galereya, hero slider, statistika), to'liq admin panel (CRUD), 3 tilli interfeys, SEO asoslari.
 
-> [!WARNING]
-> [science/page.tsx:85-89](file:///c:/dev/altuit/src/app/science/page.tsx#L85-L89) da sahifa sarlavhasi hali **"Ilmiy hayot"** deb yozilgan:
-> ```tsx
-> {lang === "uz"
->   ? "Ilmiy hayot"
->   : lang === "ru"
->     ? "Научная жизнь"
->     : "Academic Life"}
-> ```
-> Sadoo "Ilmiy hayotni o'rniga **yutuqlar** qo'yib qo'y" dedi — **hamma joyda bir xil** bo'lishi kerak.
+Lekin **3 ta jiddiy security muammosi** va **bir qancha funksional bug'lar** bor. Eng muhimi — **admin huquqlari hech qanday rol bilan himoyalanmagan**: Supabase'da public signup yoqilgan bo'lsa, istalgan ro'yxatdan o'tgan foydalanuvchi saytni to'liq boshqara oladi. Bu birinchi navbatda tuzatilishi kerak.
 
-**Status**: ❌ Sahifa titlida `"Ilmiy hayot"` qolgan, `"Yutuqlar"` bo'lishi kerak.
+Early-stage startup sifatida eng katta bo'shliq — **engagement funksiyalari yo'q**: share tugmalari, Telegram/Instagram integratsiyasi, analytics, qabul countdown. Quyida bosqichma-bosqich reja berilgan.
 
 ---
 
-### 2. 🟡 Hero slider — "yozuvlar kerak emas, faqat rasm"
+## 2. Nima ishlayapti ✅
 
-> [!IMPORTANT]
-> Sadoo aydi: "bitta rasm turadigan narsa kerak... boyagi mana bu yozuvlar, boshqalar kerak emas."
-> 
-> Hozir hero slider 2 xil ishlaydi:
-> - Agar DB slideda `titleUz` bo'lsa → **matn va buttonlar** ko'rsatadi
-> - Agar `titleUz` bo'lmasa → **faqat rasm** ko'rsatadi
-> 
-> Bu logika to'g'ri ishlaydi — **admindan slide qo'shganda title bo'sh qoldirilsa, faqat rasm ko'rinadi**.
-> 
-> Lekin fallback (DB bo'sh bo'lganda) da hali matnli slide bor: [page.tsx:127-141](file:///c:/dev/altuit/src/app/page.tsx#L127-L141)
-
-**Status**: ⚠️ Asosan ishlaydi, lekin fallback slideda matn bor. Adminga rasm yuklanganda to'g'ri ishlaydi.
-
----
-
-### 3. 🟡 `Litsey haqida qisqa ma'lumot` — qayerdan olinadi?
-
-> Sadoo: "Litsey haqida qisqa ma'lumot — u yangilanmaydi" (o'zi to'g'irlab oldi).
-
-Hozir **statik** — i18n'dan olinadi. Bu to'g'ri.
-
-**Status**: ✅ OK
+| Bo'lim | Holat | Izoh |
+|---|---|---|
+| Yangiliklar (`/news`, `/news/[id]`) | ✅ | DB'dan dinamik, draft/publish tizimi, rasm galereyasi, PDF biriktirish, XSS himoyasi (DOMPurify) |
+| Rahbariyat / Pedagoglar / Kafedralar | ✅ | Supabase + admin CRUD + drag&drop tartiblash |
+| Yutuqlar (`/science`) | ✅ | DB'dan dinamik ("Ilmiy hayot" eski nomi allaqachon tuzatilgan) |
+| Galereya (`/gallery`) | ✅ | DB'dan dinamik, kategoriyalar |
+| Hero slider | ✅ | Admin orqali rasm + matn boshqariladi |
+| Statistika (counterlar) | ✅ | DB'dan dinamik |
+| Qabul qoidalari | ✅ | DB'dan dinamik |
+| Kirish formasi | ✅ | Telegram bot orqali xabar yuboradi (multi-recipient) |
+| Admin panel `/altuit-dashboard` | ✅ | 10 ta CRUD bo'limi, auth himoyasi, toast, noindex |
+| SEO | ✅ | Sitemap, robots, JSON-LD, OG metadata, custom 404 |
+| Xavfsizlik asoslari | ✅ | `.env` git'ga qo'shilmagan, RLS yoqilgan, `/admin` decoy (404) |
 
 ---
 
-### 4. 🟡 Build warning: `middleware` deprecated
+## 3. Kritik xatoliklar 🔴 (darhol tuzatish kerak)
 
-> [!NOTE]
-> Build'da `⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.` xabari chiqadi.
-> Bu Next.js 16 yangiligi — `middleware.ts` → `proxy` o'zgarishi kerak. Hozircha ishlaydi, lekin kelajakda o'zgartirish kerak.
+### 3.1. Admin rol tekshiruvi umuman yo'q — eng jiddiy muammo
+- **RLS**: barcha yozish huquqi `auth.role() = 'authenticated'` bilan berilgan — ya'ni **har qanday tizimga kirgan user** (rolidan qat'iy nazar) hamma jadvalni o'chira/yoza oladi. [supabase-schema.sql:198-240]
+- **Middleware**: faqat "user bormi?" deb tekshiradi, rolni tekshirmaydi. [src/middleware.ts:36-45]
+- **Dashboard layout**: ham faqat sessiya mavjudligini tekshiradi. [src/app/altuit-dashboard/layout.tsx:64-92]
+- **Natija**: Supabase Authentication'da "Email signup" yoqilgan bo'lsa — har kim o'zi ro'yxatdan o'tib, admin bo'lib oladi va butun kontentni boshqaradi.
 
----
+**Yechim (ikkalasidan biri):**
+1. Supabase dashboard'da public signup-ni **o'chirish** (faqat admin qo'lda user yaratadi); YOKI
+2. `user_metadata.role = 'admin'` yoki `admin_roles` jadvali qo'shib, RLS policy + middleware'da rolni tekshirish.
 
-### 5. 🟡 ESLint — 35 ta error, 25 ta warning
+### 3.2. Contact API — ichki ma'lumot oshkor bo'ladi
+- Telegram chat ID'lari xato xabarida mijozga verbatim qaytadi: `Chat ${chatId} ga xabar yuborib bo'lmadi`. [src/app/api/contact/route.ts:102, 112-117]
+- **Yechim**: foydalanuvchiga har doim generic xabar ("Xabar yuborishda xatolik yuz berdi") qaytarish, tafsilotni faqat server log'iga yozish.
 
-Asosiy muammolar:
-- **Unescaped `'`** — dashboarddagi sahifalarda `'` belgisi escape qilinmagan (25+ joy)
-- **`@typescript-eslint/no-explicit-any`** — 7 ta joyda `any` type ishlatilgan
-- **Unused imports** — `Award`, `Building2`, `FlaskConical`, `ChevronLeft`, `ChevronRight`, `FaFacebookF`, `Image`, `Sliders`, `X` va boshqalar import qilingan lekin ishlatilmagan
-
-**Status**: ⚠️ Sayt ishlaydi, lekin kod sifati uchun tozalash kerak.
-
----
-
-## 📊 Umumiy natija
-
-| Kategoriya | Holat |
-|------------|-------|
-| **Funksional talablar** | 12/13 ✅ (1 ta kichik muammo) |
-| **Dinamik bo'limlar** (DB orqali) | ✅ Rahbariyat, Pedagoglar, Gallery, Yutuqlar, Yangiliklar, Kirish qoidalari, Hero, Statistikalar |
-| **Statik bo'limlar** | ✅ Yo'nalishlar, Hujjatlar, FAQ |
-| **Build** | ✅ Muvaffaqiyatli |
-| **Lint** | ⚠️ 35 error (lekin barchasi faqat code style muammolari) |
+### 3.3. Spam himoyasi yo'q
+- Contact formada honeypot, rate-limit yoki captcha yo'q. [src/app/api/contact/route.ts:6-120]
+- Bot soatiga yuzlab xabar yuborib, Telegram'ni spam qilishi mumkin.
+- **Yechim**: honeypot maydoni + IP bazli rate-limit (masalan, Vercel Edge/Upstash) + telefon formatini tekshirish.
 
 ---
 
-## 🔧 Tuzatish kerak bo'lgan joylar (prioritet bo'yicha)
+## 4. Muhim bug'lar 🟠 (ishlayapti, lekin noto'g'ri)
 
-1. **🔴 Muhim**: [science/page.tsx](file:///c:/dev/altuit/src/app/science/page.tsx#L85-L89) — `"Ilmiy hayot"` → `"Yutuqlar"` (barcha tillarda)
-2. **🟡 O'rtacha**: Fallback hero slidedagi matnni olib tashlash yoki bo'sh qoldirish
-3. **🟡 O'rtacha**: ESLint errorlarni tozalash (unescaped entities, unused imports)
-4. **🟢 Past**: Middleware → Proxy migrasiya (Next.js 16)
+| # | Muammo | Joyi |
+|---|---|---|
+| 1 | **Til almashtirishda FOUC (flash)**: sahifa avval "uz" bo'lib render bo'ladi, keyin ru/en ga o'tadi. `setState` effect ichida chaqirilgan (lint error ham shu). | src/lib/useLang.ts:14 |
+| 2 | **Race condition**: `useAsyncData` eski javob yangisini ustidan yozishi mumkin; `error` qiymati hech qayerda o'qilmaydi — xatoliklar "bo'sh state" bo'lib ko'rinadi. | src/lib/useAsyncData.ts:11-30, src/app/HomeClient.tsx:217-229 |
+| 3 | **Carousel tiqilishi**: 1200ms lock auto-advance tick'larini yutib yuboradi — slider bir necha soniya to'xtab qolishi mumkin. | src/app/HomeClient.tsx:260-289 |
+| 4 | **Maintenance default noto'g'ri**: DB'da qator bo'lmasa `maintenanceMode: true` qaytadi — yangi o'rnatilganda sayt "texnik ishlar" banneri bilan chiqadi. | src/lib/db.ts:541-543 |
+| 5 | **og-image.jpg yo'q**: metadata'da referensiya bor, lekin `public/` da faqat `image.png` va `logo.png`. Telegram/Facebook'da bo'lishishda OG card buzilgan. | src/app/layout.tsx:53,65 |
+| 6 | **Manzil 3 joyda duplicate va turlicha**: "112-uy" vs "112", telefon 2 joyda. | src/lib/config.ts:8-10, src/lib/i18n.ts:223, src/app/contact/ContactClient.tsx:70-100 |
+| 7 | **Footer'da hardcode**: avtobus raqamlari (19,38,50,63,115), "tatual.uz" matni — i18n'dan emas. | src/components/Footer.tsx |
+| 8 | **Xarita so'rovi hardcode** (faqat o'zbekcha manzil, hamma tilda) | src/app/contact/ContactClient.tsx:276-315 |
+| 9 | **Telefon maydoni** `type="text"`, faqat uzunlik tekshiriladi — format validatsiya yo'q | src/app/contact/ContactClient.tsx:450-458 |
+| 10 | **`<html lang="uz">` statik**, ru/en sahifalar uchun `hreflang` yo'q — SEO tillar bo'yicha to'liq emas | src/app/layout.tsx:85 |
+
+---
+
+## 5. Schema / Migratsiya muammolari 🟡
+
+| # | Muammo | Izoh |
+|---|---|---|
+| 1 | `site_settings` jadvali **kodda ishlatilmaydi** — maintenance `stats` jadvalining `maintenance_mode` kalitida saqlanadi | supabase-schema.sql:157-165 vs src/lib/db.ts:528-560 |
+| 2 | `facilities` jadvali **o'lik** — schema'da bor, admin panel va kod yo'q | supabase-schema.sql:78-89 |
+| 3 | `supabase-migration-news-images.sql` **eskirgan** — `images` ustuni schema'da allaqachon bor, migration keraksiz | supabase-migration-news-images.sql:1-14 |
+| 4 | `key` ustuni `stats` jadvalida **unique emas** — bir xil kalit 2 marta qo'shilsa xato yuzaga kelishi mumkin | supabase-schema.sql:120-129 |
+
+---
+
+## 6. Kod sifati 🟡
+
+- **Lint: 88 muammo (40 error, 48 warning)**:
+  - ~35 ta unescaped `'` (react/no-unescaped-entities) — apostoflar `&apos;` bilan yozilishi kerak
+  - 7+ ta unused import/variable (`useRef`, `Editor`, `lang`, `error` va b.)
+  - `set-state-in-effect` (src/lib/useLang.ts:14)
+  - React Compiler memoization muammosi (src/components/admin/NewsImageUpload.tsx:321)
+- **Next.js 16**: `middleware.ts` konvensiyasi `proxy` ga o'zgartirilgan — kelajakda `src/proxy.ts` deb qayta nomlash tavsiya (hozir ishlayapti).
+- Admin panel faqat o'zbekcha — rus tilida ishlaydigan xodimlar uchun qiyin.
+
+---
+
+## 7. Engagement rejasi — early stage startup uchun 🚀
+
+### Hafta 1 — eng yuqori effekt (katta ish talab qilmaydi)
+
+| # | Funksiya | Nega muhim |
+|---|---|---|
+| 1 | **News'ga share tugmalari** (Telegram, Facebook, X, "link nusxalash") | O'zbekistonda asosiy tarqatish kanali Telegram — bepul word-of-mouth |
+| 2 | **Telegram kanaliga obuna banneri** (footer/navbar: `t.me/tatu_akademik_litseyi`) | Maqsadli auditoriya (9-sinf ota-onalari) Telegram'da |
+| 3 | **Instagram feed embed** (`@tatu_lyceum`) | Talabgorlar va ota-onalar Instagram'da — saytga tirbandlik olib kiradi |
+
+### Hafta 2 — o'rtacha ish
+
+| # | Funksiya | Nega muhim |
+|---|---|---|
+| 4 | **Analytics** (GA4 yoki Vercel Analytics) | Qaysi sahifa ishlayotganini bilmasdan optimallashtirib bo'lmaydi |
+| 5 | **Qabul countdown** — "hujjat topshirishgacha N kun" + `my.edu.uz` CTA | Urgency — konversiyani oshiradi |
+| 6 | **Related news + prev/next** | Sahifa/visit soni oshadi |
+| 7 | **News search + tag filter** | Mavjud yangiliklardan foydalanish osonlashadi |
+
+### Hafta 3+ — kengaytirish
+
+| # | Funksiya | Nega muhim |
+|---|---|---|
+| 8 | Newsletter / qabul xabarnomasi (email yoki Telegram) | Qabul mavsumida qaytib keladigan auditoriya |
+| 9 | View counter + o'qish vaqti | Ijtimoiy isbot (social proof) |
+| 10 | Testimonials / bitiruvchilar bo'limi ("bitiruvchilarimiz qayerga kirdi") | Abituriyentlar uchun eng kuchli isbot |
+| 11 | Galereyada lightbox + YouTube video embed (litsey virtual turi) | Vizual taassurot |
+| 12 | QR code (bosma reklama/broshyuralar uchun) | Offline → online o'tish |
+| 13 | RSS feed | Yangiliklar avtomatik tarqaladi |
+| 14 | Poll ("Qaysi yo'nalish sizni qiziqtiradi?") | Engagement + ma'lumot to'plash |
+
+---
+
+## 8. Prioritized roadmap ✅→🔴→🟠→🚀
+
+**1-bosqich — Security (bugun):**
+- [ ] Supabase signup-ni o'chirish yoki `admin_roles` jadvali + RLS/middleware rol tekshiruvi
+- [ ] Contact API'da generic xato xabarlari
+- [ ] Honeypot + rate-limit + telefon validatsiya
+
+**2-bosqich — Tuzatishlar (shu hafta):**
+- [ ] og-image.jpg yaratish (1200x630) yoki `image.png` dan foydalanish
+- [ ] useLang FOUC tuzatish (lazy initial state)
+- [ ] useAsyncData race guard + error UI
+- [ ] Carousel lock muammosi
+- [ ] Maintenance default `false`
+- [ ] Lint 88 muammoni tozalash
+- [ ] Manzil/telefonni bitta manbaga birlashtirish (config.ts)
+
+**3-bosqich — Engagement (keyingi):**
+- [ ] Share tugmalari → Telegram banner → Instagram feed → Analytics → Countdown → Related news → Search
+
+**4-bosqich — Kengaytirish:**
+- [ ] Newsletter, testimonial, lightbox+video, QR, RSS, poll
+- [ ] `proxy.ts` migratsiya, `site_settings` jadvali sinxronlash, `facilities` qo'shish yoki o'chirish
+
+---
+
+## 9. Tekshiruv natijalari
+
+```bash
+npm run build   # ✅ Compiled successfully — 25 route, TypeScript OK
+npm run lint    # ⚠️ 88 problems (40 errors, 48 warnings)
+git ls-files    # ✅ .env git'ga qo'shilmagan (secret xavfsiz)
+```
+
+**Manba**: `C:\dev\altuit` (branch `main`), kod qat'iy referensiyalar bilan tekshirildi.

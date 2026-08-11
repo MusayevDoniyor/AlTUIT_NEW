@@ -165,7 +165,45 @@ VALUES ('site', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- ============================================
--- Row Level Security (RLS) — Hamma o'qishi mumkin, faqat auth'd users yozishi mumkin
+-- Admin huquqlarini tekshirish
+-- Faqat admin_users jadvalidagi email yoki user_metadata.role='admin'
+-- bo'lgan foydalanuvchi YOZA oladi. Public signup'dan o'tgan oddiy
+-- foydalanuvchi faqat O'QISHI mumkin.
+-- ============================================
+
+-- Admin email allowlist jadvali (funksiyadan OLDIN yaratilishi kerak)
+CREATE TABLE IF NOT EXISTS public.admin_users (
+  email TEXT PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Admin email qo'shish (o'zingizning admin emailingizni yozing):
+-- INSERT INTO public.admin_users (email) VALUES ('admin@tatual.uz');
+
+-- Admin tekshiruv funksiyasi
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT COALESCE(auth.jwt() -> 'user_metadata' ->> 'role', '') = 'admin'
+      OR EXISTS (
+          SELECT 1 FROM public.admin_users
+          WHERE email = auth.jwt() ->> 'email'
+      );
+$$;
+
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admin read" ON public.admin_users FOR SELECT USING (public.is_admin());
+CREATE POLICY "Admin insert" ON public.admin_users FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Admin update" ON public.admin_users FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Admin delete" ON public.admin_users FOR DELETE USING (public.is_admin());
+
+-- ============================================
+-- Row Level Security (RLS) — Hamma o'qishi mumkin, faqat admin yozishi mumkin
 -- ============================================
 
 -- Enable RLS for all tables
@@ -195,49 +233,49 @@ CREATE POLICY "Public read" ON hero_slides FOR SELECT USING (true);
 CREATE POLICY "Public read" ON site_settings FOR SELECT USING (true);
 
 -- Authenticated users can INSERT, UPDATE, DELETE
-CREATE POLICY "Auth insert" ON news FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON news FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON news FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON news FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON news FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON news FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON leadership FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON leadership FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON leadership FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON leadership FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON leadership FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON leadership FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON teachers FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON teachers FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON teachers FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON teachers FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON teachers FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON teachers FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON facilities FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON facilities FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON facilities FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON facilities FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON facilities FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON facilities FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON departments FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON departments FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON departments FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON departments FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON departments FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON departments FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON achievements FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON achievements FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON achievements FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON achievements FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON achievements FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON achievements FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON admission_rules FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON admission_rules FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON admission_rules FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON admission_rules FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON admission_rules FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON admission_rules FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON stats FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON stats FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON stats FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON stats FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON stats FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON stats FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON gallery FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON gallery FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON gallery FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON gallery FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON gallery FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON gallery FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON hero_slides FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON hero_slides FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON hero_slides FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON hero_slides FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON hero_slides FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON hero_slides FOR DELETE USING (public.is_admin());
 
-CREATE POLICY "Auth insert" ON site_settings FOR INSERT WITH CHECK (auth.role() = 'authenticated');
-CREATE POLICY "Auth update" ON site_settings FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "Auth delete" ON site_settings FOR DELETE USING (auth.role() = 'authenticated');
+CREATE POLICY "Auth insert" ON site_settings FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Auth update" ON site_settings FOR UPDATE USING (public.is_admin());
+CREATE POLICY "Auth delete" ON site_settings FOR DELETE USING (public.is_admin());
 
 -- ============================================
 -- Storage bucket (rasmlar uchun)
@@ -249,15 +287,15 @@ ON CONFLICT (id) DO NOTHING;
 
 -- Storage policy: anyone can read, authenticated users can upload/delete
 CREATE POLICY "Public image read" ON storage.objects FOR SELECT USING (bucket_id = 'images');
-CREATE POLICY "Auth image upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
-CREATE POLICY "Auth image update" ON storage.objects FOR UPDATE USING (bucket_id = 'images' AND auth.role() = 'authenticated');
-CREATE POLICY "Auth image delete" ON storage.objects FOR DELETE USING (bucket_id = 'images' AND auth.role() = 'authenticated');
+CREATE POLICY "Auth image upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'images' AND public.is_admin());
+CREATE POLICY "Auth image update" ON storage.objects FOR UPDATE USING (bucket_id = 'images' AND public.is_admin());
+CREATE POLICY "Auth image delete" ON storage.objects FOR DELETE USING (bucket_id = 'images' AND public.is_admin());
 
 -- Documents storage bucket (news PDF biriktirmalari uchun)
 INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', true)
 ON CONFLICT (id) DO NOTHING;
 
 CREATE POLICY "Public document read" ON storage.objects FOR SELECT USING (bucket_id = 'documents');
-CREATE POLICY "Auth document upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'documents' AND auth.role() = 'authenticated');
-CREATE POLICY "Auth document update" ON storage.objects FOR UPDATE USING (bucket_id = 'documents' AND auth.role() = 'authenticated');
-CREATE POLICY "Auth document delete" ON storage.objects FOR DELETE USING (bucket_id = 'documents' AND auth.role() = 'authenticated');
+CREATE POLICY "Auth document upload" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'documents' AND public.is_admin());
+CREATE POLICY "Auth document update" ON storage.objects FOR UPDATE USING (bucket_id = 'documents' AND public.is_admin());
+CREATE POLICY "Auth document delete" ON storage.objects FOR DELETE USING (bucket_id = 'documents' AND public.is_admin());
