@@ -21,15 +21,11 @@ export default function Footer({ lang }: FooterProps) {
   const t = translations[lang];
 
   const links = [
-    { label: t.nav_about_short, href: "/about" },
-    { label: t.nav_directions, href: "/#directions" },
-    { label: t.nav_departments, href: "/departments" },
-    { label: t.nav_rules, href: "/admission" },
-    { label: t.nav_docs, href: "/admission#documents" },
-    { label: t.nav_faq, href: "/about#faq" },
-    { label: t.nav_achievements, href: "/science" },
+    { label: t.nav_home, href: "/" },
+    { label: t.nav_about, href: "/about" },
+    { label: t.nav_admissions, href: "/admission" },
+    { label: t.nav_science, href: "/science" },
     { label: t.nav_news, href: "/news" },
-    { label: t.nav_gallery, href: "/gallery" },
     { label: t.nav_contact, href: "/contact" },
   ];
 
