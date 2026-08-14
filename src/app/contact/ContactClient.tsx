@@ -260,78 +260,65 @@ export default function ContactClient() {
                 ))}
               </div>
 
-              {/* Map embed */}
+              {/* Real map embed */}
               <div
                 style={{
                   borderRadius: 16,
                   overflow: "hidden",
-                  height: 240,
-                  background: "linear-gradient(135deg,#1a3a6e,#2d5bb5)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   border: "1px solid rgba(26,58,110,0.1)",
-                  position: "relative",
-                  cursor: "pointer",
+                  boxShadow: "0 8px 40px rgba(26,58,110,0.08)",
                 }}
-                onClick={() =>
-                  window.open(
-                    "https://maps.google.com/?q=Tashkent+Bogishamol+112",
-                    "_blank",
-                  )
-                }
               >
-                <div
+                <iframe
+                  src="https://www.google.com/maps?q=Bogishamol+ko%CA%BBchasi,+112,+Tashkent&z=16&hl=uz&output=embed"
+                  width="100%"
+                  height="320"
+                  style={{ border: 0, display: "block" }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={
+                    lang === "uz"
+                      ? "Yunusobod tumani, Bog'ishamol ko'chasi, 112 - xarita"
+                      : lang === "ru"
+                        ? "Карта - Ташкент, Юнусабадский район, ул. Богишамол, 112"
+                        : "Map - 112 Bogishamol Street, Tashkent"
+                  }
+                />
+                <a
+                  href="https://maps.google.com/?q=Tashkent+Bogishamol+112"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
-                    textAlign: "center",
-                    color: "rgba(255,255,255,0.9)",
-                    padding: "24px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 6,
+                    padding: "12px",
+                    background: "#f8fafc",
+                    color: "#1a3a6e",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                    borderTop: "1px solid #e2e8f0",
+                    transition: "background 0.2s",
                   }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.background =
+                      "#f1f5f9")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLAnchorElement).style.background =
+                      "#f8fafc")
+                  }
                 >
-                  <FaMapMarkerAlt
-                    size={40}
-                    style={{ marginBottom: 12, opacity: 0.8 }}
-                  />
-                  <p
-                    style={{
-                      fontSize: "0.9rem",
-                      fontWeight: 700,
-                      marginBottom: 4,
-                    }}
-                  >
-                    {lang === "uz"
-                      ? "Toshkent, Yunusobod tumani"
-                      : lang === "ru"
-                        ? "Ташкент, Юнусабадский район"
-                        : "Tashkent, Yunusabad"}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "0.8rem",
-                      opacity: 0.7,
-                      marginBottom: 14,
-                    }}
-                  >
-                    Bog'ishamol ko'chasi, 112
-                  </p>
-                  <span
-                    style={{
-                      background: "rgba(200,169,110,0.3)",
-                      border: "1px solid rgba(200,169,110,0.5)",
-                      color: "#c8a96e",
-                      fontSize: "0.78rem",
-                      fontWeight: 700,
-                      padding: "6px 16px",
-                      borderRadius: 50,
-                    }}
-                  >
-                    {lang === "uz"
-                      ? "Xaritada ko'rish →"
-                      : lang === "ru"
-                        ? "Открыть на карте →"
-                        : "View on map →"}
-                  </span>
-                </div>
+                  <FaMapMarkerAlt size={14} color="#c8a96e" />
+                  {lang === "uz"
+                    ? "Katta xaritada ochish →"
+                    : lang === "ru"
+                      ? "Открыть на большой карте →"
+                      : "Open in larger map →"}
+                </a>
               </div>
             </div>
 
