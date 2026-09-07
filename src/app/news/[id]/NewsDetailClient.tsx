@@ -148,24 +148,6 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
     }
   };
 
-  const handleNativeShare = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : canonicalUrl;
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title,
-          text: desc || title,
-          url,
-        });
-        return;
-      } catch {
-        // User cancelled share
-        return;
-      }
-    }
-    handleCopyLink();
-  };
-
   const allImages: ImageItem[] = parseNewsImages(news.images);
   const mainImage = news.imageUrl || getNewsMainImage(news) || allImages[0]?.url;
 
@@ -688,33 +670,33 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
           {/* Share card */}
           <div
             style={{
-              marginTop: 36,
+              marginTop: 32,
               background: "white",
-              borderRadius: 18,
-              padding: "20px 28px",
-              boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
-              border: "1px solid rgba(26,58,110,0.07)",
+              borderRadius: 14,
+              padding: "12px 20px",
+              boxShadow: "0 2px 12px rgba(26,58,110,0.05)",
+              border: "1px solid rgba(26,58,110,0.08)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 16,
+              gap: 12,
               flexWrap: "wrap",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Share2 size={18} color="#1a3a6e" />
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Share2 size={16} color="#1a3a6e" />
               <span
                 style={{
                   fontWeight: 700,
-                  fontSize: "0.92rem",
+                  fontSize: "0.88rem",
                   color: "#1a3a6e",
                 }}
               >
                 {lang === "uz"
-                  ? "Ulashish:"
+                  ? "Ulashish"
                   : lang === "ru"
-                    ? "Поделиться:"
-                    : "Share:"}
+                    ? "Поделиться"
+                    : "Share"}
               </span>
             </div>
 
@@ -722,7 +704,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
+                gap: 8,
                 flexWrap: "wrap",
               }}
             >
@@ -734,22 +716,32 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 aria-label="Telegram"
                 title="Telegram orqali ulashish"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "8px 16px",
+                  width: 36,
+                  height: 36,
                   borderRadius: 10,
                   background: "#229ED9",
                   color: "white",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   textDecoration: "none",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
                   transition: "all 0.2s",
-                  boxShadow: "0 2px 8px rgba(34,158,217,0.25)",
+                  boxShadow: "0 2px 6px rgba(34,158,217,0.25)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform =
+                    "translateY(-1px)";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                    "0 4px 10px rgba(34,158,217,0.35)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform =
+                    "none";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                    "0 2px 6px rgba(34,158,217,0.25)";
                 }}
               >
                 <FaTelegramPlane size={16} />
-                <span>Telegram</span>
               </a>
 
               {/* Facebook direct share */}
@@ -760,81 +752,81 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 aria-label="Facebook"
                 title="Facebook orqali ulashish"
                 style={{
-                  width: 38,
-                  height: 38,
+                  width: 36,
+                  height: 36,
                   borderRadius: 10,
                   background: "#1877F2",
                   color: "white",
-                  display: "flex",
+                  display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
                   textDecoration: "none",
-                  transition: "transform 0.2s",
-                }}
-              >
-                <FaFacebookF size={16} />
-              </a>
-
-              {/* Device share button */}
-              <button
-                onClick={handleNativeShare}
-                aria-label="Ulashish"
-                title="Qurilma orqali ulashish"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "8px 14px",
-                  borderRadius: 10,
-                  background: "rgba(26,58,110,0.08)",
-                  color: "#1a3a6e",
-                  border: "none",
-                  fontWeight: 600,
-                  fontSize: "0.85rem",
-                  cursor: "pointer",
                   transition: "all 0.2s",
+                  boxShadow: "0 2px 6px rgba(24,119,242,0.25)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform =
+                    "translateY(-1px)";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                    "0 4px 10px rgba(24,119,242,0.35)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.transform =
+                    "none";
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                    "0 2px 6px rgba(24,119,242,0.25)";
                 }}
               >
-                <Share2 size={15} />
-                <span>
-                  {lang === "uz"
-                    ? "Ulashish"
-                    : lang === "ru"
-                      ? "Поделиться"
-                      : "Share"}
-                </span>
-              </button>
+                <FaFacebookF size={15} />
+              </a>
 
               {/* Copy link button */}
               <button
                 onClick={handleCopyLink}
+                aria-label="Havolani nusxalash"
+                title="Havolani nusxalash"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 6,
-                  padding: "8px 14px",
+                  height: 36,
+                  padding: "0 13px",
                   borderRadius: 10,
-                  background: copied ? "#10b981" : "rgba(26,58,110,0.08)",
+                  background: copied ? "#10b981" : "rgba(26,58,110,0.07)",
                   color: copied ? "white" : "#1a3a6e",
                   border: "none",
                   fontWeight: 600,
-                  fontSize: "0.85rem",
+                  fontSize: "0.82rem",
                   cursor: "pointer",
                   transition: "all 0.2s",
                 }}
+                onMouseEnter={(e) => {
+                  if (!copied) {
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      "rgba(26,58,110,0.12)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!copied) {
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      "rgba(26,58,110,0.07)";
+                  }
+                }}
               >
                 {copied ? <Check size={14} /> : <Copy size={14} />}
-                {copied
-                  ? lang === "uz"
-                    ? "Nusxalandi!"
-                    : lang === "ru"
-                      ? "Скопировано!"
-                      : "Copied!"
-                  : lang === "uz"
-                    ? "Havolani nusxalash"
-                    : lang === "ru"
-                      ? "Копировать ссылку"
-                      : "Copy link"}
+                <span>
+                  {copied
+                    ? lang === "uz"
+                      ? "Nusxalandi!"
+                      : lang === "ru"
+                        ? "Скопировано!"
+                        : "Copied!"
+                    : lang === "uz"
+                      ? "Nusxalash"
+                      : lang === "ru"
+                        ? "Скопировать"
+                        : "Copy"}
+                </span>
               </button>
             </div>
           </div>
