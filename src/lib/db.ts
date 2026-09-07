@@ -108,6 +108,39 @@ export interface ImageItem {
   isMain: boolean;
 }
 
+export function parseNewsImages(images?: string | ImageItem[]): ImageItem[] {
+  if (!images) return [];
+  try {
+    const parsed = typeof images === "string" ? JSON.parse(images) : images;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  } catch {
+    return [];
+  }
+}
+
+export function getNewsMainImage(item: { imageUrl?: string; images?: string | ImageItem[] }): string {
+  if (item.imageUrl && item.imageUrl.trim()) {
+    return item.imageUrl.trim();
+  }
+  const images = parseNewsImages(item.images);
+  if (images.length > 0) {
+    const main = images.find((i) => i.isMain) || images[0];
+    return main?.url || "";
+  }
+  return "";
+}
+
+function normalizeNewsItem(item: NewsItem): NewsItem {
+  if (!item.imageUrl || !item.imageUrl.trim()) {
+    const mainUrl = getNewsMainImage(item);
+    if (mainUrl) {
+      item.imageUrl = mainUrl;
+    }
+  }
+  return item;
+}
+
 export async function getNews(): Promise<NewsItem[]> {
   const { data, error } = await supabase
     .from("news")
@@ -115,7 +148,7 @@ export async function getNews(): Promise<NewsItem[]> {
     .eq("is_published", true)
     .order("date", { ascending: false });
   if (error) throw error;
-  return (data || []).map((row) => mapRow<NewsItem>(row));
+  return (data || []).map((row) => normalizeNewsItem(mapRow<NewsItem>(row)));
 }
 
 /** Admin: all news including drafts */
@@ -125,7 +158,7 @@ export async function getAllNews(): Promise<NewsItem[]> {
     .select("*")
     .order("date", { ascending: false });
   if (error) throw error;
-  return (data || []).map((row) => mapRow<NewsItem>(row));
+  return (data || []).map((row) => normalizeNewsItem(mapRow<NewsItem>(row)));
 }
 
 export async function getNewsById(id: string): Promise<NewsItem | null> {
@@ -139,7 +172,7 @@ export async function getNewsById(id: string): Promise<NewsItem | null> {
     if (error.code === "PGRST116") return null; // not found
     throw error;
   }
-  return data ? mapRow(data) : null;
+  return data ? normalizeNewsItem(mapRow<NewsItem>(data)) : null;
 }
 
 export async function saveNews(

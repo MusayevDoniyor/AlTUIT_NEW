@@ -7,7 +7,7 @@ import { translations } from "@/lib/i18n";
 import { Calendar, ArrowRight, Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getNews } from "@/lib/db";
+import { getNews, getNewsMainImage } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
 import { PubCard } from "@/components/Skeleton";
@@ -244,24 +244,27 @@ export default function NewsClient() {
                         background: `linear-gradient(90deg, ${item.color || "#1a3a6e"}, ${item.color || "#1a3a6e"}88)`,
                       }}
                     />
-                    {item.imageUrl && (
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "100%",
-                          height: 180,
-                          overflow: "hidden",
-                        }}
-                      >
-                        <Image
-                          src={item.imageUrl}
-                          alt={title}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                    )}
+                    {(() => {
+                      const cardImage = item.imageUrl || getNewsMainImage(item);
+                      return cardImage ? (
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            height: 180,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <Image
+                            src={cardImage}
+                            alt={title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      ) : null;
+                    })()}
                     <div style={{ padding: "24px" }}>
                       <div
                         style={{

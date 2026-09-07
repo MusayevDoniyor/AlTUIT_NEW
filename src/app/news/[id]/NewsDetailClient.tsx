@@ -6,8 +6,9 @@ import Image from "next/image";
 import DOMPurify from "dompurify";
 import { translations } from "@/lib/i18n";
 import { useLang } from "@/lib/useLang";
-import { Calendar, ArrowLeft, FileText, Download, Share2, Check, Copy } from "lucide-react";
+import { Calendar, ArrowLeft, FileText, Download, Share2, Check, Copy, ImageIcon } from "lucide-react";
 import { FaTelegramPlane, FaFacebookF } from "react-icons/fa";
+import { parseNewsImages, getNewsMainImage, type ImageItem } from "@/lib/db";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -25,6 +26,7 @@ interface NewsDetail {
   tag: { uz: string; ru: string; en: string } | string;
   color: string;
   imageUrl?: string;
+  images?: string;
   fileUrl?: string;
   fileName?: string;
   date: string;
@@ -66,6 +68,9 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
     typeof news.tag === "string"
       ? news.tag
       : news.tag?.[lang] || news.tag?.uz || news.tag?.en || "";
+
+  const allImages: ImageItem[] = parseNewsImages(news.images);
+  const mainImage = news.imageUrl || getNewsMainImage(news) || allImages[0]?.url;
 
   /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
   function renderBody(text: string) {
@@ -241,7 +246,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
           </Link>
 
           {/* Featured image */}
-          {news.imageUrl && (
+          {mainImage && (
             <div
               style={{
                 position: "relative",
@@ -254,7 +259,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               }}
             >
               <Image
-                src={news.imageUrl}
+                src={mainImage}
                 alt={title}
                 fill
                 sizes="(max-width: 860px) 100vw, 860px"
@@ -292,6 +297,67 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               }}
             >
               {renderBody(body)}
+            </div>
+          )}
+
+          {/* Photo Gallery (if multiple photos attached) */}
+          {allImages.length > 1 && (
+            <div style={{ marginTop: 36 }}>
+              <h3
+                style={{
+                  fontSize: "1.15rem",
+                  fontWeight: 700,
+                  color: "#1a3a6e",
+                  marginBottom: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <ImageIcon size={20} color="#c8a96e" />
+                {lang === "uz"
+                  ? "Fotolavhalar"
+                  : lang === "ru"
+                    ? "Фотогалерея"
+                    : "Photo Gallery"}
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+                  gap: 16,
+                }}
+              >
+                {allImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      position: "relative",
+                      aspectRatio: "4/3",
+                      borderRadius: 14,
+                      overflow: "hidden",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+                      border: "1px solid rgba(26,58,110,0.08)",
+                      cursor: "pointer",
+                      background: "#e5e7eb",
+                    }}
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        window.open(img.url, "_blank", "noopener");
+                      }
+                    }}
+                  >
+                    <Image
+                      src={img.url}
+                      alt={`${title} - ${idx + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px"
+                      style={{ objectFit: "cover", transition: "transform 0.3s ease" }}
+                      className="hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

@@ -63,6 +63,7 @@ export default async function NewsDetailPage({ params }: Props) {
     tag: news.tag,
     color: news.color,
     imageUrl: news.imageUrl,
+    images: news.images || "",
     fileUrl: news.fileUrl,
     fileName: news.fileName,
     date: news.date,

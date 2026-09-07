@@ -133,6 +133,10 @@ export default function AdminNewsPage() {
       const id = editing.id || Date.now().toString();
       const data = { ...editing } as NewsItem;
       delete (data as { id?: string }).id;
+      if (!data.imageUrl && images.length > 0) {
+        const mainImg = images.find((img) => img.isMain) || images[0];
+        if (mainImg?.url) data.imageUrl = mainImg.url;
+      }
       await saveNews(id, { ...data, isPublished: publish });
       showToast(
         "success",
@@ -607,9 +611,19 @@ export default function AdminNewsPage() {
                 <SectionTitle>Rasmlar</SectionTitle>
                 <NewsImageUpload
                   images={images}
-                  onChange={(newImages) =>
-                    set("images", JSON.stringify(newImages))
-                  }
+                  onChange={(newImages) => {
+                    const mainImg =
+                      newImages.find((img) => img.isMain) || newImages[0];
+                    setEditing((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            images: JSON.stringify(newImages),
+                            imageUrl: mainImg?.url || "",
+                          }
+                        : prev,
+                    );
+                  }}
                   maxImages={5}
                 />
               </div>

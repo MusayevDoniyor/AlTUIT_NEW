@@ -21,6 +21,7 @@ import {
   getHeroSlides,
   getStats,
   getNews,
+  getNewsMainImage,
   getLeadership,
   type StatItem,
   type NewsItem,
@@ -1093,24 +1094,27 @@ export default function Home() {
                         background: `linear-gradient(90deg, ${item.color || "#1a3a6e"}, ${item.color || "#1a3a6e"}88)`,
                       }}
                     />
-                    {item.imageUrl && (
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "100%",
-                          height: 160,
-                          overflow: "hidden",
-                        }}
-                      >
-                        <Image
-                          src={item.imageUrl}
-                          alt={title || ""}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                    )}
+                    {(() => {
+                      const cardImage = item.imageUrl || getNewsMainImage(item);
+                      return cardImage ? (
+                        <div
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            height: 160,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <Image
+                            src={cardImage}
+                            alt={title || ""}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      ) : null;
+                    })()}
                     <div style={{ padding: "24px" }}>
                       <div
                         style={{
