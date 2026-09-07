@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations, type Lang } from "@/lib/i18n";
@@ -22,6 +22,60 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PubSkeleton } from "@/components/Skeleton";
+
+function DefaultAvatar() {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "100%", height: "100%", display: "block" }}
+      aria-hidden="true"
+    >
+      <rect width="48" height="48" fill="#e2e8f0" />
+      <circle cx="24" cy="17" r="7.5" fill="#94a3b8" />
+      <path
+        d="M8 43c0-7 5.5-12.5 13-13.5h6c7.5 1 13 6.5 13 13.5v5H8v-5z"
+        fill="#94a3b8"
+      />
+    </svg>
+  );
+}
+
+function TeacherAvatar({
+  src,
+  alt = "",
+  size = 56,
+}: {
+  src?: string;
+  alt?: string;
+  size?: number;
+}) {
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setError(false);
+  }, [src]);
+
+  if (!src || error) {
+    return <DefaultAvatar />;
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={size}
+      height={size}
+      style={{
+        objectFit: "cover",
+        width: "100%",
+        height: "100%",
+      }}
+      onError={() => setError(true)}
+    />
+  );
+}
 
 export default function AboutClient() {
   const [lang, setLang] = useLang();
@@ -995,23 +1049,11 @@ export default function AboutClient() {
                                       justifyContent: "center",
                                     }}
                                   >
-                                    {t.photoUrl ? (
-                                      <Image
-                                        src={t.photoUrl}
-                                        alt=""
-                                        width={56}
-                                        height={56}
-                                        style={{
-                                          objectFit: "cover",
-                                          width: "100%",
-                                          height: "100%",
-                                        }}
-                                      />
-                                    ) : (
-                                      <span style={{ fontSize: "1.4rem" }}>
-                                        👨‍🏫
-                                      </span>
-                                    )}
+                                    <TeacherAvatar
+                                      src={t.photoUrl}
+                                      alt={name}
+                                      size={56}
+                                    />
                                   </div>
                                   <h4
                                     style={{
@@ -1244,21 +1286,11 @@ export default function AboutClient() {
                     justifyContent: "center",
                   }}
                 >
-                  {selectedTeacher.photoUrl ? (
-                    <Image
-                      src={selectedTeacher.photoUrl}
-                      alt=""
-                      width={72}
-                      height={72}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <span style={{ fontSize: "2rem" }}>👨‍🏫</span>
-                  )}
+                  <TeacherAvatar
+                    src={selectedTeacher.photoUrl}
+                    alt={selectedTeacher.fullNameUz}
+                    size={72}
+                  />
                 </div>
                 <div>
                   <h3
