@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import { Building2, Plus, Pencil, Trash2, Check } from "lucide-react";
 import {
   getDepartments,
   saveDepartment,
@@ -17,6 +17,8 @@ import {
   Input,
   Button,
   EmptyState,
+  LangTabs,
+  AdminModal,
   ConfirmDialog,
   useToast,
   C,
@@ -203,106 +205,115 @@ export default function AdminDepartmentsPage() {
         )}
       </Card>
 
-      {editing && (
-        <div style={{
-          position: "fixed", inset: 0, zIndex: 100,
-          display: "flex", alignItems: "flex-start", justifyContent: "center",
-          background: "rgba(5, 12, 26, 0.78)", backdropFilter: "blur(8px)",
-          overflowY: "auto", padding: "20px",
-        }}>
-          <div style={{
-            background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-            border: `1px solid ${C.border}`,
-            borderRadius: 20, width: "100%", maxWidth: 500,
-            padding: "28px", margin: "auto",
-            boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-          }}>
-            <div style={{
-              display: "flex", alignItems: "center",
-              justifyContent: "space-between", marginBottom: 24,
-            }}>
-              <h2 style={{ color: C.text, fontWeight: 800, fontSize: "1.1rem", margin: 0 }}>
-                {editing.isNew ? "Yangi kafedra" : "Tahrirlash"}
-              </h2>
-              <button onClick={close} style={{ background: "none", border: "none", color: C.textMuted, cursor: "pointer", padding: 4 }}>
-                <X size={20} />
-              </button>
-            </div>
+      {/* MODAL */}
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={520}
+        title={editing?.isNew ? "Yangi kafedra qo'shish" : "Kafedrani tahrirlash"}
+        subtitle="Akademik litsey kafedrasi va mudiri ma'lumotlari"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button onClick={handleSave} loading={saving}>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <LangTabs active={lang} onChange={setLang} />
 
-            {/* Language tabs */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-              {(["uz", "ru", "en"] as const).map((l) => (
-                <button key={l} onClick={() => setLang(l)}
-                  style={{
-                    padding: "7px 14px", borderRadius: 8,
-                    border: lang === l ? `1px solid ${C.goldBorder}` : `1px solid ${C.border}`,
-                    background: lang === l ? C.goldLight : "transparent",
-                    color: lang === l ? C.gold : C.textMuted,
-                    fontSize: "0.8rem", fontWeight: lang === l ? 700 : 500,
-                    cursor: "pointer", fontFamily: "inherit",
-                  }}
-                >{l === "uz" ? "O'zbek" : l === "ru" ? "Rus" : "Ingliz"}</button>
-              ))}
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <Input
-                label={`Nomi (${lang.toUpperCase()})`}
-                value={
-                  lang === "uz" ? editing.nameUz : lang === "ru" ? editing.nameRu : editing.nameEn
-                }
-                onChange={(e) => set(
-                  lang === "uz" ? "nameUz" : lang === "ru" ? "nameRu" : "nameEn",
+            <Input
+              label={`Nomi (${lang.toUpperCase()})`}
+              value={
+                lang === "uz"
+                  ? editing.nameUz
+                  : lang === "ru"
+                    ? editing.nameRu
+                    : editing.nameEn
+              }
+              onChange={(e) =>
+                set(
+                  lang === "uz"
+                    ? "nameUz"
+                    : lang === "ru"
+                      ? "nameRu"
+                      : "nameEn",
                   e.target.value,
-                )}
-                placeholder={lang === "uz" ? "Masalan: Matematika va fizika" : "Kafedra nomi"}
-              />
-              <Input
-                label="Tartib raqami"
-                type="number"
-                value={editing.orderIndex}
-                onChange={(e) => set("orderIndex", parseInt(e.target.value) || 0)}
-              />
-              <div>
-                <label style={{ display: "block", color: C.textMuted, fontSize: "0.78rem", fontWeight: 600, marginBottom: 6 }}>
-                  Kafedra mudiri
-                </label>
-                <select
-                  value={editing.headTeacherId || ""}
-                  onChange={(e) => set("headTeacherId", e.target.value || null)}
-                  style={{
-                    width: "100%", padding: "10px 14px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px solid ${C.border}`, borderRadius: 10,
-                    color: C.text, fontSize: "0.88rem", outline: "none",
-                    boxSizing: "border-box", fontFamily: "inherit", cursor: "pointer",
-                  }}
-                >
-                  <option value="" style={{ background: "#0f2347" }}>— Mudir belgilanmagan —</option>
-                  {teachers.map((t) => (
-                    <option key={t.id} value={t.id} style={{ background: "#0f2347" }}>
-                      {t.fullNameUz} ({t.subjectUz})
-                    </option>
-                  ))}
-                </select>
-                <p style={{ color: C.textDim, fontSize: "0.72rem", margin: "4px 0 0" }}>
-                  Mudir tanlanganda o&apos;qituvchi avtomatik shu kafedraga biriktiriladi
-                </p>
-              </div>
-            </div>
-
-            <div style={{
-              display: "flex", gap: 10, justifyContent: "flex-end",
-              marginTop: 24, paddingTop: 20, borderTop: `1px solid ${C.border}`,
-            }}>
-              <Button variant="ghost" onClick={close}>Bekor qilish</Button>
-              <Button onClick={handleSave} loading={saving}>
-                <Check size={14} /> Saqlash
-              </Button>
+                )
+              }
+              placeholder={
+                lang === "uz" ? "Masalan: Matematika va fizika" : "Kafedra nomi"
+              }
+            />
+            <Input
+              label="Tartib raqami"
+              type="number"
+              value={editing.orderIndex}
+              onChange={(e) =>
+                set("orderIndex", parseInt(e.target.value) || 0)
+              }
+            />
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  color: C.textMuted,
+                  fontSize: "0.78rem",
+                  fontWeight: 600,
+                  marginBottom: 6,
+                }}
+              >
+                Kafedra mudiri
+              </label>
+              <select
+                value={editing.headTeacherId || ""}
+                onChange={(e) => set("headTeacherId", e.target.value || null)}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 10,
+                  color: C.text,
+                  fontSize: "0.88rem",
+                  outline: "none",
+                  boxSizing: "border-box",
+                  fontFamily: "inherit",
+                  cursor: "pointer",
+                }}
+              >
+                <option value="" style={{ background: "#0f2347" }}>
+                  — Mudir belgilanmagan —
+                </option>
+                {teachers.map((t) => (
+                  <option
+                    key={t.id}
+                    value={t.id}
+                    style={{ background: "#0f2347" }}
+                  >
+                    {t.fullNameUz} ({t.subjectUz})
+                  </option>
+                ))}
+              </select>
+              <p
+                style={{
+                  color: C.textDim,
+                  fontSize: "0.72rem",
+                  margin: "4px 0 0",
+                }}
+              >
+                Mudir tanlanganda o&apos;qituvchi avtomatik shu kafedraga
+                biriktiriladi
+              </p>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </AdminModal>
     </div>
   );
 }

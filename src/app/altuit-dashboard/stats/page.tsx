@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart2, Check, Pencil, X } from "lucide-react";
+import { BarChart2, Check, Pencil } from "lucide-react";
 import { getStats, saveStat, StatItem } from "@/lib/db";
+import FlagIcon from "@/components/FlagIcon";
 import {
   PageHeader,
   Card,
@@ -12,6 +13,7 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  AdminModal,
   useToast,
   C,
   spinStyle,
@@ -234,21 +236,38 @@ export default function AdminStatsPage() {
                     fontSize: "0.85rem",
                     fontWeight: 600,
                     marginBottom: 4,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
-                  🇺🇿 {item.labelUz}
+                  <FlagIcon code="uz" width={16} height={11} />
+                  <span>{item.labelUz}</span>
                 </div>
                 <div
                   style={{
                     color: C.textMuted,
                     fontSize: "0.75rem",
                     marginBottom: 4,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
-                  🇷🇺 {item.labelRu}
+                  <FlagIcon code="ru" width={16} height={11} />
+                  <span>{item.labelRu}</span>
                 </div>
-                <div style={{ color: C.textMuted, fontSize: "0.75rem" }}>
-                  🇬🇧 {item.labelEn}
+                <div
+                  style={{
+                    color: C.textMuted,
+                    fontSize: "0.75rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <FlagIcon code="en" width={16} height={11} />
+                  <span>{item.labelEn}</span>
                 </div>
               </div>
 
@@ -274,175 +293,112 @@ export default function AdminStatsPage() {
         )}
       </div>
 
-      {/* MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 500,
-              padding: "28px",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
-              }}
-            >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                Statistikani tahrirlash ({editing.key})
-              </h2>
-              <button
-                onClick={close}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={520}
+        title={`Statistikani tahrirlash (${editing?.key || ""})`}
+        subtitle="Asosiy sahifadagi ko'rsatkich va raqamlar"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button onClick={handleSave} loading={saving}>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SectionTitle>Nomlanishi (til bo&apos;yicha)</SectionTitle>
+            <LangTabs active={lang} onChange={setLang} />
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Nomlanishi (til bo&apos;yicha)</SectionTitle>
-              <LangTabs active={lang} onChange={setLang} />
-
-              <Input
-                label={`Nomi (${lang.toUpperCase()})`}
-                value={
+            <Input
+              label={`Nomi (${lang.toUpperCase()})`}
+              value={
+                lang === "uz"
+                  ? editing.labelUz
+                  : lang === "ru"
+                    ? editing.labelRu
+                    : editing.labelEn
+              }
+              onChange={(e) =>
+                set(
                   lang === "uz"
-                    ? editing.labelUz
+                    ? "labelUz"
                     : lang === "ru"
-                      ? editing.labelRu
-                      : editing.labelEn
-                }
-                onChange={(e) =>
-                  set(
-                    lang === "uz"
-                      ? "labelUz"
-                      : lang === "ru"
-                        ? "labelRu"
-                        : "labelEn",
-                    e.target.value,
-                  )
-                }
-              />
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 12,
-                }}
-              >
-                <Input
-                  label="Qiymati (son)"
-                  type="number"
-                  value={editing.value}
-                  onChange={(e) => set("value", parseInt(e.target.value) || 0)}
-                />
-                <Input
-                  label="Qo'shimcha (Suffix)"
-                  value={editing.suffix}
-                  onChange={(e) => set("suffix", e.target.value)}
-                  placeholder="Masalan: +, %"
-                />
-              </div>
-
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    color: C.textMuted,
-                    fontSize: "0.78rem",
-                    fontWeight: 600,
-                    marginBottom: 6,
-                  }}
-                >
-                  Rangi
-                </label>
-                <select
-                  value={editing.color}
-                  onChange={(e) => set("color", e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px 14px",
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px solid ${C.border}`,
-                    borderRadius: 10,
-                    color: C.text,
-                    fontSize: "0.88rem",
-                    outline: "none",
-                    boxSizing: "border-box",
-                    fontFamily: "inherit",
-                  }}
-                >
-                  {COLOR_OPTIONS.map((c) => (
-                    <option
-                      key={c.value}
-                      value={c.value}
-                      style={{ background: "#0f2347" }}
-                    >
-                      {c.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+                      ? "labelRu"
+                      : "labelEn",
+                  e.target.value,
+                )
+              }
+            />
 
             <div
               style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
               }}
             >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button onClick={handleSave} loading={saving}>
-                <Check size={14} /> Saqlash
-              </Button>
+              <Input
+                label="Qiymati (son)"
+                type="number"
+                value={editing.value}
+                onChange={(e) => set("value", parseInt(e.target.value) || 0)}
+              />
+              <Input
+                label="Qo'shimcha (Suffix)"
+                value={editing.suffix}
+                onChange={(e) => set("suffix", e.target.value)}
+                placeholder="Masalan: +, %"
+              />
+            </div>
+
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  color: C.textMuted,
+                  fontSize: "0.78rem",
+                  fontWeight: 600,
+                  marginBottom: 6,
+                }}
+              >
+                Rangi
+              </label>
+              <select
+                value={editing.color}
+                onChange={(e) => set("color", e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 10,
+                  color: C.text,
+                  fontSize: "0.88rem",
+                  outline: "none",
+                  boxSizing: "border-box",
+                  fontFamily: "inherit",
+                }}
+              >
+                {COLOR_OPTIONS.map((c) => (
+                  <option
+                    key={c.value}
+                    value={c.value}
+                    style={{ background: "#0f2347" }}
+                  >
+                    {c.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </AdminModal>
     </div>
   );
 }

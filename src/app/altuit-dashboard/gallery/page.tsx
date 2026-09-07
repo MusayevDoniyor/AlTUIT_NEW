@@ -20,6 +20,7 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  AdminModal,
   ConfirmDialog,
   useToast,
   C,
@@ -263,70 +264,31 @@ export default function AdminGalleryPage() {
       )}
 
       {/* MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 500,
-              padding: "28px",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
-              }}
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={520}
+        title={editing?.id ? "Rasmni tahrirlash" : "Yangi rasm yuklash"}
+        subtitle="Litsey fotogalereyasi fotoalbom elementi"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button
+              onClick={handleSave}
+              loading={saving}
+              disabled={!editing?.imageUrl}
             >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                {editing.id ? "Tahrirlash" : "Yangi rasm yuklash"}
-              </h2>
-              <button
-                onClick={close}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {error && <Alert type="error" message={error} />}
 
-            {error && <Alert type="error" message={error} />}
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Image upload section (MUST be at the top) */}
               <div>
                 <SectionTitle>Rasm yuklash</SectionTitle>
@@ -482,31 +444,8 @@ export default function AdminGalleryPage() {
                 placeholder="Rasm ostida ko'rinadigan qisqa izoh..."
               />
             </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
-              }}
-            >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button
-                onClick={handleSave}
-                loading={saving}
-                disabled={!editing.imageUrl}
-              >
-                <Check size={14} /> Saqlash
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          )}
+        </AdminModal>
     </div>
   );
 }

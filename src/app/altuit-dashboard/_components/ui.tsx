@@ -1,6 +1,7 @@
 import React, {
   CSSProperties,
   useState,
+  useEffect,
   useCallback,
   useRef,
   createContext,
@@ -8,6 +9,7 @@ import React, {
 } from "react";
 import Image from "next/image";
 import { X, ImageIcon } from "lucide-react";
+import FlagIcon from "@/components/FlagIcon";
 
 // ─── Colors (TATU Royal Navy & Luxury Gold Theme) ─────────────
 export const C = {
@@ -139,7 +141,14 @@ export function CardSkeleton({ count = 3 }: { count?: number }) {
 }
 
 // ─── Modal portal helper ────────────────────────────────────
-export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }} input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }`;
+export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }}
+@keyframes adminModalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes adminModalScaleIn { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.admin-modal-body::-webkit-scrollbar { width: 7px; }
+.admin-modal-body::-webkit-scrollbar-track { background: rgba(10, 24, 50, 0.4); }
+.admin-modal-body::-webkit-scrollbar-thumb { background: rgba(200, 169, 110, 0.28); border-radius: 4px; }
+.admin-modal-body::-webkit-scrollbar-thumb:hover { background: rgba(200, 169, 110, 0.5); }
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }`;
 
 // ─── Page Header ─────────────────────────────────────────────
 export function PageHeader({
@@ -591,36 +600,44 @@ export function LangTabs({
   active: "uz" | "ru" | "en";
   onChange: (l: "uz" | "ru" | "en") => void;
 }) {
-  const langs: { key: "uz" | "ru" | "en"; label: string }[] = [
-    { key: "uz", label: "🇺🇿 O'zbek" },
-    { key: "ru", label: "🇷🇺 Rus" },
-    { key: "en", label: "🇬🇧 Ingliz" },
+  const langs: { key: "uz" | "ru" | "en"; name: string }[] = [
+    { key: "uz", name: "O'zbek" },
+    { key: "ru", name: "Rus" },
+    { key: "en", name: "Ingliz" },
   ];
   return (
     <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-      {langs.map((l) => (
-        <button
-          key={l.key}
-          onClick={() => onChange(l.key)}
-          style={{
-            padding: "7px 14px",
-            borderRadius: 8,
-            border:
-              active === l.key
+      {langs.map((l) => {
+        const isActive = active === l.key;
+        return (
+          <button
+            key={l.key}
+            type="button"
+            onClick={() => onChange(l.key)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "7px 14px",
+              borderRadius: 8,
+              border: isActive
                 ? `1px solid ${C.goldBorder}`
                 : `1px solid ${C.border}`,
-            background: active === l.key ? C.goldLight : "transparent",
-            color: active === l.key ? C.gold : C.textMuted,
-            fontSize: "0.8rem",
-            fontWeight: active === l.key ? 700 : 500,
-            cursor: "pointer",
-            fontFamily: "inherit",
-            transition: "all 0.2s",
-          }}
-        >
-          {l.label}
-        </button>
-      ))}
+              background: isActive ? C.goldLight : "rgba(255, 255, 255, 0.03)",
+              color: isActive ? C.gold : C.textMuted,
+              fontSize: "0.82rem",
+              fontWeight: isActive ? 700 : 500,
+              cursor: "pointer",
+              fontFamily: "inherit",
+              transition: "all 0.2s",
+              boxShadow: isActive ? "0 0 12px rgba(200, 169, 110, 0.15)" : "none",
+            }}
+          >
+            <FlagIcon code={l.key} width={18} height={12} />
+            <span>{l.name}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -776,10 +793,26 @@ export function ConfirmDialog({
   onCancel: () => void;
   loading?: boolean;
 }) {
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCancel();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prev;
+    };
+  }, [open, onCancel]);
+
   if (!open) return null;
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
       style={{
         position: "fixed",
         inset: 0,
@@ -787,9 +820,11 @@ export function ConfirmDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(5, 12, 26, 0.78)",
-        backdropFilter: "blur(8px)",
+        background: "rgba(5, 12, 26, 0.82)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
         padding: 20,
+        animation: "adminModalFadeIn 0.18s ease-out",
       }}
       onClick={onCancel}
     >
@@ -802,6 +837,7 @@ export function ConfirmDialog({
           maxWidth: 420,
           padding: "28px",
           boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
+          animation: "adminModalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -853,6 +889,184 @@ export function ConfirmDialog({
             {confirmLabel}
           </Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Reusable Admin Modal ──────────────────────────────────────
+export function AdminModal({
+  open,
+  onClose,
+  title,
+  subtitle,
+  children,
+  footer,
+  maxWidth = 680,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: React.ReactNode;
+  subtitle?: React.ReactNode;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  maxWidth?: number | string;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prev;
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 100,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(5, 12, 26, 0.82)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        padding: "16px",
+        animation: "adminModalFadeIn 0.2s ease-out",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
+          border: `1px solid ${C.border}`,
+          borderRadius: 20,
+          width: "100%",
+          maxWidth,
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
+          overflow: "hidden",
+          position: "relative",
+          animation: "adminModalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header - Fixed */}
+        <div
+          style={{
+            padding: "18px 24px",
+            borderBottom: `1px solid ${C.border}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexShrink: 0,
+            background: "rgba(16, 38, 78, 0.85)",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                color: C.text,
+                fontWeight: 800,
+                fontSize: "1.15rem",
+                margin: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              {title}
+            </h2>
+            {subtitle && (
+              <p
+                style={{
+                  color: C.textDim,
+                  fontSize: "0.78rem",
+                  margin: "4px 0 0",
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Yopish (Esc)"
+            title="Yopish (Esc)"
+            style={{
+              background: "rgba(255, 255, 255, 0.06)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "50%",
+              width: 36,
+              height: 36,
+              color: C.textMuted,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "all 0.15s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(239, 68, 68, 0.18)";
+              e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.4)";
+              e.currentTarget.style.color = "#ff8080";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+              e.currentTarget.style.color = C.textMuted;
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Body - Scrollable */}
+        <div
+          className="admin-modal-body"
+          style={{
+            padding: "24px",
+            overflowY: "auto",
+            flex: 1,
+            minHeight: 0,
+          }}
+        >
+          {children}
+        </div>
+
+        {/* Footer - Fixed */}
+        {footer && (
+          <div
+            style={{
+              padding: "16px 24px",
+              borderTop: `1px solid ${C.border}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: 12,
+              flexShrink: 0,
+              background: "rgba(11, 26, 55, 0.95)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

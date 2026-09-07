@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import { FileText, Plus, Pencil, Trash2, Check } from "lucide-react";
 import {
   getAdmissionRules,
   saveAdmissionRule,
@@ -18,6 +18,7 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  AdminModal,
   ConfirmDialog,
   useToast,
   C,
@@ -215,70 +216,27 @@ export default function AdminAdmissionPage() {
       </Card>
 
       {/* MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 600,
-              padding: "28px",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
-              }}
-            >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                {editing.id ? "Tahrirlash" : "Yangi qoida bandi"}
-              </h2>
-              <button
-                onClick={close}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={600}
+        title={editing?.id ? "Qoidani tahrirlash" : "Yangi qabul qoidasi"}
+        subtitle="Qabul jarayoni va talablar bandlari"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button onClick={handleSave} loading={saving}>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {error && <Alert type="error" message={error} />}
 
-            {error && <Alert type="error" message={error} />}
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
@@ -336,27 +294,8 @@ export default function AdminAdmissionPage() {
                 }
               />
             </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
-              }}
-            >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button onClick={handleSave} loading={saving}>
-                <Check size={14} /> Saqlash
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          )}
+        </AdminModal>
     </div>
   );
 }

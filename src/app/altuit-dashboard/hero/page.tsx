@@ -29,6 +29,8 @@ import {
   Alert,
   EmptyState,
   SectionTitle,
+  LangTabs,
+  AdminModal,
   ConfirmDialog,
   useToast,
   C,
@@ -299,71 +301,29 @@ export default function AdminHeroPage() {
       )}
 
       {/* MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 500,
-              padding: "28px",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
-              }}
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={540}
+        title={editing?.id ? "Slaydni tahrirlash" : "Yangi slayd qo'shish"}
+        subtitle="Bosh sahifa banner karusel slaydi"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button
+              onClick={handleSave}
+              loading={saving}
+              disabled={!editing?.imageUrl}
             >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                {editing.id ? "Tahrirlash" : "Yangi slayd qo'shish"}
-              </h2>
-              <button
-                onClick={close}
-                aria-label="Yopish"
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {error && <Alert type="error" message={error} />}
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Image upload */}
               <div>
                 <SectionTitle>Slayd rasmi</SectionTitle>                {editing.imageUrl ? (
@@ -456,30 +416,7 @@ export default function AdminHeroPage() {
 
               <div>
                 <SectionTitle>Slayd matni (ixtiyoriy)</SectionTitle>
-                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-                  {(["uz", "ru", "en"] as const).map((l) => (
-                    <button
-                      key={l}
-                      onClick={() => setLang(l)}
-                      style={{
-                        padding: "7px 14px",
-                        borderRadius: 8,
-                        border:
-                          lang === l
-                            ? `1px solid ${C.goldBorder}`
-                            : `1px solid ${C.border}`,
-                        background: lang === l ? C.goldLight : "transparent",
-                        color: lang === l ? C.gold : C.textMuted,
-                        fontSize: "0.8rem",
-                        fontWeight: lang === l ? 700 : 500,
-                        cursor: "pointer",
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      {l === "uz" ? "O'zbek" : l === "ru" ? "Rus" : "Ingliz"}
-                    </button>
-                  ))}
-                </div>
+                <LangTabs active={lang} onChange={setLang} />
                 <Input
                   label={`Sarlavha (${lang.toUpperCase()})`}
                   value={
@@ -581,32 +518,9 @@ export default function AdminHeroPage() {
                   </label>
                 </div>
               </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
-              }}
-            >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button
-                onClick={handleSave}
-                loading={saving}
-                disabled={!editing.imageUrl}
-              >
-                <Check size={14} /> Saqlash
-              </Button>
-            </div>
           </div>
-        </div>
-      )}
+        )}
+      </AdminModal>
     </div>
   );
 }

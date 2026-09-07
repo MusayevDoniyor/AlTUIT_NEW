@@ -22,6 +22,7 @@ import {
   LangTabs,
   SearchInput,
   ConfirmDialog,
+  AdminModal,
   useToast,
   C,
   spinStyle,
@@ -368,78 +369,50 @@ export default function AdminNewsPage() {
       </Card>
 
       {/* EDIT MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 680,
-              padding: "28px",
-              position: "relative",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={720}
+        title={
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span>{editing?.id ? "Yangilikni tahrirlash" : "Yangi yangilik"}</span>
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
+                color: C.textDim,
+                fontSize: "0.72rem",
+                fontWeight: 600,
+                background: "rgba(255,255,255,0.06)",
+                padding: "2px 8px",
+                borderRadius: 6,
+                border: "1px solid rgba(255,255,255,0.1)",
               }}
             >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                {editing.id ? "Yangilikni tahrirlash" : "Yangi yangilik"}
-                <span
-                  style={{
-                    color: C.textDim,
-                    fontSize: "0.75rem",
-                    fontWeight: 500,
-                    marginLeft: 10,
-                  }}
-                >
-                  Ctrl+S
-                </span>
-              </h2>
-              <button
-                onClick={close}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              Ctrl+S
+            </span>
+          </div>
+        }
+        subtitle="TATU akademik litseyi rasmiy axborot va yangiliklar posti"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleSave(false)}
+              disabled={saving}
+              style={{ color: C.textMuted, borderColor: C.border }}
+            >
+              <Save size={14} /> Draft
+            </Button>
+            <Button onClick={() => handleSave(true)} loading={saving}>
+              <Send size={14} /> Chop etish
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Date and published */}
               <div
                 style={{
@@ -739,10 +712,9 @@ export default function AdminNewsPage() {
                   placeholder={`Yangilik matnini yozing (${lang.toUpperCase()})...`}
                 />
               </div>
-            </div>
 
-            {/* Preview */}
-            <div style={{ marginTop: 24 }}>
+              {/* Preview */}
+              <div style={{ marginTop: 24 }}>
               <SectionTitle>Ko&apos;rinish</SectionTitle>
               <NewsPreview
                 data={{
@@ -772,39 +744,9 @@ export default function AdminNewsPage() {
                 lang={lang}
               />
             </div>
-
-            {/* Actions — sticky */}
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
-                position: "sticky",
-                bottom: 0,
-                background: "#0c1c3a",
-              }}
-            >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleSave(false)}
-                disabled={saving}
-                style={{ color: C.textMuted, borderColor: C.border }}
-              >
-                <Save size={14} /> Draft
-              </Button>
-              <Button onClick={() => handleSave(true)} loading={saving}>
-                <Send size={14} /> Chop etish
-              </Button>
-            </div>
           </div>
-        </div>
-      )}
+        )}
+      </AdminModal>
     </div>
   );
 }

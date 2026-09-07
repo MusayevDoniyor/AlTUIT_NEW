@@ -7,7 +7,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  X,
   Check,
   GripVertical,
 } from "lucide-react";
@@ -28,6 +27,7 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
+  AdminModal,
   ConfirmDialog,
   useToast,
   ImageUpload,
@@ -286,68 +286,25 @@ export default function AdminLeadershipPage() {
       </Card>
 
       {/* MODAL */}
-      {editing && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            background: "rgba(5, 12, 26, 0.78)",
-            backdropFilter: "blur(8px)",
-            overflowY: "auto",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-              border: `1px solid ${C.border}`,
-              borderRadius: 20,
-              width: "100%",
-              maxWidth: 620,
-              padding: "28px",
-              position: "relative",
-              margin: "auto",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 24,
-              }}
-            >
-              <h2
-                style={{
-                  color: C.text,
-                  fontWeight: 800,
-                  fontSize: "1.1rem",
-                  margin: 0,
-                }}
-              >
-                {editing.id ? "Tahrirlash" : "Yangi rahbariyat a'zosi"}
-              </h2>
-              <button
-                onClick={close}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: C.textMuted,
-                  cursor: "pointer",
-                  padding: 4,
-                  display: "flex",
-                }}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <AdminModal
+        open={Boolean(editing)}
+        onClose={close}
+        maxWidth={620}
+        title={editing?.id ? "Rahbariyat a'zosini tahrirlash" : "Yangi rahbariyat a'zosi"}
+        subtitle="TATU akademik litseyi rahbariyati ma'lumotlari"
+        footer={
+          <>
+            <Button variant="ghost" onClick={close}>
+              Bekor qilish
+            </Button>
+            <Button onClick={handleSave} loading={saving}>
+              <Check size={14} /> Saqlash
+            </Button>
+          </>
+        }
+      >
+        {editing && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Multilingual */}
               <SectionTitle>Ism va lavozim (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
@@ -460,27 +417,8 @@ export default function AdminLeadershipPage() {
                 />
               </div>
             </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                justifyContent: "flex-end",
-                marginTop: 24,
-                paddingTop: 20,
-                borderTop: `1px solid ${C.border}`,
-              }}
-            >
-              <Button variant="ghost" onClick={close}>
-                Bekor qilish
-              </Button>
-              <Button onClick={handleSave} loading={saving}>
-                <Check size={14} /> Saqlash
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+          )}
+        </AdminModal>
     </div>
   );
 }
