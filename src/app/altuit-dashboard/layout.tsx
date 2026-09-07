@@ -103,7 +103,7 @@ export default function AdminLayout({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0f1117",
+          background: "#091224",
         }}
       >
         <div
@@ -127,7 +127,7 @@ export default function AdminLayout({
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#0f1117" }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#091224" }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -135,9 +135,9 @@ export default function AdminLayout({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0,0,0,0.6)",
+            background: "rgba(5,12,24,0.75)",
             zIndex: 40,
-            backdropFilter: "blur(2px)",
+            backdropFilter: "blur(4px)",
           }}
         />
       )}
@@ -150,8 +150,8 @@ export default function AdminLayout({
           left: sidebarOpen ? 0 : "-280px",
           width: 260,
           height: "100vh",
-          background: "linear-gradient(180deg, #141620 0%, #0f1117 100%)",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
+          background: "linear-gradient(180deg, #0f2347 0%, #081224 100%)",
+          borderRight: "1px solid rgba(200,169,110,0.16)",
           zIndex: 50,
           display: "flex",
           flexDirection: "column",
@@ -164,7 +164,7 @@ export default function AdminLayout({
         <div
           style={{
             padding: "24px 20px 20px",
-            borderBottom: "1px solid rgba(255,255,255,0.06)",
+            borderBottom: "1px solid rgba(200,169,110,0.14)",
             display: "flex",
             alignItems: "center",
             gap: 12,
@@ -302,7 +302,7 @@ export default function AdminLayout({
           <div
             style={{
               height: 1,
-              background: "rgba(255,255,255,0.06)",
+              background: "rgba(200,169,110,0.12)",
               margin: "12px 8px",
             }}
           />
@@ -317,7 +317,7 @@ export default function AdminLayout({
               gap: 10,
               padding: "10px 12px",
               borderRadius: 10,
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(255,255,255,0.45)",
               textDecoration: "none",
               fontSize: "0.83rem",
               fontWeight: 500,
@@ -325,11 +325,15 @@ export default function AdminLayout({
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.color =
-                "rgba(255,255,255,0.7)";
+                "#dfc08a";
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                "rgba(200,169,110,0.08)";
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.color =
-                "rgba(255,255,255,0.4)";
+                "rgba(255,255,255,0.45)";
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                "transparent";
             }}
           >
             <svg
@@ -352,7 +356,7 @@ export default function AdminLayout({
         <div
           style={{
             padding: "16px 12px",
-            borderTop: "1px solid rgba(255,255,255,0.06)",
+            borderTop: "1px solid rgba(200,169,110,0.12)",
           }}
         >
           <div
@@ -362,7 +366,8 @@ export default function AdminLayout({
               gap: 10,
               padding: "10px 12px",
               borderRadius: 10,
-              background: "rgba(255,255,255,0.04)",
+              background: "rgba(200,169,110,0.05)",
+              border: "1px solid rgba(200,169,110,0.12)",
               marginBottom: 8,
             }}
           >
@@ -372,12 +377,13 @@ export default function AdminLayout({
                 height: 32,
                 borderRadius: "50%",
                 background: "linear-gradient(135deg,#1a3a6e,#2d5bb5)",
+                border: "1px solid rgba(200,169,110,0.3)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "0.8rem",
                 fontWeight: 700,
-                color: "white",
+                color: "#dfc08a",
                 flexShrink: 0,
               }}
             >
@@ -399,8 +405,9 @@ export default function AdminLayout({
               </p>
               <p
                 style={{
-                  color: "rgba(255,255,255,0.35)",
+                  color: "#c8a96e",
                   fontSize: "0.68rem",
+                  fontWeight: 500,
                   margin: 0,
                 }}
               >
@@ -419,7 +426,7 @@ export default function AdminLayout({
               borderRadius: 10,
               border: "1px solid rgba(239,68,68,0.2)",
               background: "rgba(239,68,68,0.06)",
-              color: "rgba(239,68,68,0.7)",
+              color: "rgba(239,68,68,0.8)",
               fontSize: "0.82rem",
               fontWeight: 600,
               cursor: "pointer",
@@ -435,7 +442,7 @@ export default function AdminLayout({
               (e.currentTarget as HTMLButtonElement).style.background =
                 "rgba(239,68,68,0.06)";
               (e.currentTarget as HTMLButtonElement).style.color =
-                "rgba(239,68,68,0.7)";
+                "rgba(239,68,68,0.8)";
             }}
           >
             <LogOut size={14} />
@@ -480,9 +487,9 @@ export default function AdminLayout({
               position: "sticky",
               top: 0,
               zIndex: 30,
-              background: "rgba(15,17,23,0.95)",
+              background: "rgba(9,18,36,0.95)",
               backdropFilter: "blur(12px)",
-              borderBottom: "1px solid rgba(255,255,255,0.06)",
+              borderBottom: "1px solid rgba(200,169,110,0.15)",
               padding: "12px 20px",
               display: "flex",
               alignItems: "center",

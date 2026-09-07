@@ -9,26 +9,30 @@ import React, {
 import Image from "next/image";
 import { X, ImageIcon } from "lucide-react";
 
-// ─── Colors ──────────────────────────────────────────────────
+// ─── Colors (TATU Royal Navy & Luxury Gold Theme) ─────────────
 export const C = {
-  bg: "#0f1117",
-  surface: "rgba(255,255,255,0.04)",
-  surfaceHover: "rgba(255,255,255,0.07)",
-  border: "rgba(255,255,255,0.07)",
-  borderFocus: "rgba(200,169,110,0.5)",
-  borderError: "rgba(239,68,68,0.5)",
-  text: "white",
-  textMuted: "rgba(255,255,255,0.45)",
-  textDim: "rgba(255,255,255,0.25)",
+  bg: "#091224",
+  bgElevated: "#0f2347",
+  surface: "rgba(26, 58, 110, 0.22)",
+  surfaceHover: "rgba(26, 58, 110, 0.38)",
+  border: "rgba(200, 169, 110, 0.18)",
+  borderFocus: "rgba(200, 169, 110, 0.65)",
+  borderError: "rgba(239, 68, 68, 0.6)",
+  text: "#ffffff",
+  textMuted: "#94a3b8",
+  textDim: "#64748b",
+  navy: "#1a3a6e",
+  navyDark: "#0f2347",
+  navyLight: "#2d5bb5",
   gold: "#c8a96e",
-  goldLight: "rgba(200,169,110,0.15)",
-  goldBorder: "rgba(200,169,110,0.25)",
+  goldLight: "rgba(200, 169, 110, 0.18)",
+  goldBorder: "rgba(200, 169, 110, 0.38)",
   danger: "#ef4444",
-  dangerBg: "rgba(239,68,68,0.1)",
-  dangerBorder: "rgba(239,68,68,0.25)",
-  success: "#22c55e",
-  successBg: "rgba(34,197,94,0.1)",
-  successBorder: "rgba(34,197,94,0.25)",
+  dangerBg: "rgba(239, 68, 68, 0.12)",
+  dangerBorder: "rgba(239, 68, 68, 0.3)",
+  success: "#10b981",
+  successBg: "rgba(16, 185, 129, 0.12)",
+  successBorder: "rgba(16, 185, 129, 0.3)",
 };
 
 // ─── Skeleton loading component ─────────────────────────────
@@ -401,7 +405,7 @@ export function Select({ label, options, style, ...props }: SelectProps) {
           <option
             key={o.value}
             value={o.value}
-            style={{ background: "#141620" }}
+            style={{ background: "#0f2347", color: "white" }}
           >
             {o.label}
           </option>
@@ -791,7 +795,7 @@ export function ConfirmDialog({
     >
       <div
         style={{
-          background: "#141620",
+          background: C.bgElevated,
           border: `1px solid ${C.border}`,
           borderRadius: 20,
           width: "100%",

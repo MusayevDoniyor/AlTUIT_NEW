@@ -19,6 +19,8 @@ import {
   Calendar,
   Clock,
   Plus,
+  BookOpen,
+  FileText,
 } from "lucide-react";
 import { siteConfig } from "@/lib/config";
 
@@ -26,8 +28,10 @@ interface Counts {
   news: number;
   leadership: number;
   teachers: number;
+  departments: number;
   achievements: number;
   gallery: number;
+  admission: number;
   heroSlides: number;
 }
 
@@ -36,7 +40,7 @@ const quickLinks = [
     label: "Yangilik qo'shish",
     href: "/altuit-dashboard/news",
     icon: Newspaper,
-    color: "#1a3a6e",
+    color: "#c8a96e",
     desc: "Yangiliklar bo'limini boshqarish",
   },
   {
@@ -54,24 +58,45 @@ const quickLinks = [
     desc: "O'qituvchilar ro'yxatini boshqarish",
   },
   {
+    label: "Kafedralar",
+    href: "/altuit-dashboard/departments",
+    icon: BookOpen,
+    color: "#3b82f6",
+    desc: "Kafedralar va fanlar tarkibi",
+  },
+  {
     label: "Yutuqlar",
     href: "/altuit-dashboard/achievements",
     icon: Trophy,
-    color: "#6032bf",
-    desc: "Yutuqlarni qo'shish va o'chirish",
+    color: "#eab308",
+    desc: "Litsey yutuqlari va sovrinlar",
+  },
+  {
+    label: "Qabul qoidalari",
+    href: "/altuit-dashboard/admission",
+    icon: FileText,
+    color: "#8b5cf6",
+    desc: "Qabul mezonlari va yo'nalishlar",
+  },
+  {
+    label: "Galereya",
+    href: "/altuit-dashboard/gallery",
+    icon: ImageIcon,
+    color: "#ec4899",
+    desc: "Fotogalereya albomini yuritish",
   },
   {
     label: "Hero slider",
     href: "/altuit-dashboard/hero",
     icon: Sliders,
-    color: "#b91c1c",
+    color: "#f97316",
     desc: "Bosh sahifa sliderini boshqarish",
   },
   {
     label: "Sayt sozlamalari",
     href: "/altuit-dashboard/settings",
     icon: Settings,
-    color: "#f59e0b",
+    color: "#14b8a6",
     desc: "Texnik ishlar rejimini boshqarish",
   },
 ];
@@ -81,8 +106,10 @@ export default function AdminDashboard() {
     news: 0,
     leadership: 0,
     teachers: 0,
+    departments: 0,
     achievements: 0,
     gallery: 0,
+    admission: 0,
     heroSlides: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -95,8 +122,10 @@ export default function AdminDashboard() {
           "news",
           "leadership",
           "teachers",
+          "departments",
           "achievements",
           "gallery",
+          "admission_rules",
           "hero_slides",
         ];
         const results = await Promise.all(
@@ -108,9 +137,11 @@ export default function AdminDashboard() {
           news: results[0].count ?? 0,
           leadership: results[1].count ?? 0,
           teachers: results[2].count ?? 0,
-          achievements: results[3].count ?? 0,
-          gallery: results[4].count ?? 0,
-          heroSlides: results[5].count ?? 0,
+          departments: results[3].count ?? 0,
+          achievements: results[4].count ?? 0,
+          gallery: results[5].count ?? 0,
+          admission: results[6].count ?? 0,
+          heroSlides: results[7].count ?? 0,
         });
       } catch (e) {
         console.error("Failed to load counts:", e);
@@ -136,7 +167,7 @@ export default function AdminDashboard() {
       label: "Yangiliklar",
       value: counts.news,
       icon: Newspaper,
-      color: "#1a3a6e",
+      color: "#c8a96e",
       href: "/altuit-dashboard/news",
     },
     {
@@ -154,24 +185,38 @@ export default function AdminDashboard() {
       href: "/altuit-dashboard/teachers",
     },
     {
+      label: "Kafedralar",
+      value: counts.departments,
+      icon: BookOpen,
+      color: "#3b82f6",
+      href: "/altuit-dashboard/departments",
+    },
+    {
       label: "Yutuqlar",
       value: counts.achievements,
       icon: Trophy,
-      color: "#c8a96e",
+      color: "#eab308",
       href: "/altuit-dashboard/achievements",
     },
     {
-      label: "Galereya rasmlari",
+      label: "Galereya",
       value: counts.gallery,
       icon: ImageIcon,
-      color: "#6032bf",
+      color: "#ec4899",
       href: "/altuit-dashboard/gallery",
+    },
+    {
+      label: "Qabul qoidalari",
+      value: counts.admission,
+      icon: FileText,
+      color: "#8b5cf6",
+      href: "/altuit-dashboard/admission",
     },
     {
       label: "Hero slaydlar",
       value: counts.heroSlides,
       icon: Sliders,
-      color: "#b91c1c",
+      color: "#f97316",
       href: "/altuit-dashboard/hero",
     },
   ];
@@ -237,27 +282,30 @@ export default function AdminDashboard() {
           <Link key={s.label} href={s.href} style={{ textDecoration: "none" }}>
             <div
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.07)",
+                background: "rgba(15, 35, 71, 0.45)",
+                border: "1px solid rgba(200, 169, 110, 0.14)",
                 borderRadius: 16,
                 padding: "20px 16px",
-                transition: "all 0.2s",
+                transition: "all 0.25s ease",
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background =
-                  "rgba(255,255,255,0.07)";
+                  "rgba(15, 35, 71, 0.75)";
                 (e.currentTarget as HTMLDivElement).style.borderColor =
-                  `${s.color}33`;
+                  "rgba(200, 169, 110, 0.35)";
                 (e.currentTarget as HTMLDivElement).style.transform =
-                  "translateY(-2px)";
+                  "translateY(-3px)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow =
+                  "0 10px 25px rgba(0,0,0,0.3)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLDivElement).style.background =
-                  "rgba(255,255,255,0.04)";
+                  "rgba(15, 35, 71, 0.45)";
                 (e.currentTarget as HTMLDivElement).style.borderColor =
-                  "rgba(255,255,255,0.07)";
+                  "rgba(200, 169, 110, 0.14)";
                 (e.currentTarget as HTMLDivElement).style.transform = "none";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
               }}
             >
               <div
@@ -266,7 +314,7 @@ export default function AdminDashboard() {
                   height: 40,
                   borderRadius: 10,
                   background: `${s.color}20`,
-                  border: `1px solid ${s.color}30`,
+                  border: `1px solid ${s.color}35`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -287,7 +335,7 @@ export default function AdminDashboard() {
                 {loading ? "—" : s.value}
               </div>
               <div
-                style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.78rem" }}
+                style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.78rem" }}
               >
                 {s.label}
               </div>
@@ -343,8 +391,8 @@ export default function AdminDashboard() {
         </div>
         <div
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "rgba(15, 35, 71, 0.45)",
+            border: "1px solid rgba(200, 169, 110, 0.14)",
             borderRadius: 16,
             overflow: "hidden",
           }}
@@ -371,13 +419,13 @@ export default function AdminDashboard() {
                   padding: "14px 18px",
                   borderBottom:
                     i < recentNews.length - 1
-                      ? "1px solid rgba(255,255,255,0.05)"
+                      ? "1px solid rgba(200, 169, 110, 0.08)"
                       : "none",
                   transition: "background 0.2s",
                 }}
                 onMouseEnter={(e) =>
                   (e.currentTarget as HTMLDivElement).style.background =
-                    "rgba(255,255,255,0.04)"
+                    "rgba(200, 169, 110, 0.04)"
                 }
                 onMouseLeave={(e) =>
                   (e.currentTarget as HTMLDivElement).style.background =
@@ -467,7 +515,7 @@ export default function AdminDashboard() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 4,
-                    color: "rgba(255,255,255,0.3)",
+                    color: "rgba(255,255,255,0.4)",
                     fontSize: "0.75rem",
                     fontWeight: 600,
                     textDecoration: "none",
@@ -480,7 +528,7 @@ export default function AdminDashboard() {
                   }
                   onMouseLeave={(e) =>
                     (e.currentTarget as HTMLAnchorElement).style.color =
-                      "rgba(255,255,255,0.3)"
+                      "rgba(255,255,255,0.4)"
                   }
                 >
                   Tahrirlash
@@ -524,24 +572,27 @@ export default function AdminDashboard() {
                   display: "flex",
                   alignItems: "center",
                   gap: 14,
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "rgba(15, 35, 71, 0.45)",
+                  border: "1px solid rgba(200, 169, 110, 0.14)",
                   borderRadius: 14,
                   padding: "16px 18px",
-                  transition: "all 0.2s",
+                  transition: "all 0.25s ease",
                   cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLDivElement).style.background =
-                    "rgba(255,255,255,0.06)";
+                    "rgba(15, 35, 71, 0.75)";
                   (e.currentTarget as HTMLDivElement).style.borderColor =
-                    `${ql.color}33`;
+                    "rgba(200, 169, 110, 0.35)";
+                  (e.currentTarget as HTMLDivElement).style.transform =
+                    "translateY(-2px)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLDivElement).style.background =
-                    "rgba(255,255,255,0.03)";
+                    "rgba(15, 35, 71, 0.45)";
                   (e.currentTarget as HTMLDivElement).style.borderColor =
-                    "rgba(255,255,255,0.07)";
+                    "rgba(200, 169, 110, 0.14)";
+                  (e.currentTarget as HTMLDivElement).style.transform = "none";
                 }}
               >
                 <div
@@ -572,7 +623,7 @@ export default function AdminDashboard() {
                   </div>
                   <div
                     style={{
-                      color: "rgba(255,255,255,0.35)",
+                      color: "rgba(255,255,255,0.4)",
                       fontSize: "0.75rem",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -597,8 +648,8 @@ export default function AdminDashboard() {
       <div
         style={{
           background:
-            "linear-gradient(135deg, rgba(26,58,110,0.3), rgba(45,91,181,0.2))",
-          border: "1px solid rgba(26,58,110,0.4)",
+            "linear-gradient(135deg, rgba(26,58,110,0.4), rgba(15,35,71,0.6))",
+          border: "1px solid rgba(200,169,110,0.25)",
           borderRadius: 16,
           padding: "20px 24px",
           display: "flex",

@@ -65,7 +65,7 @@ function AdminLoginForm() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0f1117",
+          background: "#091224",
         }}
       >
         <div
@@ -88,7 +88,7 @@ function AdminLoginForm() {
       style={{
         minHeight: "100vh",
         background:
-          "linear-gradient(135deg, #0a0d14 0%, #0f1117 50%, #141620 100%)",
+          "linear-gradient(135deg, #07101f 0%, #0f2347 50%, #0a1835 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -108,7 +108,7 @@ function AdminLoginForm() {
           height: 600,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(26,58,110,0.15) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(26,58,110,0.3) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -121,7 +121,7 @@ function AdminLoginForm() {
           height: 400,
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -130,12 +130,12 @@ function AdminLoginForm() {
         style={{
           width: "100%",
           maxWidth: 420,
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          background: "rgba(15, 35, 71, 0.7)",
+          border: "1px solid rgba(200, 169, 110, 0.22)",
           borderRadius: 24,
           padding: "40px 36px",
           backdropFilter: "blur(20px)",
-          boxShadow: "0 40px 80px rgba(0,0,0,0.4)",
+          boxShadow: "0 30px 70px rgba(0,0,0,0.5), 0 0 40px rgba(26,58,110,0.25)",
           position: "relative",
         }}
       >
@@ -232,22 +232,24 @@ function AdminLoginForm() {
               style={{
                 width: "100%",
                 padding: "12px 16px",
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(200,169,110,0.2)",
                 borderRadius: 10,
                 color: "white",
                 fontSize: "0.9rem",
                 outline: "none",
-                transition: "border-color 0.2s",
+                transition: "all 0.2s",
                 boxSizing: "border-box",
                 fontFamily: "inherit",
               }}
-              onFocus={(e) =>
-                (e.target.style.borderColor = "rgba(200,169,110,0.5)")
-              }
-              onBlur={(e) =>
-                (e.target.style.borderColor = "rgba(255,255,255,0.1)")
-              }
+              onFocus={(e) => {
+                e.target.style.borderColor = "#c8a96e";
+                e.target.style.boxShadow = "0 0 0 3px rgba(200,169,110,0.15)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "rgba(200,169,110,0.2)";
+                e.target.style.boxShadow = "none";
+              }}
             />
           </div>
 
@@ -274,22 +276,24 @@ function AdminLoginForm() {
                 style={{
                   width: "100%",
                   padding: "12px 44px 12px 16px",
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(200,169,110,0.2)",
                   borderRadius: 10,
                   color: "white",
                   fontSize: "0.9rem",
                   outline: "none",
-                  transition: "border-color 0.2s",
+                  transition: "all 0.2s",
                   boxSizing: "border-box",
                   fontFamily: "inherit",
                 }}
-                onFocus={(e) =>
-                  (e.target.style.borderColor = "rgba(200,169,110,0.5)")
-                }
-                onBlur={(e) =>
-                  (e.target.style.borderColor = "rgba(255,255,255,0.1)")
-                }
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#c8a96e";
+                  e.target.style.boxShadow = "0 0 0 3px rgba(200,169,110,0.15)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "rgba(200,169,110,0.2)";
+                  e.target.style.boxShadow = "none";
+                }}
               />
               <button
                 type="button"
@@ -375,7 +379,7 @@ function AdminLoginForm() {
         <p
           style={{
             textAlign: "center",
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.35)",
             fontSize: "0.75rem",
             marginTop: 24,
             marginBottom: 0,
@@ -403,7 +407,7 @@ export default function LoginClient() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "#0f1117",
+            background: "#091224",
           }}
         >
           <div

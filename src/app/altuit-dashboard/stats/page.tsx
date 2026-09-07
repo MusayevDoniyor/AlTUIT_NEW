@@ -40,7 +40,7 @@ export default function AdminStatsPage() {
     setLoading(true);
     try {
       const data = await getStats();
-      // Ensure we have the 4 default stats if Firestore is empty
+      // Ensure we have the default stats if database is empty
       if (data.length === 0) {
         setItems([]);
       } else {
@@ -82,7 +82,7 @@ export default function AdminStatsPage() {
     }
   };
 
-  // If Firestore has no items, we can offer to initialize them
+  // If database has no items, we can offer to initialize them
   const handleInitialize = async () => {
     setSaving(true);
     setError("");
