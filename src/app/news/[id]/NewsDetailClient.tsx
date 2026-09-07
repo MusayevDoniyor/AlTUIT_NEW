@@ -46,6 +46,69 @@ interface NewsDetail {
   date: string;
 }
 
+const BANNER_TAG_COLORS: Record<
+  string,
+  { bg: string; text: string; border: string; dot: string }
+> = {
+  "#1a3a6e": {
+    bg: "rgba(96, 165, 250, 0.18)",
+    text: "#93c5fd",
+    border: "rgba(147, 197, 253, 0.45)",
+    dot: "#60a5fa",
+  },
+  "#1d7a55": {
+    bg: "rgba(52, 211, 153, 0.18)",
+    text: "#6ee7b7",
+    border: "rgba(110, 231, 183, 0.45)",
+    dot: "#34d399",
+  },
+  "#6032bf": {
+    bg: "rgba(167, 139, 250, 0.18)",
+    text: "#c4b5fd",
+    border: "rgba(196, 181, 253, 0.45)",
+    dot: "#a78bfa",
+  },
+  "#b91c1c": {
+    bg: "rgba(248, 113, 113, 0.18)",
+    text: "#fca5a5",
+    border: "rgba(252, 165, 165, 0.45)",
+    dot: "#f87171",
+  },
+  "#c8a96e": {
+    bg: "rgba(200, 169, 110, 0.22)",
+    text: "#dfc08a",
+    border: "rgba(223, 192, 138, 0.5)",
+    dot: "#c8a96e",
+  },
+  "#0891b2": {
+    bg: "rgba(56, 189, 248, 0.18)",
+    text: "#7dd3fc",
+    border: "rgba(125, 211, 252, 0.45)",
+    dot: "#38bdf8",
+  },
+};
+
+function getBannerTagStyle(color?: string) {
+  if (!color) {
+    return {
+      bg: "rgba(200, 169, 110, 0.22)",
+      text: "#dfc08a",
+      border: "rgba(223, 192, 138, 0.5)",
+      dot: "#c8a96e",
+    };
+  }
+  const key = color.toLowerCase().trim();
+  if (BANNER_TAG_COLORS[key]) {
+    return BANNER_TAG_COLORS[key];
+  }
+  return {
+    bg: "rgba(255, 255, 255, 0.16)",
+    text: "#ffffff",
+    border: "rgba(255, 255, 255, 0.3)",
+    dot: color,
+  };
+}
+
 export default function NewsDetailClient({ news }: { news: NewsDetail }) {
   const [lang, setLang] = useLang();
   const [copied, setCopied] = useState(false);
@@ -273,21 +336,40 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               <Calendar size={14} />
               {news.date}
             </div>
-            {tagStr && (
-              <span
-                style={{
-                  background: `${news.color || "#1a3a6e"}30`,
-                  color: news.color || "#c8a96e",
-                  fontSize: "0.75rem",
-                  fontWeight: 600,
-                  padding: "3px 10px",
-                  borderRadius: 50,
-                  border: `1px solid ${news.color || "#1a3a6e"}40`,
-                }}
-              >
-                {tagStr}
-              </span>
-            )}
+            {tagStr && (() => {
+              const tagStyle = getBannerTagStyle(news.color);
+              return (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    background: tagStyle.bg,
+                    color: tagStyle.text,
+                    fontSize: "0.78rem",
+                    fontWeight: 700,
+                    padding: "4px 12px",
+                    borderRadius: 50,
+                    border: `1px solid ${tagStyle.border}`,
+                    backdropFilter: "blur(6px)",
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+                    letterSpacing: "0.2px",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      backgroundColor: tagStyle.dot,
+                      boxShadow: `0 0 6px ${tagStyle.dot}`,
+                      display: "inline-block",
+                    }}
+                  />
+                  {tagStr}
+                </span>
+              );
+            })()}
           </div>
         </div>
       </div>
