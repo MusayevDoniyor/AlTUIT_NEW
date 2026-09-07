@@ -730,7 +730,7 @@ export default function AboutClient() {
                   lineHeight: 1,
                 }}
               >
-                {dbTeachers.length > 0 ? `${dbTeachers.length}+` : "85+"}
+                40+
               </div>
               <div
                 style={{
@@ -762,7 +762,7 @@ export default function AboutClient() {
                   lineHeight: 1,
                 }}
               >
-                40+
+                3+
               </div>
               <div
                 style={{
@@ -794,7 +794,7 @@ export default function AboutClient() {
                   lineHeight: 1,
                 }}
               >
-                30+
+                20+
               </div>
               <div
                 style={{
