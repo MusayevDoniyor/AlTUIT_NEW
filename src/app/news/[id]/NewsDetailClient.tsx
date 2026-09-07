@@ -192,6 +192,17 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
     };
   }, [lightboxIdx, galleryList.length]);
 
+  function safeSanitize(html: string): string {
+    if (
+      typeof window !== "undefined" &&
+      DOMPurify &&
+      typeof DOMPurify.sanitize === "function"
+    ) {
+      return DOMPurify.sanitize(html);
+    }
+    return html;
+  }
+
   /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
   function renderBody(text: string) {
     // Check if text contains HTML tags
@@ -205,7 +216,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
             color: "#374151",
             lineHeight: 1.85,
           }}
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
+          dangerouslySetInnerHTML={{ __html: safeSanitize(text) }}
         />
       );
     }
