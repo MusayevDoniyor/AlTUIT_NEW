@@ -1,12 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DOMPurify from "dompurify";
 import { translations } from "@/lib/i18n";
 import { useLang } from "@/lib/useLang";
-import { Calendar, ArrowLeft, FileText, Download, Share2, Check, Copy, ImageIcon } from "lucide-react";
+import {
+  Calendar,
+  ArrowLeft,
+  FileText,
+  Download,
+  Share2,
+  Check,
+  Copy,
+  ImageIcon,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+} from "lucide-react";
 import { FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 import { parseNewsImages, getNewsMainImage, type ImageItem } from "@/lib/db";
 import Navbar from "@/components/Navbar";
@@ -71,6 +84,47 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
 
   const allImages: ImageItem[] = parseNewsImages(news.images);
   const mainImage = news.imageUrl || getNewsMainImage(news) || allImages[0]?.url;
+
+  // Unified list of images for in-page Lightbox Carousel
+  const galleryList: { url: string; caption: string }[] = (() => {
+    if (allImages.length > 0) {
+      return allImages.map((img, i) => ({
+        url: img.url,
+        caption: img.caption?.trim() || `${title} - ${i + 1}`,
+      }));
+    }
+    if (mainImage) {
+      return [{ url: mainImage, caption: title }];
+    }
+    return [];
+  })();
+
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (lightboxIdx === null) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxIdx(null);
+      } else if (e.key === "ArrowLeft") {
+        setLightboxIdx((prev) =>
+          prev !== null ? (prev - 1 + galleryList.length) % galleryList.length : null,
+        );
+      } else if (e.key === "ArrowRight") {
+        setLightboxIdx((prev) =>
+          prev !== null ? (prev + 1) % galleryList.length : null,
+        );
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [lightboxIdx, galleryList.length]);
 
   /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
   function renderBody(text: string) {
@@ -248,6 +302,15 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
           {/* Featured image */}
           {mainImage && (
             <div
+              role="button"
+              tabIndex={0}
+              aria-label={
+                lang === "uz"
+                  ? "Rasmni to'liq ko'rish"
+                  : lang === "ru"
+                    ? "Увеличить изображение"
+                    : "View full image"
+              }
               style={{
                 position: "relative",
                 width: "100%",
@@ -256,6 +319,16 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 overflow: "hidden",
                 marginBottom: 32,
                 boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                cursor: galleryList.length > 0 ? "pointer" : "default",
+              }}
+              onClick={() => {
+                if (galleryList.length > 0) setLightboxIdx(0);
+              }}
+              onKeyDown={(e) => {
+                if ((e.key === "Enter" || e.key === " ") && galleryList.length > 0) {
+                  e.preventDefault();
+                  setLightboxIdx(0);
+                }
               }}
             >
               <Image
@@ -263,9 +336,39 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 alt={title}
                 fill
                 sizes="(max-width: 860px) 100vw, 860px"
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "cover", transition: "transform 0.4s ease" }}
+                className={galleryList.length > 0 ? "hover:scale-105" : ""}
                 priority
               />
+              {galleryList.length > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 16,
+                    right: 16,
+                    background: "rgba(10, 18, 38, 0.78)",
+                    backdropFilter: "blur(6px)",
+                    color: "white",
+                    padding: "6px 14px",
+                    borderRadius: 20,
+                    fontSize: "0.8rem",
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    pointerEvents: "none",
+                  }}
+                >
+                  <ZoomIn size={15} />
+                  <span>
+                    {lang === "uz"
+                      ? "Kattalashtirish"
+                      : lang === "ru"
+                        ? "Просмотр"
+                        : "Zoom"}
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -320,6 +423,16 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                   : lang === "ru"
                     ? "Фотогалерея"
                     : "Photo Gallery"}
+                <span
+                  style={{
+                    fontSize: "0.82rem",
+                    fontWeight: 600,
+                    color: "#6b7280",
+                    marginLeft: 4,
+                  }}
+                >
+                  ({allImages.length})
+                </span>
               </h3>
               <div
                 style={{
@@ -331,6 +444,9 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                 {allImages.map((img, idx) => (
                   <div
                     key={idx}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${img.caption || title} (${idx + 1})`}
                     style={{
                       position: "relative",
                       aspectRatio: "4/3",
@@ -341,20 +457,51 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                       cursor: "pointer",
                       background: "#e5e7eb",
                     }}
-                    onClick={() => {
-                      if (typeof window !== "undefined") {
-                        window.open(img.url, "_blank", "noopener");
+                    onClick={() => setLightboxIdx(idx)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setLightboxIdx(idx);
                       }
                     }}
                   >
                     <Image
                       src={img.url}
-                      alt={`${title} - ${idx + 1}`}
+                      alt={img.caption || `${title} - ${idx + 1}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 300px"
                       style={{ objectFit: "cover", transition: "transform 0.3s ease" }}
                       className="hover:scale-105"
                     />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "rgba(15, 35, 71, 0.3)",
+                        opacity: 0,
+                        transition: "opacity 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      className="hover:opacity-100"
+                    >
+                      <div
+                        style={{
+                          width: 42,
+                          height: 42,
+                          borderRadius: "50%",
+                          background: "rgba(255,255,255,0.92)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#1a3a6e",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        <ZoomIn size={22} />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -588,6 +735,289 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
           </div>
         </div>
       </section>
+
+      {/* Lightbox Carousel Modal */}
+      {lightboxIdx !== null && galleryList[lightboxIdx] && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: "rgba(10, 18, 38, 0.95)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "20px 24px",
+            animation: "fadeIn 0.2s ease-out",
+          }}
+          onClick={() => setLightboxIdx(null)}
+        >
+          {/* Top Bar */}
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 1200,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              zIndex: 10,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  background: "rgba(255,255,255,0.12)",
+                  padding: "6px 14px",
+                  borderRadius: 20,
+                  border: "1px solid rgba(255,255,255,0.18)",
+                }}
+              >
+                {lightboxIdx + 1} / {galleryList.length}
+              </span>
+              <span
+                style={{
+                  color: "rgba(255,255,255,0.75)",
+                  fontSize: "0.85rem",
+                  maxWidth: 420,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+                className="hidden sm:inline-block"
+              >
+                {title}
+              </span>
+            </div>
+
+            <button
+              onClick={() => setLightboxIdx(null)}
+              aria-label="Yopish"
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                border: "none",
+                borderRadius: "50%",
+                width: 44,
+                height: 44,
+                color: "white",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "rgba(255,255,255,0.3)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "rgba(255,255,255,0.15)")
+              }
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Center Content: Navigation arrows + Image */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              flex: 1,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "12px 0",
+              minHeight: 0,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Prev button */}
+            {galleryList.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIdx(
+                    (lightboxIdx - 1 + galleryList.length) % galleryList.length,
+                  );
+                }}
+                aria-label="Oldingi rasm"
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "rgba(255,255,255,0.18)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  borderRadius: "50%",
+                  width: 52,
+                  height: 52,
+                  color: "white",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 20,
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                  e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.18)";
+                  e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                }}
+              >
+                <ChevronLeft size={32} />
+              </button>
+            )}
+
+            {/* Active image */}
+            <div
+              style={{
+                position: "relative",
+                width: "min(92vw, 1100px)",
+                height: "min(68vh, 620px)",
+              }}
+            >
+              <Image
+                src={galleryList[lightboxIdx].url}
+                alt={galleryList[lightboxIdx].caption || `${title} - ${lightboxIdx + 1}`}
+                fill
+                sizes="(max-width: 1200px) 95vw, 1100px"
+                style={{ objectFit: "contain" }}
+                priority
+              />
+            </div>
+
+            {/* Next button */}
+            {galleryList.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIdx((lightboxIdx + 1) % galleryList.length);
+                }}
+                aria-label="Keyingi rasm"
+                style={{
+                  position: "absolute",
+                  right: 12,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "rgba(255,255,255,0.18)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  borderRadius: "50%",
+                  width: 52,
+                  height: 52,
+                  color: "white",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 20,
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.35)";
+                  e.currentTarget.style.transform = "translateY(-50%) scale(1.08)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.18)";
+                  e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+                }}
+              >
+                <ChevronRight size={32} />
+              </button>
+            )}
+          </div>
+
+          {/* Bottom Bar: Caption & Thumbnail Carousel strip */}
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 900,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 12,
+              zIndex: 10,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Caption */}
+            {galleryList[lightboxIdx].caption && (
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.92)",
+                  fontSize: "0.95rem",
+                  fontWeight: 500,
+                  margin: 0,
+                  textAlign: "center",
+                  background: "rgba(0,0,0,0.35)",
+                  padding: "6px 18px",
+                  borderRadius: 20,
+                  maxWidth: "90%",
+                }}
+              >
+                {galleryList[lightboxIdx].caption}
+              </p>
+            )}
+
+            {/* Thumbnail Carousel strip */}
+            {galleryList.length > 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  overflowX: "auto",
+                  maxWidth: "100%",
+                  padding: "6px 4px",
+                }}
+              >
+                {galleryList.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setLightboxIdx(i)}
+                    aria-label={`Rasm ${i + 1}`}
+                    style={{
+                      position: "relative",
+                      width: 58,
+                      height: 42,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      flexShrink: 0,
+                      border:
+                        lightboxIdx === i
+                          ? "2px solid #c8a96e"
+                          : "2px solid transparent",
+                      opacity: lightboxIdx === i ? 1 : 0.5,
+                      cursor: "pointer",
+                      padding: 0,
+                      background: "transparent",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    <Image
+                      src={img.url}
+                      alt={`Thumbnail ${i + 1}`}
+                      fill
+                      sizes="60px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <Footer lang={lang} />
     </main>

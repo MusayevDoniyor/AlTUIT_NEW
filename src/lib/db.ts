@@ -106,6 +106,7 @@ export interface ImageItem {
   url: string;
   order: number;
   isMain: boolean;
+  caption?: string;
 }
 
 export function parseNewsImages(images?: string | ImageItem[]): ImageItem[] {
