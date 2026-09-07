@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 import { parseNewsImages, getNewsMainImage, type ImageItem } from "@/lib/db";
+import { siteConfig } from "@/lib/config";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -48,14 +49,7 @@ interface NewsDetail {
 export default function NewsDetailClient({ news }: { news: NewsDetail }) {
   const [lang, setLang] = useLang();
   const [copied, setCopied] = useState(false);
-
-  const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
-  };
+  const canonicalUrl = `${siteConfig.url}/news/${news.id}`;
 
   const t = translations[lang];
 
@@ -81,6 +75,33 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
     typeof news.tag === "string"
       ? news.tag
       : news.tag?.[lang] || news.tag?.uz || news.tag?.en || "";
+
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      const url = window.location.href || canonicalUrl;
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  const handleNativeShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : canonicalUrl;
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: desc || title,
+          url,
+        });
+        return;
+      } catch {
+        // User cancelled share
+        return;
+      }
+    }
+    handleCopyLink();
+  };
 
   const allImages: ImageItem[] = parseNewsImages(news.images);
   const mainImage = news.imageUrl || getNewsMainImage(news) || allImages[0]?.url;
@@ -615,30 +636,43 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               </span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                flexWrap: "wrap",
+              }}
+            >
+              {/* Telegram direct share */}
               <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}&text=${encodeURIComponent(title)}`}
+                href={`https://t.me/share/url?url=${encodeURIComponent(canonicalUrl)}&text=${encodeURIComponent(title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
                 title="Telegram orqali ulashish"
                 style={{
-                  width: 38,
-                  height: 38,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "8px 16px",
                   borderRadius: 10,
                   background: "#229ED9",
                   color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   textDecoration: "none",
-                  transition: "transform 0.2s",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  transition: "all 0.2s",
+                  boxShadow: "0 2px 8px rgba(34,158,217,0.25)",
                 }}
               >
-                <FaTelegramPlane size={18} />
+                <FaTelegramPlane size={16} />
+                <span>Telegram</span>
               </a>
+
+              {/* Facebook direct share */}
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -658,6 +692,38 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               >
                 <FaFacebookF size={16} />
               </a>
+
+              {/* Device share button */}
+              <button
+                onClick={handleNativeShare}
+                aria-label="Ulashish"
+                title="Qurilma orqali ulashish"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  borderRadius: 10,
+                  background: "rgba(26,58,110,0.08)",
+                  color: "#1a3a6e",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                <Share2 size={15} />
+                <span>
+                  {lang === "uz"
+                    ? "Ulashish"
+                    : lang === "ru"
+                      ? "Поделиться"
+                      : "Share"}
+                </span>
+              </button>
+
+              {/* Copy link button */}
               <button
                 onClick={handleCopyLink}
                 style={{
@@ -670,7 +736,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                   color: copied ? "white" : "#1a3a6e",
                   border: "none",
                   fontWeight: 600,
-                  fontSize: "0.82rem",
+                  fontSize: "0.85rem",
                   cursor: "pointer",
                   transition: "all 0.2s",
                 }}
@@ -683,7 +749,7 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
                       ? "Скопировано!"
                       : "Copied!"
                   : lang === "uz"
-                    ? "Havola nusxasi"
+                    ? "Havolani nusxalash"
                     : lang === "ru"
                       ? "Копировать ссылку"
                       : "Copy link"}

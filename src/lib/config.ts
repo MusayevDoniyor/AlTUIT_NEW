@@ -1,5 +1,5 @@
 export const siteConfig = {
-  url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://tatual.uz",
   name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
   shortName: "TATU Akademik Litsey",
   description:
