@@ -279,43 +279,45 @@ export default function NewsImageUpload({
     [images, onChange],
   );
 
-  const handleUpload = async (files: FileList) => {
-    const remaining = maxImages - images.length;
-    const toUpload = Array.from(files).slice(0, remaining);
-    if (toUpload.length === 0) return;
+  const handleUpload = useCallback(
+    async (files: FileList) => {
+      const remaining = maxImages - images.length;
+      const toUpload = Array.from(files).slice(0, remaining);
+      if (toUpload.length === 0) return;
 
-    const newImages = [...images];
-    const uploadingSet = new Set<number>();
+      const newImages = [...images];
+      const uploadingSet = new Set<number>();
 
-    for (let i = 0; i < toUpload.length; i++) {
-      const idx = newImages.length;
-      uploadingSet.add(idx);
+      for (let i = 0; i < toUpload.length; i++) {
+        const idx = newImages.length;
+        uploadingSet.add(idx);
 
-      // Add placeholder
-      newImages.push({ url: "", order: newImages.length, isMain: false });
-      // This triggers a re-render but it's okay for the loading state
-    }
-
-    setUploadingItems(uploadingSet);
-
-    for (let i = 0; i < toUpload.length; i++) {
-      const idx = images.length + i;
-      try {
-        const url = await uploadImage(toUpload[i], "news");
-        newImages[idx] = {
-          url,
-          order: idx,
-          isMain: idx === 0 && images.length === 0,
-        };
-      } catch {
-        // Remove failed upload slot
-        newImages.splice(idx, 1);
+        // Add placeholder
+        newImages.push({ url: "", order: newImages.length, isMain: false });
       }
-    }
 
-    setUploadingItems(new Set());
-    onChange(newImages);
-  };
+      setUploadingItems(uploadingSet);
+
+      for (let i = 0; i < toUpload.length; i++) {
+        const idx = images.length + i;
+        try {
+          const url = await uploadImage(toUpload[i], "news");
+          newImages[idx] = {
+            url,
+            order: idx,
+            isMain: idx === 0 && images.length === 0,
+          };
+        } catch {
+          // Remove failed upload slot
+          newImages.splice(idx, 1);
+        }
+      }
+
+      setUploadingItems(new Set());
+      onChange(newImages);
+    },
+    [images, maxImages, onChange],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -325,7 +327,7 @@ export default function NewsImageUpload({
         handleUpload(e.dataTransfer.files);
       }
     },
-    [images.length, maxImages, onChange],
+    [handleUpload],
   );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -84,7 +84,8 @@ export default function AdminAchievementsPage() {
   };
 
   useEffect(() => {
-    load();
+    void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openNew = () => setEditing({ ...EMPTY, orderIndex: items.length });
@@ -111,8 +112,9 @@ export default function AdminAchievementsPage() {
     setSaving(true);
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as AchievementItem;
-      await saveAchievement(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveAchievement(id, data as AchievementItem);
       showToast(
         "success",
         editing.id ? "Yutuq tahrirlandi" : "Yutuq qo'shildi",
@@ -161,7 +163,7 @@ export default function AdminAchievementsPage() {
         icon={<Trophy size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -351,7 +353,7 @@ export default function AdminAchievementsPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Ma'lumotlar (til bo'yicha)</SectionTitle>
+              <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
               <Input

@@ -1,18 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations } from "@/lib/i18n";
 import { Trophy } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import {
-  getAchievements,
-  getStats,
-  type AchievementItem,
-  type StatItem,
-} from "@/lib/db";
+import { getAchievements, getStats } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
 import { PubSkeleton } from "@/components/Skeleton";

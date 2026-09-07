@@ -22,7 +22,7 @@ interface NavbarProps {
   onLangChange: (l: Lang) => void;
 }
 
-const navItems = (t: Record<string, string>) => [
+const navItems = (t: Record<string, string>, lang: Lang) => [
   { label: t.nav_home, href: "/" },
   {
     label: t.nav_about,
@@ -30,6 +30,15 @@ const navItems = (t: Record<string, string>) => [
       { label: t.nav_about_short, href: "/about" },
       { label: t.nav_leadership, href: "/about#leadership" },
       { label: t.nav_teachers, href: "/about#teachers" },
+      {
+        label:
+          lang === "uz"
+            ? "Dars jadvali"
+            : lang === "ru"
+              ? "Расписание"
+              : "Bell Schedule",
+        href: "/about#schedule",
+      },
     ],
   },
   {
@@ -59,7 +68,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const items = navItems(t);
+  const items = navItems(t, lang);
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);

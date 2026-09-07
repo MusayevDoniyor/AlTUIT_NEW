@@ -77,8 +77,9 @@ export default function AdminAdmissionPage() {
     setError("");
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as AdmissionRuleItem;
-      await saveAdmissionRule(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveAdmissionRule(id, data as AdmissionRuleItem);
       showToast("success", editing.id ? "Tahrirlandi" : "Qo'shildi");
       await load();
       close();
@@ -121,7 +122,7 @@ export default function AdminAdmissionPage() {
         icon={<FileText size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -277,7 +278,7 @@ export default function AdminAdmissionPage() {
             {error && <Alert type="error" message={error} />}
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Ma'lumotlar (til bo'yicha)</SectionTitle>
+              <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
               <Input

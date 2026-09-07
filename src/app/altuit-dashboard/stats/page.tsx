@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart2, Check, Pencil, Sliders, X } from "lucide-react";
+import { BarChart2, Check, Pencil, X } from "lucide-react";
 import { getStats, saveStat, StatItem } from "@/lib/db";
 import {
   PageHeader,
@@ -12,7 +12,6 @@ import {
   EmptyState,
   SectionTitle,
   LangTabs,
-  ConfirmDialog,
   useToast,
   C,
   spinStyle,
@@ -35,7 +34,6 @@ export default function AdminStatsPage() {
     (Omit<StatItem, "id"> & { id?: string }) | null
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
-  const [deleteTarget, setDeleteTarget] = useState<StatItem | null>(null);
   const { showToast } = useToast();
 
   const load = async () => {
@@ -71,8 +69,9 @@ export default function AdminStatsPage() {
     setError("");
     try {
       const id = editing.id || editing.key;
-      const { id: _id, ...data } = editing as StatItem;
-      await saveStat(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveStat(id, data as StatItem);
       showToast("success", "Statistika saqlandi");
       await load();
       close();
@@ -337,7 +336,7 @@ export default function AdminStatsPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Nomlanishi (til bo'yicha)</SectionTitle>
+              <SectionTitle>Nomlanishi (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
               <Input

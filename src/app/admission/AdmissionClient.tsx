@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { translations } from "@/lib/i18n";
 import { siteConfig } from "@/lib/config";
@@ -10,7 +9,7 @@ import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
 import { FaFileAlt, FaCalendarAlt, FaPenNib, FaPhoneAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getAdmissionRules, type AdmissionRuleItem } from "@/lib/db";
+import { getAdmissionRules } from "@/lib/db";
 import { PubBlock } from "@/components/Skeleton";
 
 const APPLY_BTN = {

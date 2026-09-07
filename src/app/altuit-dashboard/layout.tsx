@@ -18,7 +18,6 @@ import {
   Building2,
   LogOut,
   Menu,
-  X,
   ChevronRight,
   Settings,
 } from "lucide-react";
@@ -345,7 +344,7 @@ export default function AdminLayout({
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
-            Saytni ko'rish
+            Saytni ko&apos;rish
           </Link>
         </nav>
 

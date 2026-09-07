@@ -51,8 +51,8 @@ export default function NotFound() {
             marginBottom: 32,
           }}
         >
-          Kechirasiz, siz qidirayotgan sahifa mavjud emas yoki o'chirilgan
-          bo'lishi mumkin.
+          Kechirasiz, siz qidirayotgan sahifa mavjud emas yoki o&apos;chirilgan
+          bo&apos;lishi mumkin.
         </p>
         <Link
           href="/"

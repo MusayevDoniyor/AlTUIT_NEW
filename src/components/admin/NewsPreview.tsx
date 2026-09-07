@@ -39,7 +39,7 @@ const C = {
   surface: "rgba(255,255,255,0.04)",
 };
 
-export default function NewsPreview({ data, lang = "uz" }: NewsPreviewProps) {
+export default function NewsPreview({ data }: NewsPreviewProps) {
   const [viewMode, setViewMode] = useState<"desktop" | "mobile">("desktop");
   const [previewTab, setPreviewTab] = useState<"card" | "full">("card");
 
@@ -85,7 +85,7 @@ export default function NewsPreview({ data, lang = "uz" }: NewsPreviewProps) {
           }}
         >
           <Eye size={16} />
-          Ko'rinish
+          Ko&apos;rinish
         </div>
 
         <div style={{ display: "flex", gap: 4 }}>
@@ -234,7 +234,7 @@ function CardPreview({
               fontSize: "0.85rem",
             }}
           >
-            Rasm yo'q
+            Rasm yo&apos;q
           </div>
         )}
       </div>
@@ -358,7 +358,7 @@ function FullPreview({
               color: "#ccc",
             }}
           >
-            Rasm yo'q
+            Rasm yo&apos;q
           </div>
         )}
       </div>

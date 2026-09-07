@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations } from "@/lib/i18n";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getNews } from "@/lib/db";
@@ -14,10 +14,30 @@ import { PubCard } from "@/components/Skeleton";
 
 export default function NewsClient() {
   const [lang, setLang] = useLang();
+  const [search, setSearch] = useState("");
   const { data: dbNews, loading } = useAsyncData(() => getNews(), []);
 
   const t = translations[lang];
   const activeNews = dbNews ?? [];
+  const filteredNews = activeNews.filter((item) => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    const title = (
+      lang === "uz"
+        ? item.titleUz
+        : lang === "ru"
+          ? item.titleRu || item.titleUz
+          : item.titleEn || item.titleUz
+    ).toLowerCase();
+    const desc = (
+      lang === "uz"
+        ? item.descUz
+        : lang === "ru"
+          ? item.descRu || item.descUz
+          : item.descEn || item.descUz
+    ).toLowerCase();
+    return title.includes(q) || desc.includes(q);
+  });
 
   if (loading) {
     return (
@@ -112,7 +132,62 @@ export default function NewsClient() {
       {/* ===== NEWS GRID ===== */}
       <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
         <div className="container-custom">
-          {activeNews.length === 0 ? (
+          {/* Search bar */}
+          <div
+            style={{
+              maxWidth: 480,
+              margin: "0 auto 48px",
+              position: "relative",
+            }}
+          >
+            <Search
+              size={18}
+              color="#9ca3af"
+              style={{
+                position: "absolute",
+                left: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+              }}
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={
+                lang === "uz"
+                  ? "Yangiliklarni qidirish..."
+                  : lang === "ru"
+                    ? "Поиск новостей..."
+                    : "Search news..."
+              }
+              style={{
+                width: "100%",
+                padding: "14px 16px 14px 44px",
+                borderRadius: 50,
+                border: "1.5px solid #e5e7eb",
+                background: "white",
+                fontSize: "0.95rem",
+                outline: "none",
+                boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+                transition: "border-color 0.2s, box-shadow 0.2s",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "#1a3a6e";
+                e.currentTarget.style.boxShadow =
+                  "0 4px 16px rgba(26,58,110,0.1)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "#e5e7eb";
+                e.currentTarget.style.boxShadow =
+                  "0 2px 10px rgba(0,0,0,0.04)";
+              }}
+            />
+          </div>
+
+          {filteredNews.length === 0 ? (
             <div
               style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
             >
@@ -132,7 +207,7 @@ export default function NewsClient() {
                 gap: 28,
               }}
             >
-              {activeNews.map((item) => {
+              {filteredNews.map((item) => {
                 const title =
                   lang === "uz"
                     ? item.titleUz

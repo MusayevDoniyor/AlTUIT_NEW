@@ -101,8 +101,9 @@ export default function AdminGalleryPage() {
     setError("");
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as GalleryItem;
-      await saveGallery(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveGallery(id, data as GalleryItem);
       showToast("success", editing.id ? "Tahrirlandi" : "Rasm qo'shildi");
       await load();
       close();
@@ -146,7 +147,7 @@ export default function AdminGalleryPage() {
         icon={<ImageIcon size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Rasm qo'shish
+            <Plus size={14} /> Rasm qo&apos;shish
           </Button>
         }
       />
@@ -455,7 +456,7 @@ export default function AdminGalleryPage() {
                 </select>
               </div>
 
-              <SectionTitle>Rasm izohi (til bo'yicha)</SectionTitle>
+              <SectionTitle>Rasm izohi (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
               <Input

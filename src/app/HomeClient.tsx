@@ -12,6 +12,8 @@ import {
   TrendingUp,
   Trophy,
   Calendar,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -265,7 +267,7 @@ export default function Home() {
       setCurrent(i);
       setTimeout(() => {
         transitioningRef.current = false;
-      }, 1200);
+      }, 600);
     },
     [current],
   );
@@ -384,7 +386,7 @@ export default function Home() {
           />
         </div>
 
-        {/* Navigation Indicators */}
+        {/* Navigation Indicators & Arrows */}
         <div
           className="container-custom"
           style={{
@@ -394,25 +396,89 @@ export default function Home() {
             right: 0,
             zIndex: 10,
             display: "flex",
-            gap: 12,
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          {activeSlides.map((_, i: number) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              aria-label={`Slayd ${i + 1}`}
-              style={{
-                width: current === i ? 40 : 10,
-                height: 10,
-                borderRadius: 5,
-                background: current === i ? "#c8a96e" : "rgba(255,255,255,0.3)",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.4s",
-              }}
-            />
-          ))}
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            {activeSlides.map((_, i: number) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                aria-label={`Slayd ${i + 1}`}
+                style={{
+                  width: current === i ? 40 : 10,
+                  height: 10,
+                  borderRadius: 5,
+                  background: current === i ? "#c8a96e" : "rgba(255,255,255,0.3)",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.4s",
+                }}
+              />
+            ))}
+          </div>
+
+          {activeSlides.length > 1 && (
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                onClick={prev}
+                aria-label="Oldingi slayd"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.1)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(200,169,110,0.3)";
+                  e.currentTarget.style.borderColor = "#c8a96e";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                }}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                onClick={next}
+                aria-label="Keyingi slayd"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.1)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(200,169,110,0.3)";
+                  e.currentTarget.style.borderColor = "#c8a96e";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+                }}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
         </div>
 
         <style jsx>{`

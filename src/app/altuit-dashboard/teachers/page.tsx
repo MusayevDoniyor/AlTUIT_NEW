@@ -164,6 +164,7 @@ export default function AdminTeachersPage() {
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openNew = () => setEditing({ ...EMPTY, orderIndex: items.length });
@@ -196,7 +197,8 @@ export default function AdminTeachersPage() {
     setSaving(true);
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...rawEditing } = editing as TeacherItem;
+      const rawEditing = { ...editing } as TeacherItem;
+      delete (rawEditing as { id?: string }).id;
 
       // Auto-append any typed but un-added experience/certificate input before saving
       const finalExpUz =
@@ -300,7 +302,7 @@ export default function AdminTeachersPage() {
         icon={<GraduationCap size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -472,7 +474,7 @@ export default function AdminTeachersPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Ism va fan (til bo'yicha)</SectionTitle>
+              <SectionTitle>Ism va fan (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
               <p
                 style={{
@@ -481,8 +483,8 @@ export default function AdminTeachersPage() {
                   margin: "0 0 10px",
                 }}
               >
-                O'zbekcha maydonlar majburiy, Ruscha va Inglizcha maydonlar esa
-                kerak bo'lganda to'ldiriladi.
+                O&apos;zbekcha maydonlar majburiy, Ruscha va Inglizcha maydonlar esa
+                kerak bo&apos;lganda to&apos;ldiriladi.
               </p>
               <div
                 style={{
@@ -666,7 +668,7 @@ export default function AdminTeachersPage() {
                         margin: 0,
                       }}
                     >
-                      Hozircha tajriba qo'shilmagan.
+                      Hozircha tajriba qo&apos;shilmagan.
                     </p>
                   )}
                 </div>
@@ -771,7 +773,7 @@ export default function AdminTeachersPage() {
                         margin: 0,
                       }}
                     >
-                      Hozircha sertifikat qo'shilmagan.
+                      Hozircha sertifikat qo&apos;shilmagan.
                     </p>
                   )}
                 </div>

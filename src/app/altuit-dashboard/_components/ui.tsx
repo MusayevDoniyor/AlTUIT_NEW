@@ -2,7 +2,6 @@ import React, {
   CSSProperties,
   useState,
   useCallback,
-  useEffect,
   useRef,
   createContext,
   useContext,
@@ -40,7 +39,6 @@ const skeletonAnim = `
 }
 `;
 const skeletonBg = `linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%)`;
-const skeletonSize = `background-size: 200% 100%`;
 
 export function Skeleton({
   width,

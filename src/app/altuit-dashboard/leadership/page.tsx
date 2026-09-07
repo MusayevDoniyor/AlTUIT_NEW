@@ -115,8 +115,9 @@ export default function AdminLeadershipPage() {
     setError("");
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as LeadershipItem;
-      await saveLeadership(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveLeadership(id, data as LeadershipItem);
       showToast("success", editing.id ? "Tahrirlandi" : "Qo'shildi");
       await load();
       close();
@@ -160,7 +161,7 @@ export default function AdminLeadershipPage() {
         icon={<Users size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -347,7 +348,7 @@ export default function AdminLeadershipPage() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Multilingual */}
-              <SectionTitle>Ism va lavozim (til bo'yicha)</SectionTitle>
+              <SectionTitle>Ism va lavozim (til bo&apos;yicha)</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
               <div
                 style={{

@@ -7,8 +7,6 @@ import {
   getAllNews,
   saveNews,
   deleteNewsWithImages,
-  uploadImage,
-  deleteImage,
   deleteFile,
   NewsItem,
   ImageItem,
@@ -19,7 +17,6 @@ import {
   Input,
   Textarea,
   Button,
-  Alert,
   EmptyState,
   SectionTitle,
   LangTabs,
@@ -66,12 +63,10 @@ export default function AdminNewsPage() {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
   const [editing, setEditing] = useState<
     (Omit<NewsItem, "id"> & { id?: string }) | null
   >(null);
   const [lang, setLang] = useState<"uz" | "ru" | "en">("uz");
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [search, setSearch] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<NewsItem | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -82,7 +77,7 @@ export default function AdminNewsPage() {
     try {
       setItems(await getAllNews());
     } catch {
-      setError("Ma'lumotlarni yuklashda xatolik");
+      showToast("error", "Ma'lumotlarni yuklashda xatolik");
     } finally {
       setLoading(false);
     }
@@ -90,6 +85,7 @@ export default function AdminNewsPage() {
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Ctrl+S handler
@@ -102,6 +98,7 @@ export default function AdminNewsPage() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing, lang]);
 
   const openNew = () => {
@@ -114,21 +111,7 @@ export default function AdminNewsPage() {
   };
   const close = () => {
     setEditing(null);
-    setError("");
     setErrors({});
-  };
-
-  const handleImageUpload = async (file: File) => {
-    if (!editing) return;
-    setUploadingImage(true);
-    try {
-      const url = await uploadImage(file, "news");
-      setEditing((prev) => (prev ? { ...prev, imageUrl: url } : prev));
-    } catch {
-      showToast("error", "Rasm yuklashda xatolik");
-    } finally {
-      setUploadingImage(false);
-    }
   };
 
   const validate = () => {
@@ -146,10 +129,10 @@ export default function AdminNewsPage() {
   const handleSave = async (publish = true) => {
     if (!editing || !validate() || saving) return;
     setSaving(true);
-    setError("");
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as NewsItem;
+      const data = { ...editing } as NewsItem;
+      delete (data as { id?: string }).id;
       await saveNews(id, { ...data, isPublished: publish });
       showToast(
         "success",
@@ -227,7 +210,7 @@ export default function AdminNewsPage() {
         icon={<Newspaper size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -513,7 +496,7 @@ export default function AdminNewsPage() {
 
               {/* Language tabs */}
               <div>
-                <SectionTitle>Matn (til bo'yicha)</SectionTitle>
+                <SectionTitle>Matn (til bo&apos;yicha)</SectionTitle>
                 <LangTabs active={lang} onChange={setLang} />
                 <div
                   style={{ display: "flex", flexDirection: "column", gap: 12 }}
@@ -719,7 +702,7 @@ export default function AdminNewsPage() {
 
               {/* Full text body using RichTextEditor */}
               <div>
-                <SectionTitle>To'liq matn ({lang.toUpperCase()})</SectionTitle>
+                <SectionTitle>To&apos;liq matn ({lang.toUpperCase()})</SectionTitle>
                 <RichTextEditor
                   content={
                     lang === "uz"
@@ -745,7 +728,7 @@ export default function AdminNewsPage() {
 
             {/* Preview */}
             <div style={{ marginTop: 24 }}>
-              <SectionTitle>Ko'rinish</SectionTitle>
+              <SectionTitle>Ko&apos;rinish</SectionTitle>
               <NewsPreview
                 data={{
                   title:

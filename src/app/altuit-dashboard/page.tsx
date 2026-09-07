@@ -316,7 +316,7 @@ export default function AdminDashboard() {
               margin: 0,
             }}
           >
-            So'nggi yangiliklar
+            So&apos;nggi yangiliklar
           </h2>
           <Link
             href="/altuit-dashboard/news"
@@ -619,7 +619,7 @@ export default function AdminDashboard() {
                 margin: 0,
               }}
             >
-              Saytni ko'rish
+              Saytni ko&apos;rish
             </p>
             <p
               style={{
@@ -628,7 +628,7 @@ export default function AdminDashboard() {
                 margin: 0,
               }}
             >
-              Hozirgi holat va o'zgarishlarni tekshirish
+              Hozirgi holat va o&apos;zgarishlarni tekshirish
             </p>
           </div>
         </div>

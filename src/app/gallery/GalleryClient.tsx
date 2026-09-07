@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useLang } from "@/lib/useLang";
 import { getGallery, type GalleryItem } from "@/lib/db";
@@ -8,6 +8,7 @@ import { useAsyncData } from "@/lib/useAsyncData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PubCard } from "@/components/Skeleton";
+import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 const CATEGORIES = [
   { label: "Hammasi", value: "" },
@@ -21,12 +22,30 @@ const CATEGORIES = [
 export default function GalleryClient() {
   const [lang, setLang] = useLang();
   const [category, setCategory] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const { data: items, loading } = useAsyncData(() => getGallery(), []);
   const allItems = items ?? [];
 
   const filtered =
     category === "" ? allItems : allItems.filter((i) => i.category === category);
+
+  useEffect(() => {
+    if (selectedIndex === null) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedIndex(null);
+      if (e.key === "ArrowLeft") {
+        setSelectedIndex((prev) => (prev !== null ? (prev - 1 + filtered.length) % filtered.length : null));
+      }
+      if (e.key === "ArrowRight") {
+        setSelectedIndex((prev) => (prev !== null ? (prev + 1) % filtered.length : null));
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedIndex, filtered.length]);
+
+  const activeItem = selectedIndex !== null ? filtered[selectedIndex] : null;
 
   return (
     <main>
@@ -128,10 +147,10 @@ export default function GalleryClient() {
                 gap: 24,
               }}
             >
-              {filtered.map((item: GalleryItem) => (
+              {filtered.map((item: GalleryItem, idx: number) => (
                 <figure
                   key={item.id}
-                  className="card-hover"
+                  className="card-hover group"
                   style={{
                     margin: 0,
                     background: "white",
@@ -139,7 +158,9 @@ export default function GalleryClient() {
                     overflow: "hidden",
                     border: "1px solid rgba(26,58,110,0.08)",
                     boxShadow: "0 4px 18px rgba(26,58,110,0.06)",
+                    cursor: "pointer",
                   }}
+                  onClick={() => setSelectedIndex(idx)}
                 >
                   <div
                     style={{
@@ -148,19 +169,44 @@ export default function GalleryClient() {
                       aspectRatio: "4/3",
                       background: "rgba(26,58,110,0.04)",
                       overflow: "hidden",
-                      cursor: "pointer",
                     }}
-                    onClick={() =>
-                      window.open(item.imageUrl, "_blank", "noopener")
-                    }
                   >
                     <Image
                       src={item.imageUrl}
                       alt={captionFor(item, lang)}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "cover", transition: "transform 0.4s ease" }}
                     />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "rgba(15, 35, 71, 0.35)",
+                        opacity: 0,
+                        transition: "opacity 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      className="hover:opacity-100"
+                    >
+                      <div
+                        style={{
+                          width: 44,
+                          height: 44,
+                          borderRadius: "50%",
+                          background: "rgba(255,255,255,0.9)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#1a3a6e",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        <ZoomIn size={22} />
+                      </div>
+                    </div>
                   </div>
                   <figcaption
                     style={{
@@ -202,6 +248,227 @@ export default function GalleryClient() {
           )}
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {activeItem && selectedIndex !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: "rgba(10, 18, 38, 0.94)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            animation: "fadeIn 0.2s ease-out",
+          }}
+          onClick={() => setSelectedIndex(null)}
+        >
+          {/* Top Bar / Close Button */}
+          <div
+            style={{
+              position: "absolute",
+              top: 20,
+              left: 24,
+              right: 24,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              zIndex: 10,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                background: "rgba(255,255,255,0.1)",
+                padding: "6px 14px",
+                borderRadius: 20,
+              }}
+            >
+              {selectedIndex + 1} / {filtered.length}
+            </div>
+
+            <button
+              onClick={() => setSelectedIndex(null)}
+              aria-label="Yopish"
+              style={{
+                background: "rgba(255,255,255,0.15)",
+                border: "none",
+                borderRadius: "50%",
+                width: 44,
+                height: 44,
+                color: "white",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.3)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Navigation Prev Button */}
+          {filtered.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIndex((selectedIndex - 1 + filtered.length) % filtered.length);
+              }}
+              aria-label="Oldingi"
+              style={{
+                position: "absolute",
+                left: 20,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "rgba(255,255,255,0.15)",
+                border: "none",
+                borderRadius: "50%",
+                width: 48,
+                height: 48,
+                color: "white",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.3)";
+                e.currentTarget.style.transform = "translateY(-50%) scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.15)";
+                e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+              }}
+            >
+              <ChevronLeft size={28} />
+            </button>
+          )}
+
+          {/* Navigation Next Button */}
+          {filtered.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedIndex((selectedIndex + 1) % filtered.length);
+              }}
+              aria-label="Keyingi"
+              style={{
+                position: "absolute",
+                right: 20,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "rgba(255,255,255,0.15)",
+                border: "none",
+                borderRadius: "50%",
+                width: 48,
+                height: 48,
+                color: "white",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.3)";
+                e.currentTarget.style.transform = "translateY(-50%) scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.15)";
+                e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+              }}
+            >
+              <ChevronRight size={28} />
+            </button>
+          )}
+
+          {/* Image & Caption Container */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              maxWidth: "88vw",
+              maxHeight: "82vh",
+              zIndex: 5,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                position: "relative",
+                width: "min(88vw, 1000px)",
+                height: "min(70vh, 650px)",
+              }}
+            >
+              <Image
+                src={activeItem.imageUrl}
+                alt={captionFor(activeItem, lang)}
+                fill
+                sizes="(max-width: 1200px) 90vw, 1000px"
+                style={{ objectFit: "contain" }}
+                priority
+              />
+            </div>
+
+            {/* Caption & Category pill below */}
+            <div
+              style={{
+                marginTop: 16,
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                flexWrap: "wrap",
+                justifyContent: "center",
+                maxWidth: 800,
+                textAlign: "center",
+              }}
+            >
+              <span
+                style={{
+                  color: "white",
+                  fontSize: "1.05rem",
+                  fontWeight: 600,
+                  textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                }}
+              >
+                {captionFor(activeItem, lang)}
+              </span>
+              {activeItem.category && (
+                <span
+                  style={{
+                    background: "rgba(200, 169, 110, 0.25)",
+                    border: "1px solid rgba(200, 169, 110, 0.5)",
+                    color: "#f5d799",
+                    fontSize: "0.78rem",
+                    fontWeight: 700,
+                    padding: "3px 12px",
+                    borderRadius: 50,
+                  }}
+                >
+                  {activeItem.category}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer lang={lang} />
     </main>

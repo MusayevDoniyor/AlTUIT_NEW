@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations } from "@/lib/i18n";
 import { useLang } from "@/lib/useLang";
-import { getTeachers, getDepartments, getLeadership, TeacherItem, DepartmentItem } from "@/lib/db";
+import { getTeachers, getDepartments, getLeadership, TeacherItem } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { parseTeacherInfo, parseTeacherCertificates } from "@/lib/teacherUtils";
 import {
@@ -18,6 +18,9 @@ import {
   ChevronRight,
   Users,
   Award,
+  Bell,
+  Clock,
+  Coffee,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -51,13 +54,9 @@ function TeacherAvatar({
   alt?: string;
   size?: number;
 }) {
-  const [error, setError] = useState(false);
+  const [errorSrc, setErrorSrc] = useState<string | null>(null);
 
-  useEffect(() => {
-    setError(false);
-  }, [src]);
-
-  if (!src || error) {
+  if (!src || errorSrc === src) {
     return <DefaultAvatar />;
   }
 
@@ -72,7 +71,7 @@ function TeacherAvatar({
         width: "100%",
         height: "100%",
       }}
-      onError={() => setError(true)}
+      onError={() => setErrorSrc(src)}
     />
   );
 }
@@ -1117,6 +1116,262 @@ export default function AboutClient() {
                   : "No teacher information available"}
             </p>
           )}
+        </div>
+      </section>
+
+      {/* ===== BELL SCHEDULE (QO'NG'IROQLAR JADVALI) ===== */}
+      <section id="schedule" style={{ padding: "96px 0", background: "white" }}>
+        <div className="container-custom">
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                background: "rgba(200,169,110,0.12)",
+                color: "#9c7c3c",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                padding: "6px 16px",
+                borderRadius: 50,
+                marginBottom: 16,
+                textTransform: "uppercase",
+              }}
+            >
+              <Bell size={14} />
+              <span>
+                {lang === "uz" ? "Kun tartibi" : lang === "ru" ? "Режим дня" : "Daily Routine"}
+              </span>
+            </div>
+            <h2 className="section-title" style={{ marginBottom: 12 }}>
+              {lang === "uz"
+                ? "Dars va qo'ng'iroqlar jadvali"
+                : lang === "ru"
+                  ? "Расписание звонков и занятий"
+                  : "Class & Bell Schedule"}
+            </h2>
+            <p
+              style={{
+                color: "#64748b",
+                maxWidth: 600,
+                margin: "0 auto",
+                fontSize: "0.95rem",
+                lineHeight: 1.6,
+              }}
+            >
+              {lang === "uz"
+                ? "O'quv mashg'ulotlari juftliklar asosida olib boriladi. Darslar va tanaffuslar vaqtlari bilan tanishing."
+                : lang === "ru"
+                  ? "Занятия проводятся парами. Ознакомьтесь с временем занятий и перемен."
+                  : "Classes are held in double periods (pairs). Check out the class and recess schedules."}
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: 28,
+              maxWidth: 1060,
+              margin: "0 auto",
+            }}
+          >
+            {/* Card 1: Academic Classes */}
+            <div
+              style={{
+                background: "#f8f9fc",
+                borderRadius: 20,
+                padding: "32px 28px",
+                border: "1px solid rgba(26,58,110,0.08)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 12,
+                    background: "linear-gradient(135deg, #1a3a6e, #2d5bb5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                  }}
+                >
+                  <Clock size={22} />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1a3a6e" }}>
+                    {lang === "uz" ? "Asosiy o'quv darslari" : lang === "ru" ? "Основные занятия" : "Main Academic Classes"}
+                  </h3>
+                  <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
+                    {lang === "uz" ? "Dushanba — Shanba (08:30 – 14:30)" : lang === "ru" ? "Понедельник — Суббота" : "Monday — Saturday"}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {[
+                  {
+                    pair: lang === "uz" ? "1-juftlik" : lang === "ru" ? "1-я пара" : "Pair 1",
+                    time: "08:30 — 09:50",
+                    breakNote: lang === "uz" ? "10 daqiqa tanaffus" : lang === "ru" ? "Перемена 10 минут" : "10 min break",
+                    isLunch: false,
+                  },
+                  {
+                    pair: lang === "uz" ? "2-juftlik" : lang === "ru" ? "2-я пара" : "Pair 2",
+                    time: "10:00 — 11:20",
+                    breakNote: lang === "uz" ? "20 daqiqa katta tanaffus (Tushlik)" : lang === "ru" ? "Большая перемена 20 минут" : "20 min lunch break",
+                    isLunch: true,
+                  },
+                  {
+                    pair: lang === "uz" ? "3-juftlik" : lang === "ru" ? "3-я пара" : "Pair 3",
+                    time: "11:40 — 13:00",
+                    breakNote: lang === "uz" ? "10 daqiqa tanaffus" : lang === "ru" ? "Перемена 10 минут" : "10 min break",
+                    isLunch: false,
+                  },
+                  {
+                    pair: lang === "uz" ? "4-juftlik" : lang === "ru" ? "4-я пара" : "Pair 4",
+                    time: "13:10 — 14:30",
+                    breakNote: lang === "uz" ? "Dars mashg'ulotlari yakuni" : lang === "ru" ? "Конец занятий" : "End of classes",
+                    isLunch: false,
+                  },
+                ].map((slot, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      background: "white",
+                      borderRadius: 14,
+                      padding: "16px 18px",
+                      border: "1px solid rgba(26,58,110,0.06)",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <span style={{ display: "block", fontWeight: 700, color: "#1a1f2e", fontSize: "0.95rem" }}>
+                        {slot.pair}
+                      </span>
+                      <span style={{ display: "flex", alignItems: "center", gap: 4, color: slot.isLunch ? "#d97706" : "#64748b", fontSize: "0.78rem", marginTop: 3 }}>
+                        {slot.isLunch && <Coffee size={12} />}
+                        {slot.breakNote}
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontFamily: "monospace",
+                        fontWeight: 700,
+                        fontSize: "0.95rem",
+                        color: "#1a3a6e",
+                        background: "rgba(26,58,110,0.06)",
+                        padding: "4px 10px",
+                        borderRadius: 8,
+                      }}
+                    >
+                      {slot.time}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Card 2: Extracurricular Activities */}
+            <div
+              style={{
+                background: "#f8f9fc",
+                borderRadius: 20,
+                padding: "32px 28px",
+                border: "1px solid rgba(26,58,110,0.08)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 12,
+                    background: "linear-gradient(135deg, #c8a96e, #dfc08a)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#0f2347",
+                  }}
+                >
+                  <BookOpen size={22} />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1a3a6e" }}>
+                    {lang === "uz" ? "To'garaklar va laboratoriyalar" : lang === "ru" ? "Кружки и лаборатории" : "Clubs & Laboratories"}
+                  </h3>
+                  <span style={{ fontSize: "0.8rem", color: "#64748b" }}>
+                    {lang === "uz" ? "Darsdan keyingi mashg'ulotlar (14:30 – 17:30)" : lang === "ru" ? "Внеурочная деятельность" : "After-school activities"}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {[
+                  {
+                    title: lang === "uz" ? "Fan to'garaklari & Olimpiada tayyorgarligi" : lang === "ru" ? "Предметные кружки и олимпиады" : "Subject Clubs & Olympiad Prep",
+                    desc: lang === "uz" ? "Matematika, Fizika va Informatika chuqurlashtirilgan mashg'ulotlari" : lang === "ru" ? "Математика, физика и информатика" : "Advanced Math, Physics and CS",
+                    time: "14:40 — 16:00",
+                  },
+                  {
+                    title: lang === "uz" ? "Dasturlash (IT) va Robototexnika" : lang === "ru" ? "Программирование (IT) и робототехника" : "IT Programming & Robotics",
+                    desc: lang === "uz" ? "Web dasturlash, Python, algoritmlar va sun'iy intellekt asoslari" : lang === "ru" ? "Веб-разработка, Python и алгоритмы" : "Web dev, Python and algorithms",
+                    time: "16:10 — 17:30",
+                  },
+                  {
+                    title: lang === "uz" ? "Xorijiy tillar klubi (IELTS / CEFR)" : lang === "ru" ? "Клуб иностранных языков" : "Foreign Languages Club",
+                    desc: lang === "uz" ? "Ingliz tili so'zlashuv klubi va imtihonlarga tayyorlanish" : lang === "ru" ? "Разговорный клуб и подготовка к экзаменам" : "Speaking club and exam prep",
+                    time: "15:00 — 16:30",
+                  },
+                  {
+                    title: lang === "uz" ? "Sport to'garaklari" : lang === "ru" ? "Спортивные секции" : "Sports Sections",
+                    desc: lang === "uz" ? "Futbol, shaxmat, stol tennisi va voleybol seksiyalari" : lang === "ru" ? "Футбол, шахматы, настольный теннис" : "Football, chess, table tennis",
+                    time: "16:00 — 17:30",
+                  },
+                ].map((act, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      background: "white",
+                      borderRadius: 14,
+                      padding: "16px 18px",
+                      border: "1px solid rgba(26,58,110,0.06)",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 4 }}>
+                      <span style={{ fontWeight: 700, color: "#1a1f2e", fontSize: "0.92rem" }}>
+                        {act.title}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "monospace",
+                          fontWeight: 700,
+                          fontSize: "0.82rem",
+                          color: "#9c7c3c",
+                          background: "rgba(200,169,110,0.12)",
+                          padding: "3px 8px",
+                          borderRadius: 6,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {act.time}
+                      </span>
+                    </div>
+                    <span style={{ color: "#64748b", fontSize: "0.78rem" }}>
+                      {act.desc}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

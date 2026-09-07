@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, Plus, Pencil, Trash2, X, Check, Users } from "lucide-react";
+import { Building2, Plus, Pencil, Trash2, X, Check } from "lucide-react";
 import {
   getDepartments,
   saveDepartment,
@@ -58,7 +58,10 @@ export default function AdminDepartmentsPage() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    void load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const openNew = () => setEditing({ ...EMPTY, orderIndex: items.length, isNew: true });
   const openEdit = (item: DepartmentItem) => setEditing({ ...item, isNew: false });
@@ -72,8 +75,10 @@ export default function AdminDepartmentsPage() {
     setSaving(true);
     try {
       const id = editing.isNew ? Date.now().toString() : editing.id!;
-      const { isNew, id: _id, ...data } = editing;
-      await saveDepartment(id, data);
+      const data = { ...editing };
+      delete (data as { isNew?: boolean }).isNew;
+      delete (data as { id?: string }).id;
+      await saveDepartment(id, data as Omit<DepartmentItem, "id">);
 
       // Auto-assign the head teacher to this department
       if (editing.headTeacherId) {
@@ -141,7 +146,7 @@ export default function AdminDepartmentsPage() {
         icon={<Building2 size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Qo'shish
+            <Plus size={14} /> Qo&apos;shish
           </Button>
         }
       />
@@ -180,7 +185,7 @@ export default function AdminDepartmentsPage() {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ color: C.text, fontWeight: 600, fontSize: "0.9rem", margin: 0 }}>{name}</p>
                     <p style={{ color: C.textMuted, fontSize: "0.78rem", margin: "4px 0 0" }}>
-                      {tCount} ta o'qituvchi{head ? ` · Mudir: ${head}` : ""}
+                      {tCount} ta o&apos;qituvchi{head ? ` · Mudir: ${head}` : ""}
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: 6 }}>
@@ -279,7 +284,7 @@ export default function AdminDepartmentsPage() {
                   ))}
                 </select>
                 <p style={{ color: C.textDim, fontSize: "0.72rem", margin: "4px 0 0" }}>
-                  Mudir tanlanganda o'qituvchi avtomatik shu kafedraga biriktiriladi
+                  Mudir tanlanganda o&apos;qituvchi avtomatik shu kafedraga biriktiriladi
                 </p>
               </div>
             </div>

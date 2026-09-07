@@ -1,16 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { translations } from "@/lib/i18n";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
-import { Building2, Users, ChevronRight } from "lucide-react";
+import { Building2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { getDepartments, getTeachers, type DepartmentItem, type TeacherItem } from "@/lib/db";
+import { getDepartments, getTeachers, DepartmentItem } from "@/lib/db";
 import { PubBlock } from "@/components/Skeleton";
+
+function DefaultAvatar() {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "100%", height: "100%", display: "block" }}
+      aria-hidden="true"
+    >
+      <rect width="48" height="48" fill="#e2e8f0" />
+      <circle cx="24" cy="17" r="7.5" fill="#94a3b8" />
+      <path
+        d="M8 43c0-7 5.5-12.5 13-13.5h6c7.5 1 13 6.5 13 13.5v5H8v-5z"
+        fill="#94a3b8"
+      />
+    </svg>
+  );
+}
 
 export default function DepartmentsClient() {
   const [lang, setLang] = useLang();
@@ -137,9 +155,7 @@ export default function DepartmentsClient() {
                           {head.photoUrl ? (
                             <Image src={head.photoUrl} alt={headName} fill style={{ objectFit: "cover" }} sizes="52px" />
                           ) : (
-                            <span style={{ fontSize: "1.2rem", fontWeight: 700, color: "#c8a96e" }}>
-                              {headName.charAt(0)}
-                            </span>
+                            <DefaultAvatar />
                           )}
                         </div>
                         <div>
@@ -187,9 +203,7 @@ export default function DepartmentsClient() {
                                 {t.photoUrl ? (
                                   <Image src={t.photoUrl} alt={tName} fill style={{ objectFit: "cover" }} sizes="36px" />
                                 ) : (
-                                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#c8a96e" }}>
-                                    {tName.charAt(0)}
-                                  </span>
+                                  <DefaultAvatar />
                                 )}
                               </div>
                               <div style={{ flex: 1, minWidth: 0 }}>

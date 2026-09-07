@@ -105,8 +105,9 @@ export default function AdminHeroPage() {
     setError("");
     try {
       const id = editing.id || Date.now().toString();
-      const { id: _id, ...data } = editing as HeroSlideItem;
-      await saveHeroSlide(id, data);
+      const data = { ...editing };
+      delete (data as { id?: string }).id;
+      await saveHeroSlide(id, data as HeroSlideItem);
       showToast(
         "success",
         editing.id ? "Slayd tahrirlandi" : "Slayd qo'shildi",
@@ -163,7 +164,7 @@ export default function AdminHeroPage() {
         icon={<Sliders size={18} color={C.gold} />}
         action={
           <Button onClick={openNew}>
-            <Plus size={14} /> Slayd qo'shish
+            <Plus size={14} /> Slayd qo&apos;shish
           </Button>
         }
       />
@@ -575,7 +576,7 @@ export default function AdminHeroPage() {
                         cursor: "pointer",
                       }}
                     />
-                    Saytda ko'rsatish (Faol)
+                    Saytda ko&apos;rsatish (Faol)
                   </label>
                 </div>
               </div>

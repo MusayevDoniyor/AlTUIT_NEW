@@ -6,7 +6,8 @@ import Image from "next/image";
 import DOMPurify from "dompurify";
 import { translations } from "@/lib/i18n";
 import { useLang } from "@/lib/useLang";
-import { Calendar, ArrowLeft, FileText, Download } from "lucide-react";
+import { Calendar, ArrowLeft, FileText, Download, Share2, Check, Copy } from "lucide-react";
+import { FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -31,6 +32,15 @@ interface NewsDetail {
 
 export default function NewsDetailClient({ news }: { news: NewsDetail }) {
   const [lang, setLang] = useLang();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
 
   const t = translations[lang];
 
@@ -358,6 +368,115 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
               </a>
             </div>
           )}
+
+          {/* Share card */}
+          <div
+            style={{
+              marginTop: 36,
+              background: "white",
+              borderRadius: 18,
+              padding: "20px 28px",
+              boxShadow: "0 4px 20px rgba(26,58,110,0.06)",
+              border: "1px solid rgba(26,58,110,0.07)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 16,
+              flexWrap: "wrap",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Share2 size={18} color="#1a3a6e" />
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: "0.92rem",
+                  color: "#1a3a6e",
+                }}
+              >
+                {lang === "uz"
+                  ? "Ulashish:"
+                  : lang === "ru"
+                    ? "Поделиться:"
+                    : "Share:"}
+              </span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}&text=${encodeURIComponent(title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Telegram"
+                title="Telegram orqali ulashish"
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 10,
+                  background: "#229ED9",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textDecoration: "none",
+                  transition: "transform 0.2s",
+                }}
+              >
+                <FaTelegramPlane size={18} />
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                title="Facebook orqali ulashish"
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 10,
+                  background: "#1877F2",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textDecoration: "none",
+                  transition: "transform 0.2s",
+                }}
+              >
+                <FaFacebookF size={16} />
+              </a>
+              <button
+                onClick={handleCopyLink}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  borderRadius: 10,
+                  background: copied ? "#10b981" : "rgba(26,58,110,0.08)",
+                  color: copied ? "white" : "#1a3a6e",
+                  border: "none",
+                  fontWeight: 600,
+                  fontSize: "0.82rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {copied ? <Check size={14} /> : <Copy size={14} />}
+                {copied
+                  ? lang === "uz"
+                    ? "Nusxalandi!"
+                    : lang === "ru"
+                      ? "Скопировано!"
+                      : "Copied!"
+                  : lang === "uz"
+                    ? "Havola nusxasi"
+                    : lang === "ru"
+                      ? "Копировать ссылку"
+                      : "Copy link"}
+              </button>
+            </div>
+          </div>
 
           {/* Bottom navigation */}
           <div
