@@ -423,21 +423,22 @@ export default function AdminTeachersPage() {
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "center",
-            background: "rgba(0,0,0,0.7)",
-            backdropFilter: "blur(6px)",
+            background: "rgba(5, 12, 26, 0.78)",
+            backdropFilter: "blur(8px)",
             overflowY: "auto",
             padding: "20px",
           }}
         >
           <div
             style={{
-              background: "#141620",
+              background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
               border: `1px solid ${C.border}`,
               borderRadius: 20,
               width: "100%",
               maxWidth: 600,
               padding: "28px",
               margin: "auto",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
             }}
           >
             <div
@@ -548,11 +549,11 @@ export default function AdminTeachersPage() {
                       boxSizing: "border-box", fontFamily: "inherit", cursor: "pointer",
                     }}
                   >
-                    <option value="" style={{ background: "#141620" }}>— Kafedra tanlanmagan —</option>
+                    <option value="" style={{ background: "#0f2347" }}>— Kafedra tanlanmagan —</option>
                     {departments.map((d) => {
                       const deptName = lang === "uz" ? d.nameUz : lang === "ru" ? d.nameRu : d.nameEn;
                       return (
-                        <option key={d.id} value={d.id} style={{ background: "#141620" }}>
+                        <option key={d.id} value={d.id} style={{ background: "#0f2347" }}>
                           {deptName}
                         </option>
                       );

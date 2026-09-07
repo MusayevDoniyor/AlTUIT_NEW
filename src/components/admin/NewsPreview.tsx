@@ -60,7 +60,7 @@ export default function NewsPreview({ data }: NewsPreviewProps) {
         border: `1px solid ${C.border}`,
         borderRadius: 14,
         overflow: "hidden",
-        background: "#0f1117",
+        background: "#091224",
       }}
     >
       {/* Header */}

@@ -787,20 +787,21 @@ export function ConfirmDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(0,0,0,0.7)",
-        backdropFilter: "blur(4px)",
+        background: "rgba(5, 12, 26, 0.78)",
+        backdropFilter: "blur(8px)",
         padding: 20,
       }}
       onClick={onCancel}
     >
       <div
         style={{
-          background: C.bgElevated,
+          background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
           border: `1px solid ${C.border}`,
           borderRadius: 20,
           width: "100%",
           maxWidth: 420,
           padding: "28px",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
         }}
         onClick={(e) => e.stopPropagation()}
       >

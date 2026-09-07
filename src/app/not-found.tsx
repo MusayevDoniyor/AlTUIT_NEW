@@ -12,7 +12,7 @@ export default function NotFound() {
       style={{
         minHeight: "100vh",
         background:
-          "linear-gradient(135deg, #0a0d14 0%, #0f1117 50%, #141620 100%)",
+          "linear-gradient(135deg, #07101f 0%, #0f2347 50%, #0a1835 100%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
