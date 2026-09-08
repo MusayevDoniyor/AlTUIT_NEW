@@ -83,6 +83,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           width: 1200,
           height: 630,
           alt: title,
+          type: ogImageUrl.endsWith(".png") ? "image/png" : "image/jpeg",
         },
       ],
     },

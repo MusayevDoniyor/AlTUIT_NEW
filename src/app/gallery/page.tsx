@@ -12,11 +12,32 @@ export const metadata: Metadata = {
     "litsey fotosuratlar",
     "litsey tadbirlar",
   ],
+  alternates: {
+    canonical: `${siteConfig.url}/gallery`,
+  },
   openGraph: {
     title: `Galereya | ${siteConfig.shortName}`,
     description:
       "TATU Akademik Litseyi hayotidan foto galereya — tadbirlar, o'quv jarayoni, bino va sharoitlar, sport hayoti.",
     url: `${siteConfig.url}/gallery`,
+    siteName: siteConfig.shortName,
+    locale: "uz_UZ",
+    type: "website",
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Galereya | TATU Akademik Litseyi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Galereya | ${siteConfig.shortName}`,
+    description:
+      "TATU Akademik Litseyi hayotidan foto galereya — tadbirlar, o'quv jarayoni, bino va sharoitlar.",
+    images: [`${siteConfig.url}/og-image.jpg`],
   },
 };
 

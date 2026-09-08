@@ -14,11 +14,32 @@ export const metadata: Metadata = {
     "litsey hujjatlar",
     "my.gov.uz litsey qabul",
   ],
+  alternates: {
+    canonical: `${siteConfig.url}/admission`,
+  },
   openGraph: {
     title: `Qabul 2025 | ${siteConfig.shortName}`,
     description:
       "TATU Akademik Litseyiga 2025-yil qabul — kirish imtihonlari, talab qilinadigan hujjatlar, muddatlar. Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlari.",
     url: `${siteConfig.url}/admission`,
+    siteName: siteConfig.shortName,
+    locale: "uz_UZ",
+    type: "website",
+    images: [
+      {
+        url: `${siteConfig.url}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Qabul 2025 | TATU Akademik Litseyi",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Qabul 2025 | ${siteConfig.shortName}`,
+    description:
+      "TATU Akademik Litseyiga 2025-yil qabul — kirish imtihonlari, talab qilinadigan hujjatlar, muddatlar.",
+    images: [`${siteConfig.url}/og-image.jpg`],
   },
 };
 

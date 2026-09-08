@@ -83,8 +83,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uz" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preconnect"
+          href="https://fbvmqyavgeqgvxoxhffi.supabase.co"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="dns-prefetch"
+          href="https://fbvmqyavgeqgvxoxhffi.supabase.co"
+        />
+      </head>
       <body className={inter.variable} suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <a href="#main-content" className="skip-to-content">
+          Asosiy qismga o&apos;tish
+        </a>
+        <div id="main-content">
+          <Providers>{children}</Providers>
+        </div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

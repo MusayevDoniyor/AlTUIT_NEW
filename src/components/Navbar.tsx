@@ -408,6 +408,8 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                 className="show-mobile"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-navigation-menu"
                 style={{
                   background: "none",
                   border: "none",
@@ -428,7 +430,10 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         className={`mobile-overlay ${mobileOpen ? "open" : ""}`}
         onClick={() => setMobileOpen(false)}
       />
-      <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
+      <div
+        id="mobile-navigation-menu"
+        className={`mobile-menu ${mobileOpen ? "open" : ""}`}
+      >
         <div
           style={{
             padding: "30px",
