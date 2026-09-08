@@ -20,7 +20,7 @@ import Footer from "@/components/Footer";
 import {
   getHeroSlides,
   getStats,
-  getNews,
+  getRecentNews,
   getNewsMainImage,
   getLeadership,
   type StatItem,
@@ -220,13 +220,13 @@ export default function Home() {
     const [slides, stats, news, leadership] = await Promise.all([
       getHeroSlides().catch(() => []),
       getStats().catch(() => []),
-      getNews().catch(() => []),
+      getRecentNews(3).catch(() => []),
       getLeadership().catch(() => []),
     ]);
     return {
       slides,
       stats,
-      news: news.slice(0, 3),
+      news,
       leadership,
     };
   }, []);

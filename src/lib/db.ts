@@ -2,10 +2,34 @@ import { supabase } from "./supabase";
 
 const MAINTENANCE_STAT_KEY = "maintenance_mode";
 
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
+const MAX_IMAGE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+
 // Generic Upload file helper using Supabase Storage
 export async function uploadImage(file: File, folder: string): Promise<string> {
-  const fileExtension = file.name.split(".").pop();
-  const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExtension}`;
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    throw new Error(
+      "Faqat JPG, PNG, WEBP yoki GIF formatidagi rasmlarni yuklash mumkin",
+    );
+  }
+  if (file.size > MAX_IMAGE_SIZE_BYTES) {
+    throw new Error("Rasm hajmi 10MB dan oshmasligi kerak");
+  }
+
+  const rawExt = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const fileExtension = ["jpg", "jpeg", "png", "webp", "gif"].includes(rawExt)
+    ? rawExt
+    : "jpg";
+  const randomSuffix =
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID().slice(0, 8)
+      : Math.random().toString(36).substring(2, 8);
+  const fileName = `${folder}/${Date.now()}_${randomSuffix}.${fileExtension}`;
 
   const { error } = await supabase.storage
     .from("images")
@@ -148,6 +172,20 @@ export async function getNews(): Promise<NewsItem[]> {
     .select("*")
     .eq("is_published", true)
     .order("date", { ascending: false });
+  if (error) throw error;
+  return (data || []).map((row) => normalizeNewsItem(mapRow<NewsItem>(row)));
+}
+
+/** Fetch latest N published news items for cards (excluding heavy article bodies) */
+export async function getRecentNews(limit = 3): Promise<NewsItem[]> {
+  const { data, error } = await supabase
+    .from("news")
+    .select(
+      "id, date, title_uz, title_ru, title_en, desc_uz, desc_ru, desc_en, tag, color, image_url, images, is_published",
+    )
+    .eq("is_published", true)
+    .order("date", { ascending: false })
+    .limit(limit);
   if (error) throw error;
   return (data || []).map((row) => normalizeNewsItem(mapRow<NewsItem>(row)));
 }

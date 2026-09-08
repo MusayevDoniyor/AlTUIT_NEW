@@ -434,12 +434,12 @@ function FullPreview({
         {/* Body (rendered HTML) */}
         {data.body ? (
           <div
-            style={{
-              fontSize: "0.95rem",
-              color: "#374151",
-              lineHeight: 1.8,
+            className="news-article-body"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(data.body, {
+                ADD_ATTR: ["target", "rel", "class"],
+              }),
             }}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.body) }}
           />
         ) : (
           <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>

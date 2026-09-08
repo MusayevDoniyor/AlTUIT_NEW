@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { Newspaper, Plus, Pencil, Trash2, X, Save, Send, FileText, ExternalLink, Eye } from "lucide-react";
 import {
@@ -95,7 +95,7 @@ export default function AdminNewsPage() {
     const handler = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "s" && editing) {
         e.preventDefault();
-        handleSave();
+        handleSave(editing.isPublished);
       }
     };
     window.addEventListener("keydown", handler);
@@ -130,18 +130,24 @@ export default function AdminNewsPage() {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSave = async (publish = true) => {
+  const handleSave = async (publish?: boolean) => {
     if (!editing || !validate() || saving) return;
     setSaving(true);
     try {
-      const id = editing.id || Date.now().toString();
+      const isPublished =
+        publish !== undefined ? publish : (editing.isPublished ?? true);
+      const id =
+        editing.id ||
+        (typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
       const data = { ...editing } as NewsItem;
       delete (data as { id?: string }).id;
       if (!data.imageUrl && images.length > 0) {
         const mainImg = images.find((img) => img.isMain) || images[0];
         if (mainImg?.url) data.imageUrl = mainImg.url;
       }
-      await saveNews(id, { ...data, isPublished: publish });
+      await saveNews(id, { ...data, isPublished });
       showToast(
         "success",
         editing.id ? "Yangilik tahrirlandi" : "Yangilik qo'shildi",
@@ -171,7 +177,7 @@ export default function AdminNewsPage() {
     }
   };
 
-  const images: ImageItem[] = (() => {
+  const images: ImageItem[] = useMemo(() => {
     if (!editing?.images) return [];
     try {
       const parsed =
@@ -182,7 +188,7 @@ export default function AdminNewsPage() {
     } catch {
       return [];
     }
-  })();
+  }, [editing?.images]);
 
   const set = (field: string, val: unknown) =>
     setEditing((prev) => (prev ? { ...prev, [field]: val } : prev));

@@ -112,7 +112,12 @@ export default function RichTextEditor({
       ImageExtension.configure({ inline: false }),
       LinkExtension.configure({
         openOnClick: false,
-        HTMLAttributes: { class: "editor-link" },
+        autolink: true,
+        HTMLAttributes: {
+          class: "editor-link",
+          target: "_blank",
+          rel: "noopener noreferrer",
+        },
       }),
       Placeholder.configure({ placeholder }),
       CharacterCount.configure({ limit: maxLength }),
@@ -159,7 +164,7 @@ export default function RichTextEditor({
         .chain()
         .focus()
         .extendMarkRange("link")
-        .setLink({ href: url })
+        .setLink({ href: url, target: "_blank" })
         .run();
     }
   }, [editor]);

@@ -1,8 +1,13 @@
+import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getNewsById, getNewsMainImage } from "@/lib/db";
+import { getNewsById as getNewsByIdDb, getNewsMainImage } from "@/lib/db";
 import NewsDetailClient from "./NewsDetailClient";
 import { siteConfig } from "@/lib/config";
+
+const getNewsById = cache(async (id: string) => {
+  return getNewsByIdDb(id);
+});
 
 type Props = {
   params: Promise<{ id: string }>;

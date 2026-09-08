@@ -9,7 +9,11 @@ import { Eye, EyeOff, LogIn, AlertCircle } from "lucide-react";
 function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const from = searchParams.get("from") || "/altuit-dashboard";
+  const rawFrom = searchParams.get("from");
+  const from =
+    rawFrom && rawFrom.startsWith("/") && !rawFrom.startsWith("//")
+      ? rawFrom
+      : "/altuit-dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

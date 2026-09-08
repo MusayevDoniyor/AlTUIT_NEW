@@ -10,15 +10,23 @@ const rateBuckets = new Map<string, { count: number; windowStart: number }>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
+
+  // Periodic eviction of expired buckets to prevent unbounded memory growth
+  if (rateBuckets.size > 1000) {
+    for (const [key, b] of rateBuckets.entries()) {
+      if (now - b.windowStart > RATE_WINDOW_MS) {
+        rateBuckets.delete(key);
+      }
+    }
+  }
+
   const bucket = rateBuckets.get(ip);
   if (!bucket || now - bucket.windowStart > RATE_WINDOW_MS) {
     rateBuckets.set(ip, { count: 1, windowStart: now });
     return false;
   }
   bucket.count += 1;
-  if (bucket.count > RATE_MAX) return true;
-  rateBuckets.set(ip, bucket);
-  return false;
+  return bucket.count > RATE_MAX;
 }
 
 function getClientIp(request: NextRequest): string {
@@ -83,18 +91,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Basic phone validation: at least 7 digits
+    // Phone validation: between 7 and 15 digits (ITU-T E.164 standard)
     const phoneDigits = phoneTrimmed.replace(/\D/g, "");
-    if (phoneDigits.length < 7) {
+    if (phoneDigits.length < 7 || phoneDigits.length > 15) {
       return NextResponse.json(
-        { error: "Telefon raqam formati noto'g'ri" },
+        { error: "Telefon raqam formati noto'g'ri (7-15 ta raqam bo'lishi kerak)" },
         { status: 400 },
       );
     }
 
-    if (!TELEGRAM_CHAT_ID) {
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
       console.error(
-        "TELEGRAM_CHAT_ID is not configured in environment variables",
+        "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not configured in environment variables",
       );
       return genericError();
     }

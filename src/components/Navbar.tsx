@@ -61,13 +61,15 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
   const items = navItems(t);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (e: React.MouseEvent, href: string) => {
     setMobileOpen(false);
     // If same page with hash, smooth scroll
     if (href.startsWith("/#") && pathname === "/") {
-      const id = href.replace("/#", "#");
-      document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+      e.preventDefault();
+      const id = href.replace("/#", "");
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     } else if (href.includes("#") && href.startsWith(pathname + "#")) {
+      e.preventDefault();
       const hash = href.split("#")[1];
       document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
     }
@@ -268,7 +270,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                             <Link
                               key={j}
                               href={child.href}
-                              onClick={() => handleNavClick(child.href)}
+                              onClick={(e) => handleNavClick(e, child.href)}
                               style={{
                                 display: "block",
                                 width: "100%",
@@ -563,7 +565,7 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
                         <Link
                           key={j}
                           href={child.href}
-                          onClick={() => setMobileOpen(false)}
+                          onClick={(e) => handleNavClick(e, child.href)}
                           style={{
                             display: "block",
                             width: "100%",

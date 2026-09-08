@@ -198,9 +198,16 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
       DOMPurify &&
       typeof DOMPurify.sanitize === "function"
     ) {
-      return DOMPurify.sanitize(html);
+      return DOMPurify.sanitize(html, {
+        ADD_ATTR: ["target", "rel", "class"],
+      });
     }
-    return html;
+    // Server-side fallback: strip executable script/iframe tags and event handlers
+    return html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+      .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+      .replace(/on\w+\s*=\s*(["']).*?\1/gi, "");
   }
 
   /** Parse body text — handles both HTML (from RichTextEditor) and plain text with Markdown images */
@@ -211,17 +218,14 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
     if (isHtml) {
       return (
         <div
-          style={{
-            fontSize: "1rem",
-            color: "#374151",
-            lineHeight: 1.85,
-          }}
+          className="news-article-body"
           dangerouslySetInnerHTML={{ __html: safeSanitize(text) }}
         />
       );
     }
 
-    // Fallback: plain text with Markdown image support ![alt](url)
+    // Fallback: plain text with Markdown image and URL auto-linking support
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(/(!\[.*?\]\(.*?\))/g);
     return parts.map((part, i) => {
       const imgMatch = part.match(/^!\[(.*?)\]\((.*?)\)$/);
@@ -251,9 +255,24 @@ export default function NewsDetailClient({ news }: { news: NewsDetail }) {
           </div>
         );
       }
+      const subParts = part.split(urlRegex);
       return (
         <p key={i} style={{ marginBottom: 18, whiteSpace: "pre-wrap" }}>
-          {part || "\u00A0"}
+          {subParts.map((sub, j) =>
+            sub.match(/^https?:\/\//) ? (
+              <a
+                key={j}
+                href={sub}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="editor-link"
+              >
+                {sub}
+              </a>
+            ) : (
+              sub || (j === 0 && subParts.length === 1 ? "\u00A0" : "")
+            ),
+          )}
         </p>
       );
     });
