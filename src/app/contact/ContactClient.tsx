@@ -323,33 +323,33 @@ export default function ContactClient() {
               </div>
             </div>
 
-            {/* Contact form */}
-            <div
-              style={{
-                background: "white",
-                borderRadius: 20,
-                padding: "36px 32px",
-                boxShadow: "0 8px 40px rgba(26,58,110,0.08)",
-                border: "1px solid rgba(26,58,110,0.07)",
-                alignSelf: "start",
-                height: "fit-content",
-              }}
-            >
-              {maintenanceMode && (
-                <div style={{ marginBottom: 20 }}>
-                  <MaintenanceBanner lang={lang} compact />
-                </div>
-              )}
-              <h3
+            {/* Contact form column */}
+            <div>
+              <h2
                 style={{
-                  color: "#1a1f2e",
-                  fontWeight: 700,
-                  fontSize: "1.2rem",
-                  marginBottom: 8,
+                  color: "#1a3a6e",
+                  fontWeight: 800,
+                  fontSize: "1.3rem",
+                  marginBottom: 28,
                 }}
               >
-                ✉️ {t.contact_send}
-              </h3>
+                {t.contact_send}
+              </h2>
+
+              <div
+                style={{
+                  background: "white",
+                  borderRadius: 20,
+                  padding: "36px 32px",
+                  boxShadow: "0 8px 40px rgba(26,58,110,0.08)",
+                  border: "1px solid rgba(26,58,110,0.07)",
+                }}
+              >
+                {maintenanceMode && (
+                  <div style={{ marginBottom: 20 }}>
+                    <MaintenanceBanner lang={lang} compact />
+                  </div>
+                )}
               <p
                 style={{
                   color: "#6b7280",
@@ -657,6 +657,7 @@ export default function ContactClient() {
                 )}
               </form>
             </div>
+          </div>
           </div>
         </div>
       </section>
