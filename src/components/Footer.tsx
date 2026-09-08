@@ -396,9 +396,39 @@ export default function Footer({ lang }: FooterProps) {
             © {new Date().getFullYear()} Al-Xorazmiy Akademik Litseyi (TATU).{" "}
             {t.footer_copy}
           </p>
-          <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.25)" }}>
-            tatual.uz
-          </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              fontSize: "0.8rem",
+            }}
+          >
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>
+              Dasturchi:{" "}
+              <a
+                href={siteConfig.developerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#c8a96e",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.textDecoration =
+                    "underline")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.textDecoration =
+                    "none")
+                }
+              >
+                {siteConfig.creator}
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </footer>

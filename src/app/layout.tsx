@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     "IELTS litsey Toshkent",
   ],
   authors: [{ name: siteConfig.name }],
-  creator: siteConfig.shortName,
+  creator: siteConfig.creator,
   publisher: siteConfig.shortName,
   metadataBase: new URL(siteConfig.url),
   alternates: {

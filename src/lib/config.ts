@@ -2,6 +2,8 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.tatual.uz",
   name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
   shortName: "TATU Akademik Litsey",
+  creator: "Musayev Doniyor",
+  developerUrl: "https://github.com/MusayevDoniyor",
   description:
     "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
   email: "info@tatual.uz",
