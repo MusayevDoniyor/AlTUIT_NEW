@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "tatual.uz",
     "aniq fanlar texnika",
     "aniq fanlar iqtisod",
-    "TATU litsey qabul 2025",
+    "TATU litsey qabul 2026",
     "litsey Yunusobod",
     "Bogishamol 112 litsey",
     "matematika fizika litsey Toshkent",
