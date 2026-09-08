@@ -163,6 +163,7 @@ export default function ContactClient() {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
               gap: 40,
+              alignItems: "start",
             }}
           >
             {/* Info cards */}
@@ -327,9 +328,11 @@ export default function ContactClient() {
               style={{
                 background: "white",
                 borderRadius: 20,
-                padding: "40px 36px",
+                padding: "36px 32px",
                 boxShadow: "0 8px 40px rgba(26,58,110,0.08)",
                 border: "1px solid rgba(26,58,110,0.07)",
+                alignSelf: "start",
+                height: "fit-content",
               }}
             >
               {maintenanceMode && (
