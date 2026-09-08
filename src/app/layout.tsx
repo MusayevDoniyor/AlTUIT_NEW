@@ -33,8 +33,11 @@ export const metadata: Metadata = {
     "litsey robototexnika",
     "IELTS litsey Toshkent",
   ],
-  authors: [{ name: siteConfig.name }],
-  creator: siteConfig.creator,
+  authors: [
+    { name: siteConfig.name },
+    { name: "Musayev Doniyor", url: "https://github.com/MusayevDoniyor" },
+  ],
+  creator: "Musayev Doniyor",
   publisher: siteConfig.shortName,
   metadataBase: new URL(siteConfig.url),
   alternates: {
@@ -111,6 +114,11 @@ export default function RootLayout({
               alternateName: "TATU Akademik Litsey",
               url: siteConfig.url,
               logo: `${siteConfig.url}/logo.png`,
+              creator: {
+                "@type": "Person",
+                name: "Musayev Doniyor",
+                url: "https://github.com/MusayevDoniyor",
+              },
               description:
                 "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
               address: {
