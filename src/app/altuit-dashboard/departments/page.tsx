@@ -209,7 +209,7 @@ export default function AdminDepartmentsPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={520}
+        maxWidth={580}
         title={editing?.isNew ? "Yangi kafedra qo'shish" : "Kafedrani tahrirlash"}
         subtitle="Akademik litsey kafedrasi va mudiri ma'lumotlari"
         footer={
@@ -224,11 +224,11 @@ export default function AdminDepartmentsPage() {
         }
       >
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <LangTabs active={lang} onChange={setLang} />
 
             <Input
-              label={`Nomi (${lang.toUpperCase()})`}
+              label={`Kafedra nomi (${lang.toUpperCase()})`}
               value={
                 lang === "uz"
                   ? editing.nameUz
@@ -247,69 +247,78 @@ export default function AdminDepartmentsPage() {
                 )
               }
               placeholder={
-                lang === "uz" ? "Masalan: Matematika va fizika" : "Kafedra nomi"
+                lang === "uz" ? "Masalan: Aniq fanlar kafedrasi" : "Kafedra nomi"
               }
             />
-            <Input
-              label="Tartib raqami"
-              type="number"
-              value={editing.orderIndex}
-              onChange={(e) =>
-                set("orderIndex", parseInt(e.target.value) || 0)
-              }
-            />
-            <div>
-              <label
-                style={{
-                  display: "block",
-                  color: C.textMuted,
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-                  marginBottom: 6,
-                }}
-              >
-                Kafedra mudiri
-              </label>
-              <select
-                value={editing.headTeacherId || ""}
-                onChange={(e) => set("headTeacherId", e.target.value || null)}
-                style={{
-                  width: "100%",
-                  padding: "10px 14px",
-                  background: "rgba(255,255,255,0.05)",
-                  border: `1px solid ${C.border}`,
-                  borderRadius: 10,
-                  color: C.text,
-                  fontSize: "0.88rem",
-                  outline: "none",
-                  boxSizing: "border-box",
-                  fontFamily: "inherit",
-                  cursor: "pointer",
-                }}
-              >
-                <option value="" style={{ background: "#0f2347" }}>
-                  — Mudir belgilanmagan —
-                </option>
-                {teachers.map((t) => (
-                  <option
-                    key={t.id}
-                    value={t.id}
-                    style={{ background: "#0f2347" }}
-                  >
-                    {t.fullNameUz} ({t.subjectUz})
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1.4fr 0.6fr",
+                gap: 12,
+              }}
+            >
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    color: C.textMuted,
+                    fontSize: "0.78rem",
+                    fontWeight: 600,
+                    marginBottom: 6,
+                  }}
+                >
+                  Kafedra mudiri
+                </label>
+                <select
+                  value={editing.headTeacherId || ""}
+                  onChange={(e) => set("headTeacherId", e.target.value || null)}
+                  style={{
+                    width: "100%",
+                    padding: "10px 14px",
+                    background: "rgba(255,255,255,0.05)",
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 10,
+                    color: C.text,
+                    fontSize: "0.88rem",
+                    outline: "none",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value="" style={{ background: "#0f2347" }}>
+                    — Mudir belgilanmagan —
                   </option>
-                ))}
-              </select>
-              <p
-                style={{
-                  color: C.textDim,
-                  fontSize: "0.72rem",
-                  margin: "4px 0 0",
-                }}
-              >
-                Mudir tanlanganda o&apos;qituvchi avtomatik shu kafedraga
-                biriktiriladi
-              </p>
+                  {teachers.map((t) => (
+                    <option
+                      key={t.id}
+                      value={t.id}
+                      style={{ background: "#0f2347" }}
+                    >
+                      {t.fullNameUz} ({t.subjectUz})
+                    </option>
+                  ))}
+                </select>
+                <p
+                  style={{
+                    color: C.textDim,
+                    fontSize: "0.7rem",
+                    margin: "4px 0 0",
+                  }}
+                >
+                  Mudir avtomatik kafedraga biriktiriladi
+                </p>
+              </div>
+
+              <Input
+                label="Tartib raqami"
+                type="number"
+                value={editing.orderIndex}
+                onChange={(e) =>
+                  set("orderIndex", parseInt(e.target.value) || 0)
+                }
+              />
             </div>
           </div>
         )}

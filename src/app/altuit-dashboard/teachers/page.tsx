@@ -418,7 +418,7 @@ export default function AdminTeachersPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={640}
+        maxWidth={840}
         title={editing?.id ? "O'qituvchini tahrirlash" : "Yangi o'qituvchi qo'shish"}
         subtitle="TATU akademik litseyi pedagog xodim ma'lumotlari"
         footer={
@@ -433,19 +433,19 @@ export default function AdminTeachersPage() {
         }
       >
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SectionTitle>Ism va fan (til bo&apos;yicha)</SectionTitle>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+              gap: 20,
+              alignItems: "start",
+            }}
+          >
+            {/* Left Column: Basic & Department Info */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <SectionTitle>Pedagog ma&apos;lumotlari</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
-              <p
-                style={{
-                  color: C.textMuted,
-                  fontSize: "0.8rem",
-                  margin: "0 0 10px",
-                }}
-              >
-                O&apos;zbekcha maydonlar majburiy, Ruscha va Inglizcha maydonlar esa
-                kerak bo&apos;lganda to&apos;ldiriladi.
-              </p>
+
               <div
                 style={{
                   display: "grid",
@@ -472,6 +472,7 @@ export default function AdminTeachersPage() {
                       e.target.value,
                     )
                   }
+                  placeholder="Ism Familiya"
                 />
                 <Input
                   label={`Fan (${lang.toUpperCase()})`}
@@ -492,59 +493,120 @@ export default function AdminTeachersPage() {
                       e.target.value,
                     )
                   }
+                  placeholder="Masalan: Fizika"
                 />
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                }}
+              >
                 <div>
-                  <label style={{ display: "block", color: C.textMuted, fontSize: "0.78rem", fontWeight: 600, marginBottom: 6 }}>
+                  <label
+                    style={{
+                      display: "block",
+                      color: C.textMuted,
+                      fontSize: "0.78rem",
+                      fontWeight: 600,
+                      marginBottom: 6,
+                    }}
+                  >
                     Kafedra
                   </label>
                   <select
                     value={editing.departmentId || ""}
                     onChange={(e) => set("departmentId", e.target.value || "")}
                     style={{
-                      width: "100%", padding: "10px 14px",
+                      width: "100%",
+                      padding: "10px 14px",
                       background: "rgba(255,255,255,0.05)",
-                      border: `1px solid ${C.border}`, borderRadius: 10,
-                      color: C.text, fontSize: "0.88rem", outline: "none",
-                      boxSizing: "border-box", fontFamily: "inherit", cursor: "pointer",
+                      border: `1px solid ${C.border}`,
+                      borderRadius: 10,
+                      color: C.text,
+                      fontSize: "0.88rem",
+                      outline: "none",
+                      boxSizing: "border-box",
+                      fontFamily: "inherit",
+                      cursor: "pointer",
                     }}
                   >
-                    <option value="" style={{ background: "#0f2347" }}>— Kafedra tanlanmagan —</option>
+                    <option value="" style={{ background: "#0f2347" }}>
+                      — Kafedra tanlanmagan —
+                    </option>
                     {departments.map((d) => {
-                      const deptName = lang === "uz" ? d.nameUz : lang === "ru" ? d.nameRu : d.nameEn;
+                      const deptName =
+                        lang === "uz"
+                          ? d.nameUz
+                          : lang === "ru"
+                            ? d.nameRu
+                            : d.nameEn;
                       return (
-                        <option key={d.id} value={d.id} style={{ background: "#0f2347" }}>
+                        <option
+                          key={d.id}
+                          value={d.id}
+                          style={{ background: "#0f2347" }}
+                        >
                           {deptName}
                         </option>
                       );
                     })}
                   </select>
                 </div>
+
+                <Input
+                  label="Tartib raqami"
+                  type="number"
+                  value={editing.orderIndex}
+                  onChange={(e) =>
+                    set("orderIndex", parseInt(e.target.value) || 0)
+                  }
+                />
               </div>
+
               <Textarea
-                label={`Tavsif (Description) (${lang.toUpperCase()})`}
-                value={lang === "uz" ? descUz : lang === "ru" ? descRu : descEn}
+                label={`Tavsif (${lang.toUpperCase()})`}
+                value={
+                  lang === "uz" ? descUz : lang === "ru" ? descRu : descEn
+                }
                 onChange={(e) => {
                   if (lang === "uz") setDescUz(e.target.value);
                   else if (lang === "ru") setDescRu(e.target.value);
                   else setDescEn(e.target.value);
                 }}
                 placeholder="O'qituvchi haqida batafsil ma'lumot..."
-                style={{ minHeight: 100 }}
+                rows={3}
+                style={{ minHeight: 80 }}
               />
+            </div>
+
+            {/* Right Column: Photo & Qualifications */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <SectionTitle>O&apos;qituvchi fotosurati</SectionTitle>
+                <ImageUpload
+                  currentUrl={editing.photoUrl || ""}
+                  onUpload={handleImageUpload}
+                  onRemove={() => set("photoUrl", "")}
+                  uploading={uploadingImage}
+                />
+              </div>
 
               <div>
                 <label
                   style={{
                     display: "block",
                     color: C.text,
-                    fontSize: "0.85rem",
+                    fontSize: "0.82rem",
                     fontWeight: 600,
-                    marginBottom: 8,
+                    marginBottom: 6,
                   }}
                 >
                   Tajriba (Experience) ({lang.toUpperCase()})
                 </label>
-                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
                   <div style={{ flex: 1 }}>
                     <Input
                       value={newExpInput}
@@ -562,24 +624,23 @@ export default function AdminTeachersPage() {
                     type="button"
                     onClick={() => addExperience()}
                     style={{
-                      height: "42px",
+                      height: "40px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: "0 16px",
+                      padding: "0 14px",
                     }}
                   >
-                    <Plus size={16} />
+                    <Plus size={15} />
                   </Button>
                 </div>
 
-                {/* List of current experiences */}
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 8,
-                    maxHeight: 150,
+                    gap: 6,
+                    maxHeight: 110,
                     overflowY: "auto",
                     paddingRight: 4,
                   }}
@@ -594,9 +655,9 @@ export default function AdminTeachersPage() {
                           justifyContent: "space-between",
                           background: "rgba(255,255,255,0.03)",
                           border: `1px solid ${C.border}`,
-                          borderRadius: 10,
-                          padding: "8px 12px",
-                          fontSize: "0.85rem",
+                          borderRadius: 8,
+                          padding: "6px 10px",
+                          fontSize: "0.8rem",
                           color: C.text,
                         }}
                       >
@@ -613,7 +674,7 @@ export default function AdminTeachersPage() {
                             padding: 2,
                           }}
                         >
-                          <X size={14} />
+                          <X size={13} />
                         </button>
                       </div>
                     ),
@@ -623,7 +684,7 @@ export default function AdminTeachersPage() {
                     <p
                       style={{
                         color: C.textMuted,
-                        fontSize: "0.8rem",
+                        fontSize: "0.75rem",
                         fontStyle: "italic",
                         margin: 0,
                       }}
@@ -639,14 +700,14 @@ export default function AdminTeachersPage() {
                   style={{
                     display: "block",
                     color: C.text,
-                    fontSize: "0.85rem",
+                    fontSize: "0.82rem",
                     fontWeight: 600,
-                    marginBottom: 8,
+                    marginBottom: 6,
                   }}
                 >
                   Sertifikatlar (Certificates) ({lang.toUpperCase()})
                 </label>
-                <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
                   <div style={{ flex: 1 }}>
                     <Input
                       value={newCertInput}
@@ -664,24 +725,23 @@ export default function AdminTeachersPage() {
                     type="button"
                     onClick={() => addCertificate()}
                     style={{
-                      height: "42px",
+                      height: "40px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: "0 16px",
+                      padding: "0 14px",
                     }}
                   >
-                    <Plus size={16} />
+                    <Plus size={15} />
                   </Button>
                 </div>
 
-                {/* List of current certificates */}
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 8,
-                    maxHeight: 150,
+                    gap: 6,
+                    maxHeight: 110,
                     overflowY: "auto",
                     paddingRight: 4,
                   }}
@@ -700,9 +760,9 @@ export default function AdminTeachersPage() {
                         justifyContent: "space-between",
                         background: "rgba(255,255,255,0.03)",
                         border: `1px solid ${C.border}`,
-                        borderRadius: 10,
-                        padding: "8px 12px",
-                        fontSize: "0.85rem",
+                        borderRadius: 8,
+                        padding: "6px 10px",
+                        fontSize: "0.8rem",
                         color: C.text,
                       }}
                     >
@@ -719,7 +779,7 @@ export default function AdminTeachersPage() {
                           padding: 2,
                         }}
                       >
-                        <X size={14} />
+                        <X size={13} />
                       </button>
                     </div>
                   ))}
@@ -728,7 +788,7 @@ export default function AdminTeachersPage() {
                     <p
                       style={{
                         color: C.textMuted,
-                        fontSize: "0.8rem",
+                        fontSize: "0.75rem",
                         fontStyle: "italic",
                         margin: 0,
                       }}
@@ -738,27 +798,10 @@ export default function AdminTeachersPage() {
                   )}
                 </div>
               </div>
-              <Input
-                label="Tartib raqami"
-                type="number"
-                value={editing.orderIndex}
-                onChange={(e) =>
-                  set("orderIndex", parseInt(e.target.value) || 0)
-                }
-              />
-
-              <div>
-                <SectionTitle>Rasm</SectionTitle>
-                <ImageUpload
-                  currentUrl={editing.photoUrl || ""}
-                  onUpload={handleImageUpload}
-                  onRemove={() => set("photoUrl", "")}
-                  uploading={uploadingImage}
-                />
-              </div>
             </div>
-          )}
-        </AdminModal>
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 }

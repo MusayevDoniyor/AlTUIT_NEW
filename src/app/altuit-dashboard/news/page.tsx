@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Newspaper, Plus, Pencil, Trash2, X, Save, Send, FileText, ExternalLink } from "lucide-react";
+import { Newspaper, Plus, Pencil, Trash2, X, Save, Send, FileText, ExternalLink, Eye } from "lucide-react";
 import {
   getAllNews,
   saveNews,
@@ -71,6 +71,7 @@ export default function AdminNewsPage() {
   const [search, setSearch] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<NewsItem | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [modalTab, setModalTab] = useState<"edit" | "preview">("edit");
   const { showToast } = useToast();
 
   const load = async () => {
@@ -105,10 +106,12 @@ export default function AdminNewsPage() {
   const openNew = () => {
     setEditing({ ...EMPTY, date: new Date().toISOString().slice(0, 10) });
     setErrors({});
+    setModalTab("edit");
   };
   const openEdit = (item: NewsItem) => {
     setEditing({ ...item });
     setErrors({});
+    setModalTab("edit");
   };
   const close = () => {
     setEditing(null);
@@ -372,7 +375,7 @@ export default function AdminNewsPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={720}
+        maxWidth={880}
         title={
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span>{editing?.id ? "Yangilikni tahrirlash" : "Yangi yangilik"}</span>
@@ -413,337 +416,429 @@ export default function AdminNewsPage() {
       >
         {editing && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {/* Date and published */}
+            {/* Top Toolbar: Tabs + Publish switch */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                paddingBottom: 14,
+                borderBottom: `1px solid ${C.border}`,
+                flexWrap: "wrap",
+              }}
+            >
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr auto",
-                  gap: 12,
-                  alignItems: "end",
+                  display: "inline-flex",
+                  background: "rgba(255, 255, 255, 0.04)",
+                  padding: 3,
+                  borderRadius: 10,
+                  border: `1px solid ${C.border}`,
                 }}
               >
-                <Input
-                  label="Sana"
-                  type="date"
-                  value={editing.date}
-                  onChange={(e) => set("date", e.target.value)}
-                />
-                <label
+                <button
+                  type="button"
+                  onClick={() => setModalTab("edit")}
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 8,
+                    gap: 6,
+                    padding: "6px 14px",
+                    borderRadius: 7,
+                    border: "none",
+                    background: modalTab === "edit" ? C.gold : "transparent",
+                    color: modalTab === "edit" ? "#091224" : C.textMuted,
+                    fontWeight: 700,
+                    fontSize: "0.82rem",
                     cursor: "pointer",
-                    paddingBottom: 2,
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  <Pencil size={13} />
+                  <span>Tahrirlash</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalTab("preview")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "6px 14px",
+                    borderRadius: 7,
+                    border: "none",
+                    background: modalTab === "preview" ? C.gold : "transparent",
+                    color: modalTab === "preview" ? "#091224" : C.textMuted,
+                    fontWeight: 700,
+                    fontSize: "0.82rem",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  <Eye size={13} />
+                  <span>Jonli ko&apos;rinish (Preview)</span>
+                </button>
+              </div>
+
+              <label
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  cursor: "pointer",
+                }}
+              >
+                <div
+                  onClick={() => set("isPublished", !editing.isPublished)}
+                  style={{
+                    width: 38,
+                    height: 22,
+                    borderRadius: 11,
+                    background:
+                      editing.isPublished !== false
+                        ? C.gold
+                        : "rgba(255,255,255,0.1)",
+                    cursor: "pointer",
+                    position: "relative",
+                    transition: "background 0.2s",
                   }}
                 >
                   <div
-                    onClick={() => set("isPublished", !editing.isPublished)}
                     style={{
-                      width: 44,
-                      height: 24,
-                      borderRadius: 12,
-                      background:
-                        editing.isPublished !== false
-                          ? C.gold
-                          : "rgba(255,255,255,0.1)",
-                      border: "none",
-                      cursor: "pointer",
-                      position: "relative",
-                      transition: "background 0.2s",
+                      position: "absolute",
+                      top: 3,
+                      left: editing.isPublished !== false ? 19 : 3,
+                      width: 16,
+                      height: 16,
+                      borderRadius: "50%",
+                      background: "white",
+                      transition: "left 0.2s",
                     }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 3,
-                        left: editing.isPublished !== false ? 22 : 3,
-                        width: 18,
-                        height: 18,
-                        borderRadius: "50%",
-                        background: "white",
-                        transition: "left 0.2s",
-                      }}
-                    />
-                  </div>
-                  <span style={{ color: C.textMuted, fontSize: "0.78rem" }}>
-                    Chop etish
-                  </span>
-                </label>
-              </div>
+                  />
+                </div>
+                <span style={{ color: C.text, fontSize: "0.8rem", fontWeight: 600 }}>
+                  {editing.isPublished !== false ? "Chop etish faol" : "Qoralama (Draft)"}
+                </span>
+              </label>
+            </div>
 
-              {/* Language tabs */}
-              <div>
-                <SectionTitle>Matn (til bo&apos;yicha)</SectionTitle>
-                <LangTabs active={lang} onChange={setLang} />
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 12 }}
-                >
-                  <Input
-                    label={`Sarlavha (${lang.toUpperCase()})`}
-                    value={
+            {/* PREVIEW TAB */}
+            {modalTab === "preview" ? (
+              <div style={{ paddingTop: 4 }}>
+                <NewsPreview
+                  data={{
+                    title:
                       lang === "uz"
                         ? editing.titleUz
                         : lang === "ru"
                           ? (editing.titleRu ?? "")
-                          : (editing.titleEn ?? "")
-                    }
-                    onChange={(e) =>
-                      set(
-                        lang === "uz"
-                          ? "titleUz"
-                          : lang === "ru"
-                            ? "titleRu"
-                            : "titleEn",
-                        e.target.value,
-                      )
-                    }
-                    error={
-                      errors[
-                        lang === "uz"
-                          ? "titleUz"
-                          : lang === "ru"
-                            ? "titleRu"
-                            : "titleEn"
-                      ] || ""
-                    }
-                    placeholder="Yangilik sarlavhasi"
-                  />
-                  <Textarea
-                    label={`Qisqa tavsif (${lang.toUpperCase()})`}
-                    value={
+                          : (editing.titleEn ?? ""),
+                    desc:
                       lang === "uz"
                         ? editing.descUz
                         : lang === "ru"
                           ? (editing.descRu ?? "")
-                          : (editing.descEn ?? "")
+                          : (editing.descEn ?? ""),
+                    body:
+                      lang === "uz"
+                        ? editing.bodyUz
+                        : lang === "ru"
+                          ? (editing.bodyRu ?? "")
+                          : (editing.bodyEn ?? ""),
+                    tag: editing.tag[lang] || "",
+                    color: editing.color,
+                    date: editing.date,
+                    images,
+                  }}
+                  lang={lang}
+                />
+              </div>
+            ) : (
+              /* EDIT TAB */
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {/* Language tabs */}
+                <div>
+                  <SectionTitle>Matn (til bo&apos;yicha)</SectionTitle>
+                  <LangTabs active={lang} onChange={setLang} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <Input
+                      label={`Sarlavha (${lang.toUpperCase()})`}
+                      value={
+                        lang === "uz"
+                          ? editing.titleUz
+                          : lang === "ru"
+                            ? (editing.titleRu ?? "")
+                            : (editing.titleEn ?? "")
+                      }
+                      onChange={(e) =>
+                        set(
+                          lang === "uz"
+                            ? "titleUz"
+                            : lang === "ru"
+                              ? "titleRu"
+                              : "titleEn",
+                          e.target.value,
+                        )
+                      }
+                      error={
+                        errors[
+                          lang === "uz"
+                            ? "titleUz"
+                            : lang === "ru"
+                              ? "titleRu"
+                              : "titleEn"
+                        ] || ""
+                      }
+                      placeholder="Yangilik sarlavhasi"
+                    />
+                    <Textarea
+                      label={`Qisqa tavsif (${lang.toUpperCase()})`}
+                      value={
+                        lang === "uz"
+                          ? editing.descUz
+                          : lang === "ru"
+                            ? (editing.descRu ?? "")
+                            : (editing.descEn ?? "")
+                      }
+                      onChange={(e) =>
+                        set(
+                          lang === "uz"
+                            ? "descUz"
+                            : lang === "ru"
+                              ? "descRu"
+                              : "descEn",
+                          e.target.value,
+                        )
+                      }
+                      error={
+                        errors[
+                          lang === "uz"
+                            ? "descUz"
+                            : lang === "ru"
+                              ? "descRu"
+                              : "descEn"
+                        ]
+                      }
+                      rows={2}
+                      style={{ minHeight: 60 }}
+                      placeholder="Qisqa tavsif (maks 160 belgi)"
+                    />
+                  </div>
+                </div>
+
+                {/* Metadata 2-column grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: 16,
+                  }}
+                >
+                  {/* Left: Date, Tag & Color */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <Input
+                        label="Sana"
+                        type="date"
+                        value={editing.date}
+                        onChange={(e) => set("date", e.target.value)}
+                      />
+                      <Input
+                        label={`Teg/Kategoriya (${lang.toUpperCase()})`}
+                        value={
+                          lang === "uz"
+                            ? editing.tag.uz
+                            : lang === "ru"
+                              ? editing.tag.ru
+                              : editing.tag.en
+                        }
+                        onChange={(e) => setTag(lang, e.target.value)}
+                        placeholder="Sport, Fan..."
+                      />
+                    </div>
+
+                    <div>
+                      <SectionTitle>Mavzu rangi</SectionTitle>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        {COLORS.map((c) => (
+                          <div
+                            key={c}
+                            onClick={() => set("color", c)}
+                            style={{
+                              width: 26,
+                              height: 26,
+                              borderRadius: "50%",
+                              background: c,
+                              cursor: "pointer",
+                              border:
+                                editing.color === c
+                                  ? "3px solid white"
+                                  : "2px solid transparent",
+                              boxShadow:
+                                editing.color === c
+                                  ? "0 0 8px rgba(255,255,255,0.4)"
+                                  : "none",
+                              transition: "all 0.15s ease",
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: PDF attachment */}
+                  <div>
+                    <SectionTitle>Fayl biriktirish (PDF)</SectionTitle>
+                    <div>
+                      {editing.fileUrl ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            padding: "8px 12px",
+                            background: "rgba(255,255,255,0.05)",
+                            borderRadius: 10,
+                            marginBottom: 8,
+                            border: `1px solid ${C.border}`,
+                          }}
+                        >
+                          <FileText size={16} color={C.gold} />
+                          <span
+                            style={{
+                              color: C.textMuted,
+                              fontSize: "0.8rem",
+                              flex: 1,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {editing.fileName || "Fayl biriktirilgan"}
+                          </span>
+                          <a
+                            href={editing.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: C.gold, display: "flex" }}
+                          >
+                            <ExternalLink size={14} />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              set("fileUrl", "");
+                              set("fileName", "");
+                            }}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: C.danger,
+                              cursor: "pointer",
+                              display: "flex",
+                              padding: 2,
+                            }}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ) : null}
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        style={{ display: "none" }}
+                        id="news-file-upload"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          try {
+                            const { uploadFile } = await import("@/lib/db");
+                            const url = await uploadFile(file, "news-files");
+                            set("fileUrl", url);
+                            set("fileName", file.name);
+                          } catch {
+                            showToast("error", "Fayl yuklashda xatolik");
+                          }
+                          e.target.value = "";
+                        }}
+                      />
+                      <label
+                        htmlFor="news-file-upload"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 8,
+                          padding: "8px 14px",
+                          borderRadius: 8,
+                          background: "rgba(200,169,110,0.1)",
+                          border: `1px solid rgba(200,169,110,0.25)`,
+                          color: C.gold,
+                          fontSize: "0.82rem",
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          transition: "all 0.2s",
+                          fontFamily: "inherit",
+                        }}
+                      >
+                        <FileText size={14} />
+                        {editing.fileUrl ? "Faylni almashtirish" : "PDF tanlash"}
+                      </label>
+                      <p style={{ color: C.textDim, fontSize: "0.7rem", margin: "4px 0 0" }}>
+                        PDF format, maksimal 10MB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Multiple Images */}
+                <div>
+                  <SectionTitle>Rasmlar (Galereya)</SectionTitle>
+                  <NewsImageUpload
+                    images={images}
+                    onChange={(newImages) => {
+                      const mainImg =
+                        newImages.find((img) => img.isMain) || newImages[0];
+                      setEditing((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              images: JSON.stringify(newImages),
+                              imageUrl: mainImg?.url || "",
+                            }
+                          : prev,
+                      );
+                    }}
+                    maxImages={5}
+                  />
+                </div>
+
+                {/* Full text body using RichTextEditor */}
+                <div>
+                  <SectionTitle>To&apos;liq matn ({lang.toUpperCase()})</SectionTitle>
+                  <RichTextEditor
+                    content={
+                      lang === "uz"
+                        ? editing.bodyUz
+                        : lang === "ru"
+                          ? (editing.bodyRu ?? "")
+                          : (editing.bodyEn ?? "")
                     }
-                    onChange={(e) =>
+                    onChange={(html) =>
                       set(
                         lang === "uz"
-                          ? "descUz"
+                          ? "bodyUz"
                           : lang === "ru"
-                            ? "descRu"
-                            : "descEn",
-                        e.target.value,
+                            ? "bodyRu"
+                            : "bodyEn",
+                        html,
                       )
                     }
-                    error={
-                      errors[
-                        lang === "uz"
-                          ? "descUz"
-                          : lang === "ru"
-                            ? "descRu"
-                            : "descEn"
-                      ]
-                    }
-                    style={{ minHeight: 80 }}
-                    placeholder="Qisqa tavsif (maks 160 belgi)"
-                  />
-                  <Input
-                    label={`Teg/Kategoriya (${lang.toUpperCase()})`}
-                    value={
-                      lang === "uz"
-                        ? editing.tag.uz
-                        : lang === "ru"
-                          ? editing.tag.ru
-                          : editing.tag.en
-                    }
-                    onChange={(e) => setTag(lang, e.target.value)}
-                    placeholder="Masalan: Olimpiada, Sport..."
+                    placeholder={`Yangilik matnini yozing (${lang.toUpperCase()})...`}
                   />
                 </div>
               </div>
-
-              {/* Color */}
-              <div>
-                <SectionTitle>Rang</SectionTitle>
-                <div style={{ display: "flex", gap: 8 }}>
-                  {COLORS.map((c) => (
-                    <div
-                      key={c}
-                      onClick={() => set("color", c)}
-                      style={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "50%",
-                        background: c,
-                        cursor: "pointer",
-                        border:
-                          editing.color === c
-                            ? "3px solid white"
-                            : "3px solid transparent",
-                        transition: "border 0.2s",
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Multiple Images */}
-              <div>
-                <SectionTitle>Rasmlar</SectionTitle>
-                <NewsImageUpload
-                  images={images}
-                  onChange={(newImages) => {
-                    const mainImg =
-                      newImages.find((img) => img.isMain) || newImages[0];
-                    setEditing((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            images: JSON.stringify(newImages),
-                            imageUrl: mainImg?.url || "",
-                          }
-                        : prev,
-                    );
-                  }}
-                  maxImages={5}
-                />
-              </div>
-
-              {/* File attachment */}
-              <div>
-                <SectionTitle>Fayl biriktirish (PDF)</SectionTitle>
-                <div>
-                  {editing.fileUrl ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        padding: "10px 14px",
-                        background: "rgba(255,255,255,0.05)",
-                        borderRadius: 10,
-                        marginBottom: 10,
-                        border: `1px solid ${C.border}`,
-                      }}
-                    >
-                      <FileText size={16} color={C.gold} />
-                      <span style={{ color: C.textMuted, fontSize: "0.82rem", flex: 1 }}>
-                        {editing.fileName || "Fayl biriktirilgan"}
-                      </span>
-                      <a
-                        href={editing.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: C.gold, display: "flex" }}
-                      >
-                        <ExternalLink size={14} />
-                      </a>
-                      <button
-                        onClick={() => {
-                          set("fileUrl", "");
-                          set("fileName", "");
-                        }}
-                        style={{ background: "none", border: "none", color: C.danger, cursor: "pointer", display: "flex" }}
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  ) : null}
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    style={{ display: "none" }}
-                    id="news-file-upload"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      try {
-                        const { uploadFile } = await import("@/lib/db");
-                        const url = await uploadFile(file, "news-files");
-                        set("fileUrl", url);
-                        set("fileName", file.name);
-                      } catch {
-                        showToast("error", "Fayl yuklashda xatolik");
-                      }
-                      e.target.value = "";
-                    }}
-                  />
-                  <label
-                    htmlFor="news-file-upload"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                      padding: "9px 16px",
-                      borderRadius: 10,
-                      background: "rgba(200,169,110,0.1)",
-                      border: `1px solid rgba(200,169,110,0.25)`,
-                      color: C.gold,
-                      fontSize: "0.85rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                      fontFamily: "inherit",
-                    }}
-                  >
-                    <FileText size={14} />
-                    {editing.fileUrl ? "Faylni almashtirish" : "PDF fayl tanlash"}
-                  </label>
-                  <p style={{ color: C.textDim, fontSize: "0.72rem", margin: "6px 0 0" }}>
-                    PDF format, maks 10MB
-                  </p>
-                </div>
-              </div>
-
-              {/* Full text body using RichTextEditor */}
-              <div>
-                <SectionTitle>To&apos;liq matn ({lang.toUpperCase()})</SectionTitle>
-                <RichTextEditor
-                  content={
-                    lang === "uz"
-                      ? editing.bodyUz
-                      : lang === "ru"
-                        ? (editing.bodyRu ?? "")
-                        : (editing.bodyEn ?? "")
-                  }
-                  onChange={(html) =>
-                    set(
-                      lang === "uz"
-                        ? "bodyUz"
-                        : lang === "ru"
-                          ? "bodyRu"
-                          : "bodyEn",
-                      html,
-                    )
-                  }
-                  placeholder={`Yangilik matnini yozing (${lang.toUpperCase()})...`}
-                />
-              </div>
-
-              {/* Preview */}
-              <div style={{ marginTop: 24 }}>
-              <SectionTitle>Ko&apos;rinish</SectionTitle>
-              <NewsPreview
-                data={{
-                  title:
-                    lang === "uz"
-                      ? editing.titleUz
-                      : lang === "ru"
-                        ? (editing.titleRu ?? "")
-                        : (editing.titleEn ?? ""),
-                  desc:
-                    lang === "uz"
-                      ? editing.descUz
-                      : lang === "ru"
-                        ? (editing.descRu ?? "")
-                        : (editing.descEn ?? ""),
-                  body:
-                    lang === "uz"
-                      ? editing.bodyUz
-                      : lang === "ru"
-                        ? (editing.bodyRu ?? "")
-                        : (editing.bodyEn ?? ""),
-                  tag: editing.tag[lang] || "",
-                  color: editing.color,
-                  date: editing.date,
-                  images,
-                }}
-                lang={lang}
-              />
-            </div>
+            )}
           </div>
         )}
       </AdminModal>

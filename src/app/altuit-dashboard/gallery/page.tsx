@@ -267,7 +267,7 @@ export default function AdminGalleryPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={520}
+        maxWidth={740}
         title={editing?.id ? "Rasmni tahrirlash" : "Yangi rasm yuklash"}
         subtitle="Litsey fotogalereyasi fotoalbom elementi"
         footer={
@@ -288,96 +288,107 @@ export default function AdminGalleryPage() {
         {error && <Alert type="error" message={error} />}
 
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {/* Image upload section (MUST be at the top) */}
-              <div>
-                <SectionTitle>Rasm yuklash</SectionTitle>
-                {editing.imageUrl ? (
-                  <div
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: 20,
+              alignItems: "start",
+            }}
+          >
+            {/* Left: Image upload */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <SectionTitle>Galereya fotosurati</SectionTitle>
+              {editing.imageUrl ? (
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: 220,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    border: `1px solid ${C.border}`,
+                  }}
+                >
+                  <Image
+                    src={editing.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(max-width: 500px) 100vw, 444px"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <button
+                    onClick={() => set("imageUrl", "")}
                     style={{
-                      position: "relative",
-                      width: "100%",
-                      height: 200,
-                      borderRadius: 12,
-                      overflow: "hidden",
-                      marginBottom: 12,
-                      border: `1px solid ${C.border}`,
-                    }}
-                  >
-                    <Image
-                      src={editing.imageUrl}
-                      alt=""
-                      fill
-                      sizes="(max-width: 500px) 100vw, 444px"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <button
-                      onClick={() => set("imageUrl", "")}
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "rgba(0,0,0,0.6)",
-                        border: "none",
-                        borderRadius: "50%",
-                        color: "white",
-                        cursor: "pointer",
-                        padding: 5,
-                        display: "flex",
-                      }}
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <label
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 10,
-                      padding: "40px 20px",
-                      border: `1px dashed ${C.border}`,
-                      borderRadius: 12,
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      background: "rgba(0,0,0,0.6)",
+                      border: "none",
+                      borderRadius: "50%",
+                      color: "white",
                       cursor: "pointer",
-                      color: C.textMuted,
-                      background: "rgba(255,255,255,0.02)",
-                      transition: "all 0.2s",
+                      padding: 5,
+                      display: "flex",
                     }}
                   >
-                    {uploadingImage ? (
-                      <div
-                        style={{
-                          width: 28,
-                          height: 28,
-                          border: `3px solid ${C.goldLight}`,
-                          borderTopColor: C.gold,
-                          borderRadius: "50%",
-                          animation: "spin 0.8s linear infinite",
-                        }}
-                      />
-                    ) : (
-                      <ImageIcon size={32} color={C.textDim} />
-                    )}
-                    <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
-                      {uploadingImage
-                        ? "Rasm yuklanmoqda..."
-                        : "Rasm tanlash uchun bosing"}
-                    </span>
-                    <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
-                      PNG, JPG, WEBP formatlar
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
+                <label
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                    padding: "40px 20px",
+                    border: `1px dashed ${C.border}`,
+                    borderRadius: 12,
+                    cursor: "pointer",
+                    color: C.textMuted,
+                    background: "rgba(255,255,255,0.02)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {uploadingImage ? (
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        border: `3px solid ${C.goldLight}`,
+                        borderTopColor: C.gold,
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                      }}
                     />
-                  </label>
-                )}
-              </div>
+                  ) : (
+                    <ImageIcon size={32} color={C.textDim} />
+                  )}
+                  <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
+                    {uploadingImage
+                      ? "Rasm yuklanmoqda..."
+                      : "Rasm tanlash uchun bosing"}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
+                    PNG, JPG, WEBP formatlar
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                  />
+                </label>
+              )}
+            </div>
+
+            {/* Right: Category & Caption */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <SectionTitle>Tavsif va Kategoriya</SectionTitle>
+              <LangTabs active={lang} onChange={setLang} />
 
               <div>
                 <label
@@ -419,9 +430,6 @@ export default function AdminGalleryPage() {
                 </select>
               </div>
 
-              <SectionTitle>Rasm izohi (til bo&apos;yicha)</SectionTitle>
-              <LangTabs active={lang} onChange={setLang} />
-
               <Input
                 label={`Tavsif / Izoh (${lang.toUpperCase()})`}
                 value={
@@ -444,8 +452,9 @@ export default function AdminGalleryPage() {
                 placeholder="Rasm ostida ko'rinadigan qisqa izoh..."
               />
             </div>
-          )}
-        </AdminModal>
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 }

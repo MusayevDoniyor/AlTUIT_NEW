@@ -297,7 +297,7 @@ export default function AdminAchievementsPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={620}
+        maxWidth={800}
         title={editing?.id ? "Yutuqni tahrirlash" : "Yangi yutuq qo'shish"}
         subtitle="Litsey va o'quvchilar yutuqlari ma'lumotlari"
         footer={
@@ -312,8 +312,17 @@ export default function AdminAchievementsPage() {
         }
       >
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+              gap: 20,
+              alignItems: "start",
+            }}
+          >
+            {/* Left: Info */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <SectionTitle>Yutuq ma&apos;lumotlari</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
 
               <Input
@@ -337,6 +346,7 @@ export default function AdminAchievementsPage() {
                 }
                 placeholder="Masalan: Respublika fan olimpiadasi 1-o'rin"
               />
+
               <Textarea
                 label={`Tavsif (${lang.toUpperCase()})`}
                 value={
@@ -357,6 +367,8 @@ export default function AdminAchievementsPage() {
                   )
                 }
                 placeholder="Yutuq haqida qisqacha ma'lumot..."
+                rows={3}
+                style={{ minHeight: 70 }}
               />
 
               <div
@@ -379,6 +391,19 @@ export default function AdminAchievementsPage() {
                   options={CATEGORY_OPTIONS}
                 />
               </div>
+            </div>
+
+            {/* Right: Media & Display */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <SectionTitle>Rasm (ixtiyoriy)</SectionTitle>
+                <ImageUpload
+                  currentUrl={editing.imageUrl || ""}
+                  onUpload={handleImageUpload}
+                  onRemove={() => set("imageUrl", "")}
+                  uploading={uploadingImage}
+                />
+              </div>
 
               <div
                 style={{
@@ -388,7 +413,7 @@ export default function AdminAchievementsPage() {
                 }}
               >
                 <Select
-                  label="Mavzu rangi / Nishon turi"
+                  label="Nishon turi"
                   value={editing.color}
                   onChange={(e) => set("color", e.target.value)}
                   options={COLOR_OPTIONS}
@@ -402,16 +427,7 @@ export default function AdminAchievementsPage() {
                   }
                 />
               </div>
-
-              <div>
-                <SectionTitle>Rasm (ixtiyoriy)</SectionTitle>
-                <ImageUpload
-                  currentUrl={editing.imageUrl || ""}
-                  onUpload={handleImageUpload}
-                  onRemove={() => set("imageUrl", "")}
-                  uploading={uploadingImage}
-                />
-              </div>
+            </div>
           </div>
         )}
       </AdminModal>

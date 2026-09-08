@@ -143,10 +143,10 @@ export function CardSkeleton({ count = 3 }: { count?: number }) {
 // ─── Modal portal helper ────────────────────────────────────
 export const spinStyle = `@keyframes spin { to { transform: rotate(360deg); }}
 @keyframes adminModalFadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes adminModalScaleIn { from { opacity: 0; transform: scale(0.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-.admin-modal-body::-webkit-scrollbar { width: 7px; }
-.admin-modal-body::-webkit-scrollbar-track { background: rgba(10, 24, 50, 0.4); }
-.admin-modal-body::-webkit-scrollbar-thumb { background: rgba(200, 169, 110, 0.28); border-radius: 4px; }
+@keyframes adminModalScaleIn { from { opacity: 0; transform: scale(0.97) translateY(6px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.admin-modal-body::-webkit-scrollbar { width: 6px; }
+.admin-modal-body::-webkit-scrollbar-track { background: transparent; }
+.admin-modal-body::-webkit-scrollbar-thumb { background: rgba(200, 169, 110, 0.25); border-radius: 9999px; }
 .admin-modal-body::-webkit-scrollbar-thumb:hover { background: rgba(200, 169, 110, 0.5); }
 input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }`;
 
@@ -830,29 +830,29 @@ export function ConfirmDialog({
     >
       <div
         style={{
-          background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-          border: `1px solid ${C.border}`,
-          borderRadius: 20,
+          background: "#0c172e",
+          border: `1px solid rgba(200, 169, 110, 0.22)`,
+          borderRadius: 18,
           width: "100%",
           maxWidth: 420,
-          padding: "28px",
-          boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
+          padding: "24px",
+          boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 35px rgba(200, 169, 110, 0.08)",
           animation: "adminModalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         <div
           style={{
-            width: 48,
-            height: 48,
-            borderRadius: "50%",
+            width: 44,
+            height: 44,
+            borderRadius: 12,
             background: variant === "danger" ? C.dangerBg : C.goldLight,
             border: `1px solid ${variant === "danger" ? C.dangerBorder : C.goldBorder}`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginBottom: 18,
-            fontSize: "1.4rem",
+            marginBottom: 16,
+            fontSize: "1.3rem",
           }}
         >
           {variant === "danger" ? "🗑️" : "ℹ️"}
@@ -861,7 +861,7 @@ export function ConfirmDialog({
           style={{
             color: C.text,
             fontWeight: 700,
-            fontSize: "1.1rem",
+            fontSize: "1.08rem",
             margin: "0 0 8px",
           }}
         >
@@ -870,8 +870,8 @@ export function ConfirmDialog({
         <p
           style={{
             color: C.textMuted,
-            fontSize: "0.88rem",
-            margin: "0 0 24px",
+            fontSize: "0.85rem",
+            margin: "0 0 22px",
             lineHeight: 1.5,
           }}
         >
@@ -939,69 +939,83 @@ export function AdminModal({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(5, 12, 26, 0.82)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-        padding: "16px",
-        animation: "adminModalFadeIn 0.2s ease-out",
+        background: "rgba(4, 9, 20, 0.8)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+        padding: "20px 16px",
+        animation: "adminModalFadeIn 0.18s ease-out",
       }}
       onClick={onClose}
     >
       <div
         style={{
-          background: "linear-gradient(180deg, #10264e 0%, #0b1a37 100%)",
-          border: `1px solid ${C.border}`,
-          borderRadius: 20,
+          background: "#0c172e",
+          border: `1px solid rgba(200, 169, 110, 0.22)`,
+          borderRadius: 18,
           width: "100%",
           maxWidth,
-          maxHeight: "90vh",
+          maxHeight: "82vh",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 40px rgba(26,58,110,0.25)",
+          boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 35px rgba(200, 169, 110, 0.08)",
           overflow: "hidden",
           position: "relative",
-          animation: "adminModalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
+          animation: "adminModalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed */}
         <div
           style={{
-            padding: "18px 24px",
-            borderBottom: `1px solid ${C.border}`,
+            padding: "15px 22px",
+            borderBottom: "1px solid rgba(200, 169, 110, 0.15)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexShrink: 0,
-            background: "rgba(16, 38, 78, 0.85)",
-            backdropFilter: "blur(10px)",
+            background: "#0f1e3d",
           }}
         >
-          <div>
-            <h2
+          <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+            <div
               style={{
-                color: C.text,
-                fontWeight: 800,
-                fontSize: "1.15rem",
-                margin: 0,
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
+                width: 3,
+                height: 18,
+                borderRadius: 2,
+                background: C.gold,
+                flexShrink: 0,
               }}
-            >
-              {title}
-            </h2>
-            {subtitle && (
-              <p
+            />
+            <div style={{ minWidth: 0 }}>
+              <h2
                 style={{
-                  color: C.textDim,
-                  fontSize: "0.78rem",
-                  margin: "4px 0 0",
+                  color: C.text,
+                  fontWeight: 700,
+                  fontSize: "1.08rem",
+                  margin: 0,
+                  lineHeight: 1.3,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
-                {subtitle}
-              </p>
-            )}
+                {title}
+              </h2>
+              {subtitle && (
+                <p
+                  style={{
+                    color: C.textDim,
+                    fontSize: "0.74rem",
+                    margin: "2px 0 0",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {subtitle}
+                </p>
+              )}
+            </div>
           </div>
           <button
             type="button"
@@ -1009,30 +1023,32 @@ export function AdminModal({
             aria-label="Yopish (Esc)"
             title="Yopish (Esc)"
             style={{
-              background: "rgba(255, 255, 255, 0.06)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "50%",
-              width: 36,
-              height: 36,
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: 8,
+              width: 30,
+              height: 30,
               color: C.textMuted,
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              flexShrink: 0,
+              marginLeft: 12,
               transition: "all 0.15s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(239, 68, 68, 0.18)";
+              e.currentTarget.style.background = "rgba(239, 68, 68, 0.2)";
               e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.4)";
               e.currentTarget.style.color = "#ff8080";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+              e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
               e.currentTarget.style.color = C.textMuted;
             }}
           >
-            <X size={18} />
+            <X size={15} />
           </button>
         </div>
 
@@ -1040,10 +1056,11 @@ export function AdminModal({
         <div
           className="admin-modal-body"
           style={{
-            padding: "24px",
+            padding: "18px 22px",
             overflowY: "auto",
             flex: 1,
             minHeight: 0,
+            background: "#0c172e",
           }}
         >
           {children}
@@ -1053,15 +1070,14 @@ export function AdminModal({
         {footer && (
           <div
             style={{
-              padding: "16px 24px",
-              borderTop: `1px solid ${C.border}`,
+              padding: "13px 22px",
+              borderTop: "1px solid rgba(200, 169, 110, 0.15)",
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-end",
-              gap: 12,
+              gap: 10,
               flexShrink: 0,
-              background: "rgba(11, 26, 55, 0.95)",
-              backdropFilter: "blur(10px)",
+              background: "#0f1e3d",
             }}
           >
             {footer}

@@ -304,7 +304,7 @@ export default function AdminHeroPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={540}
+        maxWidth={760}
         title={editing?.id ? "Slaydni tahrirlash" : "Yangi slayd qo'shish"}
         subtitle="Bosh sahifa banner karusel slaydi"
         footer={
@@ -323,153 +323,162 @@ export default function AdminHeroPage() {
         }
       >
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {/* Image upload */}
-              <div>
-                <SectionTitle>Slayd rasmi</SectionTitle>                {editing.imageUrl ? (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: 200,
-                      borderRadius: 12,
-                      overflow: "hidden",
-                      marginBottom: 12,
-                      border: `1px solid ${C.border}`,
-                    }}
-                  >
-                    <Image
-                      src={editing.imageUrl}
-                      alt=""
-                      fill
-                      sizes="(max-width: 500px) 100vw, 444px"
-                      style={{ objectFit: "cover" }}
-                    />
-                    <button
-                      onClick={() => set("imageUrl", "")}
-                      aria-label="Rasmni olib tashlash"
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "rgba(0,0,0,0.6)",
-                        border: "none",
-                        borderRadius: "50%",
-                        color: "white",
-                        cursor: "pointer",
-                        padding: 5,
-                        display: "flex",
-                      }}
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <label
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 10,
-                      padding: "40px 20px",
-                      border: `1px dashed ${C.border}`,
-                      borderRadius: 12,
-                      cursor: "pointer",
-                      color: C.textMuted,
-                      background: "rgba(255,255,255,0.02)",
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    {uploadingImage ? (
-                      <div
-                        style={{
-                          width: 28,
-                          height: 28,
-                          border: `3px solid ${C.goldLight}`,
-                          borderTopColor: C.gold,
-                          borderRadius: "50%",
-                          animation: "spin 0.8s linear infinite",
-                        }}
-                      />
-                    ) : (
-                      <Sliders size={32} color={C.textDim} />
-                    )}
-                    <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
-                      {uploadingImage
-                        ? "Yuklanmoqda..."
-                        : "Rasm tanlash uchun bosing"}
-                    </span>
-                    <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
-                      Keng formatdagi yuqori sifatli rasmlar tavsiya etiladi
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                    />
-                  </label>
-                )}
-              </div>
-
-              <div>
-                <SectionTitle>Slayd matni (ixtiyoriy)</SectionTitle>
-                <LangTabs active={lang} onChange={setLang} />
-                <Input
-                  label={`Sarlavha (${lang.toUpperCase()})`}
-                  value={
-                    lang === "uz"
-                      ? editing.titleUz || ""
-                      : lang === "ru"
-                        ? editing.titleRu || ""
-                        : editing.titleEn || ""
-                  }
-                  onChange={(e) =>
-                    set(
-                      lang === "uz"
-                        ? "titleUz"
-                        : lang === "ru"
-                          ? "titleRu"
-                          : "titleEn",
-                      e.target.value,
-                    )
-                  }
-                  placeholder="Masalan: Bilim sari yo'l"
-                />
-                <div style={{ marginTop: 12 }}>
-                  <Textarea
-                    label={`Tavsif (${lang.toUpperCase()})`}
-                    value={
-                      lang === "uz"
-                        ? editing.descUz || ""
-                        : lang === "ru"
-                          ? editing.descRu || ""
-                          : editing.descEn || ""
-                    }
-                    onChange={(e) =>
-                      set(
-                        lang === "uz"
-                          ? "descUz"
-                          : lang === "ru"
-                            ? "descRu"
-                            : "descEn",
-                        e.target.value,
-                      )
-                    }
-                    placeholder="Slayd uchun qisqa tavsif (bo'sh bo'lsa umumiy matn ko'rsatiladi)"
-                    rows={3}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: 20,
+              alignItems: "start",
+            }}
+          >
+            {/* Left Column: Image */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <SectionTitle>Slayd rasmi</SectionTitle>
+              {editing.imageUrl ? (
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: 220,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    border: `1px solid ${C.border}`,
+                  }}
+                >
+                  <Image
+                    src={editing.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(max-width: 500px) 100vw, 444px"
+                    style={{ objectFit: "cover" }}
                   />
+                  <button
+                    onClick={() => set("imageUrl", "")}
+                    aria-label="Rasmni olib tashlash"
+                    style={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      background: "rgba(0,0,0,0.6)",
+                      border: "none",
+                      borderRadius: "50%",
+                      color: "white",
+                      cursor: "pointer",
+                      padding: 5,
+                      display: "flex",
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
                 </div>
-              </div>
+              ) : (
+                <label
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 10,
+                    padding: "40px 20px",
+                    border: `1px dashed ${C.border}`,
+                    borderRadius: 12,
+                    cursor: "pointer",
+                    color: C.textMuted,
+                    background: "rgba(255,255,255,0.02)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {uploadingImage ? (
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        border: `3px solid ${C.goldLight}`,
+                        borderTopColor: C.gold,
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                      }}
+                    />
+                  ) : (
+                    <Sliders size={32} color={C.textDim} />
+                  )}
+                  <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
+                    {uploadingImage
+                      ? "Yuklanmoqda..."
+                      : "Rasm tanlash uchun bosing"}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
+                    Keng formatdagi yuqori sifatli rasmlar
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                  />
+                </label>
+              )}
+            </div>
+
+            {/* Right Column: Text and Settings */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <SectionTitle>Slayd matni va holati</SectionTitle>
+              <LangTabs active={lang} onChange={setLang} />
+
+              <Input
+                label={`Sarlavha (${lang.toUpperCase()})`}
+                value={
+                  lang === "uz"
+                    ? editing.titleUz || ""
+                    : lang === "ru"
+                      ? editing.titleRu || ""
+                      : editing.titleEn || ""
+                }
+                onChange={(e) =>
+                  set(
+                    lang === "uz"
+                      ? "titleUz"
+                      : lang === "ru"
+                        ? "titleRu"
+                        : "titleEn",
+                    e.target.value,
+                  )
+                }
+                placeholder="Masalan: Bilim sari yo'l"
+              />
+
+              <Textarea
+                label={`Tavsif (${lang.toUpperCase()})`}
+                value={
+                  lang === "uz"
+                    ? editing.descUz || ""
+                    : lang === "ru"
+                      ? editing.descRu || ""
+                      : editing.descEn || ""
+                }
+                onChange={(e) =>
+                  set(
+                    lang === "uz"
+                      ? "descUz"
+                      : lang === "ru"
+                        ? "descRu"
+                        : "descEn",
+                    e.target.value,
+                  )
+                }
+                placeholder="Slayd uchun qisqa tavsif..."
+                rows={3}
+                style={{ minHeight: 70 }}
+              />
 
               <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
-                  gap: 16,
-                  alignItems: "center",
+                  gap: 12,
+                  alignItems: "end",
+                  marginTop: 2,
                 }}
               >
                 <Input
@@ -481,43 +490,32 @@ export default function AdminHeroPage() {
                   }
                 />
 
-                <div>
-                  <label
+                <label
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    cursor: "pointer",
+                    color: C.text,
+                    fontSize: "0.84rem",
+                    paddingBottom: 10,
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={editing.isActive}
+                    onChange={(e) => set("isActive", e.target.checked)}
                     style={{
-                      display: "block",
-                      color: C.textMuted,
-                      fontSize: "0.78rem",
-                      fontWeight: 600,
-                      marginBottom: 8,
-                    }}
-                  >
-                    Holati
-                  </label>
-                  <label
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
+                      accentColor: C.gold,
+                      width: 16,
+                      height: 16,
                       cursor: "pointer",
-                      color: C.text,
-                      fontSize: "0.88rem",
                     }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={editing.isActive}
-                      onChange={(e) => set("isActive", e.target.checked)}
-                      style={{
-                        accentColor: C.gold,
-                        width: 16,
-                        height: 16,
-                        cursor: "pointer",
-                      }}
-                    />
-                    Saytda ko&apos;rsatish (Faol)
-                  </label>
-                </div>
+                  />
+                  Faol ko&apos;rsatish
+                </label>
               </div>
+            </div>
           </div>
         )}
       </AdminModal>

@@ -219,7 +219,7 @@ export default function AdminAdmissionPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={600}
+        maxWidth={620}
         title={editing?.id ? "Qoidani tahrirlash" : "Yangi qabul qoidasi"}
         subtitle="Qabul jarayoni va talablar bandlari"
         footer={
@@ -236,10 +236,17 @@ export default function AdminAdmissionPage() {
         {error && <Alert type="error" message={error} />}
 
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
-              <LangTabs active={lang} onChange={setLang} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <SectionTitle>Ma&apos;lumotlar (til bo&apos;yicha)</SectionTitle>
+            <LangTabs active={lang} onChange={setLang} />
 
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 120px",
+                gap: 12,
+              }}
+            >
               <Input
                 label={`Sarlavha (${lang.toUpperCase()})`}
                 value={
@@ -261,30 +268,6 @@ export default function AdminAdmissionPage() {
                 }
                 placeholder="Masalan: Kerakli hujjatlar"
               />
-
-              <Textarea
-                label={`Matn tarkibi (${lang.toUpperCase()})`}
-                value={
-                  lang === "uz"
-                    ? editing.contentUz
-                    : lang === "ru"
-                      ? editing.contentRu
-                      : editing.contentEn
-                }
-                onChange={(e) =>
-                  set(
-                    lang === "uz"
-                      ? "contentUz"
-                      : lang === "ru"
-                        ? "contentRu"
-                        : "contentEn",
-                    e.target.value,
-                  )
-                }
-                placeholder="Bu bandning to'liq matnini kiriting. Xohlasangiz, yangi qatorlar tashlashingiz mumkin..."
-                style={{ minHeight: 180 }}
-              />
-
               <Input
                 label="Tartib raqami"
                 type="number"
@@ -294,8 +277,33 @@ export default function AdminAdmissionPage() {
                 }
               />
             </div>
-          )}
-        </AdminModal>
+
+            <Textarea
+              label={`Matn tarkibi (${lang.toUpperCase()})`}
+              value={
+                lang === "uz"
+                  ? editing.contentUz
+                  : lang === "ru"
+                    ? editing.contentRu
+                    : editing.contentEn
+              }
+              onChange={(e) =>
+                set(
+                  lang === "uz"
+                    ? "contentUz"
+                    : lang === "ru"
+                      ? "contentRu"
+                      : "contentEn",
+                  e.target.value,
+                )
+              }
+              placeholder="Bandning to'liq matni..."
+              rows={4}
+              style={{ minHeight: 110 }}
+            />
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 }

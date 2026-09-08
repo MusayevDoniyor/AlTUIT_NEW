@@ -289,7 +289,7 @@ export default function AdminLeadershipPage() {
       <AdminModal
         open={Boolean(editing)}
         onClose={close}
-        maxWidth={620}
+        maxWidth={780}
         title={editing?.id ? "Rahbariyat a'zosini tahrirlash" : "Yangi rahbariyat a'zosi"}
         subtitle="TATU akademik litseyi rahbariyati ma'lumotlari"
         footer={
@@ -304,10 +304,19 @@ export default function AdminLeadershipPage() {
         }
       >
         {editing && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {/* Multilingual */}
-              <SectionTitle>Ism va lavozim (til bo&apos;yicha)</SectionTitle>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gap: 20,
+              alignItems: "start",
+            }}
+          >
+            {/* Left: Info */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <SectionTitle>Rahbariyat ma&apos;lumotlari</SectionTitle>
               <LangTabs active={lang} onChange={setLang} />
+
               <div
                 style={{
                   display: "grid",
@@ -357,7 +366,6 @@ export default function AdminLeadershipPage() {
                 />
               </div>
 
-
               <div
                 style={{
                   display: "grid",
@@ -366,7 +374,7 @@ export default function AdminLeadershipPage() {
                 }}
               >
                 <Input
-                  label="Boshlang'ich harflar (initials)"
+                  label="Boshlang'ich harflar"
                   value={editing.initials}
                   onChange={(e) => set("initials", e.target.value)}
                   placeholder="A.S"
@@ -383,42 +391,47 @@ export default function AdminLeadershipPage() {
 
               {/* Color */}
               <div>
-                <SectionTitle>Rang</SectionTitle>
+                <SectionTitle>Mavzu rangi</SectionTitle>
                 <div style={{ display: "flex", gap: 8 }}>
                   {COLORS.map((c) => (
                     <div
                       key={c}
                       onClick={() => set("color", c)}
                       style={{
-                        width: 28,
-                        height: 28,
+                        width: 26,
+                        height: 26,
                         borderRadius: "50%",
                         background: c,
                         cursor: "pointer",
                         border:
                           editing.color === c
                             ? "3px solid white"
-                            : "3px solid transparent",
-                        transition: "border 0.2s",
+                            : "2px solid transparent",
+                        boxShadow:
+                          editing.color === c
+                            ? "0 0 8px rgba(255,255,255,0.4)"
+                            : "none",
+                        transition: "all 0.15s ease",
                       }}
                     />
                   ))}
                 </div>
               </div>
-
-              {/* Photo */}
-              <div>
-                <SectionTitle>Rasm</SectionTitle>
-                <ImageUpload
-                  currentUrl={editing.photoUrl || ""}
-                  onUpload={handleImageUpload}
-                  onRemove={() => set("photoUrl", "")}
-                  uploading={uploadingImage}
-                />
-              </div>
             </div>
-          )}
-        </AdminModal>
+
+            {/* Right: Photo */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <SectionTitle>Fotosurat</SectionTitle>
+              <ImageUpload
+                currentUrl={editing.photoUrl || ""}
+                onUpload={handleImageUpload}
+                onRemove={() => set("photoUrl", "")}
+                uploading={uploadingImage}
+              />
+            </div>
+          </div>
+        )}
+      </AdminModal>
     </div>
   );
 }
