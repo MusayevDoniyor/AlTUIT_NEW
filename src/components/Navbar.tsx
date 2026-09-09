@@ -18,8 +18,8 @@ import {
 } from "react-icons/fa";
 
 interface NavbarProps {
-  lang: Lang;
-  onLangChange: (l: Lang) => void;
+  lang?: Lang;
+  onLangChange?: (l: Lang) => void;
 }
 
 const navItems = (t: Record<string, string>) => [
@@ -46,7 +46,7 @@ const navItems = (t: Record<string, string>) => [
   { label: t.nav_contact, href: "/contact" },
 ];
 
-export default function Navbar({ lang, onLangChange }: NavbarProps) {
+export default function Navbar({ lang = "uz" }: NavbarProps) {
   const t = translations[lang] as unknown as Record<string, string>;
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -327,62 +327,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
 
             {/* ACTIONS */}
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div
-                className="hidden-mobile"
-                style={{
-                  display: "flex",
-                  gap: 6,
-                  alignItems: "center",
-                  borderRight: "1px solid #e2e8f0",
-                  paddingRight: 14,
-                }}
-              >
-                {(["uz", "ru", "en"] as Lang[]).map((l) => {
-                  const isActive = lang === l;
-                  return (
-                    <button
-                      key={l}
-                      onClick={() => onLangChange(l)}
-                      onMouseEnter={(e) => {
-                        if (!isActive) {
-                          (e.currentTarget as HTMLButtonElement).style.color =
-                            "#c8a96e";
-                          (
-                            e.currentTarget as HTMLButtonElement
-                          ).style.background = "rgba(200,169,110,0.1)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActive) {
-                          (e.currentTarget as HTMLButtonElement).style.color =
-                            "rgba(0,33,71,0.6)";
-                          (
-                            e.currentTarget as HTMLButtonElement
-                          ).style.background = "transparent";
-                        }
-                      }}
-                      style={{
-                        background: isActive
-                          ? "rgba(200,169,110,0.18)"
-                          : "transparent",
-                        color: isActive ? "#c8a96e" : "rgba(0,33,71,0.6)",
-                        fontWeight: isActive ? 700 : 600,
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "4px 8px",
-                        fontSize: "0.75rem",
-                        cursor: "pointer",
-                        transition: "all 0.2s",
-                        textTransform: "uppercase",
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      {l}
-                    </button>
-                  );
-                })}
-              </div>
-
               <a
                 href={`tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`}
                 className="hidden-mobile"
@@ -471,64 +415,6 @@ export default function Navbar({ lang, onLangChange }: NavbarProps) {
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
-          {/* Mobile Language Switcher */}
-          <div
-            style={{
-              display: "flex",
-              gap: 8,
-              justifyContent: "center",
-              padding: "0 30px 20px 30px",
-              borderBottom: "1px solid #f1f5f9",
-              marginBottom: "10px",
-            }}
-          >
-            {(["uz", "ru", "en"] as Lang[]).map((l) => {
-              const isActive = lang === l;
-              return (
-                <button
-                  key={l}
-                  onClick={() => {
-                    onLangChange(l);
-                    setMobileOpen(false);
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.color =
-                        "#c8a96e";
-                      (e.currentTarget as HTMLButtonElement).style.background =
-                        "rgba(200,169,110,0.1)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      (e.currentTarget as HTMLButtonElement).style.color =
-                        "rgba(0,33,71,0.6)";
-                      (e.currentTarget as HTMLButtonElement).style.background =
-                        "transparent";
-                    }
-                  }}
-                  style={{
-                    background: isActive
-                      ? "rgba(200,169,110,0.18)"
-                      : "transparent",
-                    color: isActive ? "#c8a96e" : "rgba(0,33,71,0.6)",
-                    fontWeight: isActive ? 700 : 600,
-                    border: "none",
-                    borderRadius: 8,
-                    padding: "6px 14px",
-                    fontSize: "0.82rem",
-                    cursor: "pointer",
-                    transition: "all 0.2s",
-                    textTransform: "uppercase",
-                    fontFamily: "inherit",
-                  }}
-                >
-                  {l.toUpperCase()}
-                </button>
-              );
-            })}
-          </div>
-
           {items.map((item, i) => (
             <div key={i}>
               {item.children ? (
