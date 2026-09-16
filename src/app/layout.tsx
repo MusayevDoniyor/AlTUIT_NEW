@@ -36,8 +36,9 @@ export const metadata: Metadata = {
   authors: [
     { name: siteConfig.name },
     { name: "Musayev Doniyor", url: "https://github.com/MusayevDoniyor" },
+    { name: "Abduvaliyev Otabek", url: "https://github.com/OtabekAbduvaliyev" },
   ],
-  creator: "Musayev Doniyor",
+  creator: ["Musayev Doniyor", "Abduvaliyev Otabek"],
   publisher: siteConfig.shortName,
   metadataBase: new URL(siteConfig.url),
   alternates: {
@@ -116,8 +117,8 @@ export default function RootLayout({
               logo: `${siteConfig.url}/logo.png`,
               creator: {
                 "@type": "Person",
-                name: "Musayev Doniyor",
-                url: "https://github.com/MusayevDoniyor",
+                name: "Abduvaliyev Otabek",
+                url: "https://github.com/OtabekAbduvaliyev",
               },
               description:
                 "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
