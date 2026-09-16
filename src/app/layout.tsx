@@ -117,8 +117,8 @@ export default function RootLayout({
               logo: `${siteConfig.url}/logo.png`,
               creator: {
                 "@type": "Person",
-                name: "Abduvaliyev Otabek",
-                url: "https://github.com/OtabekAbduvaliyev",
+                name: "Musayev Doniyor & Abduvaliyev Otabek",
+                url: "https://github.com/MusayevDoniyor",
               },
               description:
                 "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
