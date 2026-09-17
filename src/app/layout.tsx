@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.shortName}`,
   },
   description:
-    "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi — matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi. Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlari. 9-sinf bitiruvchilari uchun 2 yillik ta'lim. Toshkent, Yunusobod tumani.",
+    "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi — matematika, fizika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi. Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlari. 9-sinf bitiruvchilari uchun 2 yillik ta'lim. Toshkent, Yunusobod tumani.",
   keywords: [
     "TATU akademik litsey",
     "Muhammad al-Xorazmiy litsey",
@@ -27,7 +27,6 @@ export const metadata: Metadata = {
     "litsey Yunusobod",
     "Bogishamol 112 litsey",
     "matematika fizika litsey Toshkent",
-    "informatika litsey",
     "TATU litsey kirish imtihoni",
     "akademik litsey o'zbek",
     "litsey robototexnika",
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
     { name: "Musayev Doniyor", url: "https://github.com/MusayevDoniyor" },
     { name: "Abduvaliyev Otabek", url: "https://github.com/OtabekAbduvaliyev" },
   ],
-  creator: ["Musayev Doniyor", "Abduvaliyev Otabek"],
+  creator: "Musayev Doniyor & Abduvaliyev Otabek",
   publisher: siteConfig.shortName,
   metadataBase: new URL(siteConfig.url),
   alternates: {
@@ -121,7 +120,7 @@ export default function RootLayout({
                 url: "https://github.com/MusayevDoniyor",
               },
               description:
-                "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
+                "Matematika, fizika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Bog'ishamol ko'chasi, 112",

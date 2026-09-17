@@ -10,7 +10,6 @@ export const metadata: Metadata = {
     "akademik litsey Toshkent",
     "litsey qabul 2026",
     "Muhammad al-Xorazmiy litseyi",
-    "matematika fizika informatika litsey",
   ],
   alternates: {
     canonical: siteConfig.url,

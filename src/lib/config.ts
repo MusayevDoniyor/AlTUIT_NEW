@@ -5,7 +5,7 @@ export const siteConfig = {
   creator: ["Musayev Doniyor", "Abduvaliyev Otabek"],
   developerUrl: ["https://github.com/MusayevDoniyor", "https://github.com/OtabekAbduvaliyev"],
   description:
-    "Matematika, fizika, informatika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
+    "Matematika, fizika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
   email: "info@tatual.uz",
   phone: "+998 71 235-03-69",
   phoneMobile: "+998 93 103-32-45",
