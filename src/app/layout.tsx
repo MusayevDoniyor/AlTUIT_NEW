@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.name,
     description:
-      "Aniq fanlar (texnika) va aniq fanlar (iqtisod) yo'nalishlarida 2 yillik intensiv ta'lim. Robototexnika, Web-dasturlash, Cisco, IELTS to'garaklari. Manzil: Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
+      "Aniq fanlar (texnika va iqtisodiyot) yo'nalishlarida 2 yillik chuqurlashtirilgan akademik ta'lim. Fan olimpiadalari va xorijiy tillarga ixtisoslashgan to'garaklar. Manzil: Toshkent shahri, Yunusobod tumani, Bog'ishamol ko'chasi, 112-uy.",
     url: siteConfig.url,
     siteName: siteConfig.shortName,
     locale: "uz_UZ",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description:
-      "Aniq fanlar yo'nalishida 2 yillik intensiv ta'lim. Toshkent, Yunusobod, Bog'ishamol ko'chasi, 112.",
+      "Aniq fanlar (texnika va iqtisodiyot) yo'nalishida 2 yillik chuqurlashtirilgan akademik ta'lim. Toshkent, Bog'ishamol ko'chasi, 112-uy.",
     images: [`${siteConfig.url}/og-image.jpg`],
   },
   robots: {
@@ -123,7 +123,7 @@ export default function RootLayout({
                 "Matematika, fizika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "Bog'ishamol ko'chasi, 112",
+                streetAddress: "Bog'ishamol ko'chasi, 112-uy",
                 addressLocality: "Toshkent",
                 addressRegion: "Yunusobod tumani",
                 addressCountry: "UZ",

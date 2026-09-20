@@ -84,7 +84,7 @@ export default function Footer({ lang }: FooterProps) {
                     maxWidth: 210,
                   }}
                 >
-                  Muhammad Al-Xorazmiy nomidagi
+                  Muhammad al-Xorazmiy nomidagi
                 </div>
                 <div
                   style={{
@@ -96,7 +96,7 @@ export default function Footer({ lang }: FooterProps) {
                     lineHeight: 1.2,
                   }}
                 >
-                  TATU akademik litseyi
+                  TATU Akademik Litseyi
                 </div>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function Footer({ lang }: FooterProps) {
                   color="#c8a96e"
                   style={{ flexShrink: 0, marginTop: 2 }}
                 />
-                <span style={{ fontSize: "0.84rem" }}>19, 38, 50, 63, 115</span>
+                <span style={{ fontSize: "0.84rem" }}>Avtobuslar: 19, 38, 50, 63, 115</span>
               </div>
 
               <div

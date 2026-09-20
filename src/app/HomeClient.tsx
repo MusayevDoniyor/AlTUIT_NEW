@@ -14,6 +14,8 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  BookOpen,
+  Clock,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -87,52 +89,26 @@ function HeroSlide({
           fill
           priority={priority}
           className="object-cover"
-          style={{ zIndex: -1 }}
+          style={{ zIndex: -1, objectPosition: "center center" }}
           sizes="100vw"
         />
       )}
-      <div
-        className="carousel-overlay"
-        style={{
-          background:
-            "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
-        }}
-      />
-      <div
-        className="container-custom"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+      <div className="carousel-overlay" />
+      <div className="container-custom hero-slide-wrapper">
         <div style={{ maxWidth: 850 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 12,
-                marginBottom: 28,
-                background: "rgba(255,255,255,0.08)",
-                backdropFilter: "blur(5px)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                borderRadius: 100,
-                padding: "8px 24px",
-              }}
-            >
+            <div className="hero-badge">
               <div
                 style={{
                   width: 8,
                   height: 8,
                   borderRadius: "50%",
                   background: "#c8a96e",
+                  flexShrink: 0,
                 }}
               />
               <span
@@ -148,38 +124,19 @@ function HeroSlide({
               </span>
             </div>
 
-            <h1
-              style={{
-                color: "white",
-                fontWeight: 900,
-                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                lineHeight: 1.1,
-                marginBottom: 25,
-              }}
-            >
+            <h1 className="hero-title">
               {title || t.hero_title}
             </h1>
 
-            <p
-              style={{
-                color: "rgba(255,255,255,0.85)",
-                fontSize: "clamp(1.1rem, 1.5vw, 1.3rem)",
-                lineHeight: 1.6,
-                marginBottom: 40,
-                maxWidth: 650,
-              }}
-            >
+            <p className="hero-subtitle">
               {subtitle || t.hero_subtitle}
             </p>
 
-            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+            <div className="hero-actions">
               <Link
                 href="/admission"
-                className="btn-primary"
+                className="btn-primary hero-btn"
                 style={{
-                  padding: "18px 40px",
-                  borderRadius: 12,
-                  fontSize: "1rem",
                   background: "#c8a96e",
                   color: "#002147",
                 }}
@@ -188,11 +145,8 @@ function HeroSlide({
               </Link>
               <Link
                 href="/about"
-                className="btn-outline"
+                className="btn-outline hero-btn"
                 style={{
-                  padding: "18px 40px",
-                  borderRadius: 12,
-                  fontSize: "1rem",
                   borderColor: "rgba(255,255,255,0.4)",
                   borderWidth: 2,
                 }}
@@ -316,6 +270,8 @@ export default function Home() {
           if (s.key === "teachers") Icon = Users2;
           else if (s.key === "uni_rate") Icon = TrendingUp;
           else if (s.key === "olympiad_winners") Icon = Trophy;
+          else if (s.key === "clubs") Icon = BookOpen;
+          else if (s.key === "duration") Icon = Clock;
           return {
             icon: Icon,
             value: s.value,
@@ -325,7 +281,56 @@ export default function Home() {
             color: s.color,
           };
         })
-      : [];
+      : [
+          {
+            icon: GraduationCap,
+            value: 450,
+            suffix: "",
+            label:
+              lang === "uz"
+                ? "O'quv o'rinlari"
+                : lang === "ru"
+                  ? "Учебных мест"
+                  : "Student Capacity",
+            color: "#1a3a6e",
+          },
+          {
+            icon: BookOpen,
+            value: 26,
+            suffix: "",
+            label:
+              lang === "uz"
+                ? "To'garaklar"
+                : lang === "ru"
+                  ? "Кружков и секций"
+                  : "Specialized Clubs",
+            color: "#2d5bb5",
+          },
+          {
+            icon: Clock,
+            value: 2,
+            suffix: "",
+            label:
+              lang === "uz"
+                ? "Yillik ta'lim muddati"
+                : lang === "ru"
+                  ? "Года обучения"
+                  : "Years of Study",
+            color: "#c8a96e",
+          },
+          {
+            icon: TrendingUp,
+            value: 94,
+            suffix: "%+",
+            label:
+              lang === "uz"
+                ? "OTMga kirish foizi"
+                : lang === "ru"
+                  ? "Поступление в вузы"
+                  : "University Admission Rate",
+            color: "#1d7a55",
+          },
+        ];
 
   const activeNews = dbNews;
 
@@ -336,7 +341,7 @@ export default function Home() {
       {/* ===== HERO CAROUSEL (crossfade) ===== */}
       <section
         className="carousel-container"
-        style={{ height: "100vh", background: "#002147", overflow: "hidden" }}
+        style={{ background: "#002147", overflow: "hidden" }}
       >
         {/* Prev slide fading out */}
         <div
@@ -358,15 +363,7 @@ export default function Home() {
               sizes="100vw"
             />
           )}
-          {prevImage && (
-            <div
-              className="carousel-overlay"
-              style={{
-                background:
-                  "linear-gradient(to right, rgba(0,33,71,0.95) 20%, rgba(0,33,71,0.3) 100%)",
-              }}
-            />
-          )}
+          {prevImage && <div className="carousel-overlay" />}
         </div>
 
         {/* Current slide fading in */}
@@ -388,30 +385,18 @@ export default function Home() {
         </div>
 
         {/* Navigation Indicators & Arrows */}
-        <div
-          className="container-custom"
-          style={{
-            position: "absolute",
-            bottom: 60,
-            left: 0,
-            right: 0,
-            zIndex: 10,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+        <div className="container-custom hero-controls">
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             {activeSlides.map((_, i: number) => (
               <button
                 key={i}
                 onClick={() => goTo(i)}
                 aria-label={`Slayd ${i + 1}`}
                 style={{
-                  width: current === i ? 40 : 10,
-                  height: 10,
-                  borderRadius: 5,
-                  background: current === i ? "#c8a96e" : "rgba(255,255,255,0.3)",
+                  width: current === i ? 36 : 8,
+                  height: 8,
+                  borderRadius: 4,
+                  background: current === i ? "#c8a96e" : "rgba(255,255,255,0.35)",
                   border: "none",
                   cursor: "pointer",
                   transition: "all 0.4s",
@@ -421,7 +406,7 @@ export default function Home() {
           </div>
 
           {activeSlides.length > 1 && (
-            <div style={{ display: "flex", gap: 8 }}>
+            <div className="hero-nav-arrows" style={{ display: "flex", gap: 8 }}>
               <button
                 onClick={prev}
                 aria-label="Oldingi slayd"

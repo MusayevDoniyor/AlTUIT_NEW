@@ -109,10 +109,10 @@ export default function AboutClient() {
             : "Our Mission",
       desc:
         lang === "uz"
-          ? "Iqtidorli yoshlarni topib, ularni aniq fanlar bo'yicha ilmiy va amaliy tayyorgarlikka yo'naltirish."
+          ? "Bilimga intiluvchan yoshlarning intellektual salohiyatini to‘liq ro‘yobga chiqarish va aniq fanlar bo‘yicha chuqur fundamental ta’lim berish."
           : lang === "ru"
-            ? "Найти талантливую молодежь и направить её на научную и практическую подготовку по точным наукам."
-            : "Find talented youth and guide them into scientific and practical training in exact sciences.",
+            ? "Всестороннее развитие интеллектуального потенциала целеустремленной молодежи и качественное академическое образование."
+            : "Developing the intellectual potential of ambitious youth and delivering high-level fundamental education.",
     },
     {
       icon: Eye,
@@ -120,36 +120,36 @@ export default function AboutClient() {
         lang === "uz" ? "Qadriyatlar" : lang === "ru" ? "Ценности" : "Values",
       desc:
         lang === "uz"
-          ? "Nazokat, mas'uliyat, hamkorlik va o'zbek milliy an'analariga hurmat."
+          ? "Akademik halollik, yuksak mas'uliyat, intellektual salohiyat va milliy qadriyatlarga sodiqlik."
           : lang === "ru"
-            ? "Вежливость, ответственность, сотрудничество и уважение к узбекским национальным традициям."
-            : "Courtesy, responsibility, collaboration and respect for Uzbek national traditions.",
+            ? "Академическая честность, высокая ответственность, интеллектуальное развитие и уважение к ценностям."
+            : "Academic integrity, responsibility, intellectual pursuit and cultural respect.",
     },
     {
       icon: Star,
       title:
-        lang === "uz" ? "Natijalar" : lang === "ru" ? "Результаты" : "Results",
+        lang === "uz" ? "Natijadorlik" : lang === "ru" ? "Результативность" : "Results",
       desc:
         lang === "uz"
-          ? "Bitiruvchilarimiz TATU va boshqa nufuzli oliygohlarga muvaffaqiyatli kirishadi."
+          ? "Bitiruvchilarimizning mutlaq ko'pchiligi TATU va nufuzli milliy hamda xorijiy oliygohlarga talabalikka qabul qilinadi."
           : lang === "ru"
-            ? "Наши выпускники успешно поступают в ТУИТ и другие престижные вузы."
-            : "Our graduates successfully enter TATU and other prestigious universities.",
+            ? "Подавляющее большинство выпускников успешно поступают в ТУИТ и ведущие зарубежные университеты."
+            : "The vast majority of our graduates gain admission to TUIT and leading international universities.",
     },
     {
       icon: BookOpen,
       title:
         lang === "uz"
-          ? "O'quv jarayoni"
+          ? "O'quv muhiti"
           : lang === "ru"
-            ? "Процесс обучения"
-            : "Learning Process",
+            ? "Образовательная среда"
+            : "Learning Environment",
       desc:
         lang === "uz"
-          ? "Amaliy mashg'ulotlar, laboratoriya tajribalari va ta'lim resurslariga keng kirish imkoniyati."
+          ? "Zamonaviy kompyuter laboratoriyalari, amaliy mashg'ulotlar va zamonaviy ta'lim texnologiyalari."
           : lang === "ru"
-            ? "Практические занятия, лабораторные эксперименты и широкий доступ к учебным ресурсам."
-            : "Practical lessons, laboratory experiments and broad access to learning resources.",
+            ? "Современные компьютерные лаборатории, практические занятия и передовые образовательные технологии."
+            : "Modern computer laboratories, hands-on learning and innovative educational technologies.",
     },
   ];
 

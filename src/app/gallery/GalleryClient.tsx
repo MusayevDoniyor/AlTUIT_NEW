@@ -10,14 +10,32 @@ import Footer from "@/components/Footer";
 import { PubCard } from "@/components/Skeleton";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
-const CATEGORIES = [
-  { label: "Hammasi", value: "" },
-  { label: "Tadbirlar", value: "Tadbirlar" },
-  { label: "O'quv jarayoni", value: "O'quv jarayoni" },
-  { label: "Binolar & Sharoitlar", value: "Binolar" },
-  { label: "Sport hayoti", value: "Sport" },
-  { label: "Boshqa", value: "Boshqa" },
-];
+const CATEGORIES: Record<string, { label: string; value: string }[]> = {
+  uz: [
+    { label: "Hammasi", value: "" },
+    { label: "Tadbirlar", value: "Tadbirlar" },
+    { label: "O'quv jarayoni", value: "O'quv jarayoni" },
+    { label: "Bino va sharoitlar", value: "Binolar" },
+    { label: "Sport hayoti", value: "Sport" },
+    { label: "Boshqa", value: "Boshqa" },
+  ],
+  ru: [
+    { label: "Все", value: "" },
+    { label: "Мероприятия", value: "Tadbirlar" },
+    { label: "Учебный процесс", value: "O'quv jarayoni" },
+    { label: "Здания и условия", value: "Binolar" },
+    { label: "Спорт", value: "Sport" },
+    { label: "Другое", value: "Boshqa" },
+  ],
+  en: [
+    { label: "All", value: "" },
+    { label: "Events", value: "Tadbirlar" },
+    { label: "Academic Process", value: "O'quv jarayoni" },
+    { label: "Campus & Facilities", value: "Binolar" },
+    { label: "Sports", value: "Sport" },
+    { label: "Other", value: "Boshqa" },
+  ],
+};
 
 export default function GalleryClient() {
   const [lang, setLang] = useLang();
@@ -87,7 +105,7 @@ export default function GalleryClient() {
               marginBottom: 40,
             }}
           >
-            {CATEGORIES.map((c) => (
+            {(CATEGORIES[lang] || CATEGORIES.uz).map((c) => (
               <button
                 key={c.value}
                 onClick={() => setCategory(c.value)}

@@ -12,7 +12,8 @@ export const metadata: Metadata = {
     "aniq fanlar texnika",
     "aniq fanlar iqtisod",
     "litsey hujjatlar",
-    "my.gov.uz litsey qabul",
+    "my.edu.uz litsey qabul",
+    "litsey qabul nizomi",
   ],
   alternates: {
     canonical: `${siteConfig.url}/admission`,

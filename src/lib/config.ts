@@ -9,7 +9,7 @@ export const siteConfig = {
   email: "info@tatual.uz",
   phone: "+998 71 235-03-69",
   phoneMobile: "+998 93 103-32-45",
-  address: "Toshkent, Yunusobod tumani, Bog'ishamol ko'chasi, 112",
+  address: "Toshkent shahri, Yunusobod tumani, Bog'ishamol ko'chasi, 112-uy",
   telegram: "https://t.me/tatu_akademik_litseyi",
   instagram: "https://www.instagram.com/tatu_lyceum/",
 };
