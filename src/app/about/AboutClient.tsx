@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { PubSkeleton } from "@/components/Skeleton";
+import { PubSkeleton, LeadershipCardSkeleton } from "@/components/Skeleton";
 
 function DefaultAvatar() {
   return (
@@ -454,9 +454,7 @@ export default function AboutClient() {
             }}
           >
             {loading ? (
-              <div style={{ gridColumn: "1 / -1" }}>
-                <PubSkeleton />
-              </div>
+              [1, 2, 3].map((i) => <LeadershipCardSkeleton key={i} />)
             ) : dbLeadership.length === 0 ? (
               <p
                 style={{

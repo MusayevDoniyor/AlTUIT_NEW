@@ -7,7 +7,7 @@ import { getGallery, type GalleryItem } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { PubCard } from "@/components/Skeleton";
+import { GalleryCardSkeleton } from "@/components/Skeleton";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 
 const CATEGORIES: Record<string, { label: string; value: string }[]> = {
@@ -141,9 +141,7 @@ export default function GalleryClient() {
               }}
             >
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} style={{ aspectRatio: "4/3" }}>
-                  <PubCard />
-                </div>
+                <GalleryCardSkeleton key={i} />
               ))}
             </div>
           ) : filtered.length === 0 ? (

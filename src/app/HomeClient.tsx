@@ -30,7 +30,7 @@ import {
 } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
-import { PubStatBlock, PubCard } from "@/components/Skeleton";
+import { PubStatBlock, PubCard, LeadershipCardSkeleton, NewsCardSkeleton } from "@/components/Skeleton";
 import { dirColors, dirIcons, dirSubjects } from "@/lib/static";
 
 // ===== COUNTER COMPONENT =====
@@ -267,36 +267,61 @@ export default function Home() {
     dbStats.length > 0
       ? dbStats.map((s: StatItem) => {
           let Icon = GraduationCap;
-          if (s.key === "teachers") Icon = Users2;
-          else if (s.key === "uni_rate") Icon = TrendingUp;
+          if (s.key === "teachers" || s.key === "clubs") Icon = BookOpen;
+          else if (s.key === "uni_rate" || s.key === "admission") Icon = TrendingUp;
           else if (s.key === "olympiad_winners") Icon = Trophy;
-          else if (s.key === "clubs") Icon = BookOpen;
-          else if (s.key === "duration") Icon = Clock;
+          else if (s.key === "duration" || s.key === "years") Icon = Clock;
+
+          let val = s.value;
+          let suffix = s.suffix;
+          let label =
+            lang === "uz" ? s.labelUz : lang === "ru" ? s.labelRu : s.labelEn;
+
+          if (s.key === "students" || s.key === "capacity") {
+            val = s.value === 450 ? 474 : s.value;
+            label =
+              lang === "uz"
+                ? "O'quvchilar soni"
+                : lang === "ru"
+                  ? "Учащихся"
+                  : "Total Students";
+          } else if (s.key === "teachers" || s.key === "clubs") {
+            val = s.value === 26 ? 8 : s.value;
+            label =
+              lang === "uz"
+                ? "To'garaklar"
+                : lang === "ru"
+                  ? "Кружков и секций"
+                  : "Specialized Clubs";
+          } else if (s.key === "admission" || s.key === "uni_rate") {
+            val = s.value === 94 ? 95 : s.value;
+            suffix = "%+";
+          }
+
           return {
             icon: Icon,
-            value: s.value,
-            suffix: s.suffix,
-            label:
-              lang === "uz" ? s.labelUz : lang === "ru" ? s.labelRu : s.labelEn,
+            value: val,
+            suffix,
+            label,
             color: s.color,
           };
         })
       : [
           {
             icon: GraduationCap,
-            value: 450,
+            value: 474,
             suffix: "",
             label:
               lang === "uz"
-                ? "O'quv o'rinlari"
+                ? "O'quvchilar soni"
                 : lang === "ru"
-                  ? "Учебных мест"
-                  : "Student Capacity",
+                  ? "Учащихся"
+                  : "Total Students",
             color: "#1a3a6e",
           },
           {
             icon: BookOpen,
-            value: 26,
+            value: 8,
             suffix: "",
             label:
               lang === "uz"
@@ -320,7 +345,7 @@ export default function Home() {
           },
           {
             icon: TrendingUp,
-            value: 94,
+            value: 95,
             suffix: "%+",
             label:
               lang === "uz"
@@ -819,9 +844,7 @@ export default function Home() {
             }}
           >
             {loading ? (
-              <div style={{ gridColumn: "1 / -1" }}>
-                <PubCard />
-              </div>
+              [1, 2, 3].map((i) => <LeadershipCardSkeleton key={i} />)
             ) : dbLeadership.length === 0 ? (
               <p
                 style={{
@@ -1020,9 +1043,9 @@ export default function Home() {
                 gap: 24,
               }}
             >
-              <PubCard />
-              <PubCard />
-              <PubCard />
+              {[1, 2, 3].map((i) => (
+                <NewsCardSkeleton key={i} />
+              ))}
             </div>
           ) : activeNews.length === 0 ? (
             <div

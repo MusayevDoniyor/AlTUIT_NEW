@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import { getNews, getNewsMainImage } from "@/lib/db";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
-import { PubCard } from "@/components/Skeleton";
+import { NewsCardSkeleton } from "@/components/Skeleton";
 
 export default function NewsClient() {
   const [lang, setLang] = useLang();
@@ -38,47 +38,6 @@ export default function NewsClient() {
     ).toLowerCase();
     return title.includes(q) || desc.includes(q);
   });
-
-  if (loading) {
-    return (
-      <main>
-        <Navbar lang={lang} onLangChange={setLang} />
-        <div className="page-banner" style={{ paddingTop: 140 }}>
-          <div
-            className="container-custom"
-            style={{ position: "relative", zIndex: 1 }}
-          >
-            <h1
-              style={{
-                color: "white",
-                fontWeight: 900,
-                fontSize: "clamp(2rem,5vw,3rem)",
-                marginBottom: 12,
-              }}
-            >
-              {t.news_title}
-            </h1>
-          </div>
-        </div>
-        <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
-          <div className="container-custom">
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))",
-                gap: 28,
-              }}
-            >
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <PubCard key={i} />
-              ))}
-            </div>
-          </div>
-        </section>
-        <Footer lang={lang} />
-      </main>
-    );
-  }
 
   return (
     <main>
@@ -187,7 +146,19 @@ export default function NewsClient() {
             />
           </div>
 
-          {filteredNews.length === 0 ? (
+          {loading ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))",
+                gap: 28,
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <NewsCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : filteredNews.length === 0 ? (
             <div
               style={{ textAlign: "center", padding: "48px 0", width: "100%" }}
             >

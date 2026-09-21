@@ -9,7 +9,7 @@ import { Building2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getDepartments, getTeachers, DepartmentItem } from "@/lib/db";
-import { PubBlock } from "@/components/Skeleton";
+import { DepartmentCardSkeleton } from "@/components/Skeleton";
 
 function DefaultAvatar() {
   return (
@@ -80,8 +80,8 @@ export default function DepartmentsClient() {
       <section style={{ padding: "80px 0", background: "#f8f9fc" }}>
         <div className="container-custom">
           {loading ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 700, margin: "0 auto" }}>
-              {[1, 2, 3].map((i) => <PubBlock key={i} lines={3} height={16} />)}
+            <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 860, margin: "0 auto" }}>
+              {[1, 2, 3].map((i) => <DepartmentCardSkeleton key={i} />)}
             </div>
           ) : depts.length === 0 ? (
             <div style={{ textAlign: "center", padding: "48px 0", color: "#6b7280" }}>

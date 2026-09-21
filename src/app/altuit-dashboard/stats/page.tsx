@@ -91,16 +91,16 @@ export default function AdminStatsPage() {
     const initialStats: StatItem[] = [
       {
         key: "capacity",
-        value: 450,
+        value: 474,
         suffix: "",
-        labelUz: "O'quv o'rinlari",
-        labelRu: "Учебных мест",
-        labelEn: "Student Capacity",
+        labelUz: "O'quvchilar soni",
+        labelRu: "Учащихся",
+        labelEn: "Total Students",
         color: "#1a3a6e",
       },
       {
         key: "clubs",
-        value: 26,
+        value: 8,
         suffix: "",
         labelUz: "To'garaklar",
         labelRu: "Кружков и секций",
@@ -118,7 +118,7 @@ export default function AdminStatsPage() {
       },
       {
         key: "uni_rate",
-        value: 94,
+        value: 95,
         suffix: "%+",
         labelUz: "OTMga kirish foizi",
         labelRu: "Поступление в вузы",
