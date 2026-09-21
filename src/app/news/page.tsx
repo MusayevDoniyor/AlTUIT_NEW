@@ -42,5 +42,32 @@ export const metadata: Metadata = {
 };
 
 export default function NewsPage() {
-  return <NewsClient />;
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Bosh sahifa",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Yangiliklar",
+        item: `${siteConfig.url}/news`,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <NewsClient />
+    </>
+  );
 }

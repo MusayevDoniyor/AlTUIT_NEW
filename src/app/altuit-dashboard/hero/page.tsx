@@ -7,7 +7,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  X,
   Check,
   Eye,
   EyeOff,
@@ -36,6 +35,7 @@ import {
   C,
   spinStyle,
   TableSkeleton,
+  ImageUpload,
 } from "../_components/ui";
 
 const EMPTY: Omit<HeroSlideItem, "id"> = {
@@ -85,14 +85,14 @@ export default function AdminHeroPage() {
     setError("");
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0] || !editing) return;
+  const handleImageUpload = async (file: File) => {
+    if (!editing) return;
     setUploadingImage(true);
     try {
-      const url = await uploadImage(e.target.files[0], "hero");
+      const url = await uploadImage(file, "hero");
       setEditing((prev) => (prev ? { ...prev, imageUrl: url } : prev));
     } catch {
-      setError("Rasm yuklashda xatolik yuz berdi");
+      showToast("error", "Rasm yuklashda xatolik yuz berdi");
     } finally {
       setUploadingImage(false);
     }
@@ -334,91 +334,12 @@ export default function AdminHeroPage() {
             {/* Left Column: Image */}
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <SectionTitle>Slayd rasmi</SectionTitle>
-              {editing.imageUrl ? (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: 220,
-                    borderRadius: 12,
-                    overflow: "hidden",
-                    border: `1px solid ${C.border}`,
-                  }}
-                >
-                  <Image
-                    src={editing.imageUrl}
-                    alt=""
-                    fill
-                    sizes="(max-width: 500px) 100vw, 444px"
-                    style={{ objectFit: "cover" }}
-                  />
-                  <button
-                    onClick={() => set("imageUrl", "")}
-                    aria-label="Rasmni olib tashlash"
-                    style={{
-                      position: "absolute",
-                      top: 8,
-                      right: 8,
-                      background: "rgba(0,0,0,0.6)",
-                      border: "none",
-                      borderRadius: "50%",
-                      color: "white",
-                      cursor: "pointer",
-                      padding: 5,
-                      display: "flex",
-                    }}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-              ) : (
-                <label
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 10,
-                    padding: "40px 20px",
-                    border: `1px dashed ${C.border}`,
-                    borderRadius: 12,
-                    cursor: "pointer",
-                    color: C.textMuted,
-                    background: "rgba(255,255,255,0.02)",
-                    transition: "all 0.2s",
-                  }}
-                >
-                  {uploadingImage ? (
-                    <div
-                      style={{
-                        width: 28,
-                        height: 28,
-                        border: `3px solid ${C.goldLight}`,
-                        borderTopColor: C.gold,
-                        borderRadius: "50%",
-                        animation: "spin 0.8s linear infinite",
-                      }}
-                    />
-                  ) : (
-                    <Sliders size={32} color={C.textDim} />
-                  )}
-                  <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>
-                    {uploadingImage
-                      ? "Yuklanmoqda..."
-                      : "Rasm tanlash uchun bosing"}
-                  </span>
-                  <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>
-                    Keng formatdagi yuqori sifatli rasmlar
-                  </span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                  />
-                </label>
-              )}
+              <ImageUpload
+                currentUrl={editing.imageUrl}
+                onUpload={handleImageUpload}
+                onRemove={() => set("imageUrl", "")}
+                uploading={uploadingImage}
+              />
             </div>
 
             {/* Right Column: Text and Settings */}

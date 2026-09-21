@@ -42,6 +42,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   alternates: {
     canonical: siteConfig.url,
+    languages: {
+      "uz-UZ": siteConfig.url,
+      "ru-RU": `${siteConfig.url}?lang=ru`,
+      "en-US": `${siteConfig.url}?lang=en`,
+      "x-default": siteConfig.url,
+    },
+  },
+  other: {
+    "geo.region": "UZ-TK",
+    "geo.placename": "Toshkent",
+    "geo.position": "41.3526;69.2887",
+    ICBM: "41.3526, 69.2887",
   },
   openGraph: {
     title: siteConfig.name,
@@ -111,16 +123,23 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "EducationalOrganization",
               name: "Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi",
-              alternateName: "TATU Akademik Litsey",
+              alternateName: ["TATU Akademik Litsey", "TATU AL", "AlTUIT"],
               url: siteConfig.url,
               logo: `${siteConfig.url}/logo.png`,
+              image: `${siteConfig.url}/og-image.jpg`,
               creator: {
                 "@type": "Person",
                 name: "Musayev Doniyor & Abduvaliyev Otabek",
                 url: "https://github.com/MusayevDoniyor",
               },
               description:
-                "Matematika, fizika va ingliz tili fanlarini chuqur o'rganishga ixtisoslashgan davlat ta'lim muassasasi",
+                "Matematika, fizika va chet tillarini chuqur o'rganishga ixtisoslashgan davlat akademik litseyi.",
+              parentOrganization: {
+                "@type": "CollegeOrUniversity",
+                name: "Muhammad al-Xorazmiy nomidagi Toshkent axborot texnologiyalari universiteti",
+                alternateName: "TATU",
+                url: "https://tuit.uz",
+              },
               address: {
                 "@type": "PostalAddress",
                 streetAddress: "Bog'ishamol ko'chasi, 112-uy",
@@ -128,9 +147,35 @@ export default function RootLayout({
                 addressRegion: "Yunusobod tumani",
                 addressCountry: "UZ",
               },
+              geo: {
+                "@type": "GeoCoordinates",
+                latitude: 41.3526,
+                longitude: 69.2887,
+              },
+              hasMap: "https://maps.google.com/?q=41.3526,69.2887",
               telephone: ["+998712350369", "+998931033245"],
               email: "info@tatual.uz",
-              sameAs: ["https://tuit.uz/akademik-litsey", siteConfig.url],
+              sameAs: [
+                siteConfig.telegram,
+                siteConfig.instagram,
+                "https://tuit.uz/akademik-litsey",
+                siteConfig.url,
+              ],
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                  ],
+                  opens: "08:30",
+                  closes: "17:30",
+                },
+              ],
             }),
           }}
         />

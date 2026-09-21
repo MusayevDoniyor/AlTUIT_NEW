@@ -23,7 +23,6 @@ interface PreviewData {
 
 interface NewsPreviewProps {
   data: PreviewData;
-  lang?: "uz" | "ru" | "en";
 }
 
 const C = {

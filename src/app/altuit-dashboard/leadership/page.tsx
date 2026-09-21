@@ -8,7 +8,6 @@ import {
   Pencil,
   Trash2,
   Check,
-  GripVertical,
 } from "lucide-react";
 import {
   getLeadership,
@@ -189,12 +188,6 @@ export default function AdminLeadershipPage() {
                     idx < items.length - 1 ? `1px solid ${C.border}` : "none",
                 }}
               >
-                <GripVertical
-                  size={14}
-                  color={C.textDim}
-                  style={{ flexShrink: 0 }}
-                />
-
                 {/* Avatar */}
                 <div
                   style={{

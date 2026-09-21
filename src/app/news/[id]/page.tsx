@@ -151,6 +151,31 @@ export default async function NewsDetailPage({ params }: Props) {
     },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Bosh sahifa",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Yangiliklar",
+        item: `${siteConfig.url}/news`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: news.titleUz || "Yangilik",
+        item: postUrl,
+      },
+    ],
+  };
+
   const serialized = {
     id: news.id || id,
     titleUz: news.titleUz,
@@ -176,6 +201,10 @@ export default async function NewsDetailPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <NewsDetailClient news={serialized} />
     </>

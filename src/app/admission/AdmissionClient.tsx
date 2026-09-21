@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { translations } from "@/lib/i18n";
 import { siteConfig } from "@/lib/config";
 import { useAsyncData } from "@/lib/useAsyncData";
 import { useLang } from "@/lib/useLang";
-import { ClipboardList, FileText, PenLine, CheckCircle } from "lucide-react";
+import { ClipboardList, FileText, PenLine, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { FaFileAlt, FaCalendarAlt, FaPenNib, FaPhoneAlt } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -20,6 +21,7 @@ const APPLY_BTN = {
 
 export default function AdmissionClient() {
   const [lang, setLang] = useLang();
+  const [openRule, setOpenRule] = useState<number | null>(0);
   const { data: rulesData, loading: loadingRules } = useAsyncData(
     () => getAdmissionRules(),
     [],
@@ -536,14 +538,14 @@ export default function AdmissionClient() {
 
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr",
-                  gap: 24,
-                  maxWidth: 800,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                  maxWidth: 850,
                   margin: "0 auto",
                 }}
               >
-                {rules.map((rule) => {
+                {rules.map((rule, idx) => {
                   const title =
                     lang === "uz"
                       ? rule.titleUz
@@ -556,57 +558,131 @@ export default function AdmissionClient() {
                       : lang === "ru"
                         ? rule.contentRu
                         : rule.contentEn;
+                  const isOpen = openRule === idx;
                   return (
                     <div
-                      key={rule.id}
+                      key={rule.id ?? idx}
                       style={{
                         background: "white",
-                        borderRadius: 18,
-                        padding: "32px",
-                        border: "1px solid rgba(26,58,110,0.07)",
-                        boxShadow: "0 4px 18px rgba(26,58,110,0.05)",
+                        borderRadius: 16,
+                        border: isOpen
+                          ? "1px solid rgba(200,169,110,0.45)"
+                          : "1px solid rgba(26,58,110,0.08)",
+                        boxShadow: isOpen
+                          ? "0 10px 30px rgba(26,58,110,0.08)"
+                          : "0 2px 10px rgba(26,58,110,0.03)",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease",
                       }}
                     >
-                      <h3
+                      <button
+                        type="button"
+                        onClick={() => setOpenRule(isOpen ? null : idx)}
                         style={{
-                          color: "#1a3a6e",
-                          fontWeight: 700,
-                          fontSize: "1.1rem",
-                          marginBottom: 14,
+                          width: "100%",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
                           display: "flex",
                           alignItems: "center",
-                          gap: 12,
+                          justifyContent: "space-between",
+                          padding: "20px 24px",
+                          textAlign: "left",
+                          gap: 16,
                         }}
                       >
-                        <span
+                        <div
                           style={{
-                            width: 28,
-                            height: 28,
-                            borderRadius: "50%",
-                            background: "rgba(200,169,110,0.15)",
-                            color: "#c8a96e",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 14,
+                            minWidth: 0,
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: "50%",
+                              background: isOpen
+                                ? "#1a3a6e"
+                                : "rgba(200,169,110,0.18)",
+                              color: isOpen ? "#c8a96e" : "#1a3a6e",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "0.85rem",
+                              fontWeight: 800,
+                              flexShrink: 0,
+                              transition: "all 0.25s ease",
+                            }}
+                          >
+                            {idx + 1}
+                          </span>
+                          <h3
+                            style={{
+                              color: isOpen ? "#1a3a6e" : "#1e293b",
+                              fontWeight: 700,
+                              fontSize: "1.05rem",
+                              margin: 0,
+                              lineHeight: 1.35,
+                            }}
+                          >
+                            {title}
+                          </h3>
+                        </div>
+                        <div
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: 10,
+                            background: isOpen
+                              ? "rgba(200,169,110,0.18)"
+                              : "rgba(26,58,110,0.06)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: "0.85rem",
-                            fontWeight: 700,
+                            flexShrink: 0,
+                            color: isOpen ? "#c8a96e" : "#1a3a6e",
+                            transition: "all 0.25s ease",
                           }}
                         >
-                          {rule.orderIndex + 1}
-                        </span>
-                        {title}
-                      </h3>
-                      <p
+                          {isOpen ? (
+                            <ChevronUp size={16} />
+                          ) : (
+                            <ChevronDown size={16} />
+                          )}
+                        </div>
+                      </button>
+
+                      <div
                         style={{
-                          color: "#4b5563",
-                          fontSize: "0.92rem",
-                          lineHeight: 1.7,
-                          margin: 0,
-                          whiteSpace: "pre-line",
+                          overflow: "hidden",
+                          transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                          maxHeight: isOpen ? "1000px" : "0",
+                          opacity: isOpen ? 1 : 0,
                         }}
                       >
-                        {content}
-                      </p>
+                        <div
+                          style={{
+                            padding: "0 24px 24px 70px",
+                            borderTop: "1px solid rgba(26,58,110,0.05)",
+                            paddingTop: 16,
+                          }}
+                        >
+                          <p
+                            style={{
+                              color: "#475569",
+                              fontSize: "0.92rem",
+                              lineHeight: 1.75,
+                              margin: 0,
+                              whiteSpace: "pre-line",
+                            }}
+                          >
+                            {content}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}

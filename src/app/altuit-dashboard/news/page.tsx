@@ -557,7 +557,6 @@ export default function AdminNewsPage() {
                     date: editing.date,
                     images,
                   }}
-                  lang={lang}
                 />
               </div>
             ) : (

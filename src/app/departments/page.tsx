@@ -35,5 +35,32 @@ export const metadata: Metadata = {
 };
 
 export default function DepartmentsPage() {
-  return <DepartmentsClient />;
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Bosh sahifa",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Kafedralar",
+        item: `${siteConfig.url}/departments`,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <DepartmentsClient />
+    </>
+  );
 }
