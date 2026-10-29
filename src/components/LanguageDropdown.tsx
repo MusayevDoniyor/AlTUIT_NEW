@@ -13,8 +13,8 @@ interface LanguageDropdownProps {
 }
 
 const languages = [
-  { code: "uz" as const, label: "O'zbekcha", codeUpper: "UZ" },
-  { code: "en" as const, label: "English", codeUpper: "EN" },
+  { code: "uz" as const, label: "UZ", codeUpper: "UZ" },
+  { code: "en" as const, label: "EN", codeUpper: "EN" },
 ];
 
 export default function LanguageDropdown({
@@ -124,9 +124,7 @@ export default function LanguageDropdown({
             width={isFull ? 20 : 17}
             height={isFull ? 14 : 11}
           />
-          <span style={{ letterSpacing: "0.03em" }}>
-            {isFull ? current.label : current.codeUpper}
-          </span>
+          <span style={{ letterSpacing: "0.03em" }}>{current.label}</span>
         </span>
         <ChevronDown
           size={isFull ? 16 : 13}
@@ -149,14 +147,14 @@ export default function LanguageDropdown({
             top: "calc(100% + 6px)",
             right: 0,
             left: isFull ? 0 : "auto",
-            minWidth: isFull ? "100%" : 145,
+            minWidth: isFull ? "100%" : 105,
             width: isFull ? "100%" : "auto",
             background: "#ffffff",
             borderRadius: 10,
             border: "1px solid #e2e8f0",
             boxShadow:
               "0 12px 28px -4px rgba(0, 33, 71, 0.16), 0 6px 12px -4px rgba(0, 33, 71, 0.08)",
-            padding: 5,
+            padding: 4,
             zIndex: 1100,
             animation: "customDropdownFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
@@ -177,14 +175,14 @@ export default function LanguageDropdown({
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
-                  padding: "8px 10px",
+                  padding: "7px 10px",
                   borderRadius: 7,
                   border: "none",
                   background: isSelected
                     ? "rgba(200, 169, 110, 0.12)"
                     : "transparent",
                   color: isSelected ? "#002147" : "#334155",
-                  fontWeight: isSelected ? 700 : 500,
+                  fontWeight: isSelected ? 700 : 600,
                   fontSize: "0.82rem",
                   cursor: "pointer",
                   transition: "background 0.15s ease, color 0.15s ease",
@@ -219,7 +217,7 @@ export default function LanguageDropdown({
                     size={14}
                     color="#c8a96e"
                     strokeWidth={2.5}
-                    style={{ marginLeft: 8, flexShrink: 0 }}
+                    style={{ marginLeft: 6, flexShrink: 0 }}
                   />
                 )}
               </button>
