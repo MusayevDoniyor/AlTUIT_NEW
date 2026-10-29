@@ -23,6 +23,9 @@ export interface TranslationStructure {
   nav_gallery: string;
   nav_contact: string;
 
+  brand_title: string;
+  brand_subtitle: string;
+
   header_admin: string;
   header_hours: string;
 
@@ -91,6 +94,7 @@ export interface TranslationStructure {
   footer_links: string;
   footer_contact: string;
   footer_copy: string;
+  footer_buses: string;
 
   maintenance_notice: string;
 }
@@ -114,6 +118,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_news: "Yangiliklar",
     nav_gallery: "Galereya",
     nav_contact: "Bog'lanish",
+
+    brand_title: "Muhammad al-Xorazmiy nomidagi",
+    brand_subtitle: "TATU akademik litseyi",
 
     header_admin: "Litsey ma'muriyati",
     header_hours: "Dushanba – Shanba, 8:30 – 16:00",
@@ -237,6 +244,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_links: "Tezkor havolalar",
     footer_contact: "Aloqa",
     footer_copy: "Barcha huquqlar himoyalangan.",
+    footer_buses: "Avtobuslar: 19, 38, 50, 63, 115",
 
     maintenance_notice:
       "Diqqat: Saytda profilaktika va texnik yangilash ishlari olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha cheklangan bo'lishi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69 yoki +998 93 103-32-45.",
@@ -259,6 +267,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_news: "Новости",
     nav_gallery: "Галерея",
     nav_contact: "Контакты",
+
+    brand_title: "Им. Мухаммада аль-Хорезми",
+    brand_subtitle: "Академический лицей ТУИТ",
 
     header_admin: "Администрация лицея",
     header_hours: "Понедельник – Суббота, 8:30 – 16:00",
@@ -366,9 +377,11 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_msg: "Сообщение",
     contact_submit: "Отправить",
 
+    // Footer
     footer_links: "Быстрые ссылки",
     footer_contact: "Контакты",
     footer_copy: "Все права защищены.",
+    footer_buses: "Автобусы: 19, 38, 50, 63, 115",
 
     maintenance_notice:
       "Внимание: на сайте проводятся профилактические и технические работы. Некоторые сервисы могут быть временно недоступны. Телефоны для связи: +998 71 235-03-69, +998 93 103-32-45.",
@@ -392,6 +405,9 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_gallery: "Gallery",
     nav_contact: "Contact",
 
+    brand_title: "Muhammad al-Khwarizmi",
+    brand_subtitle: "TUIT Academic Lyceum",
+
     header_admin: "Lyceum administration",
     header_hours: "Monday – Saturday, 8:30 – 16:00",
 
@@ -399,8 +415,8 @@ export const translations: Record<Lang, TranslationStructure> = {
     hero_title: "Muhammad al-Khwarizmi Academic Lyceum under TUIT",
     hero_subtitle:
       "Since 2006, we provide in-depth academic education in exact sciences (technical and economics tracks) for talented youth with an emphasis on research and intellectual growth.",
-    hero_cta: "Apply Now",
-    hero_cta2: "About Us",
+    hero_cta: "Admissions",
+    hero_cta2: "About the Lyceum",
 
     about_title: "About the Lyceum",
     about_p1:
@@ -423,7 +439,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     adm_subtitle: "Follow these official steps to apply to the academic lyceum",
     adm_step1_title: "Online Registration",
     adm_step1_desc:
-      "Register online via the official educational services portal at my.edu.uz.",
+      "Register online via the official educational services portal at my.edu.uz and enter the required details.",
     adm_step2_title: "Document Submission",
     adm_step2_desc:
       "Submit electronic application and required photos between June 10 and July 10.",
@@ -438,7 +454,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     docs_list: [
       "Applicant ID card or birth certificate details (PINFL)",
       "1 color photo (3.5x4.5 cm in digital format)",
-      "9th grade graduation certificate (automatically integrated)",
+      "9th grade graduation certificate (automatically integrated via digital database)",
       "Olympiad winner certificate (if applicable for quota privileges)",
       "Language certificate (IELTS, TOEFL, CEFR level B2 or higher, if available)",
     ],
@@ -451,7 +467,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     faq_items: [
       {
         q: "How can I apply to the lyceum?",
-        a: "To apply, register online at my.edu.uz during the designated period and take the entrance examinations.",
+        a: "To apply, register online at my.edu.uz during the designated period and take the entrance examinations conducted by the Knowledge Assessment Agency.",
       },
       {
         q: "Which grade students are eligible?",
@@ -498,9 +514,11 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_msg: "Message",
     contact_submit: "Send",
 
+    // Footer
     footer_links: "Quick Links",
     footer_contact: "Contact",
     footer_copy: "All rights reserved.",
+    footer_buses: "Buses: 19, 38, 50, 63, 115",
 
     maintenance_notice:
       "Notice: Scheduled maintenance is in progress. Some services and channels may be temporarily limited. For urgent inquiries: +998 71 235-03-69 or +998 93 103-32-45.",

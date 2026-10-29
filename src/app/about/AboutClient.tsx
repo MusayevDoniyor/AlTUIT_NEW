@@ -690,8 +690,8 @@ export default function AboutClient() {
                 lang === "uz"
                   ? dept.nameUz
                   : lang === "ru"
-                    ? dept.nameRu
-                    : dept.nameEn;
+                    ? dept.nameRu || dept.nameUz
+                    : dept.nameEn || dept.nameUz;
               const count = dbTeachers.filter(
                 (t) => t.departmentId === dept.id,
               ).length;
@@ -916,8 +916,8 @@ export default function AboutClient() {
                     lang === "uz"
                       ? dept.nameUz
                       : lang === "ru"
-                        ? dept.nameRu
-                        : dept.nameEn;
+                        ? dept.nameRu || dept.nameUz
+                        : dept.nameEn || dept.nameUz;
                   const deptTeachers = dbTeachers.filter(
                     (t) => t.departmentId === dept.id,
                   );
@@ -1339,14 +1339,14 @@ export default function AboutClient() {
                   lang === "uz"
                     ? selectedTeacher.infoUz
                     : lang === "ru"
-                      ? selectedTeacher.infoRu
-                      : selectedTeacher.infoEn;
+                      ? selectedTeacher.infoRu || selectedTeacher.infoUz
+                      : selectedTeacher.infoEn || selectedTeacher.infoUz;
                 const certRaw =
                   lang === "uz"
                     ? selectedTeacher.certificatesUz
                     : lang === "ru"
-                      ? selectedTeacher.certificatesRu
-                      : selectedTeacher.certificatesEn;
+                      ? selectedTeacher.certificatesRu || selectedTeacher.certificatesUz
+                      : selectedTeacher.certificatesEn || selectedTeacher.certificatesUz;
 
                 const { description, experience } = parseTeacherInfo(infoRaw);
                 const { certificates } = parseTeacherCertificates(certRaw);

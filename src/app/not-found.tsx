@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "404 — Sahifa topilmadi",
+  title: "404 — Sahifa topilmadi / Page Not Found",
   robots: { index: false, follow: false },
 };
 
@@ -20,7 +20,7 @@ export default function NotFound() {
         padding: "20px",
       }}
     >
-      <div style={{ textAlign: "center", maxWidth: 480 }}>
+      <div style={{ textAlign: "center", maxWidth: 520 }}>
         <div
           style={{
             fontSize: "6rem",
@@ -37,22 +37,33 @@ export default function NotFound() {
           style={{
             color: "white",
             fontWeight: 800,
-            fontSize: "1.8rem",
-            margin: "0 0 12px",
+            fontSize: "1.7rem",
+            margin: "0 0 14px",
           }}
         >
-          Sahifa topilmadi
+          Sahifa topilmadi / Page Not Found
         </h1>
         <p
           style={{
-            color: "rgba(255,255,255,0.5)",
+            color: "rgba(255,255,255,0.7)",
             fontSize: "0.95rem",
             lineHeight: 1.6,
-            marginBottom: 32,
+            marginBottom: 8,
           }}
         >
           Kechirasiz, siz qidirayotgan sahifa mavjud emas yoki o&apos;chirilgan
           bo&apos;lishi mumkin.
+        </p>
+        <p
+          style={{
+            color: "rgba(255,255,255,0.5)",
+            fontSize: "0.85rem",
+            lineHeight: 1.5,
+            marginBottom: 32,
+          }}
+        >
+          Sorry, the page you are looking for does not exist or may have been
+          moved.
         </p>
         <Link
           href="/"
@@ -70,7 +81,7 @@ export default function NotFound() {
             transition: "all 0.3s ease",
           }}
         >
-          ← Bosh sahifaga qaytish
+          ← Bosh sahifaga qaytish / Back to Home
         </Link>
       </div>
     </div>

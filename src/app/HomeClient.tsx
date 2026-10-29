@@ -203,13 +203,13 @@ export default function Home() {
       ? slide?.titleUz || ""
       : lang === "ru"
         ? slide?.titleRu || slide?.titleUz || ""
-        : slide?.titleEn || slide?.titleUz || "";
+        : slide?.titleEn || slide?.titleUz || t.hero_title;
   const slideSubtitle =
     lang === "uz"
       ? slide?.descUz || ""
       : lang === "ru"
         ? slide?.descRu || slide?.descUz || ""
-        : slide?.descEn || slide?.descUz || "";
+        : slide?.descEn || slide?.descUz || t.hero_subtitle;
 
   const prevSlide = activeSlides[prevIndex];
   const prevImage = prevSlide?.imageUrl || "";
@@ -416,7 +416,7 @@ export default function Home() {
               <button
                 key={i}
                 onClick={() => goTo(i)}
-                aria-label={`Slayd ${i + 1}`}
+                aria-label={lang === "uz" ? `Slayd ${i + 1}` : lang === "ru" ? `Слайд ${i + 1}` : `Slide ${i + 1}`}
                 style={{
                   width: current === i ? 36 : 8,
                   height: 8,
@@ -434,7 +434,7 @@ export default function Home() {
             <div className="hero-nav-arrows" style={{ display: "flex", gap: 8 }}>
               <button
                 onClick={prev}
-                aria-label="Oldingi slayd"
+                aria-label={lang === "uz" ? "Oldingi slayd" : lang === "ru" ? "Предыдущий слайд" : "Previous slide"}
                 style={{
                   width: 40,
                   height: 40,
@@ -462,7 +462,7 @@ export default function Home() {
               </button>
               <button
                 onClick={next}
-                aria-label="Keyingi slayd"
+                aria-label={lang === "uz" ? "Keyingi slayd" : lang === "ru" ? "Следующий слайд" : "Next slide"}
                 style={{
                   width: 40,
                   height: 40,
@@ -1072,18 +1072,18 @@ export default function Home() {
                   (lang === "uz"
                     ? item.titleUz
                     : lang === "ru"
-                      ? item.titleRu
-                      : item.titleEn) ?? "";
+                      ? item.titleRu?.trim() || item.titleUz
+                      : item.titleEn?.trim() || item.titleUz) || item.titleUz;
                 const desc =
                   (lang === "uz"
                     ? item.descUz
                     : lang === "ru"
-                      ? item.descRu
-                      : item.descEn) ?? "";
+                      ? item.descRu?.trim() || item.descUz
+                      : item.descEn?.trim() || item.descUz) || item.descUz;
                 const tagStr =
                   typeof item.tag === "string"
                     ? item.tag
-                    : item.tag?.[lang] || "";
+                    : item.tag?.[lang] || item.tag?.uz || item.tag?.en || "";
 
                 return (
                   <Link

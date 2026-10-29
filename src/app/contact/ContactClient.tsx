@@ -56,7 +56,16 @@ export default function ContactClient() {
       setForm({ name: "", phone: "", telegram: "", message: "", website: "" });
       setTimeout(() => setSent(false), 5000);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Xatolik yuz berdi";
+      const defaultError =
+        lang === "uz"
+          ? "Xatolik yuz berdi. Iltimos qayta urinib ko'ring."
+          : lang === "ru"
+            ? "Произошла ошибка. Пожалуйста, повторите попытку."
+            : "An error occurred. Please try again.";
+      const msg =
+        err instanceof Error && err.message !== "Xatolik yuz berdi"
+          ? err.message
+          : defaultError;
       setError(msg);
       setTimeout(() => setError(""), 5000);
     } finally {

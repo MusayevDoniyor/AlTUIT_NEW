@@ -550,14 +550,14 @@ export default function AdmissionClient() {
                     lang === "uz"
                       ? rule.titleUz
                       : lang === "ru"
-                        ? rule.titleRu
-                        : rule.titleEn;
+                        ? rule.titleRu || rule.titleUz
+                        : rule.titleEn || rule.titleUz;
                   const content =
                     lang === "uz"
                       ? rule.contentUz
                       : lang === "ru"
-                        ? rule.contentRu
-                        : rule.contentEn;
+                        ? rule.contentRu || rule.contentUz
+                        : rule.contentEn || rule.contentUz;
                   const isOpen = openRule === idx;
                   return (
                     <div

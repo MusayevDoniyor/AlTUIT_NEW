@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { translations, type Lang } from "@/lib/i18n";
+import { useLang } from "@/lib/useLang";
+import FlagIcon from "@/components/FlagIcon";
 import { siteConfig } from "@/lib/config";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -46,7 +48,13 @@ const navItems = (t: Record<string, string>) => [
   { label: t.nav_contact, href: "/contact" },
 ];
 
-export default function Navbar({ lang = "uz" }: NavbarProps) {
+export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
+  const [globalLang, setGlobalLang] = useLang();
+  const lang = propLang || globalLang;
+  const changeLang = (l: Lang) => {
+    setGlobalLang(l);
+    onLangChange?.(l);
+  };
   const t = translations[lang] as unknown as Record<string, string>;
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -216,7 +224,7 @@ export default function Navbar({ lang = "uz" }: NavbarProps) {
                     maxWidth: 210,
                   }}
                 >
-                  Muhammad Al-Xorazmiy nomidagi
+                  {t.brand_title}
                 </div>
                 <div
                   style={{
@@ -228,7 +236,7 @@ export default function Navbar({ lang = "uz" }: NavbarProps) {
                     lineHeight: 1.2,
                   }}
                 >
-                  TATU akademik litseyi
+                  {t.brand_subtitle}
                 </div>
               </div>
             </Link>
@@ -326,7 +334,52 @@ export default function Navbar({ lang = "uz" }: NavbarProps) {
             </nav>
 
             {/* ACTIONS */}
-            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {/* Language Switcher (UZ / EN only) */}
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "#f1f5f9",
+                  borderRadius: 50,
+                  padding: "3px",
+                  border: "1px solid #e2e8f0",
+                }}
+              >
+                {(["uz", "en"] as const).map((l) => {
+                  const isActive = lang === l;
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => changeLang(l)}
+                      style={{
+                        background: isActive ? "#002147" : "transparent",
+                        color: isActive ? "#ffffff" : "#475569",
+                        fontWeight: 700,
+                        border: "none",
+                        borderRadius: 50,
+                        padding: "5px 10px",
+                        fontSize: "0.75rem",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        textTransform: "uppercase",
+                        fontFamily: "inherit",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        boxShadow: isActive
+                          ? "0 2px 6px rgba(0,33,71,0.25)"
+                          : "none",
+                      }}
+                      aria-label={`Switch language to ${l.toUpperCase()}`}
+                    >
+                      <FlagIcon code={l} width={15} height={10} />
+                      <span>{l.toUpperCase()}</span>
+                    </button>
+                  );
+                })}
+              </div>
               <a
                 href={`tel:${siteConfig.phone.replace(/[^\d+]/g, "")}`}
                 className="hidden-mobile"
@@ -394,7 +447,7 @@ export default function Navbar({ lang = "uz" }: NavbarProps) {
               letterSpacing: "0.1em",
             }}
           >
-            MENU
+            {lang === "uz" ? "MENYU" : "MENU"}
           </div>
           <button
             onClick={() => setMobileOpen(false)}
@@ -415,6 +468,58 @@ export default function Navbar({ lang = "uz" }: NavbarProps) {
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "20px 0" }}>
+          {/* Mobile Language Switcher (UZ / EN only) */}
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              justifyContent: "center",
+              padding: "0 24px 18px 24px",
+              borderBottom: "1px solid #f1f5f9",
+              marginBottom: 12,
+            }}
+          >
+            {(["uz", "en"] as const).map((l) => {
+              const isActive = lang === l;
+              return (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => {
+                    changeLang(l);
+                    setMobileOpen(false);
+                  }}
+                  style={{
+                    flex: 1,
+                    maxWidth: 150,
+                    background: isActive ? "#002147" : "#f8fafc",
+                    color: isActive ? "#ffffff" : "#475569",
+                    fontWeight: 700,
+                    border: isActive
+                      ? "1px solid #002147"
+                      : "1px solid #e2e8f0",
+                    borderRadius: 10,
+                    padding: "9px 16px",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    fontFamily: "inherit",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 8,
+                    boxShadow: isActive
+                      ? "0 4px 12px rgba(0,33,71,0.2)"
+                      : "none",
+                  }}
+                  aria-label={`Switch language to ${l.toUpperCase()}`}
+                >
+                  <FlagIcon code={l} width={18} height={12} />
+                  <span>{l === "uz" ? "O'zbek" : "English"}</span>
+                </button>
+              );
+            })}
+          </div>
           {items.map((item, i) => (
             <div key={i}>
               {item.children ? (

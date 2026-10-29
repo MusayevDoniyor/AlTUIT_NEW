@@ -93,7 +93,12 @@ export default function DepartmentsClient() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 860, margin: "0 auto" }}>
               {depts.map((dept) => {
-                const name = lang === "uz" ? dept.nameUz : lang === "ru" ? dept.nameRu : dept.nameEn;
+                const name =
+                  (lang === "uz"
+                    ? dept.nameUz
+                    : lang === "ru"
+                      ? dept.nameRu || dept.nameUz
+                      : dept.nameEn || dept.nameUz) || dept.nameUz;
                 const head = headTeacher(dept);
                 const teacherList = teachersInDept(dept.id!);
                 const headName = head

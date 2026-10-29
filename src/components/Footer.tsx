@@ -84,7 +84,7 @@ export default function Footer({ lang }: FooterProps) {
                     maxWidth: 210,
                   }}
                 >
-                  Muhammad al-Xorazmiy nomidagi
+                  {t.brand_title}
                 </div>
                 <div
                   style={{
@@ -96,7 +96,7 @@ export default function Footer({ lang }: FooterProps) {
                     lineHeight: 1.2,
                   }}
                 >
-                  TATU Akademik Litseyi
+                  {t.brand_subtitle}
                 </div>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function Footer({ lang }: FooterProps) {
                   color="#c8a96e"
                   style={{ flexShrink: 0, marginTop: 2 }}
                 />
-                <span style={{ fontSize: "0.84rem" }}>Avtobuslar: 19, 38, 50, 63, 115</span>
+                <span style={{ fontSize: "0.84rem" }}>{t.footer_buses}</span>
               </div>
 
               <div
@@ -393,7 +393,12 @@ export default function Footer({ lang }: FooterProps) {
           }}
         >
           <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.3)" }}>
-            © {new Date().getFullYear()} Al-Xorazmiy Akademik Litseyi (TATU).{" "}
+            © {new Date().getFullYear()}{" "}
+            {lang === "uz"
+              ? "Al-Xorazmiy Akademik Litseyi (TATU)."
+              : lang === "ru"
+                ? "Академический лицей им. аль-Хорезми (ТУИТ)."
+                : "Al-Khwarizmi Academic Lyceum (TUIT)."}{" "}
             {t.footer_copy}
           </p>
           <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.25)" }}>
