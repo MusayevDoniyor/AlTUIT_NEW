@@ -651,23 +651,23 @@ body {
     display: none !important;
   }
 }
-@media (max-width: 1200px) {
+@media (max-width: 1260px) {
   .hidden-mobile {
     display: none !important;
   }
   .show-mobile {
-    display: block !important;
+    display: flex !important;
   }
 }
-@media (min-width: 1201px) {
+@media (min-width: 1261px) {
   .show-mobile {
     display: none !important;
   }
 }
-@media (min-width: 1201px) and (max-width: 1366px) {
+@media (min-width: 1261px) and (max-width: 1380px) {
   .nav-link {
-    padding: 8px 10px !important;
-    font-size: 0.68rem !important;
+    padding: 7px 8px !important;
+    font-size: 0.71rem !important;
   }
   .header-main .container-custom {
     padding: 0 16px !important;

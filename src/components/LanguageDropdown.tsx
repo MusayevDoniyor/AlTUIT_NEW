@@ -71,7 +71,7 @@ export default function LanguageDropdown({
         userSelect: "none",
       }}
     >
-      {/* Trigger Button (Compact & Ultra-sleek) */}
+      {/* Trigger Button */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -80,37 +80,40 @@ export default function LanguageDropdown({
         aria-label={`Tilni tanlash / Select language (hozirgi: ${current.codeUpper})`}
         style={{
           width: isFull ? "100%" : "auto",
+          height: isFull ? 44 : 36,
           display: "flex",
           alignItems: "center",
           justifyContent: isFull ? "space-between" : "center",
-          gap: isFull ? 6 : 4,
-          background: isOpen ? "#f8fafc" : "#f1f5f9",
+          gap: isFull ? 8 : 6,
+          background: isOpen ? "#ffffff" : "#f8fafc",
           color: "#002147",
           border: "1px solid",
           borderColor: isOpen ? "#c8a96e" : "#e2e8f0",
-          borderRadius: isFull ? 8 : 6,
-          padding: isFull ? "9px 12px" : "3px 7px",
-          fontSize: isFull ? "0.85rem" : "0.72rem",
+          borderRadius: isFull ? 10 : 8,
+          padding: isFull ? "0 14px" : "0 11px",
+          fontSize: isFull ? "0.88rem" : "0.8rem",
           fontWeight: 700,
-          lineHeight: 1.2,
           cursor: "pointer",
-          transition: "all 0.15s ease",
+          transition: "all 0.18s cubic-bezier(0.4, 0, 0.2, 1)",
           boxShadow: isOpen
-            ? "0 0 0 1.5px rgba(200, 169, 110, 0.25)"
-            : "0 1px 2px rgba(0,0,0,0.02)",
+            ? "0 0 0 2px rgba(200, 169, 110, 0.25)"
+            : "0 1px 2px rgba(0, 0, 0, 0.04)",
           fontFamily: "inherit",
           outline: "none",
+          whiteSpace: "nowrap",
         }}
         onMouseEnter={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#cbd5e1";
-            e.currentTarget.style.background = "#eef2f6";
+            e.currentTarget.style.borderColor = "#c8a96e";
+            e.currentTarget.style.background = "#ffffff";
+            e.currentTarget.style.boxShadow = "0 2px 6px rgba(0, 33, 71, 0.08)";
           }
         }}
         onMouseLeave={(e) => {
           if (!isOpen) {
             e.currentTarget.style.borderColor = "#e2e8f0";
-            e.currentTarget.style.background = "#f1f5f9";
+            e.currentTarget.style.background = "#f8fafc";
+            e.currentTarget.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.04)";
           }
         }}
       >
@@ -118,24 +121,23 @@ export default function LanguageDropdown({
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: isFull ? 6 : 4,
+            gap: isFull ? 8 : 6,
           }}
         >
           <FlagIcon
             code={current.code}
-            width={isFull ? 18 : 13}
-            height={isFull ? 12 : 9}
+            width={isFull ? 20 : 17}
+            height={isFull ? 14 : 11.5}
           />
-          <span style={{ letterSpacing: "0.02em" }}>{current.label}</span>
+          <span style={{ letterSpacing: "0.03em" }}>{current.label}</span>
         </span>
         <ChevronDown
-          size={isFull ? 14 : 10}
+          size={isFull ? 16 : 13}
           style={{
             transform: isOpen ? "rotate(180deg)" : "none",
-            transition: "transform 0.15s ease",
+            transition: "transform 0.18s ease",
             color: isOpen ? "#c8a96e" : "#64748b",
             flexShrink: 0,
-            opacity: 0.8,
           }}
         />
       </button>
@@ -147,19 +149,19 @@ export default function LanguageDropdown({
           aria-orientation="vertical"
           style={{
             position: "absolute",
-            top: "calc(100% + 4px)",
+            top: "calc(100% + 5px)",
             right: 0,
             left: isFull ? 0 : "auto",
-            minWidth: isFull ? "100%" : 84,
+            minWidth: isFull ? "100%" : 105,
             width: isFull ? "100%" : "auto",
             background: "#ffffff",
-            borderRadius: 8,
+            borderRadius: 9,
             border: "1px solid #e2e8f0",
             boxShadow:
-              "0 8px 20px -3px rgba(0, 33, 71, 0.14), 0 4px 8px -3px rgba(0, 33, 71, 0.06)",
-            padding: 3,
+              "0 10px 25px -4px rgba(0, 33, 71, 0.15), 0 4px 10px -2px rgba(0, 33, 71, 0.06)",
+            padding: 4,
             zIndex: 1100,
-            animation: "customDropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
+            animation: "customDropdownFadeIn 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           {languages.map((item) => {
@@ -178,19 +180,21 @@ export default function LanguageDropdown({
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
-                  padding: "5px 7px",
-                  borderRadius: 5,
+                  height: 34,
+                  padding: "0 10px",
+                  borderRadius: 6,
                   border: "none",
                   background: isSelected
-                    ? "rgba(200, 169, 110, 0.12)"
+                    ? "rgba(200, 169, 110, 0.14)"
                     : "transparent",
                   color: isSelected ? "#002147" : "#334155",
                   fontWeight: isSelected ? 700 : 600,
-                  fontSize: "0.74rem",
+                  fontSize: "0.8rem",
                   cursor: "pointer",
-                  transition: "background 0.12s ease, color 0.12s ease",
+                  transition: "background 0.15s ease, color 0.15s ease",
                   textAlign: "left",
                   fontFamily: "inherit",
+                  whiteSpace: "nowrap",
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
@@ -209,18 +213,18 @@ export default function LanguageDropdown({
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: 6,
+                    gap: 7,
                   }}
                 >
-                  <FlagIcon code={item.code} width={13} height={9} />
+                  <FlagIcon code={item.code} width={17} height={11.5} />
                   <span>{item.label}</span>
                 </span>
                 {isSelected && (
                   <Check
-                    size={11}
+                    size={13}
                     color="#c8a96e"
                     strokeWidth={2.5}
-                    style={{ marginLeft: 4, flexShrink: 0 }}
+                    style={{ marginLeft: 6, flexShrink: 0 }}
                   />
                 )}
               </button>

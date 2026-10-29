@@ -265,7 +265,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                       <>
                         <button
                           className="nav-link"
-                          style={{ padding: "8px 11px", fontSize: "0.74rem" }}
+                          style={{ padding: "8px 11px", fontSize: "0.74rem", whiteSpace: "nowrap" }}
                         >
                           {item.label}
                           <ChevronDown
@@ -323,6 +323,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                           padding: "8px 11px",
                           fontSize: "0.74rem",
                           textDecoration: "none",
+                          whiteSpace: "nowrap",
                         }}
                       >
                         {item.label}
@@ -334,7 +335,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
             </nav>
 
             {/* ACTIONS */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
               {/* Custom Language Dropdown (UZ / EN only) */}
               <LanguageDropdown lang={lang} onChange={changeLang} />
               <a
@@ -343,19 +344,21 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 5,
-                  padding: "5px 12px",
+                  gap: 6,
+                  height: 36,
+                  padding: "0 14px",
                   background: "#002147",
                   color: "white",
                   borderRadius: 50,
                   textDecoration: "none",
-                  fontSize: "0.76rem",
+                  fontSize: "0.78rem",
                   fontWeight: 700,
                   transition: "all 0.3s",
                   flexShrink: 0,
+                  whiteSpace: "nowrap",
                 }}
               >
-                <FaPhoneAlt size={12} />
+                <FaPhoneAlt size={11} />
                 <span>{siteConfig.phone}</span>
               </a>
 
@@ -366,14 +369,21 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-navigation-menu"
                 style={{
-                  background: "none",
-                  border: "none",
+                  background: "#f1f5f9",
+                  border: "1px solid #e2e8f0",
                   color: "#002147",
                   cursor: "pointer",
-                  padding: 4,
+                  height: 36,
+                  width: 36,
+                  borderRadius: 8,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 0,
+                  transition: "all 0.2s ease",
                 }}
               >
-                <Menu size={24} />
+                <Menu size={20} />
               </button>
             </div>
           </div>
