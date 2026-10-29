@@ -244,7 +244,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
             {/* NAV MENU */}
             <nav
               className="hidden-mobile"
-              style={{ flex: 1, display: "flex", justifyContent: "center" }}
+              style={{ flex: 1, display: "flex", justifyContent: "center", minWidth: 0 }}
             >
               <ul
                 style={{
@@ -265,7 +265,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                       <>
                         <button
                           className="nav-link"
-                          style={{ padding: "10px 14px", fontSize: "0.75rem" }}
+                          style={{ padding: "8px 11px", fontSize: "0.74rem" }}
                         >
                           {item.label}
                           <ChevronDown
@@ -320,8 +320,8 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                         href={item.href!}
                         className={`nav-link ${pathname === item.href ? "active" : ""}`}
                         style={{
-                          padding: "10px 14px",
-                          fontSize: "0.75rem",
+                          padding: "8px 11px",
+                          fontSize: "0.74rem",
                           textDecoration: "none",
                         }}
                       >
@@ -334,7 +334,7 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
             </nav>
 
             {/* ACTIONS */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
               {/* Custom Language Dropdown (UZ / EN only) */}
               <LanguageDropdown lang={lang} onChange={changeLang} />
               <a
@@ -343,15 +343,16 @@ export default function Navbar({ lang: propLang, onLangChange }: NavbarProps) {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 6,
-                  padding: "6px 14px",
+                  gap: 5,
+                  padding: "5px 12px",
                   background: "#002147",
                   color: "white",
                   borderRadius: 50,
                   textDecoration: "none",
-                  fontSize: "0.8rem",
+                  fontSize: "0.76rem",
                   fontWeight: 700,
                   transition: "all 0.3s",
+                  flexShrink: 0,
                 }}
               >
                 <FaPhoneAlt size={12} />

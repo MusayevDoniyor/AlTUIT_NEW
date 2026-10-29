@@ -67,10 +67,11 @@ export default function LanguageDropdown({
         position: "relative",
         display: isFull ? "block" : "inline-block",
         width: isFull ? "100%" : "auto",
+        flexShrink: 0,
         userSelect: "none",
       }}
     >
-      {/* Trigger Button */}
+      {/* Trigger Button (Compact & Ultra-sleek) */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -82,20 +83,21 @@ export default function LanguageDropdown({
           display: "flex",
           alignItems: "center",
           justifyContent: isFull ? "space-between" : "center",
-          gap: 7,
+          gap: isFull ? 6 : 4,
           background: isOpen ? "#f8fafc" : "#f1f5f9",
           color: "#002147",
           border: "1px solid",
           borderColor: isOpen ? "#c8a96e" : "#e2e8f0",
-          borderRadius: isFull ? 10 : 8,
-          padding: isFull ? "10px 14px" : "6px 10px",
-          fontSize: isFull ? "0.88rem" : "0.78rem",
+          borderRadius: isFull ? 8 : 6,
+          padding: isFull ? "9px 12px" : "3px 7px",
+          fontSize: isFull ? "0.85rem" : "0.72rem",
           fontWeight: 700,
+          lineHeight: 1.2,
           cursor: "pointer",
-          transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: "all 0.15s ease",
           boxShadow: isOpen
-            ? "0 0 0 2px rgba(200, 169, 110, 0.22)"
-            : "0 1px 2px rgba(0,0,0,0.03)",
+            ? "0 0 0 1.5px rgba(200, 169, 110, 0.25)"
+            : "0 1px 2px rgba(0,0,0,0.02)",
           fontFamily: "inherit",
           outline: "none",
         }}
@@ -116,23 +118,24 @@ export default function LanguageDropdown({
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: 7,
+            gap: isFull ? 6 : 4,
           }}
         >
           <FlagIcon
             code={current.code}
-            width={isFull ? 20 : 17}
-            height={isFull ? 14 : 11}
+            width={isFull ? 18 : 13}
+            height={isFull ? 12 : 9}
           />
-          <span style={{ letterSpacing: "0.03em" }}>{current.label}</span>
+          <span style={{ letterSpacing: "0.02em" }}>{current.label}</span>
         </span>
         <ChevronDown
-          size={isFull ? 16 : 13}
+          size={isFull ? 14 : 10}
           style={{
             transform: isOpen ? "rotate(180deg)" : "none",
-            transition: "transform 0.2s ease",
+            transition: "transform 0.15s ease",
             color: isOpen ? "#c8a96e" : "#64748b",
             flexShrink: 0,
+            opacity: 0.8,
           }}
         />
       </button>
@@ -144,19 +147,19 @@ export default function LanguageDropdown({
           aria-orientation="vertical"
           style={{
             position: "absolute",
-            top: "calc(100% + 6px)",
+            top: "calc(100% + 4px)",
             right: 0,
             left: isFull ? 0 : "auto",
-            minWidth: isFull ? "100%" : 105,
+            minWidth: isFull ? "100%" : 84,
             width: isFull ? "100%" : "auto",
             background: "#ffffff",
-            borderRadius: 10,
+            borderRadius: 8,
             border: "1px solid #e2e8f0",
             boxShadow:
-              "0 12px 28px -4px rgba(0, 33, 71, 0.16), 0 6px 12px -4px rgba(0, 33, 71, 0.08)",
-            padding: 4,
+              "0 8px 20px -3px rgba(0, 33, 71, 0.14), 0 4px 8px -3px rgba(0, 33, 71, 0.06)",
+            padding: 3,
             zIndex: 1100,
-            animation: "customDropdownFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
+            animation: "customDropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           {languages.map((item) => {
@@ -175,17 +178,17 @@ export default function LanguageDropdown({
                   alignItems: "center",
                   justifyContent: "space-between",
                   width: "100%",
-                  padding: "7px 10px",
-                  borderRadius: 7,
+                  padding: "5px 7px",
+                  borderRadius: 5,
                   border: "none",
                   background: isSelected
                     ? "rgba(200, 169, 110, 0.12)"
                     : "transparent",
                   color: isSelected ? "#002147" : "#334155",
                   fontWeight: isSelected ? 700 : 600,
-                  fontSize: "0.82rem",
+                  fontSize: "0.74rem",
                   cursor: "pointer",
-                  transition: "background 0.15s ease, color 0.15s ease",
+                  transition: "background 0.12s ease, color 0.12s ease",
                   textAlign: "left",
                   fontFamily: "inherit",
                 }}
@@ -206,18 +209,18 @@ export default function LanguageDropdown({
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: 8,
+                    gap: 6,
                   }}
                 >
-                  <FlagIcon code={item.code} width={18} height={12} />
+                  <FlagIcon code={item.code} width={13} height={9} />
                   <span>{item.label}</span>
                 </span>
                 {isSelected && (
                   <Check
-                    size={14}
+                    size={11}
                     color="#c8a96e"
                     strokeWidth={2.5}
-                    style={{ marginLeft: 6, flexShrink: 0 }}
+                    style={{ marginLeft: 4, flexShrink: 0 }}
                   />
                 )}
               </button>
