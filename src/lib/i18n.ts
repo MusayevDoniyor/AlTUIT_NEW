@@ -11,6 +11,7 @@ export interface TranslationStructure {
   nav_about_short: string;
   nav_leadership: string;
   nav_teachers: string;
+  nav_strategy: string;
   nav_admissions: string;
   nav_directions: string;
   nav_departments: string;
@@ -107,6 +108,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Litsey haqida qisqa ma'lumot",
     nav_leadership: "Rahbariyat",
     nav_teachers: "Pedagog xodimlar",
+    nav_strategy: "Strategik rivojlanish",
     nav_admissions: "Abituriyentlar",
     nav_directions: "Yo'nalishlar",
     nav_departments: "Kafedralar",
@@ -256,6 +258,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Краткая информация",
     nav_leadership: "Руководство",
     nav_teachers: "Педагогический состав",
+    nav_strategy: "Стратегическое развитие",
     nav_admissions: "Абитуриентам",
     nav_directions: "Направления",
     nav_departments: "Кафедры",
@@ -393,6 +396,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     nav_about_short: "Brief Information",
     nav_leadership: "Leadership",
     nav_teachers: "Teaching Staff",
+    nav_strategy: "Strategic Development",
     nav_admissions: "Admissions",
     nav_directions: "Directions",
     nav_departments: "Departments",
