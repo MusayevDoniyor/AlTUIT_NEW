@@ -18,7 +18,6 @@ import {
   ChevronRight,
   Users,
   Award,
-  ArrowRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -391,112 +390,6 @@ export default function AboutClient() {
                   </p>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== STRATEGIC DEVELOPMENT (1.2.5 & 1.3.5) ===== */}
-      <section
-        id="strategy"
-        style={{
-          padding: "80px 0",
-          background: "linear-gradient(180deg, #f8f9fc 0%, #ffffff 100%)",
-          borderTop: "1px solid #eef2f6",
-        }}
-      >
-        <div className="container-custom">
-          <div
-            style={{
-              background: "linear-gradient(135deg, #002147 0%, #082850 100%)",
-              borderRadius: 16,
-              padding: "clamp(32px, 5vw, 48px)",
-              color: "white",
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              boxShadow: "0 10px 30px rgba(0, 33, 71, 0.1)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span
-                style={{
-                  background: "rgba(200, 169, 110, 0.2)",
-                  color: "#dfc08a",
-                  padding: "4px 12px",
-                  borderRadius: 50,
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  border: "1px solid rgba(200, 169, 110, 0.4)",
-                }}
-              >
-                {lang === "uz"
-                  ? "1.2.5 va 1.3.5-mezonlar"
-                  : lang === "ru"
-                    ? "Критерии 1.2.5 и 1.3.5"
-                    : "Criteria 1.2.5 & 1.3.5"}
-              </span>
-            </div>
-
-            <div style={{ maxWidth: 760 }}>
-              <h2
-                style={{
-                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                  fontWeight: 800,
-                  marginBottom: 12,
-                  color: "#ffffff",
-                }}
-              >
-                {lang === "uz"
-                  ? "Strategik Rivojlanish Konsepsiyasi (2024–2030)"
-                  : lang === "ru"
-                    ? "Концепция Стратегического Развития (2024–2030)"
-                    : "Strategic Development Concept (2024–2030)"}
-              </h2>
-              <p
-                style={{
-                  fontSize: "0.92rem",
-                  color: "rgba(255, 255, 255, 0.85)",
-                  lineHeight: 1.65,
-                  margin: 0,
-                }}
-              >
-                {lang === "uz"
-                  ? "Litseyning o'rta va uzoq muddatli rivojlanish dasturi, 5 ta ustuvor yo'nalish, maqsadli KPI ko'rsatkichlari, ta'lim sifati monitoringi hamda tasdiqlangan normativ hujjatlar bilan maxsus bo'limda tanishing."
-                  : lang === "ru"
-                    ? "Ознакомьтесь с утвержденной средне- и долгосрочной стратегией развития лицея, целевыми KPI показателями, механизмом мониторинга качества и нормативными документами в специальном разделе."
-                    : "Explore the approved medium- and long-term strategic development program, 5 core pillars, KPI targets, quality monitoring protocols and official policies in our dedicated portal."}
-              </p>
-            </div>
-
-            <div>
-              <Link
-                href="/strategy"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  background: "#c8a96e",
-                  color: "#002147",
-                  fontWeight: 700,
-                  fontSize: "0.86rem",
-                  padding: "12px 24px",
-                  borderRadius: 8,
-                  textDecoration: "none",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <span>
-                  {lang === "uz"
-                    ? "Strategik rivojlanish bo'limiga o'tish"
-                    : lang === "ru"
-                      ? "Перейти в раздел стратегического развития"
-                      : "View Strategic Development Section"}
-                </span>
-                <ArrowRight size={16} strokeWidth={2} />
-              </Link>
             </div>
           </div>
         </div>

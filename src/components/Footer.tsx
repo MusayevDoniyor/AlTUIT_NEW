@@ -23,7 +23,6 @@ export default function Footer({ lang }: FooterProps) {
   const links = [
     { label: t.nav_home, href: "/" },
     { label: t.nav_about, href: "/about" },
-    { label: t.nav_strategy, href: "/strategy" },
     { label: t.nav_admissions, href: "/admission" },
     { label: t.nav_science, href: "/science" },
     { label: t.nav_news, href: "/news" },

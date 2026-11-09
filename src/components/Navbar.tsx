@@ -30,7 +30,6 @@ const navItems = (t: Record<string, string>) => [
     label: t.nav_about,
     children: [
       { label: t.nav_about_short, href: "/about" },
-      { label: t.nav_strategy, href: "/strategy" },
       { label: t.nav_leadership, href: "/about#leadership" },
       { label: t.nav_teachers, href: "/about#teachers" },
     ],
