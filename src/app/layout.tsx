@@ -153,7 +153,7 @@ export default function RootLayout({
                 longitude: 69.2887,
               },
               hasMap: "https://maps.google.com/?q=41.3526,69.2887",
-              telephone: ["+998712350369", "+998931033245"],
+              telephone: "+998712350369",
               email: "info@tatual.uz",
               sameAs: [
                 siteConfig.telegram,

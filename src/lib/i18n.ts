@@ -80,8 +80,6 @@ export interface TranslationStructure {
   contact_address_val: string;
   contact_phone: string;
   contact_phone_val: string;
-  contact_phone_mobile: string;
-  contact_phone_mobile_val: string;
   contact_email: string;
   contact_email_val: string;
   contact_schedule: string;
@@ -229,8 +227,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address_val: "Toshkent shahri, Yunusobod tumani, Bog'ishamol ko'chasi, 112-uy (Mo'ljal: 'Bodomzor' metro bekati)",
     contact_phone: "Telefon",
     contact_phone_val: "+998 71 235-03-69",
-    contact_phone_mobile: "Tez aloqa",
-    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Elektron pochta",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Ish vaqti",
@@ -247,7 +243,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_buses: "Avtobuslar: 19, 38, 50, 63, 115",
 
     maintenance_notice:
-      "Diqqat: Saytda profilaktika va texnik yangilash ishlari olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha cheklangan bo'lishi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69 yoki +998 93 103-32-45.",
+      "Diqqat: Saytda profilaktika va texnik yangilash ishlari olib borilmoqda. Ba'zi ma'lumotlar va aloqa kanallari vaqtincha cheklangan bo'lishi mumkin. Shoshilinch bog'lanish: +998 71 235-03-69.",
   },
 
   ru: {
@@ -366,8 +362,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address_val: "Ташкент, Юнусабадский район, улица Богишамол, 112 (Ориентир: станция метро «Бодомзор»)",
     contact_phone: "Телефон",
     contact_phone_val: "+998 71 235-03-69",
-    contact_phone_mobile: "Быстрая связь",
-    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Эл. почта",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Режим работы",
@@ -384,7 +378,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_buses: "Автобусы: 19, 38, 50, 63, 115",
 
     maintenance_notice:
-      "Внимание: на сайте проводятся профилактические и технические работы. Некоторые сервисы могут быть временно недоступны. Телефоны для связи: +998 71 235-03-69, +998 93 103-32-45.",
+      "Внимание: на сайте проводятся профилактические и технические работы. Некоторые сервисы могут быть временно недоступны. Телефоны для связи: +998 71 235-03-69.",
   },
 
   en: {
@@ -503,8 +497,6 @@ export const translations: Record<Lang, TranslationStructure> = {
     contact_address_val: "112 Bogishamol Street, Yunusabad District, Tashkent (Landmark: 'Bodomzor' metro station)",
     contact_phone: "Phone",
     contact_phone_val: "+998 71 235-03-69",
-    contact_phone_mobile: "Quick contact",
-    contact_phone_mobile_val: "+998 93 103-32-45",
     contact_email: "Email",
     contact_email_val: "info@tatual.uz",
     contact_schedule: "Working Hours",
@@ -521,7 +513,7 @@ export const translations: Record<Lang, TranslationStructure> = {
     footer_buses: "Buses: 19, 38, 50, 63, 115",
 
     maintenance_notice:
-      "Notice: Scheduled maintenance is in progress. Some services and channels may be temporarily limited. For urgent inquiries: +998 71 235-03-69 or +998 93 103-32-45.",
+      "Notice: Scheduled maintenance is in progress. Some services and channels may be temporarily limited. For urgent inquiries: +998 71 235-03-69.",
   },
 };
 

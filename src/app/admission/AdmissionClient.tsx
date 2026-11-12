@@ -735,13 +735,6 @@ export default function AdmissionClient() {
               >
                 <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> {siteConfig.phone}
               </a>
-              <a
-                href={`tel:${siteConfig.phoneMobile.replace(/[^\d+]/g, "")}`}
-                className="btn-outline"
-                style={{ color: "#1a3a6e", borderColor: "#1a3a6e", textDecoration: "none" }}
-              >
-                <FaPhoneAlt size={12} style={{ marginRight: 8 }} /> {siteConfig.phoneMobile}
-              </a>
               <Link
                 href="/contact"
                 className="btn-outline"
