@@ -57,7 +57,7 @@ BEGIN
   FOREACH tbl IN ARRAY ARRAY[
     'news','leadership','teachers','departments','facilities',
     'achievements','admission_rules','stats','gallery','hero_slides',
-    'site_settings'
+    'site_settings','documents'
   ]
   LOOP
     IF to_regclass('public.' || tbl) IS NOT NULL THEN
