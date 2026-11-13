@@ -98,17 +98,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="uz" suppressHydrationWarning>
-      <head>
-        <link
-          rel="preconnect"
-          href="https://fbvmqyavgeqgvxoxhffi.supabase.co"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="dns-prefetch"
-          href="https://fbvmqyavgeqgvxoxhffi.supabase.co"
-        />
-      </head>
       <body className={inter.variable} suppressHydrationWarning>
         <a href="#main-content" className="skip-to-content">
           Asosiy qismga o&apos;tish
