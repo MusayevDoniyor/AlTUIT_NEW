@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS public.admin_users (
 -- Admin email qo'shish (o'zingizning admin emailingizni yozing):
 -- INSERT INTO public.admin_users (email) VALUES ('admin@tatual.uz');
 
--- Admin tekshiruv funksiyasi
+-- Admin tekshiruv funksiyasi (QAT'IY: Faqat admin_users jadvalida ruxsat berilgan emaillar)
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS boolean
 LANGUAGE sql
@@ -188,11 +188,10 @@ STABLE
 SECURITY DEFINER
 SET search_path = public
 AS $$
-  SELECT COALESCE(auth.jwt() -> 'user_metadata' ->> 'role', '') = 'admin'
-      OR EXISTS (
-          SELECT 1 FROM public.admin_users
-          WHERE email = auth.jwt() ->> 'email'
-      );
+  SELECT EXISTS (
+      SELECT 1 FROM public.admin_users
+      WHERE LOWER(email) = LOWER(auth.jwt() ->> 'email')
+  );
 $$;
 
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;

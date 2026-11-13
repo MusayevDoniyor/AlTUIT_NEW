@@ -2,12 +2,13 @@
 -- SUPABASE SECURITY HARDENING — MAVJUD BAZAGA ISHLATISH UCHUN
 -- ============================================
 -- Bu fayl allaqachon o'rnatilgan Supabase bazangizni himoyalaydi:
--- hozirgacha HAR QANDAY ro'yxatdan o'tgan foydalanuvchi yozishi mumkin edi
--- (auth.role() = 'authenticated'). Endi faqat admin_users jadvalidagi email
--- yoki user_metadata.role='admin' bo'lgan foydalanuvchi yozishi mumkin.
+-- Faqat admin_users jadvalidagi tasdiqlangan email egalari ma'lumotlarni
+-- qo'shishi, o'zgartirishi yoki o'chirishi mumkin.
+-- Xavfsizlik: user_metadata tekshiruvi butunlay olib tashlangan (begona
+-- shaxslar ro'yxatdan o'tish orqali o'ziga admin rolini bera olmaydi).
 --
 -- ISHLATISH: Supabase Dashboard -> SQL Editor -> bu faylni qo'ying -> Run.
--- So'ng admin emailingizni qo'shing (quyida ko'rsatilgan).
+-- So'ng o'z emailingizni admin_users jadvaliga qo'shing.
 
 -- 1. Admin email allowlist jadvali (funksiyadan OLDIN yaratilishi kerak,
 --    chunki PostgreSQL funksiya yaratishda jadval mavjudligini tekshiradi)
@@ -21,7 +22,7 @@ INSERT INTO public.admin_users (email)
 VALUES ('admin@tatual.uz')
 ON CONFLICT (email) DO NOTHING;
 
--- 2. Admin tekshiruv funksiyasi
+-- 2. Admin tekshiruv funksiyasi (QAT'IY: Faqat admin_users jadvaliga qaraydi)
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS boolean
 LANGUAGE sql
@@ -29,11 +30,10 @@ STABLE
 SECURITY DEFINER
 SET search_path = public
 AS $$
-  SELECT COALESCE(auth.jwt() -> 'user_metadata' ->> 'role', '') = 'admin'
-      OR EXISTS (
-          SELECT 1 FROM public.admin_users
-          WHERE email = auth.jwt() ->> 'email'
-      );
+  SELECT EXISTS (
+      SELECT 1 FROM public.admin_users
+      WHERE LOWER(email) = LOWER(auth.jwt() ->> 'email')
+  );
 $$;
 
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
