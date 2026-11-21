@@ -193,3 +193,5 @@ altuit/
 
 Ushbu loyiha **Muhammad al-Xorazmiy nomidagi TATU Akademik Litseyi** uchun maxsus ishlab chiqilgan.
 Saytning barcha huquqlari himoyalangan.
+
+**Bosh Dasturchi & Muallif:** [Doniyor Musayev](https://github.com/MusayevDoniyor) · [doniyorweb.uz](https://doniyorweb.uz) · [LinkedIn](https://www.linkedin.com/in/doniyor-musayev/)
